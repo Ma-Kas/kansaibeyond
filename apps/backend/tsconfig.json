@@ -1,0 +1,12 @@
+{
+  "extends": "@kansaibeyond/typescript-config/tsconfig.base.json",
+  "compilerOptions": {
+    "typeRoots": ["./src/types"],
+    "outDir": "./build/",
+
+    /* Bundler mode */
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "kansaibeyond",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
+  },
+  "author": "Ma-Kas",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": "^18.16.0",
+    "pnpm": "^8.15.3"
+  },
+  "packageManager": "pnpm@8.15.3"
+}

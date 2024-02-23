@@ -1,0 +1,18 @@
+{
+  "name": "@kansaibeyond/eslint-config-custom",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Ma-Kas",
+  "license": "UNLICENSED",
+  "files": [
+    "library.js",
+    "express.js",
+    "react.js"
+  ],
+  "devDependencies": {
+    "eslint-config-prettier": "^9.1.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "typescript": "^5.3.3"
+  }
+}
