@@ -16,7 +16,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare username: string;
   declare userIcon: CreationOptional<string>;
   declare password: string;
-  declare status: CreationOptional<'Admin' | 'Guest Writer' | 'Guest'>;
+  declare status: CreationOptional<'Admin' | 'Writer' | 'Tech' | 'Guest'>;
   declare disabled: CreationOptional<boolean>;
   // Automatically created foreign key columns using .hasMany or .belongsTo()
   // Need to be declared here, but not initialized in .init()

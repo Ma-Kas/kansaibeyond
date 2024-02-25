@@ -5,6 +5,8 @@ import express from 'express';
 import { BACKEND_PORT } from './utils/config';
 import { connectToDatabase } from './utils/db';
 
+import errorHandler from './middleware/errorHandler';
+
 // Express initialization
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(express.json());
 // Routes
 
 // Error Handling
+app.use(errorHandler);
 
 // Database connection
 void (async function connect() {
