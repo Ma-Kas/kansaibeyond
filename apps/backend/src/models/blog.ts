@@ -10,7 +10,6 @@ import {
 import { sequelize } from '../utils/db';
 import User from './user';
 import Category from './category';
-import Comment from './comment';
 
 class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare id: CreationOptional<number>;
@@ -20,11 +19,10 @@ class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare tags: string;
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
-  // Automatically created foreign key columns using .hasMany or .belongsTo()
+  // Automatically created foreign key columns using .belongsTo()
   // Need to be declared here, but not initialized in .init()
   declare userId: ForeignKey<User['id']>;
   declare categoryId: ForeignKey<Category['id']>;
-  declare commentId: ForeignKey<Comment['id']>;
 }
 
 Blog.init(

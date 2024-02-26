@@ -4,12 +4,9 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  ForeignKey,
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
-import Blog from './blog';
-import Comment from './comment';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
@@ -18,10 +15,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare password: string;
   declare status: CreationOptional<'Admin' | 'Writer' | 'Tech' | 'Guest'>;
   declare disabled: CreationOptional<boolean>;
-  // Automatically created foreign key columns using .hasMany or .belongsTo()
-  // Need to be declared here, but not initialized in .init()
-  declare blogId: ForeignKey<Blog['id']>;
-  declare commentId: ForeignKey<Comment['id']>;
 }
 
 User.init(
