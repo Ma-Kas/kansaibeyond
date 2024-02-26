@@ -12,6 +12,10 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
   declare username: string;
   declare userIcon: CreationOptional<string>;
+  declare firstName: string;
+  declare lastName: string;
+  declare email: string;
+  declare displayName: string;
   declare password: string;
   declare status: CreationOptional<'Admin' | 'Writer' | 'Tech' | 'Guest'>;
   declare disabled: CreationOptional<boolean>;
@@ -32,6 +36,25 @@ User.init(
     userIcon: {
       type: DataTypes.TEXT,
       allowNull: true,
+    },
+    firstName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
+    displayName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     password: {
       type: DataTypes.TEXT,
