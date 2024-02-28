@@ -1,0 +1,9 @@
+###
+// DELETE valid user 
+DELETE http://localhost:3001/api/users/testUser2
+
+
+###
+// DELETE invalid user 
+DELETE http://localhost:3001/api/users/testUserrrrr
+
