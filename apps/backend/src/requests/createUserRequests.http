@@ -1,0 +1,53 @@
+// POST valid new user
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+  "username": "testUser2",
+  "firstName": "testy",
+  "lastName": "mctester",
+  "email": "testy@test.com",
+  "displayName": "the tester",
+  "password": "testPassword"
+}
+
+###
+// POST invalid new user (missing password field)
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+  "username": "testUser4",
+  "firstName": "testy",
+  "lastName": "mctester",
+  "email": "another",
+  "displayName": "the tester"
+}
+
+###
+// POST invalid new user (firstName wrong input type)
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+  "username": "testUser4",
+  "firstName": 2,
+  "lastName": 2,
+  "email": "another",
+  "displayName": "the tester",
+  "password": "testPassword"
+}
+
+###
+// POST invalid new user (already existing username)
+POST http://localhost:3001/api/users
+content-type: application/json
+
+{
+  "username": "testUser",
+  "firstName": "testy",
+  "lastName": "mctester",
+  "email": "testy@test.com",
+  "displayName": "the tester",
+  "password": "testPassword"
+}

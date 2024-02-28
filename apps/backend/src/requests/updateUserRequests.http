@@ -1,0 +1,39 @@
+###
+// UPDATE valid user with valid data
+PUT http://localhost:3001/api/users/testUser
+content-type: application/json
+
+{
+  "firstName": "former testy",
+  "displayName": "the former tester"
+}
+
+###
+// UPDATE valid user with invalid data
+PUT http://localhost:3001/api/users/testUser
+content-type: application/json
+
+{
+  "firstName": 2,
+  "displayName": "the former tester"
+}
+
+###
+// UPDATE valid user with invalid data
+PUT http://localhost:3001/api/users/testUser
+content-type: application/json
+
+{
+  "userIcon": 2,
+  "displayName": "the former tester"
+}
+
+###
+// UPDATE invalid user with valid data
+PUT http://localhost:3001/api/users/testUser2
+content-type: application/json
+
+{
+  "firstName": "former testy",
+  "displayName": "the former tester"
+}
