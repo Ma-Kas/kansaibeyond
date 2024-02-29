@@ -6,6 +6,8 @@ const envVariables = z.object({
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_CONNECTION_STRING: z.string(),
+  DB_TEST_PASSWORD: z.string(),
+  DB_TEST_CONNECTION_STRING: z.string(),
   JWT_TOKEN_SECRET: z.string(),
 });
 

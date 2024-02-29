@@ -3,7 +3,7 @@ import User from './user';
 import Category from './category';
 import Comment from './comment';
 
-void (function initialize() {
+const createAssociations = () => {
   try {
     User.hasMany(Blog);
     Blog.belongsTo(User);
@@ -19,6 +19,6 @@ void (function initialize() {
   } catch (err: unknown) {
     console.log('Error', err);
   }
-})();
+};
 
-export { User, Blog, Category, Comment };
+export { createAssociations, User, Blog, Category, Comment };
