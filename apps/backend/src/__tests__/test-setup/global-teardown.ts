@@ -1,8 +1,8 @@
-import { disconnectFromDatabase } from '../../utils/test-db';
+import { wipeDatabaseAndDisconnect } from '../../utils/db';
 
 const resetDb = async () => {
   try {
-    await disconnectFromDatabase();
+    await wipeDatabaseAndDisconnect();
   } catch (err: unknown) {
     console.log('Error', err);
   }

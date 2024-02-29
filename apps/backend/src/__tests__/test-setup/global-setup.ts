@@ -1,5 +1,5 @@
 import { createAssociations } from '../../models';
-import { connectToDatabase } from '../../utils/test-db';
+import { connectToDatabase } from '../../utils/db';
 
 createAssociations();
 
