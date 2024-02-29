@@ -6,4 +6,12 @@ module.exports = {
   parserOptions: {
     project: true,
   },
+  overrides: [
+    {
+      files: ['/src/__tests__/*'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };
