@@ -119,18 +119,6 @@ const up: Migration = async ({ context: queryInterface }) => {
       unique: true,
     },
   });
-
-  // await queryInterface.addColumn('users', 'blog_id', {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: { model: 'blogs', key: 'id' },
-  // });
-  // await queryInterface.addColumn('users', 'comment_id', {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: { model: 'comments', key: 'id' },
-  // });
-
   await queryInterface.addColumn('blogs', 'user_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -141,11 +129,6 @@ const up: Migration = async ({ context: queryInterface }) => {
     allowNull: false,
     references: { model: 'categories', key: 'id' },
   });
-  // await queryInterface.addColumn('blogs', 'comment_id', {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: { model: 'comments', key: 'id' },
-  // });
 
   await queryInterface.addColumn('comments', 'blog_id', {
     type: DataTypes.INTEGER,

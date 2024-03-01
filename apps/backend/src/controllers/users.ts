@@ -16,20 +16,6 @@ router.get('/', async (_req, res, next) => {
   try {
     const allUsers = await User.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
-      // include: [
-      //   {
-      //     model: Blog,
-      //     include: [
-      //       {
-      //         model: Category,
-      //         attributes: ['categoryName'],
-      //       },
-      //     ],
-      //     attributes: {
-      //       exclude: ['userId'],
-      //     },
-      //   },
-      // ],
     });
 
     res.status(200).json(allUsers);
