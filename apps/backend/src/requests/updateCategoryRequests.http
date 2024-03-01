@@ -1,0 +1,26 @@
+###
+// UPDATE valid category with valid data
+PUT http://localhost:3001/api/categories/testcategory
+content-type: application/json
+
+{
+  "categoryName": "former testcategory"
+}
+
+###
+// UPDATE valid category with invalid data
+PUT http://localhost:3001/api/categories/testcategory
+content-type: application/json
+
+{
+  "categoryName": 400
+}
+
+###
+// UPDATE invalid category with valid data
+PUT http://localhost:3001/api/categories/nonexisting
+content-type: application/json
+
+{
+  "categoryName": "former testcategory"
+}

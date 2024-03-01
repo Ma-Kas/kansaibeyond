@@ -1,0 +1,34 @@
+// POST valid new category
+POST http://localhost:3001/api/categories
+content-type: application/json
+
+{
+  "categoryName": "testcategory"
+}
+
+###
+// POST invalid new category (missing categoryName field)
+POST http://localhost:3001/api/categories
+content-type: application/json
+
+{
+
+}
+
+###
+// POST invalid new category (wrong input type)
+POST http://localhost:3001/api/categories
+content-type: application/json
+
+{
+  "categoryName": 400
+}
+
+###
+// POST invalid new category (already existing categoryName)
+POST http://localhost:3001/api/categories
+content-type: application/json
+
+{
+  "categoryName": "testcategory"
+}
