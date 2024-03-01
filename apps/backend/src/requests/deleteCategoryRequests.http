@@ -1,0 +1,9 @@
+###
+// DELETE valid category 
+DELETE http://localhost:3001/api/categories/testcategory
+
+
+###
+// DELETE invalid category 
+DELETE http://localhost:3001/api/categories/nonexisting
+

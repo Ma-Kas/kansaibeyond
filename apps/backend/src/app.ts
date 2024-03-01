@@ -3,6 +3,7 @@ import express from 'express';
 
 // Project Dependencies
 import userRouter from './controllers/users';
+import categoryRouter from './controllers/categories';
 
 import errorHandler from './middleware/errorHandler';
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/users', userRouter);
+app.use('/api/categories', categoryRouter);
 
 // Error Handling
 app.use(errorHandler);

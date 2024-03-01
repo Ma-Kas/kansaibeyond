@@ -13,6 +13,13 @@ type User = {
   commentId?: number[];
 };
 
+type Category = {
+  id: number;
+  categoryName: string;
+};
+
+type CategoryExId = Omit<Category, 'id'>;
+
 type NewUser = Pick<
   User,
   'username' | 'firstName' | 'lastName' | 'email' | 'displayName' | 'password'
@@ -23,4 +30,4 @@ type UpdateUser = Partial<
   Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'blogId' | 'commentId'>
 > & { userIcon?: string };
 
-export { User, NewUser, UpdateUser };
+export { User, NewUser, UpdateUser, Category, CategoryExId };

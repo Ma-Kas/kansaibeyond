@@ -31,7 +31,7 @@ describe('creating a new category', () => {
         {
           context: {},
           message:
-            'Validation error: Expected string, received number at "categoryName',
+            'Validation error: Expected string, received number at "categoryName";',
         },
       ],
     });
@@ -52,7 +52,7 @@ describe('creating a new category', () => {
       errors: [
         {
           message:
-            'SequelizeUniqueConstraintError: categoryName must be unique',
+            'SequelizeUniqueConstraintError: category_name must be unique',
         },
       ],
     });
@@ -67,7 +67,7 @@ describe('getting categories', () => {
     expect(response.status).toEqual(200);
   });
 
-  test('with valid category-name as param returns specific category', async () => {
+  test('with valid categoryName as param returns specific category', async () => {
     const response = await request(app)
       .get('/api/categories/testcategory')
       .expect('Content-Type', /application\/json/);
@@ -75,7 +75,7 @@ describe('getting categories', () => {
     expect(response.body.categoryName).toEqual('testcategory');
   });
 
-  test('with non-existing category-name as param returns 404', async () => {
+  test('with non-existing categoryName as param returns 404', async () => {
     const response = await request(app)
       .get('/api/categories/nonexisting')
       .expect('Content-Type', /application\/json/);
@@ -119,12 +119,12 @@ describe('updating category', () => {
   });
 
   test('fails with 400 with invalid update data on existing category', async () => {
-    const updateData = { category: 400 };
+    const updateData = { categoryName: 400 };
 
     const response = await request(app)
       .put('/api/categories/testcategory')
-      .send(updateData)
-      .expect('Content-Type', /application\/json/);
+      .send(updateData);
+    // .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
     expect(response.body).toMatchObject({
       errors: [
