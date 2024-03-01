@@ -47,6 +47,7 @@ const up: Migration = async ({ context: queryInterface }) => {
     title: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     content: {
       type: DataTypes.TEXT,

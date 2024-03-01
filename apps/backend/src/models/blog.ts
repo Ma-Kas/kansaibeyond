@@ -35,6 +35,7 @@ Blog.init(
     title: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     content: {
       type: DataTypes.TEXT,
