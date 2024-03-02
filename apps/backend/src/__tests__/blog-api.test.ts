@@ -4,14 +4,41 @@ import app from '../app';
 const baseBlog = {
   title: 'test-blog',
   content: 'test HTML code',
-  media: { title: 'testImage', url: 'testImageUrl' },
+  media: { name: 'testImage', url: 'testImageUrl' },
   tags: ['test', 'test2'],
+  categoryId: 1,
 };
+
+// Need to create user and category first to satisfy foreign key requirements
+beforeAll(async () => {
+  const blogTestCategory = {
+    categoryName: 'testBlogCategory',
+  };
+
+  const blogTestUser = {
+    username: 'testBlogUser',
+    firstName: 'testy',
+    lastName: 'McTester',
+    email: 'testy@test.com',
+    displayName: 'the tester',
+    password: 'testPassword',
+  };
+
+  // prettier-ignore
+  await request(app)
+      .post('/api/categories')
+      .send(blogTestCategory)
+
+  // prettier-ignore
+  await request(app)
+      .post('/api/users')
+      .send(blogTestUser)
+});
 
 describe('creating a new blog', () => {
   test('succeeds with valid blog data', async () => {
-    const response = await request(app)
-      .post('/api/blogs')
+    // prettier-ignore
+    const response = await request(app).post('/api/blogs')
       .send(baseBlog)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
@@ -23,8 +50,9 @@ describe('creating a new blog', () => {
     const newBlog = {
       title: 400,
       content: 'test HTML code',
-      media: { title: 'testImage', url: 'testImageUrl' },
+      media: { name: 'testImage', url: 'testImageUrl' },
       tags: ['test', 'test2'],
+      categoryId: 1,
     };
 
     // prettier-ignore
@@ -38,7 +66,7 @@ describe('creating a new blog', () => {
         {
           context: {},
           message:
-            'Validation error: Expected string, received number at "title";',
+            'Validation error: Expected string, received number at "title"',
         },
       ],
     });
@@ -48,8 +76,9 @@ describe('creating a new blog', () => {
     const newBlog = {
       title: 'test-blog',
       content: 'test HTML code',
-      media: { title: 'testImage', url: 'testImageUrl' },
+      media: { name: 'testImage', url: 'testImageUrl' },
       tags: ['test', 'test2'],
+      categoryId: 1,
     };
 
     // prettier-ignore
@@ -74,6 +103,8 @@ describe('getting blog data', () => {
       .get('/api/blogs')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
+    expect(response.body[0].user.username).toEqual('testBlogUser');
+    expect(response.body[0].category.categoryName).toEqual('testBlogCategory');
   });
 
   test('with valid title as param returns specific blog', async () => {
@@ -82,6 +113,8 @@ describe('getting blog data', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.title).toEqual('test-blog');
+    expect(response.body.user.username).toEqual('testBlogUser');
+    expect(response.body.category.categoryName).toEqual('testBlogCategory');
   });
 
   test('with non-existing title as param returns 404', async () => {

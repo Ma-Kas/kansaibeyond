@@ -1,3 +1,4 @@
+// User Model Types
 type User = {
   id: number;
   username: string;
@@ -9,16 +10,9 @@ type User = {
   password: string;
   status: 'Admin' | 'Writer' | 'Tech' | 'Guest';
   disabled: boolean;
-  blogId?: number[];
-  commentId?: number[];
+  blogs?: number[];
+  comments?: number[];
 };
-
-type Category = {
-  id: number;
-  categoryName: string;
-};
-
-type CategoryExId = Omit<Category, 'id'>;
 
 type NewUser = Pick<
   User,
@@ -27,7 +21,47 @@ type NewUser = Pick<
 
 // Omit original userIcon, re-add in intersection to disallow null when updating
 type UpdateUser = Partial<
-  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'blogId' | 'commentId'>
+  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'blogs' | 'comments'>
 > & { userIcon?: string };
 
-export { User, NewUser, UpdateUser, Category, CategoryExId };
+// Blog Model Types
+type BlogMedia = {
+  name: string;
+  url: string;
+  caption?: string;
+};
+
+type Blog = {
+  id: number;
+  title: string;
+  content: string;
+  media: BlogMedia;
+  tags: string[];
+  views?: number;
+  readTime?: number;
+  userId: number;
+  categoryId: number;
+};
+
+type NewBlog = Omit<Blog, 'id' | 'views' | 'readTime'>;
+
+type UpdateBlog = Partial<Omit<NewBlog, 'userId'>>;
+
+// Category Model Types
+type Category = {
+  id: number;
+  categoryName: string;
+};
+
+type CategoryExId = Omit<Category, 'id'>;
+
+export {
+  User,
+  NewUser,
+  UpdateUser,
+  Blog,
+  NewBlog,
+  UpdateBlog,
+  Category,
+  CategoryExId,
+};
