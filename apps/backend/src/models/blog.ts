@@ -13,6 +13,7 @@ import Category from './category';
 
 class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare id: CreationOptional<number>;
+  declare routeName: string;
   declare title: string;
   declare content: string;
   declare media: string;
@@ -29,6 +30,11 @@ Blog.init(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    routeName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
     },
     title: {
       type: DataTypes.TEXT,
