@@ -4,7 +4,7 @@ import { Category } from '../models';
 import {
   validateNewCategory,
   validateCategoryUpdate,
-} from '../utils/inputValidation';
+} from '../utils/input-validation';
 import NotFoundError from '../errors/NotFoundError';
 import BadRequestError from '../errors/BadRequestError';
 
