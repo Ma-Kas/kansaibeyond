@@ -19,8 +19,6 @@ class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare tags: string;
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
-  // Automatically created foreign key columns using .belongsTo()
-  // Need to be declared here, but not initialized in .init()
   declare userId: ForeignKey<User['id']>;
   declare categoryId: ForeignKey<Category['id']>;
 }
@@ -56,6 +54,16 @@ Blog.init(
     readTime: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'category', key: 'id' },
     },
   },
   {

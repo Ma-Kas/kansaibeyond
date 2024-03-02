@@ -19,8 +19,6 @@ class Comment extends Model<
   declare content: string;
   declare name: CreationOptional<string>;
   declare email: CreationOptional<string>;
-  // Automatically created foreign key columns using .belongsTo()
-  // Need to be declared here, but not initialized in .init()
   declare blogId: ForeignKey<Blog['id']>;
   declare userId: ForeignKey<User['id']>;
 }
@@ -46,6 +44,16 @@ Comment.init(
       validate: {
         isEmail: true,
       },
+    },
+    blogId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'blogs', key: 'id' },
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: { model: 'users', key: 'id' },
     },
   },
   {
