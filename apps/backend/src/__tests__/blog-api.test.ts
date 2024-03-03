@@ -5,7 +5,7 @@ const baseBlog = {
   routeName: 'test-blog',
   title: 'test blog title',
   content: 'test HTML code',
-  media: { name: 'testImage', url: 'testImageUrl' },
+  media: { name: 'testImage', url: 'http://testImageUrl' },
   tags: ['test', 'test2'],
   categoryId: 1,
 };
@@ -52,7 +52,7 @@ describe('creating a new blog', () => {
       routeName: 'test-blog',
       title: 400,
       content: 'test HTML code',
-      media: { name: 'testImage', url: 'testImageUrl' },
+      media: { name: 'testImage', url: 'http://testImageUrl' },
       tags: ['test', 'test2'],
       categoryId: 1,
     };
@@ -79,7 +79,7 @@ describe('creating a new blog', () => {
       routeName: 'test-blog',
       title: 'other test blog title',
       content: 'test HTML code',
-      media: { name: 'testImage', url: 'testImageUrl' },
+      media: { name: 'testImage', url: 'http://testImageUrl' },
       tags: ['test', 'test2'],
       categoryId: 1,
     };
