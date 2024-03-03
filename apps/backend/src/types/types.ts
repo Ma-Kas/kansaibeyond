@@ -56,6 +56,25 @@ type Category = {
 
 type CategoryExId = Omit<Category, 'id'>;
 
+// Comment Model Types
+type Comment = {
+  id: number;
+  content: string;
+  name?: string;
+  email?: string;
+  userId?: number;
+  blogId: number;
+};
+
+type NewComment = Pick<Comment, 'content' | 'blogId'> & {
+  name: string;
+  email: string;
+};
+
+type NewRegisteredComment = Pick<Comment, 'content' | 'blogId'> & {
+  userId: number;
+};
+
 export {
   User,
   NewUser,
@@ -65,4 +84,7 @@ export {
   UpdateBlog,
   Category,
   CategoryExId,
+  Comment,
+  NewComment,
+  NewRegisteredComment,
 };
