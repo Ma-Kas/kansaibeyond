@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { Blog, Category, User } from '../models';
+import { Blog, Category, User, Comment } from '../models';
 import { validateNewBlog, validateBlogUpdate } from '../utils/input-validation';
 
 import BadRequestError from '../errors/BadRequestError';
@@ -24,6 +24,16 @@ router.get('/', async (_req, res, next) => {
           model: Category,
           attributes: ['categoryName'],
         },
+        {
+          model: Comment,
+          attributes: ['id', 'content', 'name'],
+          include: [
+            {
+              model: User,
+              attributes: ['username'],
+            },
+          ],
+        },
       ],
     });
 
@@ -42,7 +52,13 @@ router.get('/:routeName', async (req, res, next) => {
   try {
     const blog = await Blog.findOne({
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'categoryId'],
+        exclude: [
+          'createdAt',
+          'updatedAt',
+          'userId',
+          'categoryId',
+          'routeName',
+        ],
       },
       include: [
         {
@@ -52,6 +68,16 @@ router.get('/:routeName', async (req, res, next) => {
         {
           model: Category,
           attributes: ['categoryName'],
+        },
+        {
+          model: Comment,
+          attributes: ['id', 'content', 'name'],
+          include: [
+            {
+              model: User,
+              attributes: ['username'],
+            },
+          ],
         },
       ],
       where: { routeName: req.params.routeName },

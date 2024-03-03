@@ -6,7 +6,7 @@ content-type: application/json
   "routeName": "blog-route",
   "title": "This is a blog title",
   "content": "HTML goes here",
-  "media": {"name": "imageName", "url": "ImageURL", "caption": "An image"},
+  "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
   "tags": ["personal", "blog", "nice"],
   "categoryId": 1
 }
