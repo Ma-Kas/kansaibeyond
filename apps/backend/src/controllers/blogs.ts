@@ -2,10 +2,6 @@ import express from 'express';
 
 import { Blog, Category, User } from '../models';
 import { validateNewBlog, validateBlogUpdate } from '../utils/input-validation';
-import {
-  formatNewBlogData,
-  formatUpdateBlogData,
-} from '../utils/format-validated-data';
 
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
@@ -31,6 +27,10 @@ router.get('/', async (_req, res, next) => {
       ],
     });
 
+    if (!allBlogs) {
+      throw new NotFoundError({ message: 'No blogs found' });
+    }
+
     res.status(200).json(allBlogs);
   } catch (err: unknown) {
     next(err);
@@ -38,7 +38,7 @@ router.get('/', async (_req, res, next) => {
 });
 
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:title', async (req, res, next) => {
+router.get('/:routeName', async (req, res, next) => {
   try {
     const blog = await Blog.findOne({
       attributes: {
@@ -54,7 +54,7 @@ router.get('/:title', async (req, res, next) => {
           attributes: ['categoryName'],
         },
       ],
-      where: { title: req.params.title },
+      where: { routeName: req.params.routeName },
     });
     if (!blog) {
       throw new NotFoundError({ message: 'Blog not found.' });
@@ -68,17 +68,17 @@ router.get('/:title', async (req, res, next) => {
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
 router.post('/', async (req, res, next) => {
   try {
-    const user = await User.findByPk(1);
+    const user = await User.findOne();
+
     if (!user) {
       throw new NotFoundError({ message: 'User not found' });
     }
 
     const validatedBlogData = validateNewBlog(req.body);
     if (validatedBlogData) {
-      const formattedNewBlog = formatNewBlogData(validatedBlogData);
-      formattedNewBlog.userId = user.id;
+      validatedBlogData.userId = user.id;
 
-      const addedBlog = await Blog.create(formattedNewBlog);
+      const addedBlog = await Blog.create(validatedBlogData);
       res.status(201).json(addedBlog);
     } else {
       throw new BadRequestError({ message: 'Invalid Blog data.' });
@@ -89,19 +89,18 @@ router.post('/', async (req, res, next) => {
 });
 
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.put('/:title', async (req, res, next) => {
+router.put('/:routeName', async (req, res, next) => {
   try {
     const blogToUpdate = await Blog.findOne({
-      where: { title: req.params.title },
+      where: { routeName: req.params.routeName },
     });
     if (!blogToUpdate) {
       throw new NotFoundError({ message: 'Blog to update was not found.' });
     }
     const validatedUpdateData = validateBlogUpdate(req.body);
     if (validatedUpdateData) {
-      const blogUpdate = formatUpdateBlogData(validatedUpdateData);
-      const updatedBlog = await Blog.update(blogUpdate, {
-        where: { title: blogToUpdate.title },
+      const updatedBlog = await Blog.update(validatedUpdateData, {
+        where: { routeName: blogToUpdate.routeName },
         returning: true,
       });
       res.status(200).json(updatedBlog[1][0]);
@@ -115,17 +114,17 @@ router.put('/:title', async (req, res, next) => {
 });
 
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:title', async (req, res, next) => {
+router.delete('/:routeName', async (req, res, next) => {
   try {
     const blogToDelete = await Blog.findOne({
-      where: { title: req.params.title },
+      where: { routeName: req.params.routeName },
     });
     if (!blogToDelete) {
       throw new NotFoundError({ message: 'Blog to delete was not found.' });
     }
 
     await blogToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${blogToDelete.title}` });
+    res.status(200).json({ message: `Deleted ${blogToDelete.routeName}` });
   } catch (err: unknown) {
     next(err);
   }

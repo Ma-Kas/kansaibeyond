@@ -33,6 +33,7 @@ type BlogMedia = {
 
 type Blog = {
   id: number;
+  routeName: string;
   title: string;
   content: string;
   media: BlogMedia;
