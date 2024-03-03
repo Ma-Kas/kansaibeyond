@@ -5,6 +5,7 @@ import express from 'express';
 import userRouter from './controllers/users';
 import categoryRouter from './controllers/categories';
 import blogRouter from './controllers/blogs';
+import commentRouter from './controllers/comments';
 
 import errorHandler from './middleware/errorHandler';
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/blogs', blogRouter);
+app.use('/api/comments', commentRouter);
 
 // Error Handling
 app.use(errorHandler);

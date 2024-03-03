@@ -8,7 +8,7 @@ beforeAll(async () => {
   } catch (err: unknown) {
     console.log('Error', err);
   }
-});
+}, 10000);
 
 // After each test suite, run all down migrations, close database connection
 afterAll(async () => {
@@ -21,4 +21,4 @@ afterAll(async () => {
   } catch (err: unknown) {
     console.log('Error', err);
   }
-});
+}, 10000);
