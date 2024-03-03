@@ -2,7 +2,8 @@ import request from 'supertest';
 import app from '../app';
 
 const baseBlog = {
-  title: 'test-blog',
+  routeName: 'test-blog',
+  title: 'test blog title',
   content: 'test HTML code',
   media: { name: 'testImage', url: 'testImageUrl' },
   tags: ['test', 'test2'],
@@ -48,6 +49,7 @@ describe('creating a new blog', () => {
 
   test('fails with 400 with invalid blog data format', async () => {
     const newBlog = {
+      routeName: 'test-blog',
       title: 400,
       content: 'test HTML code',
       media: { name: 'testImage', url: 'testImageUrl' },
@@ -72,9 +74,10 @@ describe('creating a new blog', () => {
     });
   });
 
-  test('fails with 400 on already existing title', async () => {
+  test('fails with 400 on already existing routeName', async () => {
     const newBlog = {
-      title: 'test-blog',
+      routeName: 'test-blog',
+      title: 'other test blog title',
       content: 'test HTML code',
       media: { name: 'testImage', url: 'testImageUrl' },
       tags: ['test', 'test2'],
@@ -90,7 +93,7 @@ describe('creating a new blog', () => {
     expect(response.body).toMatchObject({
       errors: [
         {
-          message: 'SequelizeUniqueConstraintError: title must be unique',
+          message: 'SequelizeUniqueConstraintError: route_name must be unique',
         },
       ],
     });
@@ -107,17 +110,17 @@ describe('getting blog data', () => {
     expect(response.body[0].category.categoryName).toEqual('testBlogCategory');
   });
 
-  test('with valid title as param returns specific blog', async () => {
+  test('with valid routeName as param returns specific blog', async () => {
     const response = await request(app)
       .get('/api/blogs/test-blog')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
-    expect(response.body.title).toEqual('test-blog');
+    expect(response.body.title).toEqual('test blog title');
     expect(response.body.user.username).toEqual('testBlogUser');
     expect(response.body.category.categoryName).toEqual('testBlogCategory');
   });
 
-  test('with non-existing title as param returns 404', async () => {
+  test('with non-existing routeName as param returns 404', async () => {
     const response = await request(app)
       .get('/api/blogs/nonexisting')
       .expect('Content-Type', /application\/json/);
@@ -141,7 +144,7 @@ describe('updating blog', () => {
   });
 
   test('succeeds with valid update data on existing blog', async () => {
-    const updateData = { title: 'changedTestBlog' };
+    const updateData = { title: 'changed Test Blog Title' };
 
     const response = await request(app)
       .put('/api/blogs/test-blog')
@@ -179,7 +182,7 @@ describe('updating blog', () => {
   });
 
   test('fails with 404 with valid update data on non-existing blog', async () => {
-    const updateData = { title: 'changedTestBlog' };
+    const updateData = { title: 'changed Test Blog Title' };
 
     const response = await request(app)
       .put('/api/blogs/nonexisting')

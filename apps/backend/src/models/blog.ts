@@ -13,10 +13,11 @@ import Category from './category';
 
 class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare id: CreationOptional<number>;
+  declare routeName: string;
   declare title: string;
   declare content: string;
-  declare media: string;
-  declare tags: string;
+  declare media: object;
+  declare tags: string[];
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
@@ -30,6 +31,11 @@ Blog.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    routeName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+    },
     title: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -40,11 +46,11 @@ Blog.init(
       allowNull: false,
     },
     media: {
-      type: DataTypes.TEXT,
+      type: DataTypes.JSONB,
       allowNull: false,
     },
     tags: {
-      type: DataTypes.TEXT,
+      type: DataTypes.ARRAY(DataTypes.TEXT),
       allowNull: false,
     },
     views: {

@@ -33,6 +33,7 @@ const blogTagSchema = z.array(z.string());
 
 const newBlogSchema = z
   .object({
+    routeName: z.string(),
     title: z.string(),
     content: z.string(),
     media: blogMediaSchema,
@@ -155,6 +156,10 @@ const validateUserUpdate = (input: unknown): UpdateUser | null => {
 const validateNewBlog = (input: unknown): NewBlog => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
+  }
+
+  if (!('routeName' in input)) {
+    throw new BadRequestError({ message: 'Route Name is required.' });
   }
 
   if (!('title' in input)) {
