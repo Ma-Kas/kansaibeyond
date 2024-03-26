@@ -11,11 +11,14 @@
   "author": "Ma-Kas",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@kansaibeyond/eslint-config-custom": "workspace:^",
+    "@kansaibeyond/shared-types": "workspace:^",
+    "@kansaibeyond/typescript-config": "workspace:^",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": "^18.16.0",
+    "node": "^20.11.1",
     "pnpm": "^8.15.3"
   },
   "packageManager": "pnpm@8.15.3"
