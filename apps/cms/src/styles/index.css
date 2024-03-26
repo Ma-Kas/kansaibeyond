@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Madefor';
+  font-style: normal;
+  src: url('../assets/fonts/Madefor.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Madefor';
+  font-style: italic;
+  src: url('../assets/fonts/Madefor_Italic.ttf') format('truetype');
+}
