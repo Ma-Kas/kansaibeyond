@@ -38,10 +38,7 @@ const HeaderUserMenu = () => {
         >
           <Group gap={7}>
             <Avatar src={user.image} alt={user.name} radius='xl' size={20} />
-            <IconChevronDown
-              style={{ width: rem(12), height: rem(12) }}
-              stroke={1.5}
-            />
+            <IconChevronDown />
           </Group>
         </UnstyledButton>
       </Menu.Target>

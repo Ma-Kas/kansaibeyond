@@ -30,6 +30,10 @@
   stroke: light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
+.icon_container svg {
+  stroke-width: rem(1px);
+}
+
 .button_label {
   font-size: rem(12px);
   font-weight: 500;

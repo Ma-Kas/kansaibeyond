@@ -18,3 +18,10 @@
     var(--mantine-color-dark-8)
   );
 }
+
+.user svg {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  width: rem(16px);
+  height: rem(16px);
+  stroke-width: rem(1.5px);
+}
