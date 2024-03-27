@@ -19,7 +19,7 @@ const menuLinks = [
 ];
 const titleLink = { link: '/kansaibeyond', label: 'Kansai & Beyond' };
 
-export function HeaderMain() {
+const HeaderMain = () => {
   const [opened, { toggle }] = useDisclosure(false);
 
   const items = menuLinks.map((link) => {
@@ -93,4 +93,6 @@ export function HeaderMain() {
       </Container>
     </header>
   );
-}
+};
+
+export default HeaderMain;

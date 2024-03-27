@@ -1,0 +1,52 @@
+.composerheader {
+  position: fixed;
+  z-index: 100;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  height: var(--subheader-editor-height);
+  margin-bottom: 0;
+  background-color: var(--mantine-color-body);
+  border-bottom: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.composerheader-inner {
+  height: var(--subheader-editor-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: rem(12px);
+  padding-bottom: rem(12px);
+}
+
+.plain-button {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  font-weight: 500;
+  background-color: transparent;
+
+  @mixin hover {
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+.color-button {
+  font-weight: 500;
+  background-color: transparent;
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+svg.action-button {
+  stroke-width: var(--editor-toolbar-icon-stroke);
+  color: var(--editor-toolbar-icon-color);
+}

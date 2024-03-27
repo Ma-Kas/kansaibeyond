@@ -1,6 +1,8 @@
 body {
   --header-height: rem(48px);
-  --subheader-editor-height: rem(48px);
+  --subheader-editor-height: rem(54px);
   --navbar-main-width: rem(255px);
-  --navbar-editor-width: rem(100px);
+
+  --editor-toolbar-icon-stroke: rem(1px);
+  --editor-toolbar-icon-color: var(--mantine-color-gray-7);
 }
