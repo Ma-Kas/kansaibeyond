@@ -1,0 +1,36 @@
+.button_root {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(6px);
+
+  @mixin hover {
+    color: var(--mantine-color-blue-light-color);
+    stroke: var(--mantine-color-blue-light-color);
+
+    .icon_container {
+      background-color: var(--composer-sidebar-button-bg);
+    }
+  }
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: rem(36px);
+  height: rem(36px);
+  padding: rem(6px);
+  border: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-radius: 50%;
+  stroke: light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.button_label {
+  font-size: rem(12px);
+  font-weight: 500;
+}

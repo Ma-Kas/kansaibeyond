@@ -1,9 +1,10 @@
-.page_content {
+.page_editor {
+  padding-left: var(--composer-sidebar-width);
+  padding-top: var(--composer-header-height);
   min-height: calc(100vh - var(--header-height));
   position: relative;
   z-index: 1;
   background-color: var(--mantine-color-body);
-  padding-bottom: rem(80px);
 
   @mixin light {
     background-color: var(--mantine-color-white);

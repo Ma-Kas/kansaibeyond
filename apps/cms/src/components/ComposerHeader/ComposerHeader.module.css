@@ -1,10 +1,11 @@
 .composerheader {
+  min-width: rem(576px);
   position: fixed;
   z-index: 100;
   top: var(--header-height);
   left: 0;
   right: 0;
-  height: var(--subheader-editor-height);
+  height: var(--composer-header-height);
   margin-bottom: 0;
   background-color: var(--mantine-color-body);
   border-bottom: rem(1px) solid
@@ -12,7 +13,7 @@
 }
 
 .composerheader-inner {
-  height: var(--subheader-editor-height);
+  height: var(--composer-header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;

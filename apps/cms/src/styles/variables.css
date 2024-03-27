@@ -1,7 +1,9 @@
 body {
   --header-height: rem(48px);
-  --subheader-editor-height: rem(54px);
+  --composer-header-height: rem(54px);
   --navbar-main-width: rem(255px);
+  --composer-sidebar-width: rem(90px);
+  --composer-sidebar-button-bg: rgba(34, 139, 230, 0.1);
 
   --editor-toolbar-icon-stroke: rem(1px);
   --editor-toolbar-icon-color: var(--mantine-color-gray-7);
