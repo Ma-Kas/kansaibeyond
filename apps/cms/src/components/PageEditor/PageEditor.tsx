@@ -12,9 +12,7 @@ export const PageEditor = ({ children }: PageEditorProps) => {
     <>
       <ComposerHeader />
       <ComposerSidebar />
-      <div className={classes['page_editor']}>
-        <div className={classes['content_wrapper']}>{children}</div>
-      </div>
+      <div className={classes['page_editor']}>{children}</div>
     </>
   );
 };

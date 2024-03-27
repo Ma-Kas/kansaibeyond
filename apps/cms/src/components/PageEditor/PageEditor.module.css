@@ -7,7 +7,7 @@
   background-color: var(--mantine-color-body);
 
   @mixin light {
-    background-color: var(--mantine-color-white);
+    background-color: var(--mantine-color-gray-2);
     box-shadow: var(--mantine-shadow-sm);
   }
 
