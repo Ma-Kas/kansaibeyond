@@ -1,13 +1,19 @@
 .header {
-  height: rem(56px);
-  margin-bottom: rem(120px);
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  margin-bottom: 0;
   background-color: var(--mantine-color-body);
   border-bottom: rem(1px) solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  box-shadow: var(--mantine-shadow-xs);
 }
 
 .inner {
-  height: rem(56px);
+  height: var(--header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;

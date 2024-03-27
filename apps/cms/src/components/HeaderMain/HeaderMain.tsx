@@ -1,8 +1,8 @@
 import { Menu, Group, Center, Burger, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown } from '@tabler/icons-react';
-import UserMenu from '../UserMenu/UserMenu';
-import classes from './HeaderMenu.module.css';
+import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
+import classes from './HeaderMain.module.css';
 
 const menuLinks = [
   { link: '/features', label: 'Features' },
@@ -19,7 +19,7 @@ const menuLinks = [
 ];
 const titleLink = { link: '/kansaibeyond', label: 'Kansai & Beyond' };
 
-export function HeaderMenu() {
+export function HeaderMain() {
   const [opened, { toggle }] = useDisclosure(false);
 
   const items = menuLinks.map((link) => {
@@ -76,11 +76,19 @@ export function HeaderMenu() {
           >
             {titleLink.label}
           </a>
-          <Group gap={5} visibleFrom='sm'>
+
+          <Group gap={5} visibleFrom='xs' ml={'auto'}>
             {items}
-            <UserMenu />
           </Group>
-          <Burger opened={opened} onClick={toggle} size='sm' hiddenFrom='sm' />
+
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            size='sm'
+            hiddenFrom='xs'
+            ml={'auto'}
+          />
+          <HeaderUserMenu />
         </div>
       </Container>
     </header>

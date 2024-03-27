@@ -1,0 +1,25 @@
+import { HeaderMain } from '../HeaderMain/HeaderMain';
+import NavbarMain from '../NavbarMain/NavbarMain';
+import classes from './Shell.module.css';
+
+interface ShellProps {
+  children: React.ReactNode;
+  withNavbar?: boolean;
+}
+
+const Shell = ({ children, withNavbar = true }: ShellProps) => {
+  return (
+    <>
+      <HeaderMain />
+
+      {withNavbar && <NavbarMain />}
+      <main
+        className={withNavbar ? classes['shell_main'] : classes['shell_editor']}
+      >
+        {children}
+      </main>
+    </>
+  );
+};
+
+export default Shell;

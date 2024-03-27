@@ -1,22 +1,14 @@
 import { useState } from 'react';
 import cx from 'clsx';
 
-import {
-  Avatar,
-  Menu,
-  Group,
-  UnstyledButton,
-  rem,
-  useMantineTheme,
-} from '@mantine/core';
+import { Avatar, Menu, Group, UnstyledButton, rem } from '@mantine/core';
 import {
   IconChevronDown,
   IconLogout,
   IconMessage,
   IconSettings,
-  IconStar,
 } from '@tabler/icons-react';
-import classes from './UserMenu.module.css';
+import classes from './HeaderUserMenu.module.css';
 
 const user = {
   name: 'Kansai & Beyond',
@@ -24,16 +16,15 @@ const user = {
     'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png',
 };
 
-const UserMenu = () => {
-  const theme = useMantineTheme();
-  const [userMenuOpened, setUserMenuOpened] = useState(false);
+const HeaderUserMenu = () => {
+  const [userMenuOpened, setHeaderUserMenuOpened] = useState(false);
   return (
     <Menu
       width={260}
       position='bottom-end'
       transitionProps={{ transition: 'pop-top-right' }}
-      onClose={() => setUserMenuOpened(false)}
-      onOpen={() => setUserMenuOpened(true)}
+      onClose={() => setHeaderUserMenuOpened(false)}
+      onOpen={() => setHeaderUserMenuOpened(true)}
       withinPortal
     >
       <Menu.Target>
@@ -42,7 +33,7 @@ const UserMenu = () => {
             // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
             cx(classes.user, {
               [classes.userActive]: userMenuOpened,
-            }) as string
+            })
           }
         >
           <Group gap={7}>
@@ -62,12 +53,13 @@ const UserMenu = () => {
         >
           {user.name}
         </Menu.Item>
+
+        <Menu.Divider />
         <Menu.Label>Content</Menu.Label>
         <Menu.Item
           leftSection={
-            <IconStar
+            <IconMessage
               style={{ width: rem(16), height: rem(16) }}
-              color={theme.colors.yellow[6]}
               stroke={1.5}
             />
           }
@@ -78,7 +70,6 @@ const UserMenu = () => {
           leftSection={
             <IconMessage
               style={{ width: rem(16), height: rem(16) }}
-              color={theme.colors.blue[6]}
               stroke={1.5}
             />
           }
@@ -116,4 +107,4 @@ const UserMenu = () => {
   );
 };
 
-export default UserMenu;
+export default HeaderUserMenu;

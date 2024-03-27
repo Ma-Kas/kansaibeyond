@@ -1,0 +1,6 @@
+body {
+  --header-height: rem(48px);
+  --subheader-editor-height: rem(48px);
+  --navbar-main-width: rem(255px);
+  --navbar-editor-width: rem(100px);
+}

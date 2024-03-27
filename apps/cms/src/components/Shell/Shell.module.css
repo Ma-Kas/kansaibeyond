@@ -1,0 +1,18 @@
+.shell_main {
+  padding-left: var(--navbar-main-width);
+  padding-top: var(--header-height);
+}
+
+.shell_editor {
+  padding-left: var(--navbar-editor-width);
+  padding-top: calc(var(--header-height) + var(--subheader-editor-height));
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  background-color: var(--mantine-color-body);
+  padding-bottom: rem(120px);
+  box-shadow: var(--mantine-shadow-md);
+  min-height: calc(100vh - var(--header-height));
+}
