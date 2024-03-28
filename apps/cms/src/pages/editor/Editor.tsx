@@ -1,5 +1,4 @@
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HashtagPlugin } from '@lexical/react/LexicalHashtagPlugin';
@@ -94,7 +93,7 @@ export default function Editor(): JSX.Element {
           />
           <CodeHighlightPlugin />
           <ListPlugin />
-          <CheckListPlugin />
+
           <ListMaxIndentLevelPlugin maxDepth={7} />
           <TablePlugin
             hasCellMerge={tableCellMerge}

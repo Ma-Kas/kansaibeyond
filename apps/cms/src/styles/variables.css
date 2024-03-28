@@ -1,10 +1,14 @@
-body {
+:root {
+  /* General Variables */
   --header-height: rem(48px);
   --composer-header-height: rem(54px);
   --navbar-main-width: rem(255px);
   --composer-sidebar-width: rem(90px);
   --composer-sidebar-button-bg: rgba(34, 139, 230, 0.1);
 
+  /* Rich Text Editor Variales */
+  --editor-font-family-light: FuturaLT-Light, sans-serif;
+  --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-icon-stroke: rem(1px);
   --editor-toolbar-icon-color: var(--mantine-color-gray-7);
 }
