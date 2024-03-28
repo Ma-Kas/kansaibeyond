@@ -1,16 +1,10 @@
 import React from 'react';
 import { EmblaOptionsType } from 'embla-carousel';
-import {
-  PrevButton,
-  NextButton,
-  usePrevNextButtons,
-} from './EmblaCarouselArrowButtons';
+import { PrevButton, NextButton } from './EmblaCarouselArrowButtons';
+import usePrevNextButtons from './usePrevNextButtons';
 import useEmblaCarousel from 'embla-carousel-react';
-import {
-  CarouselImage,
-  CarouselType,
-} from '../../pages/editor/nodes/CarouselContainerNode';
-import { LazyImage } from '../../pages/editor/nodes/CarouselComponent';
+import { CarouselImage, CarouselType } from '../../nodes/CarouselContainerNode';
+import { LazyImage } from '../../nodes/CarouselComponent';
 
 type PropType = {
   carouselType: CarouselType;
@@ -65,12 +59,12 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
     <>
-      <div className='embla__viewport' ref={emblaRef}>
-        <div className='embla__container' style={inlineStyle.container}>
+      <div className='editor_embla_viewport' ref={emblaRef}>
+        <div className='editor_embla_container' style={inlineStyle.container}>
           {slides.map((image) => {
             return (
               <div
-                className='embla__slide'
+                className='editor_embla_slide'
                 style={inlineStyle.slide}
                 key={image.id}
               >

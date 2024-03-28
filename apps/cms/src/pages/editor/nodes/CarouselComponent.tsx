@@ -38,9 +38,9 @@ import { Alignment, CarouselBlockNode } from './CarouselBlockNode';
 import CarouselResizer from '../ui/CarouselResizer';
 import useModal from '../hooks/useModal';
 import { CarouselImageObjectPosition } from './CarouselContainerNode';
-import EmblaCarousel from '../../../components/Carousel/EmblaCarousel';
+import EmblaCarousel from '../components/EmblaCarousel/EmblaCarousel';
 import { EmblaOptionsType } from 'embla-carousel';
-import '../../../components/Carousel/styles.css';
+import '../components/EmblaCarousel/EmblaCarousel.css';
 
 type ImageStyleType = {
   objectPosition?: CarouselImageObjectPosition;
