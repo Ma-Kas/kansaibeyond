@@ -50,6 +50,7 @@ import {
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_NORMAL,
   ElementFormatType,
+  ElementNode,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
   INDENT_CONTENT_COMMAND,
@@ -704,17 +705,17 @@ function ToolbarPlugin({
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
-      const anchorNode = selection.anchor.getNode();
+      const anchorNode = selection.anchor.getNode() as ElementNode;
       let element =
         anchorNode.getKey() === 'root'
           ? anchorNode
           : $findMatchingParent(anchorNode, (e) => {
-              const parent = e.getParent();
+              const parent = e.getParent() as ElementNode;
               return parent !== null && $isRootOrShadowRoot(parent);
             });
 
       if (element === null) {
-        element = anchorNode.getTopLevelElementOrThrow();
+        element = anchorNode.getTopLevelElementOrThrow() as ElementNode;
       }
 
       const elementKey = element.getKey();
@@ -738,7 +739,7 @@ function ToolbarPlugin({
 
       // Update links
       const node = getSelectedNode(selection);
-      const parent = node.getParent();
+      const parent = node.getParent() as ElementNode;
       if ($isLinkNode(parent) || $isLinkNode(node)) {
         setIsLink(true);
       } else {
@@ -755,18 +756,21 @@ function ToolbarPlugin({
       if (elementDOM !== null) {
         setSelectedElementKey(elementKey);
         if ($isListNode(element)) {
-          const parentList = $getNearestNodeOfType<ListNode>(
+          const parentList = $getNearestNodeOfType<Omit<ListNode, 'check'>>(
             anchorNode,
             ListNode
           );
           const type = parentList
             ? parentList.getListType()
             : element.getListType();
-          setBlockType(type);
+          if (type !== 'check') {
+            setBlockType(type);
+          }
         } else {
-          const type = $isHeadingNode(element)
-            ? element.getTag()
-            : element.getType();
+          const type =
+            element && $isHeadingNode(element)
+              ? element.getTag()
+              : element.getType();
           if (type in blockTypeToBlockName) {
             setBlockType(type as keyof typeof blockTypeToBlockName);
           }

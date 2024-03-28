@@ -217,7 +217,7 @@ export class EmbedNode extends DecoratorNode<JSX.Element> {
   // View
   createDOM(config: EditorConfig): HTMLElement {
     const div = document.createElement('div');
-    const className = config.theme.embedContainer;
+    const className = config.theme.embedContainer as string;
     if (className !== undefined) {
       div.className = className;
     }

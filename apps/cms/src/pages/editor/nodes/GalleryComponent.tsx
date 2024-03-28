@@ -189,7 +189,7 @@ export function UpdateGalleryDialog({
     setColumns(Number(e.target.value));
   };
   const handleGridGapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setGridGap(e.target.value as string);
+    setGridGap(e.target.value);
   };
   const handleColumnMinWidthChange = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -386,7 +386,9 @@ export function UpdateGalleryDialog({
         {imageList.map((image, index) => {
           return (
             <div key={image.id}>
-              <div className='Input__galleryInputGroupTitle'>{`Edit Image ${index + 1}:`}</div>
+              <div className='Input__galleryInputGroupTitle'>{`Edit Image ${
+                index + 1
+              }:`}</div>
               <TextInput
                 label='Alt Text'
                 placeholder='Descriptive alternative text'
@@ -593,10 +595,7 @@ export default function GalleryComponent({
           $isRangeSelection(latestSelection) &&
           latestSelection.getNodes().length === 1
         ) {
-          editor.dispatchCommand(
-            RIGHT_CLICK_IMAGE_COMMAND,
-            event as MouseEvent
-          );
+          editor.dispatchCommand(RIGHT_CLICK_IMAGE_COMMAND, event);
         }
       });
     },

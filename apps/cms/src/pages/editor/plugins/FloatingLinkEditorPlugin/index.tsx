@@ -17,6 +17,7 @@ import {
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
+  ElementNode,
   KEY_ESCAPE_COMMAND,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
@@ -190,7 +191,9 @@ function FloatingLinkEditor({
         editor.update(() => {
           const selection = $getSelection();
           if ($isRangeSelection(selection)) {
-            const parent = getSelectedNode(selection).getParent();
+            const parent = getSelectedNode(
+              selection
+            ).getParent() as ElementNode;
             if ($isAutoLinkNode(parent)) {
               const linkNode = $createLinkNode(parent.getURL(), {
                 rel: parent.__rel,
@@ -311,6 +314,7 @@ function useFloatingLinkEditorToolbar(
           ) {
             return node;
           }
+          return;
         });
         if (!badNode) {
           setIsLink(true);

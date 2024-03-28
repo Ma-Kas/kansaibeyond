@@ -1,4 +1,4 @@
-import type { ElementNode, LexicalEditor } from 'lexical';
+import type { ElementNode, LexicalEditor, LexicalNode } from 'lexical';
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import useLexicalEditable from '@lexical/react/useLexicalEditable';
@@ -63,7 +63,7 @@ function isTableSelectionRectangular(selection: TableSelection): boolean {
     if ($isTableCellNode(node)) {
       const row = node.getParentOrThrow();
       invariant(
-        $isTableRowNode(row),
+        $isTableRowNode(row as LexicalNode),
         'Expected CellNode to have a RowNode parent'
       );
       if (currentRow !== row) {
@@ -73,7 +73,7 @@ function isTableSelectionRectangular(selection: TableSelection): boolean {
         if (currentRow !== null) {
           expectedColumns = currentColumns;
         }
-        currentRow = row;
+        currentRow = row as ElementNode;
         currentColumns = 0;
       }
       const colSpan = node.__colSpan;

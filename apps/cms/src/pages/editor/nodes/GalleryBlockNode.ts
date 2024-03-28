@@ -63,7 +63,7 @@ export class GalleryBlockNode extends ElementNode {
   // View
   createDOM(config: EditorConfig): HTMLElement {
     const span = document.createElement('p');
-    const className = config.theme.galleryBlock;
+    const className = config.theme.galleryBlock as string;
     if (className !== undefined) {
       span.className = className;
     }

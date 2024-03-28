@@ -65,7 +65,7 @@ export class CarouselBlockNode extends ElementNode {
   // View
   createDOM(config: EditorConfig): HTMLElement {
     const span = document.createElement('p');
-    const className = config.theme.carouselBlock;
+    const className = config.theme.carouselBlock as string;
     if (className !== undefined) {
       span.className = className;
     }

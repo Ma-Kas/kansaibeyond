@@ -10,6 +10,7 @@ import {
   $isRangeSelection,
   $isTextNode,
   COMMAND_PRIORITY_LOW,
+  ElementNode,
   FORMAT_TEXT_COMMAND,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
@@ -311,15 +312,17 @@ const useFloatingTextFormatToolbar = (
       setIsCode(selection.hasFormat('code'));
 
       // Update links
-      const parent = node.getParent();
+      const parent = node.getParent() as ElementNode;
       if ($isLinkNode(parent) || $isLinkNode(node)) {
         setIsLink(true);
       } else {
         setIsLink(false);
       }
 
+      const anchorNode = selection.anchor.getNode() as ElementNode;
+
       if (
-        !$isCodeHighlightNode(selection.anchor.getNode()) &&
+        !$isCodeHighlightNode(anchorNode) &&
         selection.getTextContent() !== ''
       ) {
         setIsText($isTextNode(node) || $isParagraphNode(node));
