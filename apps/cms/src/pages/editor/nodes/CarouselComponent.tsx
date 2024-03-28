@@ -37,11 +37,10 @@ import Button from '../ui/Button';
 import { Alignment, CarouselBlockNode } from './CarouselBlockNode';
 import CarouselResizer from '../ui/CarouselResizer';
 import useModal from '../hooks/useModal';
-
 import { CarouselImageObjectPosition } from './CarouselContainerNode';
 import EmblaCarousel from '../../../components/Carousel/EmblaCarousel';
-import '../../../components/Carousel/styles.css';
 import { EmblaOptionsType } from 'embla-carousel';
+import '../../../components/Carousel/styles.css';
 
 type ImageStyleType = {
   objectPosition?: CarouselImageObjectPosition;
@@ -187,7 +186,7 @@ export function UpdateCarouselDialog({
     setImagesInView(Number(e.target.value));
   };
   const handleImageGapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setImageGap(e.target.value as string);
+    setImageGap(e.target.value);
   };
   const handleAlignmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setBlockAlignment(e.target.value as Alignment);
@@ -354,7 +353,9 @@ export function UpdateCarouselDialog({
         {imageList.map((image, index) => {
           return (
             <div key={image.id}>
-              <div className='Input__carouselInputGroupTitle'>{`Edit Image ${index + 1}:`}</div>
+              <div className='Input__carouselInputGroupTitle'>{`Edit Image ${
+                index + 1
+              }:`}</div>
               <TextInput
                 label='Alt Text'
                 placeholder='Descriptive alternative text'
@@ -548,10 +549,7 @@ export default function CarouselComponent({
           $isRangeSelection(latestSelection) &&
           latestSelection.getNodes().length === 1
         ) {
-          editor.dispatchCommand(
-            RIGHT_CLICK_IMAGE_COMMAND,
-            event as MouseEvent
-          );
+          editor.dispatchCommand(RIGHT_CLICK_IMAGE_COMMAND, event);
         }
       });
     },

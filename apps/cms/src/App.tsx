@@ -5,7 +5,7 @@ import { LexicalComposer } from '@lexical/react/LexicalComposer';
 // Page Imports
 import Shell from './components/Shell/Shell';
 import PageBase from './components/PageBase/PageBase';
-import PageEditor from './components/PageEditor/PageEditor';
+import PageComposer from './components/PageComposer/PageComposer';
 import { theme } from './theme';
 
 // Editor Imports
@@ -101,7 +101,7 @@ const App = () => {
           </PageBase>
         )}
         {!showNavbar && (
-          <PageEditor>
+          <PageComposer>
             <LexicalComposer initialConfig={initialConfig}>
               <TableContext>
                 <div className='editor-shell'>
@@ -109,7 +109,7 @@ const App = () => {
                 </div>
               </TableContext>
             </LexicalComposer>
-          </PageEditor>
+          </PageComposer>
         )}
       </Shell>
     </MantineProvider>

@@ -1,20 +1,20 @@
 import React from 'react';
 import ComposerHeader from '../ComposerHeader/ComposerHeader';
 import ComposerSidebar from '../ComposerSidebar/ComposerSidebar';
-import classes from './PageEditor.module.css';
+import classes from './PageComposer.module.css';
 
-interface PageEditorProps {
+interface PageComposerProps {
   children: React.ReactNode;
 }
 
-export const PageEditor = ({ children }: PageEditorProps) => {
+export const PageComposer = ({ children }: PageComposerProps) => {
   return (
     <>
       <ComposerHeader />
       <ComposerSidebar />
-      <div className={classes['page_editor']}>{children}</div>
+      <div className={classes['page_composer']}>{children}</div>
     </>
   );
 };
 
-export default PageEditor;
+export default PageComposer;

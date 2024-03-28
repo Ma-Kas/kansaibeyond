@@ -15,7 +15,9 @@ const Shell = ({ children, withNavbar = true }: ShellProps) => {
       {withNavbar && <NavbarMain />}
       {/* NO navbar && subheader and editor nav */}
       <main
-        className={withNavbar ? classes['shell_main'] : classes['shell_editor']}
+        className={
+          withNavbar ? classes['shell_main'] : classes['shell_composer']
+        }
       >
         {children}
       </main>
