@@ -12,7 +12,11 @@
     stroke: var(--mantine-color-blue-light-color);
 
     .icon_container {
-      background-color: var(--composer-sidebar-button-bg);
+      background-color: var(--transparent-blue-hover-bg);
+      stroke: var(--mantine-color-blue-light-color);
+    }
+    .icon_container svg {
+      stroke: var(--mantine-color-blue-light-color);
     }
   }
 }
@@ -36,5 +40,5 @@
 
 .button_label {
   font-size: rem(12px);
-  font-weight: 500;
+  font-weight: var(--menu-font-weight);
 }

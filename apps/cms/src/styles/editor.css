@@ -293,7 +293,7 @@ i.success {
 }
 
 .link-editor .button.active,
-.toolbar .button.active {
+.editor_toolbar .button.active {
   background-color: rgb(223, 232, 250);
 }
 
@@ -1190,7 +1190,7 @@ button.action-button:disabled {
   text-align: right;
 }
 
-.toolbar {
+.editor_toolbar {
   z-index: 99;
   display: flex;
   justify-content: center;
@@ -1269,11 +1269,11 @@ button.toolbar-item.active i {
   max-width: 40px;
 }
 
-.toolbar .code-language {
+.editor_toolbar .code-language {
   width: 150px;
 }
 
-.toolbar .toolbar-item .text {
+.editor_toolbar .toolbar-item .text {
   display: flex;
   line-height: 20px;
   vertical-align: middle;
@@ -1286,7 +1286,7 @@ button.toolbar-item.active i {
   padding-right: 10px;
 }
 
-.toolbar .toolbar-item .icon {
+.editor_toolbar .toolbar-item .icon {
   display: flex;
   width: 20px;
   height: 20px;
@@ -1296,7 +1296,7 @@ button.toolbar-item.active i {
   background-size: contain;
 }
 
-.toolbar i.chevron-down,
+.editor_toolbar i.chevron-down,
 .toolbar-item i.chevron-down {
   margin-top: 3px;
   width: 16px;
@@ -1305,7 +1305,7 @@ button.toolbar-item.active i {
   user-select: none;
 }
 
-.toolbar i.chevron-down.inside {
+.editor_toolbar i.chevron-down.inside {
   width: 16px;
   height: 16px;
   display: flex;
@@ -1315,7 +1315,7 @@ button.toolbar-item.active i {
   pointer-events: none;
 }
 
-.toolbar .divider {
+.editor_toolbar .divider {
   width: 1px;
   background-color: #eee;
   margin: 0 4px;

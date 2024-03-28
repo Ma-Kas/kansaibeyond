@@ -1,0 +1,29 @@
+.editor_toolbar_plain_button {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  font-weight: var(--editor-toolbar-font-weight);
+  background-color: transparent;
+
+  @mixin hover {
+    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+.editor_toolbar_dropdown_item {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  font-weight: var(--editor-toolbar-font-weight);
+}
+
+.editor_toolbar_dropdown_item.active {
+  background-color: var(--transparent-blue-hover-bg);
+}
+
+svg {
+  stroke-width: var(--editor-toolbar-icon-stroke);
+  color: var(--editor-toolbar-icon-color);
+  height: rem(20px);
+  width: rem(20px);
+}
