@@ -326,7 +326,8 @@ function BlockFormatDropDown({
 
   return (
     <ToolbarDropdown
-      currentBlockType={blockTypeToBlockName[blockType]}
+      type='block-format'
+      currentValue={blockTypeToBlockName[blockType]}
       ariaLabel='Formatting options for text style'
       items={dropDownItems}
       disabled={disabled}
@@ -484,12 +485,12 @@ function Divider(): JSX.Element {
 
 function FontDropDown({
   editor,
-  value,
+  currentValue,
   style,
   disabled = false,
 }: {
   editor: LexicalEditor;
-  value: string;
+  currentValue: string;
   style: string;
   disabled?: boolean;
 }): JSX.Element {
@@ -507,34 +508,19 @@ function FontDropDown({
     [editor, style]
   );
 
-  const buttonAriaLabel =
-    style === 'font-family'
-      ? 'Formatting options for font family'
-      : 'Formatting options for font size';
+  const fontFamilyDropDownItems = FONT_FAMILY_OPTIONS.map(([option, text]) => ({
+    text: text,
+    onClick: () => handleClick(option),
+  }));
 
   return (
-    <DropDown
+    <ToolbarDropdown
+      type='font-family'
+      currentValue={currentValue}
+      ariaLabel='Formatting options for font family'
+      items={fontFamilyDropDownItems}
       disabled={disabled}
-      buttonClassName={'toolbar-item ' + style}
-      // Comment to hide label for currently selected font family
-      buttonLabel={value}
-      buttonIconClassName={
-        style === 'font-family' ? 'icon block-type font-family' : ''
-      }
-      buttonAriaLabel={buttonAriaLabel}
-    >
-      {FONT_FAMILY_OPTIONS.map(([option, text]) => (
-        <DropDownItem
-          className={`item ${dropDownActiveClass(value === option)} ${
-            style === 'font-size' ? 'fontsize-item' : ''
-          }`}
-          onClick={() => handleClick(option)}
-          key={option}
-        >
-          <span className='text'>{text}</span>
-        </DropDownItem>
-      ))}
-    </DropDown>
+    />
   );
 }
 
@@ -1054,7 +1040,7 @@ function ToolbarPlugin({
             <FontDropDown
               disabled={!isEditable}
               style={'font-family'}
-              value={fontFamily}
+              currentValue={fontFamily}
               editor={editor}
             />
             <Divider />

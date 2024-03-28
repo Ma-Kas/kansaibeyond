@@ -12,14 +12,15 @@ type DropDownItem = {
 };
 
 interface ToolbarDropDownProps {
-  currentBlockType: string;
+  type: 'block-format' | 'font-family' | 'font-size';
+  currentValue: string;
   ariaLabel: string;
   items: DropDownItem[];
   disabled: boolean;
 }
 
 const ToolbarDropdown = ({
-  currentBlockType,
+  currentValue,
   ariaLabel,
   items,
   disabled = false,
@@ -33,7 +34,7 @@ const ToolbarDropdown = ({
           className={classes['editor_toolbar_plain_button']}
           rightSection={<IconChevronDown />}
         >
-          {currentBlockType}
+          {currentValue}
         </Button>
       </Menu.Target>
 
@@ -45,7 +46,7 @@ const ToolbarDropdown = ({
               className={
                 // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
                 cx(classes['editor_toolbar_dropdown_item'], {
-                  [classes.active]: currentBlockType === item.text,
+                  [classes.active]: currentValue === item.text,
                 })
               }
               onClick={item.onClick}
