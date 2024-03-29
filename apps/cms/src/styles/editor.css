@@ -36,16 +36,16 @@
   height: 100%;
   color: #000;
   position: relative;
-  line-height: 1.7;
-  font-weight: 400;
+  line-height: var(--editor-line-height);
+  font-weight: var(--editor-font-weight);
 }
 
 .editor-shell .editor-container {
   color: var(--mantine-color-text);
   background-color: var(--mantine-color-white);
   font-family: var(--editor-font-family-light);
-  line-height: 1.5;
-  font-weight: 400;
+  line-height: var(--editor-line-height);
+  font-weight: var(--editor-font-weight);
   position: relative;
   display: block;
 }

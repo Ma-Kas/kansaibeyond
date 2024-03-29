@@ -1,6 +1,6 @@
 .plain-button {
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
-  font-weight: var(--editor-toolbar-font-weight);
+  font-weight: var(--editor-font-weight);
   background-color: transparent;
 
   @mixin hover {

@@ -37,7 +37,7 @@ import { createPortal } from 'react-dom';
 import invariant from '../../../shared/src/invariant';
 
 import useModal from '../../hooks/useModal';
-import ColorPicker from '../../ui/ColorPicker';
+import MantineColorPicker from '../../components/ColorPicker/MantineColorPicker';
 
 function computeSelectionCount(selection: TableSelection): {
   columns: number;
@@ -517,7 +517,7 @@ function TableActionMenu({
         className='item'
         onClick={() =>
           showColorPickerModal('Cell background color', () => (
-            <ColorPicker
+            <MantineColorPicker
               color={backgroundColor}
               onChange={handleCellBackgroundColor}
             />

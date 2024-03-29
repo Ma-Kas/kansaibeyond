@@ -82,3 +82,20 @@ export const ELEMENT_FORMAT_OPTIONS: {
     name: 'Start Align',
   },
 };
+
+export const COLOR_SWATCHES = [
+  '#d0021b',
+  '#f5a623',
+  '#f8e71c',
+  '#8b572a',
+  '#7ed321',
+  '#417505',
+  '#bd10e0',
+  '#9013fe',
+  '#4a90e2',
+  '#50e3c2',
+  '#b8e986',
+  '#000000',
+  '#4a4a4a',
+  '#9b9b9b',
+];

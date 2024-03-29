@@ -72,7 +72,7 @@ import useModal from '../../hooks/useModal';
 import { $createStickyNode } from '../../nodes/StickyNode';
 import BlockTypeList, { BlockTypeListItem } from '../../ui/BlockTypeList';
 import DropDown, { DropDownItem } from '../../ui/DropDown';
-import DropdownColorPicker from '../../ui/DropdownColorPicker';
+import ColorPickerDropdown from '../../components/ColorPickerDropdown/ColorPickerDropdown';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { sanitizeUrl } from '../../utils/url';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
@@ -1216,23 +1216,19 @@ function ToolbarPlugin({
               isSubscript={isSubscript}
               isCode={isCode}
             />
-            <DropdownColorPicker
-              disabled={!isEditable}
-              buttonClassName='toolbar-item color-picker'
-              buttonAriaLabel='Formatting text color'
-              buttonIconClassName='icon font-color'
+            <ColorPickerDropdown
+              type='font-color'
               color={fontColor}
               onChange={onFontColorSelect}
-              title='text color'
-            />
-            <DropdownColorPicker
+              ariaLabel='Formatting text color'
               disabled={!isEditable}
-              buttonClassName='toolbar-item color-picker'
-              buttonAriaLabel='Formatting background color'
-              buttonIconClassName='icon bg-color'
+            />
+            <ColorPickerDropdown
+              type='bg-color'
               color={bgColor}
               onChange={onBgColorSelect}
-              title='bg color'
+              ariaLabel='Formatting background color'
+              disabled={!isEditable}
             />
             <ElementFormatDropdown
               disabled={!isEditable}
