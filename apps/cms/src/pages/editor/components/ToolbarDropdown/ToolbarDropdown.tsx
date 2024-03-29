@@ -1,3 +1,4 @@
+import { getLanguageFriendlyName } from '@lexical/code';
 import { Menu, Button, ThemeIcon } from '@mantine/core';
 import {
   IconChevronDown,
@@ -13,6 +14,7 @@ type DropDownItem = {
   onClick: () => void;
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   icon?: React.FC<any>;
+  codeValue?: string;
   activeFormat?: boolean;
 };
 
@@ -21,6 +23,7 @@ interface ToolbarDropDownProps {
     | 'block-format'
     | 'font-family'
     | 'font-size'
+    | 'code-language'
     | 'text-format'
     | 'element-format';
   currentValue: string;
@@ -71,6 +74,41 @@ const ToolbarDropdown = ({
                       // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
                       cx(classes['editor_toolbar_dropdown_item_font_size'], {
                         [classes.active]: currentValue === item.text,
+                      })
+                    }
+                    onClick={item.onClick}
+                  >
+                    {item.text}
+                  </Menu.Item>
+                );
+              })}
+            </Menu.Dropdown>
+          </Menu>
+        );
+      }
+      case 'code-language': {
+        return (
+          <Menu shadow='md' position='bottom-start' offset={5}>
+            <Menu.Target>
+              <Button
+                disabled={disabled}
+                aria-label={ariaLabel}
+                className={classes['editor_toolbar_plain_button']}
+                rightSection={<IconChevronDown />}
+              >
+                {getLanguageFriendlyName(currentValue)}
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              {items.map((item) => {
+                return (
+                  <Menu.Item
+                    key={item.text}
+                    className={
+                      // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                      cx(classes['editor_toolbar_dropdown_item'], {
+                        [classes.active]: currentValue === item.codeValue,
                       })
                     }
                     onClick={item.onClick}

@@ -3,7 +3,6 @@ import {
   $isCodeNode,
   CODE_LANGUAGE_FRIENDLY_NAME_MAP,
   CODE_LANGUAGE_MAP,
-  getLanguageFriendlyName,
 } from '@lexical/code';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import {
@@ -476,6 +475,35 @@ function FontDropDown({
       currentValue={currentValue}
       ariaLabel='Formatting options for font family'
       items={fontFamilyDropDownItems}
+      disabled={disabled}
+    />
+  );
+}
+
+function CodeLanguageDropDown({
+  currentValue,
+  disabled = false,
+  onCodeLanguageSelect,
+}: {
+  editor: LexicalEditor;
+  currentValue: string;
+  onCodeLanguageSelect: (value: string) => void;
+  disabled?: boolean;
+}): JSX.Element {
+  const codeLanguageDropDownItems = CODE_LANGUAGE_OPTIONS.map(
+    ([value, name]) => ({
+      text: name,
+      codeValue: value,
+      onClick: () => onCodeLanguageSelect(value),
+    })
+  );
+
+  return (
+    <ToolbarDropdown
+      type='code-language'
+      currentValue={currentValue}
+      ariaLabel='Select language'
+      items={codeLanguageDropDownItems}
       disabled={disabled}
     />
   );
@@ -1078,26 +1106,12 @@ function ToolbarPlugin({
         )}
         {blockType === 'code' ? (
           // Code Language Dropdown
-          <DropDown
+          <CodeLanguageDropDown
+            onCodeLanguageSelect={onCodeLanguageSelect}
             disabled={!isEditable}
-            buttonClassName='toolbar-item code-language'
-            buttonLabel={getLanguageFriendlyName(codeLanguage)}
-            buttonAriaLabel='Select language'
-          >
-            {CODE_LANGUAGE_OPTIONS.map(([value, name]) => {
-              return (
-                <DropDownItem
-                  className={`item ${dropDownActiveClass(
-                    value === codeLanguage
-                  )}`}
-                  onClick={() => onCodeLanguageSelect(value)}
-                  key={value}
-                >
-                  <span className='text'>{name}</span>
-                </DropDownItem>
-              );
-            })}
-          </DropDown>
+            currentValue={codeLanguage}
+            editor={editor}
+          />
         ) : (
           <>
             <FontDropDown
