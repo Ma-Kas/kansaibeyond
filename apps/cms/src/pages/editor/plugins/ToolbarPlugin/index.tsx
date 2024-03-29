@@ -24,7 +24,6 @@ import {
 } from '@lexical/rich-text';
 import {
   $getSelectionStyleValueForProperty,
-  $isParentElementRTL,
   $patchStyleText,
   $setBlocksType,
 } from '@lexical/selection';
@@ -100,6 +99,12 @@ import {
   IconSuperscript,
   IconSubscript,
   IconClearFormatting,
+  IconAlignLeft,
+  IconAlignRight,
+  IconAlignCenter,
+  IconAlignJustified,
+  IconIndentIncrease,
+  IconIndentDecrease,
 } from '@tabler/icons-react';
 import cx from 'clsx';
 import ToolbarDropdown from '../../components/ToolbarDropdown/ToolbarDropdown';
@@ -534,178 +539,168 @@ function TextFormatDropdown({
       items={textFormatDropDownItems}
       disabled={disabled}
     />
-
-    // <DropDown
-    //           disabled={!isEditable}
-    //           buttonClassName='toolbar-item spaced'
-    //           buttonLabel=''
-    //           buttonAriaLabel='Formatting options for additional text styles'
-    //           buttonIconClassName='icon format-more'
-    //         >
-    //           <DropDownItem
-    //             onClick={() => {
-    //               activeEditor.dispatchCommand(
-    //                 FORMAT_TEXT_COMMAND,
-    //                 'strikethrough'
-    //               );
-    //             }}
-    //             className={'item ' + dropDownActiveClass(isStrikethrough)}
-    //             title='Strikethrough'
-    //             aria-label='Format text with a strikethrough'
-    //           >
-    //             <i className='icon strikethrough' />
-    //             <span className='text'>Strikethrough</span>
-    //           </DropDownItem>
-    //           <DropDownItem
-    //             onClick={() => {
-    //               activeEditor.dispatchCommand(
-    //                 FORMAT_TEXT_COMMAND,
-    //                 'subscript'
-    //               );
-    //             }}
-    //             className={'item ' + dropDownActiveClass(isSubscript)}
-    //             title='Subscript'
-    //             aria-label='Format text with a subscript'
-    //           >
-    //             <i className='icon subscript' />
-    //             <span className='text'>Subscript</span>
-    //           </DropDownItem>
-    //           <DropDownItem
-    //             onClick={() => {
-    //               activeEditor.dispatchCommand(
-    //                 FORMAT_TEXT_COMMAND,
-    //                 'superscript'
-    //               );
-    //             }}
-    //             className={'item ' + dropDownActiveClass(isSuperscript)}
-    //             title='Superscript'
-    //             aria-label='Format text with a superscript'
-    //           >
-    //             <i className='icon superscript' />
-    //             <span className='text'>Superscript</span>
-    //           </DropDownItem>
-    //           <DropDownItem
-    //             onClick={clearFormatting}
-    //             className='item'
-    //             title='Clear text formatting'
-    //             aria-label='Clear all text formatting'
-    //           >
-    //             <i className='icon clear' />
-    //             <span className='text'>Clear Formatting</span>
-    //           </DropDownItem>
-    //         </DropDown>
   );
 }
 
 function ElementFormatDropdown({
   editor,
   value,
-  isRTL,
   disabled = false,
 }: {
   editor: LexicalEditor;
   value: ElementFormatType;
-  isRTL: boolean;
   disabled: boolean;
 }) {
   const formatOption = ELEMENT_FORMAT_OPTIONS[value || 'left'];
 
+  const elementFormatDropDownItems = [
+    {
+      text: 'Left Align',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+      },
+      icon: IconAlignLeft,
+    },
+    {
+      text: 'Center Align',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
+      },
+      icon: IconAlignCenter,
+    },
+    {
+      text: 'Right Align',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
+      },
+      icon: IconAlignRight,
+    },
+    {
+      text: 'Justify Align',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
+      },
+      icon: IconAlignJustified,
+    },
+    {
+      text: 'Indent',
+      onClick: () => {
+        editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
+      },
+      icon: IconIndentIncrease,
+    },
+    {
+      text: 'Outdent',
+      onClick: () => {
+        editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
+      },
+      icon: IconIndentDecrease,
+    },
+  ];
+
   return (
-    <DropDown
+    <ToolbarDropdown
+      type='element-format'
+      currentValue={formatOption.name}
+      ariaLabel='Formatting options for text alignment'
+      items={elementFormatDropDownItems}
       disabled={disabled}
-      // Uncomment to show label of current formatting option
-      // buttonLabel={formatOption.name}
-      buttonIconClassName={`icon ${
-        isRTL ? formatOption.iconRTL : formatOption.icon
-      }`}
-      buttonClassName='toolbar-item spaced alignment'
-      buttonAriaLabel='Formatting options for text alignment'
-    >
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
-        }}
-        className='item'
-      >
-        <i className='icon left-align' />
-        <span className='text'>Left Align</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
-        }}
-        className='item'
-      >
-        <i className='icon center-align' />
-        <span className='text'>Center Align</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
-        }}
-        className='item'
-      >
-        <i className='icon right-align' />
-        <span className='text'>Right Align</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
-        }}
-        className='item'
-      >
-        <i className='icon justify-align' />
-        <span className='text'>Justify Align</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'start');
-        }}
-        className='item'
-      >
-        <i
-          className={`icon ${
-            isRTL
-              ? ELEMENT_FORMAT_OPTIONS.start.iconRTL
-              : ELEMENT_FORMAT_OPTIONS.start.icon
-          }`}
-        />
-        <span className='text'>Start Align</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'end');
-        }}
-        className='item'
-      >
-        <i
-          className={`icon ${
-            isRTL
-              ? ELEMENT_FORMAT_OPTIONS.end.iconRTL
-              : ELEMENT_FORMAT_OPTIONS.end.icon
-          }`}
-        />
-        <span className='text'>End Align</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
-        }}
-        className='item'
-      >
-        <i className={'icon ' + (isRTL ? 'indent' : 'outdent')} />
-        <span className='text'>Outdent</span>
-      </DropDownItem>
-      <DropDownItem
-        onClick={() => {
-          editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
-        }}
-        className='item'
-      >
-        <i className={'icon ' + (isRTL ? 'outdent' : 'indent')} />
-        <span className='text'>Indent</span>
-      </DropDownItem>
-    </DropDown>
+    />
+    // <DropDown
+    //   disabled={disabled}
+    //   // Uncomment to show label of current formatting option
+    //   // buttonLabel={formatOption.name}
+    //   buttonIconClassName={`icon ${
+    //     isRTL ? formatOption.iconRTL : formatOption.icon
+    //   }`}
+    //   buttonClassName='toolbar-item spaced alignment'
+    //   buttonAriaLabel='Formatting options for text alignment'
+    // >
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+    //     }}
+    //     className='item'
+    //   >
+    //     <i className='icon left-align' />
+    //     <span className='text'>Left Align</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
+    //     }}
+    //     className='item'
+    //   >
+    //     <i className='icon center-align' />
+    //     <span className='text'>Center Align</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
+    //     }}
+    //     className='item'
+    //   >
+    //     <i className='icon right-align' />
+    //     <span className='text'>Right Align</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
+    //     }}
+    //     className='item'
+    //   >
+    //     <i className='icon justify-align' />
+    //     <span className='text'>Justify Align</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'start');
+    //     }}
+    //     className='item'
+    //   >
+    //     <i
+    //       className={`icon ${
+    //         isRTL
+    //           ? ELEMENT_FORMAT_OPTIONS.start.iconRTL
+    //           : ELEMENT_FORMAT_OPTIONS.start.icon
+    //       }`}
+    //     />
+    //     <span className='text'>Start Align</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'end');
+    //     }}
+    //     className='item'
+    //   >
+    //     <i
+    //       className={`icon ${
+    //         isRTL
+    //           ? ELEMENT_FORMAT_OPTIONS.end.iconRTL
+    //           : ELEMENT_FORMAT_OPTIONS.end.icon
+    //       }`}
+    //     />
+    //     <span className='text'>End Align</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
+    //     }}
+    //     className='item'
+    //   >
+    //     <i className={'icon ' + (isRTL ? 'indent' : 'outdent')} />
+    //     <span className='text'>Outdent</span>
+    //   </DropDownItem>
+    //   <DropDownItem
+    //     onClick={() => {
+    //       editor.dispatchCommand(INDENT_CONTENT_COMMAND, undefined);
+    //     }}
+    //     className='item'
+    //   >
+    //     <i className={'icon ' + (isRTL ? 'outdent' : 'indent')} />
+    //     <span className='text'>Indent</span>
+    //   </DropDownItem>
+    // </DropDown>
   );
 }
 
@@ -739,7 +734,6 @@ function ToolbarPlugin({
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [modal, showModal] = useModal();
-  const [isRTL, setIsRTL] = useState(false);
   const [codeLanguage, setCodeLanguage] = useState<string>('');
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 
@@ -776,7 +770,6 @@ function ToolbarPlugin({
       setIsSubscript(selection.hasFormat('subscript'));
       setIsSuperscript(selection.hasFormat('superscript'));
       setIsCode(selection.hasFormat('code'));
-      setIsRTL($isParentElementRTL(selection));
 
       // Update links
       const node = getSelectedNode(selection);
@@ -1231,7 +1224,6 @@ function ToolbarPlugin({
               disabled={!isEditable}
               value={elementFormat}
               editor={editor}
-              isRTL={isRTL}
             />
             {/* Insert Options Dropdown */}
             <DropDown
