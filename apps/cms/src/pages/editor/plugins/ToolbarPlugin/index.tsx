@@ -65,6 +65,11 @@ import {
 import { Dispatch, useCallback, useEffect, useState } from 'react';
 
 // Lexical Plugins Imports
+import {
+  blockTypeToBlockName,
+  FONT_FAMILY_OPTIONS,
+  ELEMENT_FORMAT_OPTIONS,
+} from '../../../../utils/editor-constants';
 import { IS_APPLE } from '../../../shared/src/environment';
 import useModal from '../../hooks/useModal';
 import { $createStickyNode } from '../../nodes/StickyNode';
@@ -91,19 +96,6 @@ import ToolbarDropdown from '../../components/ToolbarDropdown/ToolbarDropdown';
 import classes from './Toolbar.module.css';
 
 const IMPORT_TEST = '';
-const blockTypeToBlockName = {
-  bullet: 'Bulleted List',
-  code: 'Code Block',
-  h1: 'Heading 1',
-  h2: 'Heading 2',
-  h3: 'Heading 3',
-  h4: 'Heading 4',
-  h5: 'Heading 5',
-  h6: 'Heading 6',
-  number: 'Numbered List',
-  paragraph: 'Paragraph',
-  quote: 'Quote',
-};
 
 const rootTypeToRootName = {
   root: 'Root',
@@ -147,54 +139,6 @@ function containsUnformattableNodes(selection: BaseSelection): boolean {
 }
 
 const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions();
-
-const FONT_FAMILY_OPTIONS: [string, string][] = [
-  ['Arial', 'Arial'],
-  ['Courier New', 'Courier New'],
-  ['Georgia', 'Georgia'],
-  ['Times New Roman', 'Times New Roman'],
-  ['Trebuchet MS', 'Trebuchet MS'],
-  ['Verdana', 'Verdana'],
-];
-
-const ELEMENT_FORMAT_OPTIONS: {
-  [key in Exclude<ElementFormatType, ''>]: {
-    icon: string;
-    iconRTL: string;
-    name: string;
-  };
-} = {
-  center: {
-    icon: 'center-align',
-    iconRTL: 'center-align',
-    name: 'Center Align',
-  },
-  end: {
-    icon: 'right-align',
-    iconRTL: 'left-align',
-    name: 'End Align',
-  },
-  justify: {
-    icon: 'justify-align',
-    iconRTL: 'justify-align',
-    name: 'Justify Align',
-  },
-  left: {
-    icon: 'left-align',
-    iconRTL: 'left-align',
-    name: 'Left Align',
-  },
-  right: {
-    icon: 'right-align',
-    iconRTL: 'right-align',
-    name: 'Right Align',
-  },
-  start: {
-    icon: 'left-align',
-    iconRTL: 'right-align',
-    name: 'Start Align',
-  },
-};
 
 function dropDownActiveClass(active: boolean) {
   if (active) {

@@ -4,7 +4,7 @@ import { $patchStyleText } from '@lexical/selection';
 import { $getSelection, BaseSelection, LexicalEditor } from 'lexical';
 import { useState, useEffect, useCallback } from 'react';
 import { DropDownItem, FontSizeDropDown } from '../../ui/DropDown';
-import { FONT_SIZE_OPTIONS } from './fontSize.config';
+import { FONT_SIZE_OPTIONS } from '../../../../utils/editor-constants';
 
 function FontSize({
   selectionFontSize,
@@ -90,7 +90,9 @@ function FontSize({
       >
         {FONT_SIZE_OPTIONS.map(([option, text]) => (
           <DropDownItem
-            className={`item ${dropDownActiveClass(inputValue === option.slice(0, -2))} ${'fontsize-item'}`}
+            className={`item ${dropDownActiveClass(
+              inputValue === option.slice(0, -2)
+            )} ${'fontsize-item'}`}
             onClick={() => handleClick(option)}
             key={option}
           >
