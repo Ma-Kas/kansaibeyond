@@ -82,7 +82,7 @@ import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
 import { InsertImageDialog } from '../ImagesPlugin';
 import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
 import { InsertTableDialog } from '../TablePlugin';
-import FontSize from './fontSize';
+import FontSizeDropdown from './fontSize';
 import { InsertGalleryContainerDialog } from '../ImageGalleryPlugin';
 import { InsertEmbedDialog } from '../EmbedPlugin';
 import { InsertCarouselContainerDialog } from '../ImageCarouselPlugin';
@@ -423,10 +423,6 @@ function BlockTypeListMenu({
   );
 }
 
-function Divider(): JSX.Element {
-  return <div className='divider' />;
-}
-
 function FontDropDown({
   editor,
   currentValue,
@@ -558,7 +554,6 @@ function ElementFormatDropdown({
         />
         <span className='text'>End Align</span>
       </DropDownItem>
-      <Divider />
       <DropDownItem
         onClick={() => {
           editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
@@ -945,7 +940,6 @@ function ToolbarPlugin({
         >
           <IconArrowForwardUp className={classes['action-button']} />
         </ActionIcon>
-        <Divider />
         {blockType in blockTypeToBlockName && activeEditor === editor && (
           <>
             <BlockFormatDropDown
@@ -954,7 +948,6 @@ function ToolbarPlugin({
               rootType={rootType}
               editor={editor}
             />
-            <Divider />
           </>
         )}
         {blockType === 'code' ? (
@@ -987,13 +980,12 @@ function ToolbarPlugin({
               currentValue={fontFamily}
               editor={editor}
             />
-            <Divider />
-            <FontSize
+            <FontSizeDropdown
               selectionFontSize={fontSize.slice(0, -2)}
               editor={editor}
               disabled={!isEditable}
             />
-            <Divider />
+
             <button
               disabled={!isEditable}
               onClick={() => {
@@ -1136,14 +1128,12 @@ function ToolbarPlugin({
                 <span className='text'>Clear Formatting</span>
               </DropDownItem>
             </DropDown>
-            <Divider />
             <ElementFormatDropdown
               disabled={!isEditable}
               value={elementFormat}
               editor={editor}
               isRTL={isRTL}
             />
-            <Divider />
             {/* Insert Options Dropdown */}
             <DropDown
               disabled={!isEditable}
@@ -1274,7 +1264,6 @@ function ToolbarPlugin({
             </DropDown>
           </>
         )}
-        <Divider />
         <button
           className='toolbar-item'
           onClick={() => handleImportTest(IMPORT_TEST)}

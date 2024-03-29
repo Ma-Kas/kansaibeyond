@@ -21,6 +21,11 @@
   background-color: var(--transparent-blue-hover-bg);
 }
 
+.editor_toolbar_dropdown_item_font_size {
+  composes: editor_toolbar_dropdown_item;
+  text-align: center;
+}
+
 svg {
   stroke-width: var(--editor-toolbar-icon-stroke);
   color: var(--editor-toolbar-icon-color);

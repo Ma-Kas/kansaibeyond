@@ -1,12 +1,10 @@
-import './fontSize.css';
-
 import { $patchStyleText } from '@lexical/selection';
 import { $getSelection, BaseSelection, LexicalEditor } from 'lexical';
 import { useState, useEffect, useCallback } from 'react';
-import { DropDownItem, FontSizeDropDown } from '../../ui/DropDown';
+import ToolbarDropdown from '../../components/ToolbarDropdown/ToolbarDropdown';
 import { FONT_SIZE_OPTIONS } from '../../../../utils/editor-constants';
 
-function FontSize({
+function FontSizeDropdown({
   selectionFontSize,
   disabled,
   editor,
@@ -68,40 +66,24 @@ function FontSize({
     [editor, calculateInlineStyle]
   );
 
-  function dropDownActiveClass(active: boolean) {
-    if (active) {
-      return 'active dropdown-item-active';
-    } else {
-      return '';
-    }
-  }
-
   useEffect(() => {
     setInputValue(selectionFontSize);
   }, [selectionFontSize]);
 
+  const fontSizeDropDownItems = FONT_SIZE_OPTIONS.map(([option, text]) => ({
+    text: text.slice(0, -2),
+    onClick: () => handleClick(option),
+  }));
+
   return (
-    <>
-      <FontSizeDropDown
-        value={inputValue}
-        disabled={disabled}
-        buttonClassName={'toolbar-item font-size'}
-        buttonAriaLabel={'Formatting options for font size'}
-      >
-        {FONT_SIZE_OPTIONS.map(([option, text]) => (
-          <DropDownItem
-            className={`item ${dropDownActiveClass(
-              inputValue === option.slice(0, -2)
-            )} ${'fontsize-item'}`}
-            onClick={() => handleClick(option)}
-            key={option}
-          >
-            <span className='text'>{text.slice(0, -2)}</span>
-          </DropDownItem>
-        ))}
-      </FontSizeDropDown>
-    </>
+    <ToolbarDropdown
+      type='font-size'
+      currentValue={inputValue}
+      ariaLabel='Formatting options for font size'
+      items={fontSizeDropDownItems}
+      disabled={disabled}
+    />
   );
 }
 
-export default FontSize;
+export default FontSizeDropdown;

@@ -20,44 +20,89 @@ interface ToolbarDropDownProps {
 }
 
 const ToolbarDropdown = ({
+  type,
   currentValue,
   ariaLabel,
   items,
   disabled = false,
 }: ToolbarDropDownProps) => {
-  return (
-    <Menu shadow='md' width={200} position='bottom-start' offset={5}>
-      <Menu.Target>
-        <Button
-          disabled={disabled}
-          aria-label={ariaLabel}
-          className={classes['editor_toolbar_plain_button']}
-          rightSection={<IconChevronDown />}
-        >
-          {currentValue}
-        </Button>
-      </Menu.Target>
+  // Determine which dropdown to render
+  const switchDropdownOnType = () => {
+    switch (type) {
+      case 'font-size': {
+        return (
+          <Menu shadow='md' position='bottom-start' offset={5}>
+            <Menu.Target>
+              <Button
+                disabled={disabled}
+                aria-label={ariaLabel}
+                className={classes['editor_toolbar_plain_button']}
+                rightSection={<IconChevronDown />}
+              >
+                {currentValue}
+              </Button>
+            </Menu.Target>
 
-      <Menu.Dropdown>
-        {items.map((item) => {
-          return (
-            <Menu.Item
-              key={item.text}
-              className={
-                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
-                cx(classes['editor_toolbar_dropdown_item'], {
-                  [classes.active]: currentValue === item.text,
-                })
-              }
-              onClick={item.onClick}
-            >
-              {item.text}
-            </Menu.Item>
-          );
-        })}
-      </Menu.Dropdown>
-    </Menu>
-  );
+            <Menu.Dropdown>
+              {items.map((item) => {
+                return (
+                  <Menu.Item
+                    key={item.text}
+                    className={
+                      // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                      cx(classes['editor_toolbar_dropdown_item_font_size'], {
+                        [classes.active]: currentValue === item.text,
+                      })
+                    }
+                    onClick={item.onClick}
+                  >
+                    {item.text}
+                  </Menu.Item>
+                );
+              })}
+            </Menu.Dropdown>
+          </Menu>
+        );
+      }
+      default: {
+        return (
+          <Menu shadow='md' width={200} position='bottom-start' offset={5}>
+            <Menu.Target>
+              <Button
+                disabled={disabled}
+                aria-label={ariaLabel}
+                className={classes['editor_toolbar_plain_button']}
+                rightSection={<IconChevronDown />}
+              >
+                {currentValue}
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              {items.map((item) => {
+                return (
+                  <Menu.Item
+                    key={item.text}
+                    className={
+                      // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                      cx(classes['editor_toolbar_dropdown_item'], {
+                        [classes.active]: currentValue === item.text,
+                      })
+                    }
+                    onClick={item.onClick}
+                  >
+                    {item.text}
+                  </Menu.Item>
+                );
+              })}
+            </Menu.Dropdown>
+          </Menu>
+        );
+      }
+    }
+  };
+
+  return <>{switchDropdownOnType()}</>;
 };
 
 export default ToolbarDropdown;
