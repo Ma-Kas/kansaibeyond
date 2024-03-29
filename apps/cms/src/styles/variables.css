@@ -10,6 +10,7 @@
   /* Rich Text Editor Variales */
   --editor-font-family-light: FuturaLT-Light, sans-serif;
   --editor-font-family-book: FuturaLT-Book, sans-serif;
+  --editor-toolbar-chevron-gap: rem(5px);
   --editor-toolbar-icon-stroke: rem(1.5px);
   --editor-toolbar-icon-color: var(--mantine-color-gray-7);
   --editor-toolbar-icon-color-disabled: var(--mantine-color-gray-4);

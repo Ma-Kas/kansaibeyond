@@ -12,6 +12,14 @@
   }
 }
 
+.editor_toolbar_plain_button span:where([data-position='left']) {
+  margin-inline-end: 0;
+}
+
+.editor_toolbar_plain_button span:where([data-position='right']) {
+  margin-inline-start: var(--editor-toolbar-chevron-gap);
+}
+
 .editor_toolbar_dropdown_item {
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
   font-weight: var(--editor-toolbar-font-weight);

@@ -96,6 +96,10 @@ import {
   IconUnderline,
   IconCode,
   IconLink,
+  IconStrikethrough,
+  IconSuperscript,
+  IconSubscript,
+  IconClearFormatting,
 } from '@tabler/icons-react';
 import cx from 'clsx';
 import ToolbarDropdown from '../../components/ToolbarDropdown/ToolbarDropdown';
@@ -248,7 +252,7 @@ function BlockFormatDropDown({
     },
     {
       text: 'Heading 1',
-      onClick: () => formatHeading('h2'),
+      onClick: () => formatHeading('h1'),
     },
     {
       text: 'Heading 2',
@@ -469,6 +473,127 @@ function FontDropDown({
       items={fontFamilyDropDownItems}
       disabled={disabled}
     />
+  );
+}
+
+function TextFormatDropdown({
+  editor,
+  disabled = false,
+  isStrikethrough,
+  isSuperscript,
+  isSubscript,
+  isCode,
+}: {
+  editor: LexicalEditor;
+  disabled?: boolean;
+  isStrikethrough: boolean;
+  isSuperscript: boolean;
+  isSubscript: boolean;
+  isCode: boolean;
+}): JSX.Element {
+  const textFormatDropDownItems = [
+    {
+      text: 'Code',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
+      },
+      icon: IconCode,
+      activeFormat: isCode,
+    },
+    {
+      text: 'Strikethrough',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
+      },
+      icon: IconStrikethrough,
+      activeFormat: isStrikethrough,
+    },
+    {
+      text: 'Superscript',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript');
+      },
+      icon: IconSuperscript,
+      activeFormat: isSuperscript,
+    },
+    {
+      text: 'Subscript',
+      onClick: () => {
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript');
+      },
+      icon: IconSubscript,
+      activeFormat: isSubscript,
+    },
+  ];
+
+  return (
+    <ToolbarDropdown
+      type='text-format'
+      currentValue={''}
+      ariaLabel='Formatting options for additional text styles'
+      items={textFormatDropDownItems}
+      disabled={disabled}
+    />
+
+    // <DropDown
+    //           disabled={!isEditable}
+    //           buttonClassName='toolbar-item spaced'
+    //           buttonLabel=''
+    //           buttonAriaLabel='Formatting options for additional text styles'
+    //           buttonIconClassName='icon format-more'
+    //         >
+    //           <DropDownItem
+    //             onClick={() => {
+    //               activeEditor.dispatchCommand(
+    //                 FORMAT_TEXT_COMMAND,
+    //                 'strikethrough'
+    //               );
+    //             }}
+    //             className={'item ' + dropDownActiveClass(isStrikethrough)}
+    //             title='Strikethrough'
+    //             aria-label='Format text with a strikethrough'
+    //           >
+    //             <i className='icon strikethrough' />
+    //             <span className='text'>Strikethrough</span>
+    //           </DropDownItem>
+    //           <DropDownItem
+    //             onClick={() => {
+    //               activeEditor.dispatchCommand(
+    //                 FORMAT_TEXT_COMMAND,
+    //                 'subscript'
+    //               );
+    //             }}
+    //             className={'item ' + dropDownActiveClass(isSubscript)}
+    //             title='Subscript'
+    //             aria-label='Format text with a subscript'
+    //           >
+    //             <i className='icon subscript' />
+    //             <span className='text'>Subscript</span>
+    //           </DropDownItem>
+    //           <DropDownItem
+    //             onClick={() => {
+    //               activeEditor.dispatchCommand(
+    //                 FORMAT_TEXT_COMMAND,
+    //                 'superscript'
+    //               );
+    //             }}
+    //             className={'item ' + dropDownActiveClass(isSuperscript)}
+    //             title='Superscript'
+    //             aria-label='Format text with a superscript'
+    //           >
+    //             <i className='icon superscript' />
+    //             <span className='text'>Superscript</span>
+    //           </DropDownItem>
+    //           <DropDownItem
+    //             onClick={clearFormatting}
+    //             className='item'
+    //             title='Clear text formatting'
+    //             aria-label='Clear all text formatting'
+    //           >
+    //             <i className='icon clear' />
+    //             <span className='text'>Clear Formatting</span>
+    //           </DropDownItem>
+    //         </DropDown>
   );
 }
 
@@ -1055,23 +1180,6 @@ function ToolbarPlugin({
                 className={
                   // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
                   cx(classes['plain-button'], {
-                    [classes.active]: isCode,
-                  })
-                }
-                disabled={!isEditable}
-                onClick={() => {
-                  activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
-                }}
-                title='Insert code block'
-                aria-label='Insert code block'
-              >
-                <IconCode className={classes['action-button']} />
-              </ActionIcon>
-              <ActionIcon
-                variant='transparent'
-                className={
-                  // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
-                  cx(classes['plain-button'], {
                     [classes.active]: isLink,
                   })
                 }
@@ -1082,7 +1190,25 @@ function ToolbarPlugin({
               >
                 <IconLink className={classes['action-button']} />
               </ActionIcon>
+              <ActionIcon
+                variant='transparent'
+                className={classes['plain-button']}
+                disabled={!isEditable}
+                onClick={clearFormatting}
+                title='Clear Formatting'
+                aria-label='Clear formatting'
+              >
+                <IconClearFormatting className={classes['action-button']} />
+              </ActionIcon>
             </Group>
+            <TextFormatDropdown
+              disabled={!isEditable}
+              editor={activeEditor}
+              isStrikethrough={isStrikethrough}
+              isSuperscript={isSuperscript}
+              isSubscript={isSubscript}
+              isCode={isCode}
+            />
             <DropdownColorPicker
               disabled={!isEditable}
               buttonClassName='toolbar-item color-picker'
@@ -1101,66 +1227,6 @@ function ToolbarPlugin({
               onChange={onBgColorSelect}
               title='bg color'
             />
-            {/* Text formatting dropdown */}
-            <DropDown
-              disabled={!isEditable}
-              buttonClassName='toolbar-item spaced'
-              buttonLabel=''
-              buttonAriaLabel='Formatting options for additional text styles'
-              buttonIconClassName='icon format-more'
-            >
-              <DropDownItem
-                onClick={() => {
-                  activeEditor.dispatchCommand(
-                    FORMAT_TEXT_COMMAND,
-                    'strikethrough'
-                  );
-                }}
-                className={'item ' + dropDownActiveClass(isStrikethrough)}
-                title='Strikethrough'
-                aria-label='Format text with a strikethrough'
-              >
-                <i className='icon strikethrough' />
-                <span className='text'>Strikethrough</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  activeEditor.dispatchCommand(
-                    FORMAT_TEXT_COMMAND,
-                    'subscript'
-                  );
-                }}
-                className={'item ' + dropDownActiveClass(isSubscript)}
-                title='Subscript'
-                aria-label='Format text with a subscript'
-              >
-                <i className='icon subscript' />
-                <span className='text'>Subscript</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  activeEditor.dispatchCommand(
-                    FORMAT_TEXT_COMMAND,
-                    'superscript'
-                  );
-                }}
-                className={'item ' + dropDownActiveClass(isSuperscript)}
-                title='Superscript'
-                aria-label='Format text with a superscript'
-              >
-                <i className='icon superscript' />
-                <span className='text'>Superscript</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={clearFormatting}
-                className='item'
-                title='Clear text formatting'
-                aria-label='Clear all text formatting'
-              >
-                <i className='icon clear' />
-                <span className='text'>Clear Formatting</span>
-              </DropDownItem>
-            </DropDown>
             <ElementFormatDropdown
               disabled={!isEditable}
               value={elementFormat}
