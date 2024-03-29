@@ -11,6 +11,14 @@ const showErrorOverlay = (err: Event) => {
   if (!ErrorOverlay) {
     return;
   }
+  if (
+    err instanceof ErrorEvent &&
+    err.message ===
+      'ResizeObserver loop completed with undelivered notifications.'
+  ) {
+    console.error(err);
+    return;
+  }
   const overlay = new ErrorOverlay(err);
   const body = document.body;
   if (body !== null) {
