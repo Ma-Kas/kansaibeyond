@@ -4,17 +4,41 @@
   --composer-header-height: rem(54px);
   --navbar-main-width: rem(255px);
   --composer-sidebar-width: rem(90px);
+  --composer-sidebar-drawer-width: rem(380px);
+  --z-index-sticky-note: 103;
+  --z-index-modals: 102;
+  --z-index-drawer: 101;
+  --z-index-header: 100;
+  --z-index-navbar-main: 99;
+  --z-index-composer-header: 99;
+  --z-index-composer-sidebar: 99;
+  --z-index-composer-drawer: 98;
+  --z-index-editor-toolbar: 98;
+
+  /* Font variables */
+  --font-size-regular: 14px;
+  --font-weight-regular: 400;
+  --font-weight-bold: 600;
+  --font-size-composer-sidebar-regular: 16px;
+  --font-size-composer-sidebar-heading: 18px;
+  --font-size-composer-sidebar-small: 12px;
+  --font-weight-menu: 500;
+  --font-size-editor: 14px;
+  --font-weight-editor: 400;
+  --line-height-editor: 1.5;
+
+  /* Color variables */
+  --color-menu-text-light: var(--mantine-color-gray-8);
+  --color-menu-text-dark: var(--mantine-color-dark-0);
+  --color-menu-text-disabled: var(--mantine-color-gray-4);
+  --color-editor-text: #000000;
+  --color-menu-border-light: var(--mantine-color-gray-3);
+  --color-menu-border-dark: var(--mantine-color-dark-4);
   --transparent-blue-hover-bg: rgba(34, 139, 230, 0.1);
-  --menu-font-weight: 500;
 
   /* Rich Text Editor Variales */
   --editor-font-family-light: FuturaLT-Light, sans-serif;
   --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-chevron-gap: rem(5px);
-  --editor-toolbar-icon-stroke: rem(1.5px);
-  --editor-toolbar-icon-color: var(--mantine-color-gray-7);
-  --editor-toolbar-icon-color-disabled: var(--mantine-color-gray-4);
-  --editor-font-size: 14px;
-  --editor-font-weight: 400;
-  --editor-line-height: 1.5;
+  --editor-toolbar-icon-stroke: 1.5px;
 }

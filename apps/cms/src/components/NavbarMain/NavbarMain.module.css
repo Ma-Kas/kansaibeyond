@@ -1,5 +1,5 @@
 .navbar {
-  z-index: 100;
+  z-index: var(--z-index-navbar-main);
   position: fixed;
   top: var(--header-height);
   bottom: 0;
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   border-right: rem(1px) solid
-    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
 }
 
 .navbar_scrollarea {

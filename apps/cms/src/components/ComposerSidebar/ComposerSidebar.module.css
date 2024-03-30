@@ -1,9 +1,18 @@
-.composer_sidebar {
-  position: fixed;
-  z-index: 100;
+.composer_sidebar_container {
+  position: sticky;
+  z-index: var(--z-index-composer-sidebar);
   top: calc(var(--header-height) + var(--composer-header-height));
   bottom: 0;
   left: 0;
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+  display: flex;
+}
+
+.composer_sidebar {
+  z-index: inherit;
   width: var(--composer-sidebar-width);
   background-color: light-dark(
     var(--mantine-color-white),
@@ -12,7 +21,7 @@
   display: flex;
   flex-direction: column;
   border-right: rem(1px) solid
-    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
 }
 
 .composer_sidebar_inner {
@@ -22,4 +31,47 @@
   align-items: center;
   padding-top: var(--mantine-spacing-lg);
   padding-bottom: rem(100px);
+}
+
+.sidebar_drawer_add_subheader {
+  font-size: var(--font-size-composer-sidebar-small);
+  padding-bottom: rem(12px);
+}
+
+.sidebar_drawer_add_grid_group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(15px);
+}
+
+.sidebar_drawer_add_button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(5px);
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--color-menu-text-light);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: rem(1px) solid
+    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border-radius: rem(10px);
+
+  @mixin hover {
+    border: rem(1px) solid var(--mantine-primary-color-filled);
+  }
+}
+
+.sidebar_drawer_add_button > svg {
+  height: rem(28px);
+  width: auto;
+  stroke-width: 1;
+  stroke: var(--color-menu-text-light);
+}
+
+.sidebar_drawer_add_button > span {
+  font-size: var(--font-size-composer-sidebar-small);
 }

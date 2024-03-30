@@ -2,12 +2,15 @@
   height: rem(28px);
   width: rem(28px);
   padding: 0;
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
-  font-weight: var(--editor-font-weight);
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
+  font-weight: var(--font-weight-editor);
   background-color: transparent;
 
   @mixin hover {
-    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+    color: light-dark(
+      var(--color-menu-text-light),
+      var(--color-menu-text-dark)
+    );
     background-color: light-dark(
       var(--mantine-color-gray-0),
       var(--mantine-color-dark-6)
@@ -22,7 +25,7 @@
 
 svg {
   stroke-width: var(--editor-toolbar-icon-stroke);
-  color: var(--editor-toolbar-icon-color);
+  color: var(--color-menu-text-light);
   height: rem(20px);
   width: rem(20px);
 }

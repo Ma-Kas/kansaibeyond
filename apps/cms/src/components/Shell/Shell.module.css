@@ -2,6 +2,7 @@
 .shell_composer {
   min-height: calc(100vh);
   min-width: rem(576px);
+  width: 100%;
 }
 
 .shell_main {

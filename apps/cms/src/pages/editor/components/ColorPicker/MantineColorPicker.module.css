@@ -1,5 +1,5 @@
 .editor_colorpick_input_field {
-  color: var(--mantine-color-gray-7);
+  color: var(--color-menu-text-light);
   padding-bottom: rem(8px);
 }
 
@@ -10,14 +10,14 @@
 }
 
 .editor_colorpick_input_field > div > div {
-  color: var(--mantine-color-gray-7);
-  font-size: var(--editor-font-size);
+  color: var(--color-menu-text-light);
+  font-size: var(--font-size-editor);
   width: max-content;
   padding-left: rem(10px);
 }
 
 .editor_colorpick_input_field input {
-  color: var(--mantine-color-gray-7);
+  color: var(--color-menu-text-light);
   text-transform: uppercase;
   padding-left: rem(10ch);
 }

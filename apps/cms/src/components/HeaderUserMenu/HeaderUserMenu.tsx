@@ -12,8 +12,7 @@ import classes from './HeaderUserMenu.module.css';
 
 const user = {
   name: 'Kansai & Beyond',
-  image:
-    'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-8.png',
+  image: null,
 };
 
 const HeaderUserMenu = () => {

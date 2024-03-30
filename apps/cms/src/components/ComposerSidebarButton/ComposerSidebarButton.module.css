@@ -1,5 +1,5 @@
 .button_root {
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
   background-color: transparent;
   display: flex;
   flex-direction: column;
@@ -29,9 +29,12 @@
   height: rem(36px);
   padding: rem(6px);
   border: rem(1px) solid
-    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
   border-radius: 50%;
-  stroke: light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  stroke: light-dark(
+    var(--color-menu-border-light),
+    var(--color-menu-border-dark)
+  );
 }
 
 .icon_container svg {
@@ -39,6 +42,6 @@
 }
 
 .button_label {
-  font-size: rem(12px);
-  font-weight: var(--menu-font-weight);
+  font-size: var(--font-size-composer-sidebar-small);
+  font-weight: var(--font-weight-menu);
 }
