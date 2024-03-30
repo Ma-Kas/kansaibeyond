@@ -290,6 +290,8 @@ const ComposerSidebar = () => {
             {COMPOSER_SIDEBAR_ITEMS.map((item) => {
               return (
                 <ComposerSidebarButton
+                  drawerOpen={drawerOpen}
+                  currentDrawer={currentDrawer}
                   key={item.text}
                   icon={item.icon}
                   text={item.text}

@@ -13,7 +13,6 @@ import {
 } from '@lexical/list';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $isDecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode';
-import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode';
 import {
   $createHeadingNode,
   $createQuoteNode,
@@ -36,7 +35,6 @@ import {
 import {
   $createParagraphNode,
   $getNodeByKey,
-  $getRoot,
   $getSelection,
   $isElementNode,
   $isRangeSelection,
@@ -68,21 +66,11 @@ import {
   FONT_FAMILY_OPTIONS,
   ELEMENT_FORMAT_OPTIONS,
 } from '../../../../utils/editor-constants';
-import useModal from '../../hooks/useModal';
-import { $createStickyNode } from '../../nodes/StickyNode';
 import BlockTypeList, { BlockTypeListItem } from '../../ui/BlockTypeList';
-import DropDown, { DropDownItem } from '../../ui/DropDown';
 import ColorPickerDropdown from '../../components/ColorPickerDropdown/ColorPickerDropdown';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { sanitizeUrl } from '../../utils/url';
-import { INSERT_COLLAPSIBLE_COMMAND } from '../CollapsiblePlugin';
-import { InsertImageDialog } from '../ImagesPlugin';
-import InsertLayoutDialog from '../LayoutPlugin/InsertLayoutDialog';
-import { InsertTableDialog } from '../TablePlugin';
 import FontSizeDropdown from './fontSize';
-import { InsertGalleryContainerDialog } from '../ImageGalleryPlugin';
-import { InsertEmbedDialog } from '../EmbedPlugin';
-import { InsertCarouselContainerDialog } from '../ImageCarouselPlugin';
 
 // Mantine Components Imports
 import { ActionIcon, Group } from '@mantine/core';
@@ -761,7 +749,6 @@ function ToolbarPlugin({
   const [isCode, setIsCode] = useState(false);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
-  const [modal, showModal] = useModal();
   const [codeLanguage, setCodeLanguage] = useState<string>('');
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 
@@ -1235,134 +1222,6 @@ function ToolbarPlugin({
               value={elementFormat}
               editor={editor}
             />
-            {/* Insert Options Dropdown */}
-            <DropDown
-              disabled={!isEditable}
-              buttonClassName='toolbar-item spaced'
-              // Uncomment to show Text on wide editor view
-              // buttonLabel='Insert'
-              buttonAriaLabel='Insert specialized editor node'
-              buttonIconClassName='icon plus'
-            >
-              <DropDownItem
-                onClick={() => {
-                  activeEditor.dispatchCommand(
-                    INSERT_HORIZONTAL_RULE_COMMAND,
-                    undefined
-                  );
-                }}
-                className='item'
-              >
-                <i className='icon horizontal-rule' />
-                <span className='text'>Divider</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  showModal('Insert Image', (onClose) => (
-                    <InsertImageDialog
-                      activeEditor={activeEditor}
-                      onClose={onClose}
-                    />
-                  ));
-                }}
-                className='item'
-              >
-                <i className='icon image' />
-                <span className='text'>Image</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  showModal('Insert Image Gallery', (onClose) => (
-                    <InsertGalleryContainerDialog
-                      activeEditor={activeEditor}
-                      onClose={onClose}
-                    />
-                  ));
-                }}
-                className='item'
-              >
-                <i className='icon gallery' />
-                <span className='text'>Image Gallery</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  showModal('Insert Image Carousel', (onClose) => (
-                    <InsertCarouselContainerDialog
-                      activeEditor={activeEditor}
-                      onClose={onClose}
-                    />
-                  ));
-                }}
-                className='item'
-              >
-                <i className='icon carousel' />
-                <span className='text'>Image Carousel</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  showModal('Embed Content', (onClose) => (
-                    <InsertEmbedDialog
-                      activeEditor={activeEditor}
-                      onClose={onClose}
-                    />
-                  ));
-                }}
-                className='item'
-              >
-                <i className='icon embed' />
-                <span className='text'>Embed Content</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  showModal('Insert Table', (onClose) => (
-                    <InsertTableDialog
-                      activeEditor={activeEditor}
-                      onClose={onClose}
-                    />
-                  ));
-                }}
-                className='item'
-              >
-                <i className='icon table' />
-                <span className='text'>Table</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  showModal('Insert Columns Layout', (onClose) => (
-                    <InsertLayoutDialog
-                      activeEditor={activeEditor}
-                      onClose={onClose}
-                    />
-                  ));
-                }}
-                className='item'
-              >
-                <i className='icon columns' />
-                <span className='text'>Columns Layout</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  editor.update(() => {
-                    const root = $getRoot();
-                    const stickyNode = $createStickyNode(0, 0);
-                    root.append(stickyNode);
-                  });
-                }}
-                className='item'
-              >
-                <i className='icon sticky' />
-                <span className='text'>Sticky Note</span>
-              </DropDownItem>
-              <DropDownItem
-                onClick={() => {
-                  editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
-                }}
-                className='item'
-              >
-                <i className='icon list-expandable' />
-                <span className='text'>Expandable List</span>
-              </DropDownItem>
-            </DropDown>
           </>
         )}
         <button
@@ -1381,7 +1240,6 @@ function ToolbarPlugin({
         >
           <i className='format export' />
         </button>
-        {modal}
       </div>
     </div>
   );

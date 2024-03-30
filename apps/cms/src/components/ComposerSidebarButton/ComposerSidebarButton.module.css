@@ -21,6 +21,18 @@
   }
 }
 
+.button_root.active {
+  color: var(--mantine-color-blue-light-color);
+  stroke: var(--mantine-primary-color-filled);
+
+  .icon_container {
+    background-color: var(--mantine-primary-color-filled);
+  }
+  .icon_container svg {
+    stroke: var(--mantine-color-body);
+  }
+}
+
 .icon_container {
   display: flex;
   justify-content: center;
