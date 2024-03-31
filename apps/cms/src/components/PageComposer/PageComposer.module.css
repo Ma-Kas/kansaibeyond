@@ -16,14 +16,3 @@
     box-shadow: none;
   }
 }
-
-.content_wrapper {
-  z-index: 1;
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  padding-top: var(--mantine-spacing-xl);
-  padding-left: calc(var(--mantine-spacing-xl) * 2);
-  padding-right: calc(var(--mantine-spacing-xl) * 2);
-  background-color: var(--mantine-color-body);
-}

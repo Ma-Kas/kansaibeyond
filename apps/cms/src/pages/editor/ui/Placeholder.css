@@ -1,12 +1,15 @@
 .Placeholder__root {
-  font-size: 18px;
-  color: #999;
+  max-width: var(--editor-content-editable-max-width);
+  min-width: var(--editor-content-editable-min-width);
+  font-size: var(--font-size-editable-default);
+  color: var(--color-menu-text-disabled);
   overflow: hidden;
   position: absolute;
   text-overflow: ellipsis;
-  top: 8px;
-  left: 28px;
-  right: 28px;
+  margin: auto;
+  top: var(--editor-padding-vertical);
+  left: var(--editor-padding-horizontal);
+  right: var(--editor-padding-horizontal);
   user-select: none;
   white-space: nowrap;
   display: inline-block;

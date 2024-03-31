@@ -16,6 +16,7 @@
   --z-index-editor-toolbar: 98;
 
   /* Font variables */
+  --font-size-editable-default: 18px;
   --font-size-regular: 14px;
   --font-weight-regular: 400;
   --font-weight-bold: 600;
@@ -39,6 +40,11 @@
   /* Rich Text Editor Variales */
   --editor-font-family-light: FuturaLT-Light, sans-serif;
   --editor-font-family-book: FuturaLT-Book, sans-serif;
+  --editor-toolbar-height: rem(56px);
+  --editor-padding-horizontal: rem(40px);
+  --editor-padding-vertical: rem(10px);
   --editor-toolbar-chevron-gap: rem(5px);
   --editor-toolbar-icon-stroke: 1.5px;
+  --editor-content-editable-max-width: rem(740px);
+  --editor-content-editable-min-width: rem(686px);
 }

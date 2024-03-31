@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Stack } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconSettings,
   IconTags,
@@ -15,20 +17,19 @@ import {
   IconSticker2,
   IconLayoutNavbarExpand,
 } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
+
+// Page Component Imports
 import ComposerSidebarButton from '../ComposerSidebarButton/ComposerSidebarButton';
 import ComposerDrawer from '../ComposerDrawer/ComposerDrawer';
-import classes from './ComposerSidebar.module.css';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import useModal from '../../pages/editor/hooks/useModal';
-import { InsertImageDialog } from '../../pages/editor/plugins/ImagesPlugin';
-import { InsertGalleryContainerDialog } from '../../pages/editor/plugins/ImageGalleryPlugin';
+
+// Lexical Editor Imports
 import {
   $getRoot,
   COMMAND_PRIORITY_CRITICAL,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
-import { useEffect, useState } from 'react';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import useModal from '../../pages/editor/hooks/useModal';
 import { InsertCarouselContainerDialog } from '../../pages/editor/plugins/ImageCarouselPlugin';
 import { InsertEmbedDialog } from '../../pages/editor/plugins/EmbedPlugin';
 import { InsertTableDialog } from '../../pages/editor/plugins/TablePlugin';
@@ -36,6 +37,11 @@ import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontal
 import InsertLayoutDialog from '../../pages/editor/plugins/LayoutPlugin/InsertLayoutDialog';
 import { $createStickyNode } from '../../pages/editor/nodes/StickyNode';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../../pages/editor/plugins/CollapsiblePlugin';
+import { InsertImageDialog } from '../../pages/editor/plugins/ImagesPlugin';
+import { InsertGalleryContainerDialog } from '../../pages/editor/plugins/ImageGalleryPlugin';
+
+// Style Imports
+import classes from './ComposerSidebar.module.css';
 
 const COMPOSER_SIDEBAR_ITEMS = [
   { text: 'Add', icon: IconPlus },

@@ -35,6 +35,7 @@ const ComposerDrawer = ({
           onClick={close}
         />
       </Group>
+
       <Stack className={classes['composer_sidebar_drawer_content']}>
         {children}
       </Stack>
