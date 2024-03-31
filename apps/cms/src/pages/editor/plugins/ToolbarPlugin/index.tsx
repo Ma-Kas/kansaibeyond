@@ -41,8 +41,6 @@ import {
   $isRootOrShadowRoot,
   $isTextNode,
   BaseSelection,
-  CAN_REDO_COMMAND,
-  CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_NORMAL,
   ElementFormatType,
@@ -54,9 +52,7 @@ import {
   LexicalEditor,
   NodeKey,
   OUTDENT_CONTENT_COMMAND,
-  REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
-  UNDO_COMMAND,
 } from 'lexical';
 import { Dispatch, useCallback, useEffect, useState } from 'react';
 
@@ -75,8 +71,6 @@ import FontSizeDropdown from './fontSize';
 // Mantine Components Imports
 import { ActionIcon, Group } from '@mantine/core';
 import {
-  IconArrowBackUp,
-  IconArrowForwardUp,
   IconBold,
   IconItalic,
   IconUnderline,
@@ -98,8 +92,6 @@ import ToolbarDropdown from '../../components/ToolbarDropdown/ToolbarDropdown';
 
 // Style Imports
 import classes from './Toolbar.module.css';
-
-const IMPORT_TEST = '';
 
 const rootTypeToRootName = {
   root: 'Root',
@@ -747,8 +739,6 @@ function ToolbarPlugin({
   const [isSubscript, setIsSubscript] = useState(false);
   const [isSuperscript, setIsSuperscript] = useState(false);
   const [isCode, setIsCode] = useState(false);
-  const [canUndo, setCanUndo] = useState(false);
-  const [canRedo, setCanRedo] = useState(false);
   const [codeLanguage, setCodeLanguage] = useState<string>('');
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 
@@ -895,23 +885,7 @@ function ToolbarPlugin({
         editorState.read(() => {
           $updateToolbar();
         });
-      }),
-      activeEditor.registerCommand<boolean>(
-        CAN_UNDO_COMMAND,
-        (payload) => {
-          setCanUndo(payload);
-          return false;
-        },
-        COMMAND_PRIORITY_CRITICAL
-      ),
-      activeEditor.registerCommand<boolean>(
-        CAN_REDO_COMMAND,
-        (payload) => {
-          setCanRedo(payload);
-          return false;
-        },
-        COMMAND_PRIORITY_CRITICAL
-      )
+      })
     );
   }, [$updateToolbar, activeEditor, editor]);
 
@@ -1036,51 +1010,9 @@ function ToolbarPlugin({
     [activeEditor, selectedElementKey]
   );
 
-  const handleExportTest = useCallback(() => {
-    editor.update(() => {
-      const json = editor.getEditorState().toJSON();
-      console.log(json);
-      // console.log(JSON.stringify(json));
-    });
-  }, [editor]);
-
-  const handleImportTest = useCallback(
-    (data: string) => {
-      editor.update(() => {
-        const editorState = editor.parseEditorState(data);
-        editor.setEditorState(editorState);
-      });
-    },
-    [editor]
-  );
-
   return (
     <div className='editor_toolbar'>
       <div className='editor_toolbar_inner'>
-        <ActionIcon
-          variant='transparent'
-          className={classes['plain-button']}
-          disabled={!canUndo || !isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
-          }}
-          title={'Undo (Ctrl+Z)'}
-          aria-label='Undo'
-        >
-          <IconArrowBackUp className={classes['action-button']} />
-        </ActionIcon>
-        <ActionIcon
-          variant='transparent'
-          className={classes['plain-button']}
-          disabled={!canRedo || !isEditable}
-          onClick={() => {
-            activeEditor.dispatchCommand(REDO_COMMAND, undefined);
-          }}
-          title={'Redo (Ctrl+Y)'}
-          aria-label='Redo'
-        >
-          <IconArrowForwardUp className={classes['action-button']} />
-        </ActionIcon>
         {blockType in blockTypeToBlockName && activeEditor === editor && (
           <>
             <BlockFormatDropDown
@@ -1224,22 +1156,6 @@ function ToolbarPlugin({
             />
           </>
         )}
-        <button
-          className='toolbar-item'
-          onClick={() => handleImportTest(IMPORT_TEST)}
-          title='Test Import'
-          aria-label='Test Import'
-        >
-          <i className='format import' />
-        </button>
-        <button
-          className='toolbar-item'
-          onClick={handleExportTest}
-          title='Test Export'
-          aria-label='Test Export'
-        >
-          <i className='format export' />
-        </button>
       </div>
     </div>
   );
