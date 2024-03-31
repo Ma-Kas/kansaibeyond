@@ -34,6 +34,8 @@ import Placeholder from './ui/Placeholder';
 import FloatingBlockTypeToolbarPlugin from './plugins/FloatingBlockTypeToolbarPlugin';
 import { LexicalNode } from 'lexical';
 
+import PostEditorTitle from './components/PostEditorTitle/PostEditorTitle';
+
 type BlockTypeListContext = {
   blockTypePopupNode: LexicalNode | null;
   setBlockTypePopupNode: React.Dispatch<
@@ -73,73 +75,75 @@ export default function Editor(): JSX.Element {
         <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
       </BlockTypeListPopupContext.Provider>
 
-      <div className={'editor-container'}>
-        <DragDropPaste />
-        <AutoFocusPlugin />
-        <HashtagPlugin />
-        <AutoLinkPlugin />
-        <>
-          <HistoryPlugin />
-          <RichTextPlugin
-            contentEditable={
-              <div className='editor-scroller'>
-                <div className='editor' ref={onRef}>
-                  <ContentEditable />
+      <div className='editor-container'>
+        <PostEditorTitle />
+        <div className='editor-container-inner'>
+          <DragDropPaste />
+          <AutoFocusPlugin />
+          <HashtagPlugin />
+          <AutoLinkPlugin />
+          <>
+            <HistoryPlugin />
+            <RichTextPlugin
+              contentEditable={
+                <div className='editor-scroller'>
+                  <div className='editor' ref={onRef}>
+                    <ContentEditable />
+                  </div>
                 </div>
-              </div>
-            }
-            placeholder={placeholder}
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <CodeHighlightPlugin />
-          <ListPlugin />
-
-          <ListMaxIndentLevelPlugin maxDepth={7} />
-          <TablePlugin
-            hasCellMerge={tableCellMerge}
-            hasCellBackgroundColor={tableCellBackgroundColor}
-          />
-          <TableCellResizer />
-          <ImagesPlugin />
-          <ImageGalleryPlugin />
-          <ImageCarouselPlugin />
-          <LinkPlugin />
-          <EmbedPlugin />
-          {!isEditable && <LexicalClickableLinkPlugin />}
-          <HorizontalRulePlugin />
-          <TabIndentationPlugin />
-          <CollapsiblePlugin />
-          <LayoutPlugin />
-          {floatingAnchorElem && (
-            <>
-              <BlockTypeListPopupContext.Provider
-                value={{ blockTypePopupNode, setBlockTypePopupNode }}
-              >
-                <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-              </BlockTypeListPopupContext.Provider>
-              <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
-              <FloatingLinkEditorPlugin
-                anchorElem={floatingAnchorElem}
-                isLinkEditMode={isLinkEditMode}
-                setIsLinkEditMode={setIsLinkEditMode}
-              />
-              <TableCellActionMenuPlugin
-                anchorElem={floatingAnchorElem}
-                cellMerge={true}
-              />
-              <FloatingTextFormatToolbarPlugin
-                anchorElem={floatingAnchorElem}
-              />
-              <BlockTypeListPopupContext.Provider
-                value={{ blockTypePopupNode, setBlockTypePopupNode }}
-              >
-                <FloatingBlockTypeToolbarPlugin
+              }
+              placeholder={placeholder}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <CodeHighlightPlugin />
+            <ListPlugin />
+            <ListMaxIndentLevelPlugin maxDepth={7} />
+            <TablePlugin
+              hasCellMerge={tableCellMerge}
+              hasCellBackgroundColor={tableCellBackgroundColor}
+            />
+            <TableCellResizer />
+            <ImagesPlugin />
+            <ImageGalleryPlugin />
+            <ImageCarouselPlugin />
+            <LinkPlugin />
+            <EmbedPlugin />
+            {!isEditable && <LexicalClickableLinkPlugin />}
+            <HorizontalRulePlugin />
+            <TabIndentationPlugin />
+            <CollapsiblePlugin />
+            <LayoutPlugin />
+            {floatingAnchorElem && (
+              <>
+                <BlockTypeListPopupContext.Provider
+                  value={{ blockTypePopupNode, setBlockTypePopupNode }}
+                >
+                  <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
+                </BlockTypeListPopupContext.Provider>
+                <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
+                <FloatingLinkEditorPlugin
+                  anchorElem={floatingAnchorElem}
+                  isLinkEditMode={isLinkEditMode}
+                  setIsLinkEditMode={setIsLinkEditMode}
+                />
+                <TableCellActionMenuPlugin
+                  anchorElem={floatingAnchorElem}
+                  cellMerge={true}
+                />
+                <FloatingTextFormatToolbarPlugin
                   anchorElem={floatingAnchorElem}
                 />
-              </BlockTypeListPopupContext.Provider>
-            </>
-          )}
-        </>
+                <BlockTypeListPopupContext.Provider
+                  value={{ blockTypePopupNode, setBlockTypePopupNode }}
+                >
+                  <FloatingBlockTypeToolbarPlugin
+                    anchorElem={floatingAnchorElem}
+                  />
+                </BlockTypeListPopupContext.Provider>
+              </>
+            )}
+          </>
+        </div>
       </div>
     </>
   );

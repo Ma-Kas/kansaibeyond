@@ -2,10 +2,10 @@
   max-width: var(--editor-content-editable-max-width);
   min-width: var(--editor-content-editable-min-width);
   min-height: 500px;
-  /* height: calc(
+  height: calc(
     100vh - var(--header-height) - var(--composer-header-height) -
       var(--editor-toolbar-height)
-  ); */
+  );
   margin: auto;
   border: 0;
   font-size: var(--font-size-editable-default);

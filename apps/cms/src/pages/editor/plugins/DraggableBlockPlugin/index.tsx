@@ -216,7 +216,7 @@ function setMenuPosition(
   // How far left is current editable (=left margin of ContentEditable Element)
   const root = anchorElem.querySelector('.ContentEditable__root');
   const margin = window.getComputedStyle(root!).marginLeft;
-  const left = Number(margin.slice(0, -2)) + 15;
+  const left = Number(margin.slice(0, -2)) - 30;
 
   floatingElem.style.opacity = '1';
   floatingElem.style.transform = `translate(${left}px, ${top}px)`;

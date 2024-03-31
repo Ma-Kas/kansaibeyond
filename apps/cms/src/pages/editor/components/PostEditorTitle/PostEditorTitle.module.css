@@ -1,0 +1,24 @@
+.editor-post-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: rem(25px) var(--editor-padding-horizontal)
+    var(--editor-padding-vertical);
+}
+
+.editor-post-title-inner {
+  font-size: var(--font-size-editable-h1);
+  font-family: var(--editor-font-family-book);
+  flex: 1;
+  height: auto;
+  outline: none;
+  border: none;
+  max-width: var(--editor-content-editable-max-width);
+  margin: auto;
+  padding: 0;
+  resize: none;
+}
+
+.editor-post-title-inner::placeholder {
+  color: var(--color-menu-text-disabled);
+}

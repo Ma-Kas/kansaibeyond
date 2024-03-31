@@ -17,6 +17,7 @@
 
   /* Font variables */
   --font-size-editable-default: 18px;
+  --font-size-editable-h1: 40px;
   --font-size-regular: 14px;
   --font-weight-regular: 400;
   --font-weight-bold: 600;
@@ -41,7 +42,7 @@
   --editor-font-family-light: FuturaLT-Light, sans-serif;
   --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-height: rem(56px);
-  --editor-padding-horizontal: rem(40px);
+  --editor-padding-horizontal: rem(30px);
   --editor-padding-vertical: rem(10px);
   --editor-toolbar-chevron-gap: rem(5px);
   --editor-toolbar-icon-stroke: 1.5px;
