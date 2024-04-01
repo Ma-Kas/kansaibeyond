@@ -1,5 +1,6 @@
 .composerheader {
   position: fixed;
+  min-width: var(--composer-header-min-width);
   z-index: var(--z-index-composer-header);
   top: var(--header-height);
   left: 0;
@@ -15,8 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: rem(12px);
-  padding-bottom: rem(12px);
+  padding: rem(12px);
 }
 
 .plain-button {

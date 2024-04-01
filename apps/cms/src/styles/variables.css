@@ -2,6 +2,7 @@
   /* General Variables */
   --header-height: rem(48px);
   --composer-header-height: rem(54px);
+  --composer-header-min-width: rem(575px);
   --navbar-main-width: rem(255px);
   --composer-sidebar-width: rem(90px);
   --composer-sidebar-drawer-width: rem(380px);
@@ -42,6 +43,7 @@
   --editor-font-family-light: FuturaLT-Light, sans-serif;
   --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-height: rem(56px);
+  --editor-toolbar-min-width: rem(660px);
   --editor-padding-horizontal: rem(30px);
   --editor-padding-vertical-inner: rem(10px);
   --editor-padding-vertical-outer: rem(25px);

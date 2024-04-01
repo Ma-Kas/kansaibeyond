@@ -84,66 +84,64 @@ const ComposerHeader = () => {
 
   return (
     <header className={classes.composerheader}>
-      <Container fluid>
-        <div className={classes['composerheader-inner']}>
-          <Button
-            leftSection={<IconArrowLeft size={14} />}
-            className={classes['plain-button']}
-            variant='transparent'
-          >
-            Back
-          </Button>
+      <div className={classes['composerheader-inner']}>
+        <Button
+          leftSection={<IconArrowLeft size={14} />}
+          className={classes['plain-button']}
+          variant='transparent'
+        >
+          Back
+        </Button>
 
-          <Group ml={'auto'}>
-            <ActionIcon
-              variant='transparent'
-              className={classes['plain-button']}
-              disabled={!canUndo || !isEditable}
-              onClick={() => {
-                activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
-              }}
-              title={'Undo (Ctrl+Z)'}
-              aria-label='Undo'
-            >
-              <IconArrowBackUp className={classes['action-button']} />
-            </ActionIcon>
-            <ActionIcon
-              variant='transparent'
-              className={classes['plain-button']}
-              disabled={!canRedo || !isEditable}
-              onClick={() => {
-                activeEditor.dispatchCommand(REDO_COMMAND, undefined);
-              }}
-              title={'Redo (Ctrl+Y)'}
-              aria-label='Redo'
-            >
-              <IconArrowForwardUp className={classes['action-button']} />
-            </ActionIcon>
-            <Divider orientation='vertical' />
-            <Button
-              className={classes['color-button']}
-              variant='transparent'
-              onClick={handleExportTest}
-            >
-              Save
-            </Button>
-            <Divider orientation='vertical' />
-            <Button
-              className={classes['color-button']}
-              variant='transparent'
-              onClick={() => handleImportTest(DEBUG_IMPORT_DATA)}
-            >
-              Preview
-            </Button>
-            <Button
-              radius={'xl'}
-              style={{ paddingLeft: '2rem', paddingRight: '2rem' }}
-            >
-              Publish
-            </Button>
-          </Group>
-        </div>
-      </Container>
+        <Group ml={'auto'}>
+          <ActionIcon
+            variant='transparent'
+            className={classes['plain-button']}
+            disabled={!canUndo || !isEditable}
+            onClick={() => {
+              activeEditor.dispatchCommand(UNDO_COMMAND, undefined);
+            }}
+            title={'Undo (Ctrl+Z)'}
+            aria-label='Undo'
+          >
+            <IconArrowBackUp className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={classes['plain-button']}
+            disabled={!canRedo || !isEditable}
+            onClick={() => {
+              activeEditor.dispatchCommand(REDO_COMMAND, undefined);
+            }}
+            title={'Redo (Ctrl+Y)'}
+            aria-label='Redo'
+          >
+            <IconArrowForwardUp className={classes['action-button']} />
+          </ActionIcon>
+          <Divider orientation='vertical' />
+          <Button
+            className={classes['color-button']}
+            variant='transparent'
+            onClick={handleExportTest}
+          >
+            Save
+          </Button>
+          <Divider orientation='vertical' />
+          <Button
+            className={classes['color-button']}
+            variant='transparent'
+            onClick={() => handleImportTest(DEBUG_IMPORT_DATA)}
+          >
+            Preview
+          </Button>
+          <Button
+            radius={'xl'}
+            style={{ paddingLeft: '2rem', paddingRight: '2rem' }}
+          >
+            Publish
+          </Button>
+        </Group>
+      </div>
     </header>
   );
 };

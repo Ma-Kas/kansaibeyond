@@ -44,6 +44,7 @@
 .editor_toolbar {
   z-index: var(--z-index-editor-toolbar);
   display: flex;
+  min-width: var(--editor-toolbar-min-width);
   justify-content: center;
   align-items: center;
   height: var(--editor-toolbar-height);
