@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: rem(25px) var(--editor-padding-horizontal)
-    var(--editor-padding-vertical);
+  padding: var(--editor-padding-vertical-outer) var(--editor-padding-horizontal)
+    var(--editor-padding-vertical-inner);
 }
 
 .editor-post-title-inner {

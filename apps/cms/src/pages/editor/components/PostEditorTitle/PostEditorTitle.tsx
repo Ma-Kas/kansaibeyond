@@ -15,7 +15,10 @@ const PostEditorTitle = () => {
   };
 
   return (
-    <div className={classes['editor-post-title-container']}>
+    <div
+      className={classes['editor-post-title-container']}
+      data-editor-component='post-title'
+    >
       <textarea
         className={classes['editor-post-title-inner']}
         placeholder='Add a Catchy Title'

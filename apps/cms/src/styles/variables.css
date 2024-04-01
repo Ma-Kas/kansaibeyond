@@ -43,7 +43,8 @@
   --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-height: rem(56px);
   --editor-padding-horizontal: rem(30px);
-  --editor-padding-vertical: rem(10px);
+  --editor-padding-vertical-inner: rem(10px);
+  --editor-padding-vertical-outer: rem(25px);
   --editor-toolbar-chevron-gap: rem(5px);
   --editor-toolbar-icon-stroke: 1.5px;
   --editor-content-editable-max-width: rem(740px);

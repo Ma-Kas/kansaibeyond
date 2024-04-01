@@ -21,3 +21,7 @@
   font-style: normal;
   src: url('../assets/fonts/FuturaLT-Book.ttf') format('truetype');
 }
+
+body {
+  margin: 0;
+}

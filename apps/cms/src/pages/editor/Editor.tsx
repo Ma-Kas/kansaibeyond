@@ -86,10 +86,8 @@ export default function Editor(): JSX.Element {
             <HistoryPlugin />
             <RichTextPlugin
               contentEditable={
-                <div className='editor-scroller'>
-                  <div className='editor' ref={onRef}>
-                    <ContentEditable />
-                  </div>
+                <div className='editor' ref={onRef}>
+                  <ContentEditable />
                 </div>
               }
               placeholder={placeholder}
