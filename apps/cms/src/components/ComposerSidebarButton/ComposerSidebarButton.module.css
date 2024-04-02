@@ -40,8 +40,7 @@
   width: rem(36px);
   height: rem(36px);
   padding: rem(6px);
-  border: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border: var(--editor-menu-border);
   border-radius: 50%;
   stroke: light-dark(
     var(--color-menu-border-light),

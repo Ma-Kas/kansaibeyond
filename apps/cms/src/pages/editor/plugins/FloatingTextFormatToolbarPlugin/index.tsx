@@ -1,5 +1,3 @@
-import './index.css';
-
 import { $isCodeHighlightNode } from '@lexical/code';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -17,6 +15,21 @@ import {
 } from 'lexical';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+
+// Mantine Components Imports
+import { ActionIcon } from '@mantine/core';
+import {
+  IconBold,
+  IconItalic,
+  IconUnderline,
+  IconCode,
+  IconLink,
+  IconStrikethrough,
+  IconSuperscript,
+  IconSubscript,
+} from '@tabler/icons-react';
+import cx from 'clsx';
+import classes from './FloatingTextFormatToolbar.module.css';
 
 import { getDOMRangeRect } from '../../utils/getDOMRangeRect';
 import { getSelectedNode } from '../../utils/getSelectedNode';
@@ -173,89 +186,138 @@ const TextFormatFloatingToolbar = (
   }, [editor, updateTextFormatFloatingToolbar]);
 
   return (
-    <div ref={popupCharStylesEditorRef} className='floating-text-format-popup'>
+    <div
+      ref={popupCharStylesEditorRef}
+      className={classes['floating-text-format-popup']}
+    >
       {editor.isEditable() && (
         <>
-          <button
-            type='button'
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isBold,
+              })
+            }
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
             }}
-            className={'popup-item spaced ' + (isBold ? 'active' : '')}
-            aria-label='Format text as bold'
+            title='Bold (Ctrl+B)'
+            aria-label='Format text as bold.'
           >
-            <i className='format bold' />
-          </button>
-          <button
-            type='button'
+            <IconBold className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isItalic,
+              })
+            }
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
             }}
-            className={'popup-item spaced ' + (isItalic ? 'active' : '')}
-            aria-label='Format text as italics'
+            title='Italic (Ctrl+I)'
+            aria-label='Format text as italics.'
           >
-            <i className='format italic' />
-          </button>
-          <button
-            type='button'
+            <IconItalic className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isUnderline,
+              })
+            }
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
             }}
-            className={'popup-item spaced ' + (isUnderline ? 'active' : '')}
-            aria-label='Format text to underlined'
+            title='Underline (Ctrl+U)'
+            aria-label='Format text to underlined.'
           >
-            <i className='format underline' />
-          </button>
-          <button
-            type='button'
+            <IconUnderline className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isLink,
+              })
+            }
+            onClick={insertLink}
+            title='Insert link'
+            aria-label='Insert link'
+          >
+            <IconLink className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isStrikethrough,
+              })
+            }
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
             }}
-            className={'popup-item spaced ' + (isStrikethrough ? 'active' : '')}
-            aria-label='Format text with a strikethrough'
+            title='Strikethrough'
+            aria-label='Format Strikethrough'
           >
-            <i className='format strikethrough' />
-          </button>
-          <button
-            type='button'
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript');
-            }}
-            className={'popup-item spaced ' + (isSubscript ? 'active' : '')}
-            title='Subscript'
-            aria-label='Format Subscript'
-          >
-            <i className='format subscript' />
-          </button>
-          <button
-            type='button'
+            <IconStrikethrough className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isSuperscript,
+              })
+            }
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'superscript');
             }}
-            className={'popup-item spaced ' + (isSuperscript ? 'active' : '')}
             title='Superscript'
             aria-label='Format Superscript'
           >
-            <i className='format superscript' />
-          </button>
-          <button
-            type='button'
+            <IconSuperscript className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isSubscript,
+              })
+            }
+            onClick={() => {
+              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'subscript');
+            }}
+            title='Subscript'
+            aria-label='Format Subscript'
+          >
+            <IconSubscript className={classes['action-button']} />
+          </ActionIcon>
+          <ActionIcon
+            variant='transparent'
+            className={
+              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+              cx(classes['plain-button'], {
+                [classes.active]: isCode,
+              })
+            }
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
             }}
-            className={'popup-item spaced ' + (isCode ? 'active' : '')}
-            aria-label='Insert code block'
+            title='Code'
+            aria-label='Insert Code Block'
           >
-            <i className='format code' />
-          </button>
-          <button
-            type='button'
-            onClick={insertLink}
-            className={'popup-item spaced ' + (isLink ? 'active' : '')}
-            aria-label='Insert link'
-          >
-            <i className='format link' />
-          </button>
+            <IconCode className={classes['action-button']} />
+          </ActionIcon>
         </>
       )}
     </div>

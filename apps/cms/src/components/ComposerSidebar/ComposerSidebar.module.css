@@ -21,8 +21,7 @@
   );
   display: flex;
   flex-direction: column;
-  border-right: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border-right: var(--editor-menu-border);
 }
 
 .composer_sidebar_inner {
@@ -57,8 +56,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   padding: 0;
-  border: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border: var(--editor-menu-border);
   border-radius: rem(10px);
 
   @mixin hover {

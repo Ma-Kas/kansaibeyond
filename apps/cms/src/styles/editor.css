@@ -54,8 +54,7 @@
   top: 0;
   left: var(--composer-sidebar-width);
   right: 0;
-  border-bottom: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border-bottom: var(--editor-menu-border);
 }
 
 .editor_toolbar_inner {

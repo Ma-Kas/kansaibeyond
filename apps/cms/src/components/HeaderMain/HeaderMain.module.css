@@ -7,8 +7,7 @@
   height: var(--header-height);
   margin-bottom: 0;
   background-color: var(--mantine-color-body);
-  border-bottom: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border-bottom: var(--editor-menu-border);
   box-shadow: var(--mantine-shadow-xs);
 }
 

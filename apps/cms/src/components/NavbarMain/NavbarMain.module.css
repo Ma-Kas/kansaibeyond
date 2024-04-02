@@ -11,8 +11,7 @@
   width: var(--navbar-main-width);
   display: flex;
   flex-direction: column;
-  border-right: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border-right: var(--editor-menu-border);
 }
 
 .navbar_scrollarea {

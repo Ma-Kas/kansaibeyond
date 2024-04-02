@@ -7,8 +7,7 @@
   right: 0;
   height: var(--composer-header-height);
   background-color: var(--mantine-color-white);
-  border-bottom: rem(1px) solid
-    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
+  border-bottom: var(--editor-menu-border);
 }
 
 .composerheader-inner {

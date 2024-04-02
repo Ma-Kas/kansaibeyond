@@ -44,6 +44,9 @@
   --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-height: rem(56px);
   --editor-toolbar-min-width: rem(660px);
+  --editor-menu-border-radius: rem(4px);
+  --editor-menu-border: rem(1px) solid
+    light-dark(var(--color-menu-border-light), var(--color-menu-border-dark));
   --editor-padding-horizontal: rem(30px);
   --editor-padding-vertical-inner: rem(10px);
   --editor-padding-vertical-outer: rem(25px);
