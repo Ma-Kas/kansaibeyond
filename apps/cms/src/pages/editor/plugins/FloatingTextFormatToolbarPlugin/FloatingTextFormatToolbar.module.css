@@ -7,7 +7,7 @@
   top: 0;
   left: 0;
   z-index: var(--z-index-modals);
-  opacity: 1;
+  opacity: 0;
   box-shadow: var(--mantine-shadow-md);
   border: var(--editor-menu-border);
   border-radius: rem(4px);

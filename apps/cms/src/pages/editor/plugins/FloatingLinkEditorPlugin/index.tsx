@@ -1,5 +1,3 @@
-import './index.css';
-
 import {
   $createLinkNode,
   $isAutoLinkNode,
@@ -29,6 +27,17 @@ import { createPortal } from 'react-dom';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { setFloatingElemPositionForLinkEditor } from '../../utils/setFloatingElemPositionForLinkEditor';
 import { sanitizeUrl } from '../../utils/url';
+import { ActionIcon } from '@mantine/core';
+import {
+  IconCircleCheck,
+  IconCircleX,
+  IconEdit,
+  IconTrash,
+} from '@tabler/icons-react';
+
+import cx from 'clsx';
+
+import classes from './FloatingLinkEditor.module.css';
 
 function FloatingLinkEditor({
   editor,
@@ -107,7 +116,7 @@ function FloatingLinkEditor({
   }, [anchorElem, editor, setIsLinkEditMode, isLinkEditMode, linkUrl]);
 
   useEffect(() => {
-    const scrollerElem = anchorElem.parentElement;
+    const scrollerElem = anchorElem.parentElement?.parentElement;
 
     const update = () => {
       editor.getEditorState().read(() => {
@@ -137,7 +146,6 @@ function FloatingLinkEditor({
           updateLinkEditor();
         });
       }),
-
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
@@ -211,12 +219,20 @@ function FloatingLinkEditor({
   };
 
   return (
-    <div ref={editorRef} className='link-editor'>
+    <div
+      ref={editorRef}
+      className={
+        // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+        cx(classes['link-editor'], {
+          [classes.visible]: isLink,
+        })
+      }
+    >
       {!isLink ? null : isLinkEditMode ? (
-        <>
+        <div className={classes['link-edit-view']}>
           <input
             ref={inputRef}
-            className='link-input'
+            className={classes['link-input']}
             value={editedLinkUrl}
             onChange={(event) => {
               setEditedLinkUrl(event.target.value);
@@ -225,28 +241,31 @@ function FloatingLinkEditor({
               monitorInputInteraction(event);
             }}
           />
-          <div>
-            <div
-              className='link-cancel'
-              role='button'
-              tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
+          <div className={classes['icon-group']}>
+            <ActionIcon
+              variant='transparent'
+              className={classes['plain-button']}
               onClick={() => {
                 setIsLinkEditMode(false);
               }}
-            />
-
-            <div
-              className='link-confirm'
-              role='button'
-              tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
+              title='Cancel'
+              aria-label='Cancel Link Edit.'
+            >
+              <IconCircleX className={classes['action-button']} />
+            </ActionIcon>
+            <ActionIcon
+              variant='transparent'
+              className={classes['plain-button']}
               onClick={handleLinkSubmission}
-            />
+              title='Confirm'
+              aria-label='Confirm Link Edit.'
+            >
+              <IconCircleCheck className={classes['action-button']} />
+            </ActionIcon>
           </div>
-        </>
+        </div>
       ) : (
-        <div className='link-view'>
+        <div className={classes['link-view']}>
           <a
             href={sanitizeUrl(linkUrl)}
             target='_blank'
@@ -254,25 +273,31 @@ function FloatingLinkEditor({
           >
             {linkUrl}
           </a>
-          <div
-            className='link-edit'
-            role='button'
-            tabIndex={0}
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => {
-              setEditedLinkUrl(linkUrl);
-              setIsLinkEditMode(true);
-            }}
-          />
-          <div
-            className='link-trash'
-            role='button'
-            tabIndex={0}
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => {
-              editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-            }}
-          />
+          <div className={classes['icon-group']}>
+            <ActionIcon
+              variant='transparent'
+              className={classes['plain-button']}
+              onClick={() => {
+                setEditedLinkUrl(linkUrl);
+                setIsLinkEditMode(true);
+              }}
+              title='Edit Link'
+              aria-label='Edit Link.'
+            >
+              <IconEdit className={classes['action-button']} />
+            </ActionIcon>
+            <ActionIcon
+              variant='transparent'
+              className={classes['plain-button']}
+              onClick={() => {
+                editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+              }}
+              title='Remove Link'
+              aria-label='Remove Link.'
+            >
+              <IconTrash className={classes['action-button']} />
+            </ActionIcon>
+          </div>
         </div>
       )}
     </div>
@@ -294,22 +319,15 @@ function useFloatingLinkEditorToolbar(
       if ($isRangeSelection(selection)) {
         const focusNode = getSelectedNode(selection);
         const focusLinkNode = $findMatchingParent(focusNode, $isLinkNode);
-        const focusAutoLinkNode = $findMatchingParent(
-          focusNode,
-          $isAutoLinkNode
-        );
-        if (!(focusLinkNode || focusAutoLinkNode)) {
+        if (!focusLinkNode) {
           setIsLink(false);
           return;
         }
         const badNode = selection.getNodes().find((node) => {
           const linkNode = $findMatchingParent(node, $isLinkNode);
-          const autoLinkNode = $findMatchingParent(node, $isAutoLinkNode);
           if (
             !linkNode?.is(focusLinkNode) &&
-            !autoLinkNode?.is(focusAutoLinkNode) &&
             !linkNode &&
-            !autoLinkNode &&
             !$isLineBreakNode(node)
           ) {
             return node;
