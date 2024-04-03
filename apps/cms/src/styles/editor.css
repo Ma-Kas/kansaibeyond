@@ -137,249 +137,189 @@ i.bucket {
 }
 
 /******************************************************************************/
-/* EMBED STYLES */
+/* COMMON EMBEDDED CONTENT STYLES */
 /******************************************************************************/
 
-.editor-shell div.editor-embed {
-  cursor: default;
-  position: relative;
-  min-width: 100px;
-}
-
-.editor-shell div.editor-embed:has(div.focused) {
-  outline: 4px solid rgb(60, 132, 244);
+.editor-image:has(img.focused),
+.EditorTheme__galleryContainer:has(.focused),
+.EditorTheme__carouselContainer:has(.focused),
+.editor-embed:has(div.focused) {
+  outline: var(--editor-embed-content-highlight-outline);
   user-select: none;
-}
-.editor-shell div.editor-embed div.embed {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+  z-index: var(--z-index-editor-highlighted);
 }
 
-.editor-shell div.editor-embed > .embed > :first-child {
-  pointer-events: none;
-}
-
-.editor-shell .editor-embed .embed-edit-button {
-  display: block;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 35px;
-  min-width: 60px;
-  height: 35px;
-  margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  padding: 6px 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.editor-shell .editor-embed .embed-edit-button:hover {
-  background-color: rgba(60, 132, 244, 0.5);
-}
-
-.editor-shell .editor-embed .embed-resizer {
-  display: block;
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  background-color: white;
-  border: 2px solid rgb(60, 132, 244);
-  border-radius: 50%;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-n {
-  top: -10px;
-  left: calc(50% - 6px);
-  cursor: ns-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-ne {
-  top: -10px;
-  right: -10px;
-  cursor: nesw-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-e {
-  bottom: calc(50% - 6px);
-  right: -10px;
-  cursor: ew-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-se {
-  bottom: -10px;
-  right: -10px;
-  cursor: nwse-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-s {
-  bottom: -10px;
-  left: calc(50% - 6px);
-  cursor: ns-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-sw {
-  bottom: -10px;
-  left: -10px;
-  cursor: nesw-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-w {
-  bottom: calc(50% - 6px);
-  left: -10px;
-  cursor: ew-resize;
-}
-
-.editor-shell .editor-embed .embed-resizer.embed-resizer-nw {
-  top: -10px;
-  left: -10px;
-  cursor: nwse-resize;
-}
-
-.editor-shell .react-tweet-theme {
-  margin: 0;
-}
-
-.editor-shell div.editor-image {
-  cursor: default;
-  position: relative;
-  min-width: 100px;
-  user-select: none;
-}
-
-/******************************************************************************/
-/* IMAGE STYLES */
-/******************************************************************************/
-
-.editor-shell div.editor-image:has(img.focused) {
-  outline: 4px solid rgb(60, 132, 244);
-  user-select: none;
-}
-
-.editor-shell .editor-image img {
-  cursor: default;
-  width: 100%;
-}
-
-.editor-shell .editor-image .figure-container {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-}
-
-.editor-shell .editor-image .image-caption-container {
-  padding: 1em 0;
-  font-size: 12px;
+.image-caption-container,
+.gallery-caption-container,
+.carousel-caption-container {
+  padding: var(--editor-embed-content-caption-padding);
+  font-size: var(--editor-embed-content-caption-font-size);
   text-align: center;
   min-width: 100px;
   color: black;
   word-wrap: break-word;
 }
 
-.editor-shell .editor-image .image-edit-button {
+.image-resizer,
+.gallery-resizer,
+.carousel-resizer,
+.embed-resizer {
   display: block;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: var(--editor-embed-content-resizer-handle-size);
+  aspect-ratio: 1 / 1;
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 35px;
-  min-width: 60px;
-  height: 35px;
-  margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  padding: 6px 8px;
+  background-color: var(--mantine-color-white);
+  border: var(--editor-embed-content-resizer-handle-stroke);
+  border-radius: 50%;
+}
+
+.embed-resizer.embed-resizer-n {
+  top: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  left: calc(50% - (var(--editor-embed-content-resizer-handle-size) / 2));
+  cursor: ns-resize;
+}
+
+.embed-resizer.embed-resizer-ne {
+  top: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  right: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  cursor: nesw-resize;
+}
+
+.image-resizer.image-resizer-e,
+.gallery-resizer.gallery-resizer-e,
+.carousel-resizer.carousel-resizer-e,
+.embed-resizer.embed-resizer-e {
+  bottom: calc(50% - (var(--editor-embed-content-resizer-handle-size) / 2));
+  right: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  cursor: ew-resize;
+}
+
+.embed-resizer.embed-resizer-se {
+  bottom: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  right: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  cursor: nwse-resize;
+}
+
+.embed-resizer.embed-resizer-s {
+  bottom: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  left: calc(50% - (var(--editor-embed-content-resizer-handle-size) / 2));
+  cursor: ns-resize;
+}
+
+.embed-resizer.embed-resizer-sw {
+  bottom: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  left: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  cursor: nesw-resize;
+}
+
+.image-resizer.image-resizer-w,
+.gallery-resizer.gallery-resizer-w,
+.carousel-resizer.carousel-resizer-w,
+.embed-resizer.embed-resizer-w {
+  bottom: calc(50% - (var(--editor-embed-content-resizer-handle-size) / 2));
+  left: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  cursor: ew-resize;
+}
+
+.embed-resizer.embed-resizer-nw {
+  top: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  left: calc(var(--editor-embed-content-resizer-handle-offset) * -1);
+  cursor: nwse-resize;
+}
+
+.image-edit-button,
+.gallery-edit-button,
+.carousel-edit-button,
+.embed-edit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--mantine-color-white);
+  font-family: var(--editor-font-family-menu);
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--editor-embed-content-edit-button-bg);
+  position: absolute;
+  top: var(--editor-embed-content-edit-button-offset);
+  right: var(--editor-embed-content-edit-button-offset);
+  width: fit-content;
+  height: rem(28px);
+  border-radius: var(--editor-menu-border-radius);
+  border: 1px solid var(--mantine-primary-color-filled);
+  padding: var(--editor-embed-content-edit-button-padding);
   cursor: pointer;
   user-select: none;
 }
 
-.editor-shell .editor-image .image-edit-button:hover {
-  background-color: rgba(60, 132, 244, 0.5);
+.image-edit-button:hover,
+.gallery-edit-button:hover,
+.carousel-edit-button:hover,
+.embed-edit-button:hover {
+  background-color: var(--mantine-primary-color-filled);
 }
 
-.editor-shell .editor-image .image-resizer {
-  display: block;
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  background-color: white;
-  border: 2px solid rgb(60, 132, 244);
-  border-radius: 50%;
+/******************************************************************************/
+/* IMAGE STYLES */
+/******************************************************************************/
+
+.editor-image {
+  cursor: default;
+  position: relative;
+  min-width: 100px;
+  user-select: none;
 }
 
-.editor-shell .editor-image .image-resizer.image-resizer-e {
-  bottom: calc(50% - 6px);
-  right: -10px;
-  cursor: ew-resize;
+.editor-image img {
+  cursor: default;
+  width: 100%;
 }
 
-.editor-shell .editor-image .image-resizer.image-resizer-w {
-  bottom: calc(50% - 6px);
-  left: -10px;
-  cursor: ew-resize;
+.figure-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
 }
 
 /******************************************************************************/
 /* IMAGE GALLERY STYLES */
 /******************************************************************************/
 
-.editor-shell div.EditorTheme__galleryContainer:has(.focused) {
-  outline: 4px solid rgb(60, 132, 244);
-  user-select: none;
-}
-
-.editor-shell .EditorTheme__galleryContainer .grid-container.dynamic-type {
+.grid-container.dynamic-type {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   width: 100%;
   gap: 0.5rem;
 }
 
-.editor-shell
-  .EditorTheme__galleryContainer
-  .grid-container.dynamic-type
-  .gallery-image {
+.grid-container.dynamic-type .gallery-image {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   object-position: center;
 }
 
-.editor-shell .EditorTheme__galleryContainer .grid-container.static-type {
+.grid-container.static-type {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 100%;
   gap: 0.5rem;
 }
 
-.editor-shell
-  .EditorTheme__galleryContainer
-  .grid-container.static-type
-  .gallery-image {
+.grid-container.static-type .gallery-image {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   object-position: center;
 }
 
-.editor-shell .EditorTheme__galleryContainer .grid-container.flex-type {
+.grid-container.flex-type {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   gap: 0.5rem;
 }
 
-.editor-shell
-  .EditorTheme__galleryContainer
-  .grid-container.flex-type
-  .gallery-image {
+.grid-container.flex-type .gallery-image {
   flex-grow: 1;
   width: calc(25% - 0.5rem);
   min-width: 150px;
@@ -389,147 +329,47 @@ i.bucket {
   object-fit: cover;
 }
 
-.editor-shell .EditorTheme__galleryContainer .gallery-caption-container {
-  padding: 1em 0;
-  font-size: 12px;
-  text-align: center;
-  min-width: 100px;
-  color: black;
-  word-wrap: break-word;
-}
-
-.editor-shell .EditorTheme__galleryContainer .gallery-edit-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 3rem;
-  min-width: 3rem;
-  height: 2rem;
-  margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  padding: 6px 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.editor-shell .EditorTheme__galleryContainer .gallery-edit-button:hover {
-  background-color: rgba(60, 132, 244, 0.5);
-}
-
-.editor-shell .EditorTheme__galleryContainer .gallery-resizer {
-  display: block;
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  background-color: white;
-  border: 2px solid rgb(60, 132, 244);
-  border-radius: 50%;
-}
-
-.editor-shell
-  .EditorTheme__galleryContainer
-  .gallery-resizer.gallery-resizer-e {
-  bottom: calc(50% - 6px);
-  right: -10px;
-  cursor: ew-resize;
-}
-
-.editor-shell
-  .EditorTheme__galleryContainer
-  .gallery-resizer.gallery-resizer-w {
-  bottom: calc(50% - 6px);
-  left: -10px;
-  cursor: ew-resize;
-}
-
 /******************************************************************************/
 /* IMAGE CAROUSEL STYLES */
 /******************************************************************************/
 
-.editor-shell div.EditorTheme__carouselContainer:has(.focused) {
-  outline: 4px solid rgb(60, 132, 244);
-  user-select: none;
-}
-
-.editor-shell .EditorTheme__carouselContainer .carousel-container {
+.carousel-container {
   position: relative;
   margin: auto;
   width: 100%;
 }
 
-.editor-shell
-  .EditorTheme__carouselContainer
-  .carousel-container
-  .carousel-image {
+.carousel-container .carousel-image {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   object-position: center;
 }
 
-.editor-shell .EditorTheme__carouselContainer .carousel-caption-container {
-  padding: 1em 0;
-  font-size: 12px;
-  text-align: center;
+/******************************************************************************/
+/* WEB EMBED STYLES */
+/******************************************************************************/
+
+.editor-embed {
+  cursor: default;
+  position: relative;
   min-width: 100px;
-  color: black;
-  word-wrap: break-word;
 }
 
-.editor-shell .EditorTheme__carouselContainer .carousel-edit-button {
+.editor-embed div.embed {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 3rem;
-  min-width: 3rem;
-  height: 2rem;
-  margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  padding: 6px 8px;
-  cursor: pointer;
-  user-select: none;
+  width: 100%;
+  height: 100%;
 }
 
-.editor-shell .EditorTheme__carouselContainer .carousel-edit-button:hover {
-  background-color: rgba(60, 132, 244, 0.5);
+.editor-embed > .embed > :first-child {
+  pointer-events: none;
 }
 
-.editor-shell .EditorTheme__carouselContainer .carousel-resizer {
-  display: block;
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  background-color: white;
-  border: 2px solid rgb(60, 132, 244);
-  border-radius: 50%;
-}
-
-.editor-shell
-  .EditorTheme__carouselContainer
-  .carousel-resizer.carousel-resizer-e {
-  bottom: calc(50% - 6px);
-  right: -10px;
-  cursor: ew-resize;
-}
-
-.editor-shell
-  .EditorTheme__carouselContainer
-  .carousel-resizer.carousel-resizer-w {
-  bottom: calc(50% - 6px);
-  left: -10px;
-  cursor: ew-resize;
+.react-tweet-theme {
+  margin: 0;
 }
 
 /******************************************************************************/

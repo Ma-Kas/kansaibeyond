@@ -2,6 +2,7 @@ import type { LexicalEditor, NodeKey } from 'lexical';
 
 import * as React from 'react';
 import { useRef } from 'react';
+import { Button } from '@mantine/core';
 import { UpdateImageDialog } from '../nodes/ImageComponent';
 
 function clamp(value: number, min: number, max: number) {
@@ -214,8 +215,9 @@ export default function ImageResizer({
   };
   return (
     <div ref={controlWrapperRef}>
-      <button
+      <Button
         className='image-edit-button'
+        title='Edit image'
         ref={buttonRef}
         onClick={() => {
           showModal('Update Image', (onClose) => (
@@ -228,7 +230,7 @@ export default function ImageResizer({
         }}
       >
         Edit
-      </button>
+      </Button>
 
       <div
         className='image-resizer image-resizer-e'

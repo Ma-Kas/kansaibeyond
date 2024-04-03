@@ -15,6 +15,7 @@
   --z-index-composer-sidebar: 99;
   --z-index-composer-drawer: 98;
   --z-index-editor-toolbar: 98;
+  --z-index-editor-highlighted: 50;
 
   /* Font variables */
   --font-size-editable-default: 18px;
@@ -40,6 +41,7 @@
   --transparent-blue-hover-bg: rgba(34, 139, 230, 0.1);
 
   /* Rich Text Editor Variales */
+  --editor-font-family-menu: var(--mantine-font-family);
   --editor-font-family-light: FuturaLT-Light, sans-serif;
   --editor-font-family-book: FuturaLT-Book, sans-serif;
   --editor-toolbar-height: rem(56px);
@@ -56,4 +58,17 @@
   --editor-toolbar-icon-stroke: 1.5px;
   --editor-content-editable-max-width: rem(740px);
   --editor-content-editable-min-width: rem(686px);
+
+  /* Editor Embedded Content Variables */
+  --editor-embed-content-caption-font-size: rem(12px);
+  --editor-embed-content-caption-padding: rem(12px) 0;
+  --editor-embed-content-highlight-outline: 4px solid
+    var(--mantine-primary-color-filled);
+  --editor-embed-content-resizer-handle-size: rem(12px);
+  --editor-embed-content-resizer-handle-stroke: 2px solid
+    var(--mantine-primary-color-filled);
+  --editor-embed-content-resizer-handle-offset: rem(8px);
+  --editor-embed-content-edit-button-offset: rem(12px);
+  --editor-embed-content-edit-button-bg: rgba(0, 0, 0, 0.3);
+  --editor-embed-content-edit-button-padding: rem(6px) rem(12px);
 }
