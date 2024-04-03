@@ -2,7 +2,7 @@ import { LexicalEditor } from 'lexical';
 import { useState } from 'react';
 
 import Button from '../../ui/Button';
-import DropDown, { DropDownItem } from '../../ui/DropDown';
+import Dropdown from '../../components/Dropdown/Dropdown';
 import { INSERT_LAYOUT_COMMAND } from '../../utils/exportedCommands';
 
 const LAYOUTS = [
@@ -28,22 +28,20 @@ export default function InsertLayoutDialog({
     onClose();
   };
 
+  const dropdownItems = LAYOUTS.map(({ label, value }) => ({
+    text: label,
+    onClick: () => setLayout(value),
+  }));
+
   return (
     <>
-      <DropDown
-        buttonClassName='toolbar-item dialog-dropdown'
-        buttonLabel={buttonLabel}
-      >
-        {LAYOUTS.map(({ label, value }) => (
-          <DropDownItem
-            key={value}
-            className='item'
-            onClick={() => setLayout(value)}
-          >
-            <span className='text'>{label}</span>
-          </DropDownItem>
-        ))}
-      </DropDown>
+      <Dropdown
+        type='general'
+        currentValue={buttonLabel!}
+        ariaLabel='Column Layout Options'
+        items={dropdownItems}
+        disabled={false}
+      />
       <Button onClick={onClick}>Insert</Button>
     </>
   );
