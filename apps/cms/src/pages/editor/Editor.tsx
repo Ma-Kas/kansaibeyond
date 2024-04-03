@@ -31,7 +31,6 @@ import EmbedPlugin from './plugins/EmbedPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
-import FloatingBlockTypeToolbarPlugin from './plugins/FloatingBlockTypeToolbarPlugin';
 import { LexicalNode } from 'lexical';
 
 import PostEditorTitle from './components/PostEditorTitle/PostEditorTitle';
@@ -113,11 +112,7 @@ export default function Editor(): JSX.Element {
             <LayoutPlugin />
             {floatingAnchorElem && (
               <>
-                <BlockTypeListPopupContext.Provider
-                  value={{ blockTypePopupNode, setBlockTypePopupNode }}
-                >
-                  <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
-                </BlockTypeListPopupContext.Provider>
+                <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
                 <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
                 <FloatingLinkEditorPlugin
                   anchorElem={floatingAnchorElem}
@@ -131,13 +126,6 @@ export default function Editor(): JSX.Element {
                 <FloatingTextFormatToolbarPlugin
                   anchorElem={floatingAnchorElem}
                 />
-                <BlockTypeListPopupContext.Provider
-                  value={{ blockTypePopupNode, setBlockTypePopupNode }}
-                >
-                  <FloatingBlockTypeToolbarPlugin
-                    anchorElem={floatingAnchorElem}
-                  />
-                </BlockTypeListPopupContext.Provider>
               </>
             )}
           </>
