@@ -34,7 +34,6 @@ import TextInput from '../ui/TextInput';
 import Select from '../ui/Select';
 import { DialogActions } from '../ui/Dialog';
 import Button from '../ui/Button';
-import useModal from '../hooks/useModal';
 import { Alignment, ImageBlockNode } from './ImageBlockNode';
 
 const imageCache = new Set();
@@ -88,11 +87,11 @@ function getBlockParentNode(
 export function UpdateImageDialog({
   activeEditor,
   nodeKey,
-  onClose,
+  close,
 }: {
   activeEditor: LexicalEditor;
   nodeKey: NodeKey;
-  onClose: () => void;
+  close: () => void;
 }): JSX.Element {
   const editorState = activeEditor.getEditorState();
   const node = editorState.read(() => $getNodeByKey(nodeKey) as ImageNode);
@@ -117,7 +116,7 @@ export function UpdateImageDialog({
         parentBlockNode.setAlignment(blockAlignment);
       });
     }
-    onClose();
+    close();
   };
 
   return (
@@ -184,7 +183,6 @@ export default function ImageComponent({
 }): JSX.Element {
   const imageRef = useRef<null | HTMLImageElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [modal, showModal] = useModal();
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
@@ -428,11 +426,9 @@ export default function ImageComponent({
             onResizeStart={onResizeStart}
             onResizeEnd={onResizeEnd}
             nodeKey={nodeKey}
-            showModal={showModal}
           />
         )}
       </>
-      {modal}
     </Suspense>
   );
 }

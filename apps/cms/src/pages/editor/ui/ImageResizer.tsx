@@ -3,6 +3,7 @@ import type { LexicalEditor, NodeKey } from 'lexical';
 import * as React from 'react';
 import { useRef } from 'react';
 import { Button } from '@mantine/core';
+import { SettingsModalContext } from '../Editor';
 import { UpdateImageDialog } from '../nodes/ImageComponent';
 
 function clamp(value: number, min: number, max: number) {
@@ -23,7 +24,6 @@ export default function ImageResizer({
   imageRef,
   editor,
   nodeKey,
-  showModal,
 }: {
   editor: LexicalEditor;
   buttonRef: { current: null | HTMLButtonElement };
@@ -31,10 +31,6 @@ export default function ImageResizer({
   onResizeEnd: (width: string, maxWidth: string) => void;
   onResizeStart: () => void;
   nodeKey: NodeKey;
-  showModal: (
-    title: string,
-    showModal: (onClose: () => void) => JSX.Element
-  ) => void;
 }): JSX.Element {
   const controlWrapperRef = useRef<HTMLDivElement>(null);
   const userSelect = useRef({
@@ -62,6 +58,9 @@ export default function ImageResizer({
     startY: 0,
     direction: 0,
   });
+
+  const { close, handleSettingsModuleOpen } =
+    React.useContext(SettingsModalContext);
 
   const editorRootElement = editor.getRootElement();
   // Find max allowable image width (=container full width)
@@ -219,15 +218,18 @@ export default function ImageResizer({
         className='image-edit-button'
         title='Edit image'
         ref={buttonRef}
-        onClick={() => {
-          showModal('Update Image', (onClose) => (
-            <UpdateImageDialog
-              activeEditor={editor}
-              nodeKey={nodeKey}
-              onClose={onClose}
-            />
-          ));
-        }}
+        onClick={() =>
+          handleSettingsModuleOpen({
+            content: (
+              <UpdateImageDialog
+                activeEditor={editor}
+                nodeKey={nodeKey}
+                close={close}
+              />
+            ),
+            title: 'Image Settings',
+          })
+        }
       >
         Edit
       </Button>

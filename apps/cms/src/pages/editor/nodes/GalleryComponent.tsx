@@ -36,7 +36,6 @@ import Select from '../ui/Select';
 import { DialogActions } from '../ui/Dialog';
 import Button from '../ui/Button';
 import { Alignment, GalleryBlockNode } from './GalleryBlockNode';
-import useModal from '../hooks/useModal';
 
 import { GalleryImageObjectPosition } from './GalleryContainerNode';
 
@@ -156,11 +155,11 @@ function getBlockParentNode(
 export function UpdateGalleryDialog({
   activeEditor,
   nodeKey,
-  onClose,
+  close,
 }: {
   activeEditor: LexicalEditor;
   nodeKey: NodeKey;
-  onClose: () => void;
+  close: () => void;
 }): JSX.Element {
   const editorState = activeEditor.getEditorState();
   const node = editorState.read(
@@ -284,7 +283,7 @@ export function UpdateGalleryDialog({
         parentBlockNode.setAlignment(blockAlignment);
       });
     }
-    onClose();
+    close();
   };
 
   return (
@@ -479,7 +478,6 @@ export default function GalleryComponent({
   const containerRef = useRef<null | HTMLDivElement>(
     editor.getElementByKey(nodeKey) as HTMLDivElement
   );
-  const [modal, showModal] = useModal();
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
@@ -759,13 +757,11 @@ export default function GalleryComponent({
           onResizeStart={onResizeStart}
           onResizeEnd={onResizeEnd}
           nodeKey={nodeKey}
-          showModal={showModal}
         />
       )}
       {captionText && (
         <div className='gallery-caption-container'>{captionText}</div>
       )}
-      {modal}
     </Suspense>
   );
 }

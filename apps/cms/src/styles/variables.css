@@ -71,4 +71,6 @@
   --editor-embed-content-edit-button-offset: rem(12px);
   --editor-embed-content-edit-button-bg: rgba(0, 0, 0, 0.3);
   --editor-embed-content-edit-button-padding: rem(6px) rem(12px);
+  --editor-embed-content-settings-modal-width: rem(420px);
+  --editor-embed-content-settings-modal-bg: rgba(0, 0, 0, 0.4);
 }

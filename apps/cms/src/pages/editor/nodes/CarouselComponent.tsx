@@ -36,7 +36,6 @@ import { DialogActions } from '../ui/Dialog';
 import Button from '../ui/Button';
 import { Alignment, CarouselBlockNode } from './CarouselBlockNode';
 import CarouselResizer from '../ui/CarouselResizer';
-import useModal from '../hooks/useModal';
 import { CarouselImageObjectPosition } from './CarouselContainerNode';
 import EmblaCarousel from '../components/EmblaCarousel/EmblaCarousel';
 import { EmblaOptionsType } from 'embla-carousel';
@@ -150,11 +149,11 @@ function getBlockParentNode(
 export function UpdateCarouselDialog({
   activeEditor,
   nodeKey,
-  onClose,
+  close,
 }: {
   activeEditor: LexicalEditor;
   nodeKey: NodeKey;
-  onClose: () => void;
+  close: () => void;
 }): JSX.Element {
   const editorState = activeEditor.getEditorState();
   const node = editorState.read(
@@ -261,7 +260,7 @@ export function UpdateCarouselDialog({
         parentBlockNode.setAlignment(blockAlignment);
       });
     }
-    onClose();
+    close();
   };
 
   return (
@@ -433,7 +432,6 @@ export default function CarouselComponent({
   const containerRef = useRef<null | HTMLDivElement>(
     editor.getElementByKey(nodeKey) as HTMLDivElement
   );
-  const [modal, showModal] = useModal();
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
@@ -680,13 +678,11 @@ export default function CarouselComponent({
           onResizeStart={onResizeStart}
           onResizeEnd={onResizeEnd}
           nodeKey={nodeKey}
-          showModal={showModal}
         />
       )}
       {captionText && (
         <div className='carousel-caption-container'>{captionText}</div>
       )}
-      {modal}
     </Suspense>
   );
 }

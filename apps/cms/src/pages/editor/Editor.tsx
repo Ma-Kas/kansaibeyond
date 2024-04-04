@@ -31,20 +31,33 @@ import EmbedPlugin from './plugins/EmbedPlugin';
 import ToolbarPlugin from './plugins/ToolbarPlugin';
 import ContentEditable from './ui/ContentEditable';
 import Placeholder from './ui/Placeholder';
-import { LexicalNode } from 'lexical';
 
 import PostEditorTitle from './components/PostEditorTitle/PostEditorTitle';
+import { useDisclosure } from '@mantine/hooks';
+import ContentSettingsModal from './components/ContentSettingsModal/ContentSettingsModal';
 
-type BlockTypeListContext = {
-  blockTypePopupNode: LexicalNode | null;
-  setBlockTypePopupNode: React.Dispatch<
-    React.SetStateAction<LexicalNode | null>
-  >;
+type SettingsModalContext = {
+  settingsModalOpen: boolean;
+  open: () => void;
+  close: () => void;
+  handleSettingsModuleOpen: ({
+    title,
+    content,
+  }: {
+    title: string;
+    content: JSX.Element;
+  }) => void;
 };
 
-export const BlockTypeListPopupContext = createContext<BlockTypeListContext>({
-  blockTypePopupNode: null,
-  setBlockTypePopupNode: () => {},
+export const SettingsModalContext = createContext<SettingsModalContext>({
+  settingsModalOpen: false,
+  open: () => {},
+  close: () => {},
+  // @ts-expect-error 'TODO'
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  handleSettingsModuleOpen({ title, content }) {
+    return;
+  },
 });
 
 export default function Editor(): JSX.Element {
@@ -52,8 +65,9 @@ export default function Editor(): JSX.Element {
     settings: { tableCellMerge, tableCellBackgroundColor },
   } = useSettings();
   const isEditable = useLexicalEditable();
-  const [blockTypePopupNode, setBlockTypePopupNode] =
-    useState<LexicalNode | null>(null);
+  const [settingsModalOpen, { open, close }] = useDisclosure(false);
+  const [settingsModalTitle, setSettingsModalTitle] = useState('Settings');
+  const [settingsModalContent, setSettingsModalContent] = useState(<></>);
 
   const placeholder = <Placeholder>{'Enter some text...'}</Placeholder>;
   const [floatingAnchorElem, setFloatingAnchorElem] =
@@ -66,14 +80,21 @@ export default function Editor(): JSX.Element {
     }
   };
 
+  const handleSettingsModuleOpen = ({
+    title,
+    content,
+  }: {
+    title: string;
+    content: JSX.Element;
+  }) => {
+    setSettingsModalTitle(title);
+    setSettingsModalContent(content);
+    open();
+  };
+
   return (
     <>
-      <BlockTypeListPopupContext.Provider
-        value={{ blockTypePopupNode, setBlockTypePopupNode }}
-      >
-        <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
-      </BlockTypeListPopupContext.Provider>
-
+      <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
       <div className='editor-container'>
         <PostEditorTitle />
         <div className='editor-container-inner'>
@@ -83,15 +104,25 @@ export default function Editor(): JSX.Element {
           <AutoLinkPlugin />
           <>
             <HistoryPlugin />
-            <RichTextPlugin
-              contentEditable={
-                <div className='editor' ref={onRef}>
-                  <ContentEditable />
-                </div>
-              }
-              placeholder={placeholder}
-              ErrorBoundary={LexicalErrorBoundary}
-            />
+            <SettingsModalContext.Provider
+              value={{
+                settingsModalOpen,
+                open,
+                close,
+                handleSettingsModuleOpen,
+              }}
+            >
+              <RichTextPlugin
+                contentEditable={
+                  <div className='editor' ref={onRef}>
+                    <ContentEditable />
+                  </div>
+                }
+                placeholder={placeholder}
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+            </SettingsModalContext.Provider>
+
             <CodeHighlightPlugin />
             <ListPlugin />
             <ListMaxIndentLevelPlugin maxDepth={7} />
@@ -130,6 +161,13 @@ export default function Editor(): JSX.Element {
             )}
           </>
         </div>
+        <ContentSettingsModal
+          title={settingsModalTitle}
+          isOpen={settingsModalOpen}
+          close={close}
+        >
+          <>{settingsModalContent}</>
+        </ContentSettingsModal>
       </div>
     </>
   );

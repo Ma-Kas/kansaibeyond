@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useRef } from 'react';
 import { UpdateGalleryDialog } from '../nodes/GalleryComponent';
 import { getMinColumnWidth } from '../utils/getMinColumnWidth';
+import { SettingsModalContext } from '../Editor';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -53,7 +54,6 @@ export default function GalleryResizer({
   containerRef,
   editor,
   nodeKey,
-  showModal,
 }: {
   editor: LexicalEditor;
   buttonRef: { current: null | HTMLButtonElement };
@@ -61,10 +61,6 @@ export default function GalleryResizer({
   onResizeEnd: (width: string, maxWidth: string) => void;
   onResizeStart: () => void;
   nodeKey: NodeKey;
-  showModal: (
-    title: string,
-    showModal: (onClose: () => void) => JSX.Element
-  ) => void;
 }): JSX.Element {
   const controlWrapperRef = useRef<HTMLDivElement>(null);
   const userSelect = useRef({
@@ -92,6 +88,9 @@ export default function GalleryResizer({
     startY: 0,
     direction: 0,
   });
+
+  const { close, handleSettingsModuleOpen } =
+    React.useContext(SettingsModalContext);
 
   const editorRootElement = editor.getRootElement();
   // Find max allowable gallery width (=block full width)
@@ -248,15 +247,18 @@ export default function GalleryResizer({
       <button
         className='gallery-edit-button'
         ref={buttonRef}
-        onClick={() => {
-          showModal('Update Gallery', (onClose) => (
-            <UpdateGalleryDialog
-              activeEditor={editor}
-              nodeKey={nodeKey}
-              onClose={onClose}
-            />
-          ));
-        }}
+        onClick={() =>
+          handleSettingsModuleOpen({
+            content: (
+              <UpdateGalleryDialog
+                activeEditor={editor}
+                nodeKey={nodeKey}
+                close={close}
+              />
+            ),
+            title: 'Gallery Settings',
+          })
+        }
       >
         Edit
       </button>

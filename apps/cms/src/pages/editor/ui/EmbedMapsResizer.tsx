@@ -3,6 +3,7 @@ import type { LexicalEditor, NodeKey } from 'lexical';
 import * as React from 'react';
 import { useRef } from 'react';
 import { UpdateEmbedDialog } from '../nodes/EmbedComponent';
+import { SettingsModalContext } from '../Editor';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -22,7 +23,6 @@ export default function EmbedMapsResizer({
   embedRef,
   editor,
   nodeKey,
-  showModal,
 }: {
   editor: LexicalEditor;
   buttonRef: { current: null | HTMLButtonElement };
@@ -30,10 +30,6 @@ export default function EmbedMapsResizer({
   onResizeEnd: (width: string, maxWidth: string) => void;
   onResizeStart: () => void;
   nodeKey: NodeKey;
-  showModal: (
-    title: string,
-    showModal: (onClose: () => void) => JSX.Element
-  ) => void;
 }): JSX.Element {
   const controlWrapperRef = useRef<HTMLDivElement>(null);
   const userSelect = useRef({
@@ -61,6 +57,9 @@ export default function EmbedMapsResizer({
     startY: 0,
     direction: 0,
   });
+
+  const { close, handleSettingsModuleOpen } =
+    React.useContext(SettingsModalContext);
 
   const editorRootElement = editor.getRootElement();
   // Find max allowable embed width (=container full width)
@@ -269,15 +268,18 @@ export default function EmbedMapsResizer({
       <button
         className='embed-edit-button'
         ref={buttonRef}
-        onClick={() => {
-          showModal('Update Embed', (onClose) => (
-            <UpdateEmbedDialog
-              activeEditor={editor}
-              nodeKey={nodeKey}
-              onClose={onClose}
-            />
-          ));
-        }}
+        onClick={() =>
+          handleSettingsModuleOpen({
+            content: (
+              <UpdateEmbedDialog
+                activeEditor={editor}
+                nodeKey={nodeKey}
+                close={close}
+              />
+            ),
+            title: 'Embed Settings',
+          })
+        }
       >
         Edit
       </button>

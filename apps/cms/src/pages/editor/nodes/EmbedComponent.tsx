@@ -32,7 +32,6 @@ import TextInput from '../ui/TextInput';
 import Select from '../ui/Select';
 import { DialogActions } from '../ui/Dialog';
 import Button from '../ui/Button';
-import useModal from '../hooks/useModal';
 import { Alignment, EmbedBlockNode } from './EmbedBlockNode';
 import EmbedResizer from '../ui/EmbedResizer';
 import EmbedMapsResizer from '../ui/EmbedMapsResizer';
@@ -53,11 +52,11 @@ function getBlockParentNode(
 export function UpdateEmbedDialog({
   activeEditor,
   nodeKey,
-  onClose,
+  close,
 }: {
   activeEditor: LexicalEditor;
   nodeKey: NodeKey;
-  onClose: () => void;
+  close: () => void;
 }): JSX.Element {
   const editorState = activeEditor.getEditorState();
   const node = editorState.read(() => $getNodeByKey(nodeKey) as EmbedNode);
@@ -82,7 +81,7 @@ export function UpdateEmbedDialog({
         parentBlockNode.setAlignment(blockAlignment);
       });
     }
-    onClose();
+    close();
   };
 
   return (
@@ -140,7 +139,6 @@ export default function EmbedComponent({
 }): JSX.Element {
   const embedRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [modal, showModal] = useModal();
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey);
   const [isResizing, setIsResizing] = useState<boolean>(false);
@@ -376,7 +374,6 @@ export default function EmbedComponent({
                 onResizeStart={onResizeStart}
                 onResizeEnd={onResizeEnd}
                 nodeKey={nodeKey}
-                showModal={showModal}
               />
             )}
           </>
@@ -398,7 +395,6 @@ export default function EmbedComponent({
                 onResizeStart={onResizeStart}
                 onResizeEnd={onResizeEnd}
                 nodeKey={nodeKey}
-                showModal={showModal}
               />
             )}
           </>
@@ -421,7 +417,6 @@ export default function EmbedComponent({
                 onResizeStart={onResizeStart}
                 onResizeEnd={onResizeEnd}
                 nodeKey={nodeKey}
-                showModal={showModal}
               />
             )}
           </>
@@ -430,10 +425,5 @@ export default function EmbedComponent({
     }
   };
 
-  return (
-    <>
-      {createDOMFromEmbedType()}
-      {modal}
-    </>
-  );
+  return <>{createDOMFromEmbedType()}</>;
 }

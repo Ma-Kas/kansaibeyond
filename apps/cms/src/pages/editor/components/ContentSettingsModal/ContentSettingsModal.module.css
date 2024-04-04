@@ -1,0 +1,48 @@
+.content_settings_modal_container:has(.open) {
+  position: fixed;
+  inset: 0;
+  background-color: var(--editor-embed-content-settings-modal-bg);
+  z-index: calc(var(--z-index-modals) - 1);
+}
+
+.content_settings_modal {
+  --gap: rem(24px);
+
+  position: fixed;
+  font-size: var(--font-size-composer-sidebar-regular);
+  color: var(--color-menu-text-light);
+  z-index: var(--z-index-modals);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--editor-embed-content-settings-modal-width);
+  margin-right: calc(var(--editor-embed-content-settings-modal-width) * -1);
+  padding: var(--gap);
+  transition: margin-right 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.content_settings_modal.open {
+  margin-right: 0;
+}
+
+.content_settings_modal_header p {
+  font-size: var(--font-size-composer-sidebar-heading);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-menu-text-light);
+}
+
+.content_settings_modal_close_button > svg > path {
+  fill: var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content {
+  font-size: var(--font-size-composer-sidebar-regular);
+  flex-grow: 1;
+  gap: rem(36px);
+  height: 100%;
+  position: relative;
+  overflow: auto;
+}
