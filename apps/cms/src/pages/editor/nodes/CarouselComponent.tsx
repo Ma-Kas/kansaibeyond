@@ -32,14 +32,14 @@ import { z } from 'zod';
 import { RIGHT_CLICK_IMAGE_COMMAND } from '../utils/exportedCommands';
 import TextInput from '../ui/TextInput';
 import Select from '../ui/Select';
-import { DialogActions } from '../ui/Dialog';
-import Button from '../ui/Button';
 import { Alignment, CarouselBlockNode } from './CarouselBlockNode';
 import CarouselResizer from '../ui/CarouselResizer';
 import { CarouselImageObjectPosition } from './CarouselContainerNode';
 import EmblaCarousel from '../components/EmblaCarousel/EmblaCarousel';
 import { EmblaOptionsType } from 'embla-carousel';
 import '../components/EmblaCarousel/EmblaCarousel.css';
+
+import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
 
 type ImageStyleType = {
   objectPosition?: CarouselImageObjectPosition;
@@ -263,8 +263,23 @@ export function UpdateCarouselDialog({
     close();
   };
 
+  // Reset changed values and close modal
+  const handleOnCancel = () => {
+    setImageList(node.getImageList());
+    setCarouselType(node.getCarouselType());
+    setImagesInView(node.getImagesInView());
+    setImageGap(node.getImageGap());
+    setCaptionText(node.getCaptionText());
+    setBlockAlignment(parentBlockNode.getAlignment());
+    close();
+  };
+
   return (
-    <>
+    <ContentSettingsModalInner
+      title='Carousel Settings'
+      confirm={handleOnConfirm}
+      cancel={handleOnCancel}
+    >
       {/* Whole Carousel Edit */}
       <div className='Input__carouselInputGroup'>
         <div className='Input__carouselInputGroupTitle'>
@@ -395,16 +410,7 @@ export function UpdateCarouselDialog({
           );
         })}
       </div>
-
-      <DialogActions>
-        <Button
-          data-test-id='carousel-modal-file-upload-btn'
-          onClick={() => handleOnConfirm()}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
-    </>
+    </ContentSettingsModalInner>
   );
 }
 

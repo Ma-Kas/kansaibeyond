@@ -32,7 +32,6 @@
   justify-content: center;
 }
 .EditorTheme__carouselContainer {
-  box-sizing: border-box;
   position: relative;
   margin: 0;
   display: flex;

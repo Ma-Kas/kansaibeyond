@@ -227,7 +227,6 @@ export default function ImageResizer({
                 close={close}
               />
             ),
-            title: 'Image Settings',
           })
         }
       >

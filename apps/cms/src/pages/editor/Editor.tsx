@@ -40,13 +40,7 @@ type SettingsModalContext = {
   settingsModalOpen: boolean;
   open: () => void;
   close: () => void;
-  handleSettingsModuleOpen: ({
-    title,
-    content,
-  }: {
-    title: string;
-    content: JSX.Element;
-  }) => void;
+  handleSettingsModuleOpen: ({ content }: { content: JSX.Element }) => void;
 };
 
 export const SettingsModalContext = createContext<SettingsModalContext>({
@@ -55,7 +49,7 @@ export const SettingsModalContext = createContext<SettingsModalContext>({
   close: () => {},
   // @ts-expect-error 'TODO'
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  handleSettingsModuleOpen({ title, content }) {
+  handleSettingsModuleOpen({ content }) {
     return;
   },
 });
@@ -66,7 +60,6 @@ export default function Editor(): JSX.Element {
   } = useSettings();
   const isEditable = useLexicalEditable();
   const [settingsModalOpen, { open, close }] = useDisclosure(false);
-  const [settingsModalTitle, setSettingsModalTitle] = useState('Settings');
   const [settingsModalContent, setSettingsModalContent] = useState(<></>);
 
   const placeholder = <Placeholder>{'Enter some text...'}</Placeholder>;
@@ -80,14 +73,7 @@ export default function Editor(): JSX.Element {
     }
   };
 
-  const handleSettingsModuleOpen = ({
-    title,
-    content,
-  }: {
-    title: string;
-    content: JSX.Element;
-  }) => {
-    setSettingsModalTitle(title);
+  const handleSettingsModuleOpen = ({ content }: { content: JSX.Element }) => {
     setSettingsModalContent(content);
     open();
   };
@@ -161,11 +147,7 @@ export default function Editor(): JSX.Element {
             )}
           </>
         </div>
-        <ContentSettingsModal
-          title={settingsModalTitle}
-          isOpen={settingsModalOpen}
-          close={close}
-        >
+        <ContentSettingsModal isOpen={settingsModalOpen} close={close}>
           <>{settingsModalContent}</>
         </ContentSettingsModal>
       </div>

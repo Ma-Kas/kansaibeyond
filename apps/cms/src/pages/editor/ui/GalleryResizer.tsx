@@ -256,7 +256,6 @@ export default function GalleryResizer({
                 close={close}
               />
             ),
-            title: 'Gallery Settings',
           })
         }
       >

@@ -33,11 +33,10 @@ import { RIGHT_CLICK_IMAGE_COMMAND } from '../utils/exportedCommands';
 import GalleryResizer from '../ui/GalleryResizer';
 import TextInput from '../ui/TextInput';
 import Select from '../ui/Select';
-import { DialogActions } from '../ui/Dialog';
-import Button from '../ui/Button';
 import { Alignment, GalleryBlockNode } from './GalleryBlockNode';
 
 import { GalleryImageObjectPosition } from './GalleryContainerNode';
+import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
 
 type ImageStyleType = {
   objectPosition?: GalleryImageObjectPosition;
@@ -286,8 +285,24 @@ export function UpdateGalleryDialog({
     close();
   };
 
+  // Reset changed values and close modal
+  const handleOnCancel = () => {
+    setImageList(node.getImageList());
+    setGridType(node.getGridType());
+    setColumns(node.getColumns());
+    setGridGap(node.getGridGap());
+    setColumnMinWidth(node.getColumnMinWidth());
+    setCaptionText(node.getCaptionText());
+    setBlockAlignment(parentBlockNode.getAlignment());
+    close();
+  };
+
   return (
-    <>
+    <ContentSettingsModalInner
+      title='Gallery Settings'
+      confirm={handleOnConfirm}
+      cancel={handleOnCancel}
+    >
       {/* Whole Gallery Edit */}
       <div className='Input__galleryInputGroup'>
         <div className='Input__galleryInputGroupTitle'>Edit Whole Gallery:</div>
@@ -439,16 +454,7 @@ export function UpdateGalleryDialog({
           );
         })}
       </div>
-
-      <DialogActions>
-        <Button
-          data-test-id='gallery-modal-file-upload-btn'
-          onClick={() => handleOnConfirm()}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
-    </>
+    </ContentSettingsModalInner>
   );
 }
 

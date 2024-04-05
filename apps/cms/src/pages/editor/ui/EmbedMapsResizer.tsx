@@ -277,7 +277,6 @@ export default function EmbedMapsResizer({
                 close={close}
               />
             ),
-            title: 'Embed Settings',
           })
         }
       >

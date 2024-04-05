@@ -1,58 +1,20 @@
-import { CloseButton, Text, Group, Paper, Stack } from '@mantine/core';
+import { Paper } from '@mantine/core';
 import cx from 'clsx';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import classes from './ContentSettingsModal.module.css';
 
 interface ModalProps {
-  title: string;
   isOpen: boolean;
   close: () => void;
   children: ReactNode;
 }
 
-const ContentSettingsModal = ({
-  title,
-  isOpen,
-  close,
-  children,
-}: ModalProps) => {
-  // Close on Escape key
-  useEffect(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        close();
-      }
-    };
-
-    window.addEventListener('keydown', handler);
-
-    return () => {
-      window.removeEventListener('keydown', handler);
-    };
-  }, [close]);
-
-  // Close on click outside modal
-  const handleOutsideClick = (e: React.MouseEvent) => {
-    const target = e.target;
-    const className = classes['content_settings_modal_container'];
-    if (
-      !target ||
-      !(target instanceof HTMLElement) ||
-      !target.classList.contains(className)
-    ) {
-      return;
-    }
-    close();
-  };
-
+const ContentSettingsModal = ({ isOpen, children }: ModalProps) => {
   return (
     <>
       {createPortal(
-        <div
-          className={classes['content_settings_modal_container']}
-          onClick={handleOutsideClick}
-        >
+        <div className={classes['content_settings_modal_container']}>
           <Paper
             radius={0}
             autoFocus={false}
@@ -63,19 +25,7 @@ const ContentSettingsModal = ({
               })
             }
           >
-            <Group
-              className={classes['content_settings_modal_header']}
-              justify='space-between'
-            >
-              <Text>{title}</Text>
-              <CloseButton
-                className={classes['content_settings_modal_close_button']}
-                onClick={close}
-              />
-            </Group>
-            <Stack className={classes['content_settings_modal_content']}>
-              {children}
-            </Stack>
+            {children}
           </Paper>
         </div>,
         document.body

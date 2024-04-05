@@ -30,12 +30,11 @@ import { Tweet } from 'react-tweet';
 import { $isEmbedNode, EmbedNode } from './EmbedNode';
 import TextInput from '../ui/TextInput';
 import Select from '../ui/Select';
-import { DialogActions } from '../ui/Dialog';
-import Button from '../ui/Button';
 import { Alignment, EmbedBlockNode } from './EmbedBlockNode';
 import EmbedResizer from '../ui/EmbedResizer';
 import EmbedMapsResizer from '../ui/EmbedMapsResizer';
 import EmbedTwitterResizer from '../ui/EmbedTwitterResizer';
+import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
 
 const INSTAGRAM_SCRIPT_URL = 'http://www.instagram.com/embed.js';
 
@@ -84,8 +83,19 @@ export function UpdateEmbedDialog({
     close();
   };
 
+  // Reset changed values and close modal
+  const handleOnCancel = () => {
+    setSource(node.getSource());
+    setBlockAlignment(parentBlockNode.getAlignment());
+    close();
+  };
+
   return (
-    <>
+    <ContentSettingsModalInner
+      title='Embed Settings'
+      confirm={handleOnConfirm}
+      cancel={handleOnCancel}
+    >
       {embedType === 'general' && (
         <div style={{ marginBottom: '1em' }}>
           <TextInput
@@ -110,16 +120,7 @@ export function UpdateEmbedDialog({
         <option value='center'>Center</option>
         <option value='right'>Right</option>
       </Select>
-
-      <DialogActions>
-        <Button
-          data-test-id='image-modal-file-upload-btn'
-          onClick={() => handleOnConfirm()}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
-    </>
+    </ContentSettingsModalInner>
   );
 }
 

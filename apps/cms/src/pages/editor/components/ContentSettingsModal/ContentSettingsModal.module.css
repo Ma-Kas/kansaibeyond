@@ -39,10 +39,37 @@
 }
 
 .content_settings_modal_content {
+  margin: 0 calc(var(--gap) * -1);
   font-size: var(--font-size-composer-sidebar-regular);
   flex-grow: 1;
   gap: rem(36px);
   height: 100%;
   position: relative;
   overflow: auto;
+}
+
+.content_settings_modal_content_inner {
+  padding: 0 var(--gap);
+}
+
+.content_settings_modal_footer {
+  margin-left: auto;
+}
+
+.content_settings_modal_cancel_button {
+  background-color: transparent;
+  color: var(--mantine-primary-color-filled);
+  border: 1px solid var(--mantine-primary-color-filled);
+
+  @mixin hover {
+    color: var(--mantine-primary-color-filled-hover);
+    background-color: transparent;
+    border: 1px solid var(--mantine-primary-color-filled-hover);
+  }
+}
+
+.content_settings_modal_confirm_button,
+.content_settings_modal_cancel_button {
+  border-radius: rem(32px);
+  padding: 0 rem(32px);
 }

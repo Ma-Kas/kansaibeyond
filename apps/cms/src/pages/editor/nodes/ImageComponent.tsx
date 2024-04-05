@@ -32,9 +32,8 @@ import ImageResizer from '../ui/ImageResizer';
 import { $isImageNode, ImageNode } from './ImageNode';
 import TextInput from '../ui/TextInput';
 import Select from '../ui/Select';
-import { DialogActions } from '../ui/Dialog';
-import Button from '../ui/Button';
 import { Alignment, ImageBlockNode } from './ImageBlockNode';
+import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
 
 const imageCache = new Set();
 
@@ -119,8 +118,20 @@ export function UpdateImageDialog({
     close();
   };
 
+  // Reset changed values and close modal
+  const handleOnCancel = () => {
+    setAltText(node.getAltText());
+    setCaptionText(node.getCaptionText());
+    setBlockAlignment(parentBlockNode.getAlignment());
+    close();
+  };
+
   return (
-    <>
+    <ContentSettingsModalInner
+      title='Image Settings'
+      confirm={handleOnConfirm}
+      cancel={handleOnCancel}
+    >
       <div style={{ marginBottom: '1em' }}>
         <TextInput
           label='Alt Text'
@@ -153,16 +164,7 @@ export function UpdateImageDialog({
         <option value='center'>Center</option>
         <option value='right'>Right</option>
       </Select>
-
-      <DialogActions>
-        <Button
-          data-test-id='image-modal-file-upload-btn'
-          onClick={() => handleOnConfirm()}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
-    </>
+    </ContentSettingsModalInner>
   );
 }
 

@@ -219,7 +219,6 @@ export default function CarouselResizer({
                 close={close}
               />
             ),
-            title: 'Carousel Settings',
           })
         }
       >

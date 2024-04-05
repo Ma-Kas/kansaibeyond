@@ -230,7 +230,6 @@ export default function EmbedTwitterResizer({
                 close={close}
               />
             ),
-            title: 'Embed Settings',
           })
         }
       >

@@ -7,6 +7,7 @@
   touch-action: pan-y;
 }
 .editor_embla_slide {
+  box-sizing: content-box;
   display: flex;
   justify-content: center;
   align-items: center;
