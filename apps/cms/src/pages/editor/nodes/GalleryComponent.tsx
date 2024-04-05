@@ -31,12 +31,20 @@ import { mergeRegister } from '@lexical/utils';
 import { z } from 'zod';
 import { RIGHT_CLICK_IMAGE_COMMAND } from '../utils/exportedCommands';
 import GalleryResizer from '../ui/GalleryResizer';
-import TextInput from '../ui/TextInput';
-import Select from '../ui/Select';
 import { Alignment, GalleryBlockNode } from './GalleryBlockNode';
 
 import { GalleryImageObjectPosition } from './GalleryContainerNode';
 import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
+import {
+  TextInput,
+  NumberInput,
+  Select,
+  Slider,
+  Text,
+  Divider,
+  Tabs,
+} from '@mantine/core';
+import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
 
 type ImageStyleType = {
   objectPosition?: GalleryImageObjectPosition;
@@ -50,6 +58,7 @@ type GalleryInlineStyleType = {
 };
 
 const stringSchema = z.string();
+const numberSchema = z.number();
 const imagePositionSchema = z.union([
   z.literal('center'),
   z.literal('left'),
@@ -164,6 +173,7 @@ export function UpdateGalleryDialog({
   const node = editorState.read(
     () => $getNodeByKey(nodeKey) as GalleryContainerNode
   );
+  const [activeTab, setActiveTab] = useState<string | null>('layout');
   const [imageList, setImageList] = useState(node.getImageList());
   const [gridType, setGridType] = useState<GridType>(node.getGridType());
   const [columns, setColumns] = useState(node.getColumns());
@@ -180,28 +190,36 @@ export function UpdateGalleryDialog({
   );
 
   // Edits of whole gallery
-  const handleGridTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setGridType(e.target.value as GridType);
+  const handleGridTypeChange = (select: string | null) => {
+    if (select) {
+      setGridType(select as GridType);
+    }
   };
-  const handleColumnsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setColumns(Number(e.target.value));
+  const handleColumnsChange = (select: number) => {
+    if (select) {
+      setColumns(select);
+    }
   };
-  const handleGridGapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setGridGap(e.target.value);
+  const handleGridGapChange = (input: number | string) => {
+    setGridGap(input.toString().concat('px'));
   };
-  const handleColumnMinWidthChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setColumnMinWidth(Number(e.target.value));
+  const handleColumnMinWidthChange = (input: number | string | null) => {
+    if (input) {
+      setColumnMinWidth(Number(input));
+    }
   };
-  const handleAlignmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setBlockAlignment(e.target.value as Alignment);
+  const handleAlignmentChange = (select: string | null) => {
+    if (select) {
+      setBlockAlignment(select as Alignment);
+    }
   };
-  const handleAspectRatioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const changedImageList = imageList.map((image) => {
-      return { ...image, aspectRatio: e.target.value };
-    });
-    setImageList(changedImageList);
+  const handleAspectRatioChange = (select: string | null) => {
+    if (select) {
+      const changedImageList = imageList.map((image) => {
+        return { ...image, aspectRatio: select };
+      });
+      setImageList(changedImageList);
+    }
   };
 
   const handleImageChange = (
@@ -223,9 +241,7 @@ export function UpdateGalleryDialog({
         break;
       }
       case 'position': {
-        const event = input as React.ChangeEvent<HTMLSelectElement>;
-        const value = event.target.value;
-        const parseResult = imagePositionSchema.safeParse(value);
+        const parseResult = imagePositionSchema.safeParse(input);
         if (parseResult.success) {
           const newPosition = parseResult.data;
           image.objectPosition = newPosition;
@@ -237,11 +253,9 @@ export function UpdateGalleryDialog({
         break;
       }
       case 'width': {
-        const event = input as React.ChangeEvent<HTMLSelectElement>;
-        const value = event.target.value;
-        const parseResult = stringSchema.safeParse(value);
+        const parseResult = numberSchema.safeParse(input);
         if (parseResult.success) {
-          const newWidth = parseResult.data;
+          const newWidth = `${parseResult.data}%`;
           image.imageWidth = newWidth;
           const changedImageList = imageList.map((img) =>
             img.id !== image.id ? img : image
@@ -251,9 +265,7 @@ export function UpdateGalleryDialog({
         break;
       }
       case 'aspect-ratio': {
-        const event = input as React.ChangeEvent<HTMLSelectElement>;
-        const value = event.target.value;
-        const parseResult = stringSchema.safeParse(value);
+        const parseResult = stringSchema.safeParse(input);
         if (parseResult.success) {
           const newAspectRatio = parseResult.data;
           image.aspectRatio = newAspectRatio;
@@ -283,6 +295,7 @@ export function UpdateGalleryDialog({
       });
     }
     close();
+    setActiveTab('layout');
   };
 
   // Reset changed values and close modal
@@ -294,6 +307,7 @@ export function UpdateGalleryDialog({
     setColumnMinWidth(node.getColumnMinWidth());
     setCaptionText(node.getCaptionText());
     setBlockAlignment(parentBlockNode.getAlignment());
+    setActiveTab('layout');
     close();
   };
 
@@ -303,157 +317,271 @@ export function UpdateGalleryDialog({
       confirm={handleOnConfirm}
       cancel={handleOnCancel}
     >
-      {/* Whole Gallery Edit */}
-      <div className='Input__galleryInputGroup'>
-        <div className='Input__galleryInputGroupTitle'>Edit Whole Gallery:</div>
-        <Select
-          value={gridType}
-          label='Gallery Type'
-          name='gallery-type'
-          id='gallery-type-select'
-          onChange={handleGridTypeChange}
+      <Tabs
+        className={classes['content_settings_modal_content_tabs']}
+        value={activeTab}
+        onChange={setActiveTab}
+      >
+        <Tabs.List
+          className={classes['content_settings_modal_content_tabs_list']}
         >
-          <option value='dynamic-type'>Dynamic</option>
-          <option value='static-type'>Fixed Column Number</option>
-          <option value='flex-type'>Last Row Stretch</option>
-        </Select>
-        <Select
-          disabled={gridType !== 'static-type' ? true : false}
-          value={columns ? columns : '3'}
-          label='Columns'
-          name='columns-all'
-          id='columns-select'
-          onChange={handleColumnsChange}
+          <Tabs.Tab value='images'>Images</Tabs.Tab>
+          <Tabs.Tab value='layout'>Layout</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel
+          className={classes['content_settings_modal_content_tabs_panel']}
+          value='layout'
         >
-          <option value='2'>2</option>
-          <option value='3'>3</option>
-          <option value='4'>4</option>
-          <option value='5'>5</option>
-          <option value='6'>6</option>
-        </Select>
-        <TextInput
-          label='Caption'
-          placeholder='Add a caption here'
-          onChange={setCaptionText}
-          value={captionText}
-          data-test-id='gallery-modal-caption-text-input'
-        />
-        <Select
-          value={gridGap ? gridGap : '0.5rem'}
-          label='Grid Gap'
-          name='grid-gap-all'
-          id='grid-gap-all-select'
-          onChange={handleGridGapChange}
-        >
-          <option value='0.25rem'>0.25</option>
-          <option value='0.5rem'>0.5</option>
-          <option value='0.75rem'>0.75</option>
-          <option value='1rem'>1</option>
-          <option value='1.25rem'>1.25</option>
-          <option value='1.5rem'>1.5</option>
-          <option value='2rem'>2</option>
-        </Select>
-        <Select
-          style={{ marginBottom: '1em', width: '208px' }}
-          value={blockAlignment}
-          label='Alignment'
-          name='alignment'
-          id='alignment-select'
-          onChange={handleAlignmentChange}
-        >
-          <option value='left'>Left</option>
-          <option value='center'>Center</option>
-          <option value='right'>Right</option>
-        </Select>
-        <Select
-          value={imageList[0].aspectRatio ? imageList[0].aspectRatio : '1 / 1'}
-          label='Aspect Ratio'
-          name='aspect-ratio-all'
-          id='aspect-ratio-all-select'
-          onChange={handleAspectRatioChange}
-        >
-          <option value='1 / 1'>1:1</option>
-          <option value='3 / 4'>3:4</option>
-          <option value='4 / 5'>4:5</option>
-          <option value='4 / 3'>4:3</option>
-          <option value='1.91 / 1'>1.91:1</option>
-          <option value='16 / 9'>16:9</option>
-        </Select>
-        <Select
-          style={{ marginBottom: '1em', width: '208px' }}
-          value={columnMinWidth ? `${columnMinWidth}` : '150'}
-          label='Minimum Column Size'
-          name='min-column-size'
-          id='min-column-size-select'
-          onChange={handleColumnMinWidthChange}
-        >
-          <option value='100'>100px</option>
-          <option value='150'>150px</option>
-          <option value='200'>200px</option>
-          <option value='250'>250px</option>
-          <option value='300'>300px</option>
-        </Select>
-      </div>
-
-      {/* Individual Image Edit */}
-      <div className='Input__galleryInputGroup'>
-        {imageList.map((image, index) => {
-          return (
-            <div key={image.id}>
-              <div className='Input__galleryInputGroupTitle'>{`Edit Image ${
-                index + 1
-              }:`}</div>
-              <TextInput
-                label='Alt Text'
-                placeholder='Descriptive alternative text'
-                onChange={(value) => handleImageChange(image, 'altText', value)}
-                value={image.altText}
-                data-test-id='gallery-image-modal-alt-text-input'
+          {/* Whole Gallery Edit */}
+          <div
+            className={classes['content_settings_modal_content_inner_group']}
+          >
+            <Select
+              label='Gallery Type'
+              data={[
+                { value: 'dynamic-type', label: 'Dynamic' },
+                { value: 'static-type', label: 'Fixed Column Number' },
+                { value: 'flex-type', label: 'Last Row Stretched' },
+              ]}
+              value={gridType}
+              onChange={(value, _option) => handleGridTypeChange(value)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+            <Divider />
+            <Select
+              label='Image Aspect Ratio'
+              data={[
+                { value: '16 / 9', label: '16:9' },
+                { value: '4 / 3', label: '4:3' },
+                { value: '1.91 / 3', label: '1.91:1' },
+                { value: '1 / 1', label: '1:1' },
+                { value: '3 / 4', label: '3:4' },
+                { value: '4 / 5', label: '4:5' },
+                { value: '9 / 16', label: '9:16' },
+              ]}
+              value={
+                imageList[0].aspectRatio ? imageList[0].aspectRatio : '1 / 1'
+              }
+              onChange={(value, _option) => handleAspectRatioChange(value)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+            <div
+              className={
+                classes['content_settings_modal_content_slider_container']
+              }
+              style={{ marginBottom: '24px' }}
+            >
+              <Text>Images per Row</Text>
+              <Slider
+                disabled={gridType !== 'static-type' ? true : false}
+                label={null}
+                min={1}
+                max={6}
+                marks={[
+                  { value: 1, label: '1' },
+                  { value: 2, label: '2' },
+                  { value: 3, label: '3' },
+                  { value: 4, label: '4' },
+                  { value: 5, label: '5' },
+                  { value: 6, label: '6' },
+                ]}
+                step={1}
+                value={columns ? columns : 3}
+                onChange={handleColumnsChange}
               />
-              <Select
-                value={image.objectPosition ? image.objectPosition : 'center'}
-                label='Position'
-                name='position'
-                id='position-select'
-                onChange={(e) => handleImageChange(image, 'position', e)}
-              >
-                <option value='center'>Center</option>
-                <option value='left'>Left</option>
-                <option value='right'>Right</option>
-                <option value='top'>Top</option>
-                <option value='bottom'>Bottom</option>
-              </Select>
-              <Select
-                value={image.aspectRatio ? image.aspectRatio : '1 / 1'}
-                label='Aspect Ratio'
-                name='aspect-ratio'
-                id='aspect-ratio-select'
-                onChange={(e) => handleImageChange(image, 'aspect-ratio', e)}
-              >
-                <option value='1 / 1'>1:1</option>
-                <option value=' 3 / 4'>3:4</option>
-                <option value='4 / 5'>4:5</option>
-                <option value=' 4 / 3'>4:3</option>
-                <option value=' 1.91 / 1'>1.91:1</option>
-                <option value=' 16 / 9'>16:9</option>
-              </Select>
-              <Select
-                style={{ marginBottom: '1em', width: '208px' }}
-                value={image.imageWidth ? image.imageWidth : '100%'}
-                label='Width'
-                name='width'
-                id='width-select'
-                onChange={(e) => handleImageChange(image, 'width', e)}
-              >
-                <option value='100%'>100%</option>
-                <option value='75%'>75%</option>
-                <option value='50%'>50%</option>
-                <option value='25%'>25%</option>
-              </Select>
             </div>
-          );
-        })}
-      </div>
+            <div
+              className={
+                classes['content_settings_modal_content_slider_container']
+              }
+            >
+              <Text>Minimum Image Width</Text>
+              <div
+                className={
+                  classes['content_settings_modal_content_slider_group']
+                }
+              >
+                <Slider
+                  label={null}
+                  min={100}
+                  max={300}
+                  value={columnMinWidth ? columnMinWidth : 150}
+                  onChange={handleColumnMinWidthChange}
+                />
+                <NumberInput
+                  min={100}
+                  max={300}
+                  startValue={columnMinWidth ? columnMinWidth : 150}
+                  suffix='px'
+                  value={columnMinWidth ? columnMinWidth : 150}
+                  onChange={handleColumnMinWidthChange}
+                />
+              </div>
+            </div>
+            <div
+              className={
+                classes['content_settings_modal_content_slider_container']
+              }
+            >
+              <Text>Spacing</Text>
+              <div
+                className={
+                  classes['content_settings_modal_content_slider_group']
+                }
+              >
+                <Slider
+                  min={0}
+                  max={100}
+                  value={gridGap ? Number(gridGap.slice(0, -2)) : 8}
+                  onChange={handleGridGapChange}
+                />
+                <NumberInput
+                  min={0}
+                  max={100}
+                  startValue={gridGap ? Number(gridGap.slice(0, -2)) : 8}
+                  suffix='px'
+                  value={gridGap ? Number(gridGap.slice(0, -2)) : '8'}
+                  onChange={handleGridGapChange}
+                />
+              </div>
+            </div>
+            <Divider />
+            <Select
+              label='Alignment on Page'
+              data={[
+                { value: 'left', label: 'Left' },
+                { value: 'center', label: 'Center' },
+                { value: 'right', label: 'Right' },
+              ]}
+              value={blockAlignment}
+              onChange={(value, _option) => handleAlignmentChange(value)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+            <Divider />
+            <TextInput
+              label='Caption'
+              placeholder='Add a caption here'
+              value={captionText}
+              onChange={(e) => setCaptionText(e.currentTarget.value)}
+            />
+          </div>
+        </Tabs.Panel>
+        <Tabs.Panel
+          className={classes['content_settings_modal_content_tabs_panel']}
+          value='images'
+        >
+          {/* Individual Image Edits */}
+          <div
+            className={classes['content_settings_modal_content_inner_group']}
+          >
+            {imageList.map((image, index) => {
+              return (
+                <div
+                  className={
+                    classes['content_settings_modal_content_inner_subgroup']
+                  }
+                  key={image.id}
+                >
+                  <Text>{`Image ${index + 1}`}</Text>
+                  <TextInput
+                    label='Alt Text'
+                    placeholder='Descriptive alternative text'
+                    value={image.altText}
+                    onChange={(e) =>
+                      handleImageChange(image, 'altText', e.currentTarget.value)
+                    }
+                  />
+                  <Select
+                    label='Image Position within Container'
+                    data={[
+                      { value: 'center', label: 'Center' },
+                      { value: 'left', label: 'Left' },
+                      { value: 'right', label: 'Right' },
+                      { value: 'top', label: 'Top' },
+                      { value: 'bottom', label: 'Bottom' },
+                    ]}
+                    value={
+                      image.objectPosition ? image.objectPosition : 'center'
+                    }
+                    onChange={(value, _option) =>
+                      handleImageChange(image, 'position', value)
+                    }
+                    allowDeselect={false}
+                    withCheckIcon={false}
+                  />
+                  <Select
+                    label='Image Aspect Ratio'
+                    data={[
+                      { value: '16 / 9', label: '16:9' },
+                      { value: '4 / 3', label: '4:3' },
+                      { value: '1.91 / 3', label: '1.91:1' },
+                      { value: '1 / 1', label: '1:1' },
+                      { value: '3 / 4', label: '3:4' },
+                      { value: '4 / 5', label: '4:5' },
+                      { value: '9 / 16', label: '9:16' },
+                    ]}
+                    value={image.aspectRatio ? image.aspectRatio : '1 / 1'}
+                    onChange={(value, _option) =>
+                      handleImageChange(image, 'aspect-ratio', value)
+                    }
+                    allowDeselect={false}
+                    withCheckIcon={false}
+                  />
+                  <div
+                    className={
+                      classes['content_settings_modal_content_slider_container']
+                    }
+                  >
+                    <Text>Image Width within Container</Text>
+                    <div
+                      className={
+                        classes['content_settings_modal_content_slider_group']
+                      }
+                    >
+                      <Slider
+                        label={null}
+                        min={1}
+                        max={100}
+                        value={
+                          image.imageWidth
+                            ? Number(image.imageWidth.slice(0, -1))
+                            : 100
+                        }
+                        onChange={(value) =>
+                          handleImageChange(image, 'width', value)
+                        }
+                      />
+                      <NumberInput
+                        min={1}
+                        max={100}
+                        startValue={
+                          image.imageWidth
+                            ? Number(image.imageWidth.slice(0, -1))
+                            : 100
+                        }
+                        suffix='%'
+                        value={
+                          image.imageWidth
+                            ? Number(image.imageWidth.slice(0, -1))
+                            : 100
+                        }
+                        onChange={(value) =>
+                          handleImageChange(image, 'width', value)
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {index < imageList.length - 1 && <Divider />}
+                </div>
+              );
+            })}
+          </div>
+        </Tabs.Panel>
+      </Tabs>
     </ContentSettingsModalInner>
   );
 }

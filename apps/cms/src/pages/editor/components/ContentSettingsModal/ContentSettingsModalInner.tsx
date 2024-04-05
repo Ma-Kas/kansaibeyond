@@ -45,39 +45,80 @@ const ContentSettingsModalInner = ({
     };
   }, [cancel]);
 
-  return (
-    <>
-      <Group
-        className={classes['content_settings_modal_header']}
-        justify='space-between'
-      >
-        <Text>{title}</Text>
-        <CloseButton
-          className={classes['content_settings_modal_close_button']}
-          onClick={cancel}
-        />
-      </Group>
-      <div className={classes['content_settings_modal_content']}>
-        <Stack className={classes['content_settings_modal_content_inner']}>
-          {children}
-        </Stack>
-      </div>
-      <Group className={classes['content_settings_modal_footer']}>
-        <Button
-          className={classes['content_settings_modal_cancel_button']}
-          onClick={cancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          className={classes['content_settings_modal_confirm_button']}
-          onClick={confirm}
-        >
-          Confirm
-        </Button>
-      </Group>
-    </>
-  );
+  const switchRenderOnTitle = () => {
+    switch (title) {
+      case 'Gallery Settings': {
+        return (
+          <>
+            <Group
+              className={classes['content_settings_modal_header']}
+              justify='space-between'
+            >
+              <Text>{title}</Text>
+              <CloseButton
+                className={classes['content_settings_modal_close_button']}
+                onClick={cancel}
+              />
+            </Group>
+            {children}
+            <Group className={classes['content_settings_modal_footer']}>
+              <Button
+                className={classes['content_settings_modal_cancel_button']}
+                onClick={cancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                className={classes['content_settings_modal_confirm_button']}
+                onClick={confirm}
+              >
+                Confirm
+              </Button>
+            </Group>
+          </>
+        );
+      }
+      default: {
+        return (
+          <>
+            <Group
+              className={classes['content_settings_modal_header']}
+              justify='space-between'
+            >
+              <Text>{title}</Text>
+              <CloseButton
+                className={classes['content_settings_modal_close_button']}
+                onClick={cancel}
+              />
+            </Group>
+            <div className={classes['content_settings_modal_content']}>
+              <Stack
+                className={classes['content_settings_modal_content_inner']}
+              >
+                {children}
+              </Stack>
+            </div>
+            <Group className={classes['content_settings_modal_footer']}>
+              <Button
+                className={classes['content_settings_modal_cancel_button']}
+                onClick={cancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                className={classes['content_settings_modal_confirm_button']}
+                onClick={confirm}
+              >
+                Confirm
+              </Button>
+            </Group>
+          </>
+        );
+      }
+    }
+  };
+
+  return <>{switchRenderOnTitle()}</>;
 };
 
 export default ContentSettingsModalInner;

@@ -7,6 +7,7 @@
 
 .content_settings_modal {
   --gap: rem(24px);
+  --group-gap: rem(20px);
 
   position: fixed;
   font-size: var(--font-size-composer-sidebar-regular);
@@ -46,10 +47,81 @@
   height: 100%;
   position: relative;
   overflow: auto;
+  border-top: var(--editor-menu-border);
+  border-bottom: var(--editor-menu-border);
+}
+
+.content_settings_modal_content_tabs {
+  display: flex;
+  flex-direction: column;
+  margin: 0 calc(var(--gap) * -1);
+  font-size: var(--font-size-composer-sidebar-regular);
+  flex-grow: 1;
+  height: 100%;
+  overflow-y: hidden;
+  border-bottom: var(--editor-menu-border);
+}
+
+.content_settings_modal_content_tabs_list {
+  font-weight: var(--font-weight-menu);
+  justify-content: center;
+  gap: var(--gap);
+}
+.content_settings_modal_content_tabs_list::before {
+  border-bottom: var(--editor-menu-border);
+}
+
+.content_settings_modal_content_tabs_panel {
+  flex-grow: 1;
+  padding: var(--gap);
+  overflow: auto;
 }
 
 .content_settings_modal_content_inner {
-  padding: 0 var(--gap);
+  padding: var(--gap);
+}
+
+.content_settings_modal_content_inner_group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--group-gap);
+}
+
+.content_settings_modal_content_inner_subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--group-gap);
+}
+
+.content_settings_modal_content_inner_subgroup > p:first-child {
+  font-size: var(--font-size-editor);
+  font-weight: var(--font-weight-menu);
+  color: var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content_slider_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.content_settings_modal_content_slider_container > p:first-child {
+  font-size: var(--font-size-editor);
+  font-weight: var(--font-weight-menu);
+}
+
+.content_settings_modal_content_slider_group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.content_settings_modal_content_slider_group > div:first-child {
+  flex-grow: 1;
+}
+
+.content_settings_modal_content_slider_group > div:last-child {
+  max-width: rem(85px);
 }
 
 .content_settings_modal_footer {

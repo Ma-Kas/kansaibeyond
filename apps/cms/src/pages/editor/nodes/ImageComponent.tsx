@@ -30,10 +30,10 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { RIGHT_CLICK_IMAGE_COMMAND } from '../utils/exportedCommands';
 import ImageResizer from '../ui/ImageResizer';
 import { $isImageNode, ImageNode } from './ImageNode';
-import TextInput from '../ui/TextInput';
-import Select from '../ui/Select';
 import { Alignment, ImageBlockNode } from './ImageBlockNode';
 import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
+import { TextInput, Select } from '@mantine/core';
+import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
 
 const imageCache = new Set();
 
@@ -103,8 +103,10 @@ export function UpdateImageDialog({
     parentBlockNode.getAlignment()
   );
 
-  const handlePositionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setBlockAlignment(e.target.value as Alignment);
+  const handlePositionChange = (select: string | null) => {
+    if (select) {
+      setBlockAlignment(select as Alignment);
+    }
   };
 
   const handleOnConfirm = () => {
@@ -132,38 +134,32 @@ export function UpdateImageDialog({
       confirm={handleOnConfirm}
       cancel={handleOnCancel}
     >
-      <div style={{ marginBottom: '1em' }}>
-        <TextInput
-          label='Alt Text'
-          placeholder='Descriptive alternative text'
-          onChange={setAltText}
-          value={altText}
-          data-test-id='image-modal-alt-text-input'
-        />
-      </div>
-
-      <div style={{ marginBottom: '1em' }}>
+      <div className={classes['content_settings_modal_content_inner_group']}>
         <TextInput
           label='Caption'
           placeholder='Add a caption here'
-          onChange={setCaptionText}
           value={captionText}
-          data-test-id='image-modal-caption-text-input'
+          onChange={(e) => setCaptionText(e.currentTarget.value)}
+        />
+        <TextInput
+          label='Alt Text'
+          placeholder='Descriptive alternative text'
+          value={altText}
+          onChange={(e) => setAltText(e.currentTarget.value)}
+        />
+        <Select
+          label='Alignment on Page'
+          data={[
+            { value: 'left', label: 'Left' },
+            { value: 'center', label: 'Center' },
+            { value: 'right', label: 'Right' },
+          ]}
+          value={blockAlignment}
+          onChange={(value, _option) => handlePositionChange(value)}
+          allowDeselect={false}
+          withCheckIcon={false}
         />
       </div>
-
-      <Select
-        style={{ marginBottom: '1em', width: '208px' }}
-        value={blockAlignment}
-        label='Alignment'
-        name='alignment'
-        id='alignment-select'
-        onChange={handlePositionChange}
-      >
-        <option value='left'>Left</option>
-        <option value='center'>Center</option>
-        <option value='right'>Right</option>
-      </Select>
     </ContentSettingsModalInner>
   );
 }
