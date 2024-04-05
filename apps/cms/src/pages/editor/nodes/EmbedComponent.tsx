@@ -28,13 +28,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Tweet } from 'react-tweet';
 
 import { $isEmbedNode, EmbedNode } from './EmbedNode';
-import TextInput from '../ui/TextInput';
-import Select from '../ui/Select';
 import { Alignment, EmbedBlockNode } from './EmbedBlockNode';
 import EmbedResizer from '../ui/EmbedResizer';
 import EmbedMapsResizer from '../ui/EmbedMapsResizer';
 import EmbedTwitterResizer from '../ui/EmbedTwitterResizer';
 import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
+import { Textarea, Select } from '@mantine/core';
+import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
 
 const INSTAGRAM_SCRIPT_URL = 'http://www.instagram.com/embed.js';
 
@@ -68,8 +68,10 @@ export function UpdateEmbedDialog({
     parentBlockNode.getAlignment()
   );
 
-  const handlePositionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setBlockAlignment(e.target.value as Alignment);
+  const handlePositionChange = (select: string | null) => {
+    if (select) {
+      setBlockAlignment(select as Alignment);
+    }
   };
 
   const handleOnConfirm = () => {
@@ -96,30 +98,30 @@ export function UpdateEmbedDialog({
       confirm={handleOnConfirm}
       cancel={handleOnCancel}
     >
-      {embedType === 'general' && (
-        <div style={{ marginBottom: '1em' }}>
-          <TextInput
-            label='HTML'
+      <div className={classes['content_settings_modal_content_inner_group']}>
+        <Select
+          label='Alignment on Page'
+          data={[
+            { value: 'left', label: 'Left' },
+            { value: 'center', label: 'Center' },
+            { value: 'right', label: 'Right' },
+          ]}
+          value={blockAlignment}
+          onChange={(value, _option) => handlePositionChange(value)}
+          allowDeselect={false}
+          withCheckIcon={false}
+        />
+        {embedType === 'general' && (
+          <Textarea
+            autosize
+            minRows={12}
+            label='HTML Code'
             placeholder='Your raw embed HTML'
-            onChange={setSource}
             value={source}
-            data-test-id='embed-modal-html-input'
+            onChange={(e) => setSource(e.currentTarget.value)}
           />
-        </div>
-      )}
-
-      <Select
-        style={{ marginBottom: '1em', width: '208px' }}
-        value={blockAlignment}
-        label='Alignment'
-        name='alignment'
-        id='alignment-select'
-        onChange={handlePositionChange}
-      >
-        <option value='left'>Left</option>
-        <option value='center'>Center</option>
-        <option value='right'>Right</option>
-      </Select>
+        )}
+      </div>
     </ContentSettingsModalInner>
   );
 }

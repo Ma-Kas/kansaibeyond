@@ -30,8 +30,6 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { mergeRegister } from '@lexical/utils';
 import { z } from 'zod';
 import { RIGHT_CLICK_IMAGE_COMMAND } from '../utils/exportedCommands';
-import TextInput from '../ui/TextInput';
-import Select from '../ui/Select';
 import { Alignment, CarouselBlockNode } from './CarouselBlockNode';
 import CarouselResizer from '../ui/CarouselResizer';
 import { CarouselImageObjectPosition } from './CarouselContainerNode';
@@ -40,6 +38,16 @@ import { EmblaOptionsType } from 'embla-carousel';
 import '../components/EmblaCarousel/EmblaCarousel.css';
 
 import ContentSettingsModalInner from '../components/ContentSettingsModal/ContentSettingsModalInner';
+import {
+  TextInput,
+  NumberInput,
+  Select,
+  Slider,
+  Text,
+  Divider,
+  Tabs,
+} from '@mantine/core';
+import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
 
 type ImageStyleType = {
   objectPosition?: CarouselImageObjectPosition;
@@ -159,6 +167,7 @@ export function UpdateCarouselDialog({
   const node = editorState.read(
     () => $getNodeByKey(nodeKey) as CarouselContainerNode
   );
+  const [activeTab, setActiveTab] = useState<string | null>('layout');
   const [imageList, setImageList] = useState(node.getImageList());
   const [carouselType, setCarouselType] = useState<CarouselType>(
     node.getCarouselType()
@@ -174,27 +183,29 @@ export function UpdateCarouselDialog({
   );
 
   // Edits of whole carousel
-  const handleCarouselTypeChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setCarouselType(e.target.value as CarouselType);
+  const handleCarouselTypeChange = (select: string | null) => {
+    if (select) {
+      setCarouselType(select as CarouselType);
+    }
   };
-  const handleImagesInViewChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setImagesInView(Number(e.target.value));
+  const handleImagesInViewChange = (input: number) => {
+    setImagesInView(input);
   };
-  const handleImageGapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setImageGap(e.target.value);
+  const handleImageGapChange = (input: number | string) => {
+    setImageGap(input.toString().concat('px'));
   };
-  const handleAlignmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setBlockAlignment(e.target.value as Alignment);
+  const handleAlignmentChange = (select: string | null) => {
+    if (select) {
+      setBlockAlignment(select as Alignment);
+    }
   };
-  const handleAspectRatioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const changedImageList = imageList.map((image) => {
-      return { ...image, aspectRatio: e.target.value };
-    });
-    setImageList(changedImageList);
+  const handleAspectRatioChange = (select: string | null) => {
+    if (select) {
+      const changedImageList = imageList.map((image) => {
+        return { ...image, aspectRatio: select };
+      });
+      setImageList(changedImageList);
+    }
   };
 
   const handleImageChange = (
@@ -216,9 +227,7 @@ export function UpdateCarouselDialog({
         break;
       }
       case 'position': {
-        const event = input as React.ChangeEvent<HTMLSelectElement>;
-        const value = event.target.value;
-        const parseResult = imagePositionSchema.safeParse(value);
+        const parseResult = imagePositionSchema.safeParse(input);
         if (parseResult.success) {
           const newPosition = parseResult.data;
           image.objectPosition = newPosition;
@@ -230,9 +239,7 @@ export function UpdateCarouselDialog({
         break;
       }
       case 'aspect-ratio': {
-        const event = input as React.ChangeEvent<HTMLSelectElement>;
-        const value = event.target.value;
-        const parseResult = stringSchema.safeParse(value);
+        const parseResult = stringSchema.safeParse(input);
         if (parseResult.success) {
           const newAspectRatio = parseResult.data;
           image.aspectRatio = newAspectRatio;
@@ -260,6 +267,7 @@ export function UpdateCarouselDialog({
         parentBlockNode.setAlignment(blockAlignment);
       });
     }
+    setActiveTab('layout');
     close();
   };
 
@@ -271,6 +279,7 @@ export function UpdateCarouselDialog({
     setImageGap(node.getImageGap());
     setCaptionText(node.getCaptionText());
     setBlockAlignment(parentBlockNode.getAlignment());
+    setActiveTab('layout');
     close();
   };
 
@@ -280,136 +289,200 @@ export function UpdateCarouselDialog({
       confirm={handleOnConfirm}
       cancel={handleOnCancel}
     >
-      {/* Whole Carousel Edit */}
-      <div className='Input__carouselInputGroup'>
-        <div className='Input__carouselInputGroupTitle'>
-          Edit Whole Carousel:
-        </div>
-        <Select
-          value={carouselType ? carouselType : 'slideshow'}
-          label='Carousel Type'
-          name='carousel-type-all'
-          id='carousel-type-all-select'
-          onChange={handleCarouselTypeChange}
+      <Tabs
+        className={classes['content_settings_modal_content_tabs']}
+        value={activeTab}
+        onChange={setActiveTab}
+      >
+        <Tabs.List
+          className={classes['content_settings_modal_content_tabs_list']}
         >
-          <option value='slideshow'>Slideshow</option>
-          <option value='slider'>Slider</option>
-        </Select>
-        {carouselType !== 'slideshow' && (
-          <Select
-            value={imagesInView ? imagesInView : '1'}
-            label='Max Images in View'
-            name='images-in-view-all'
-            id='images-in-view-all-select'
-            onChange={handleImagesInViewChange}
+          <Tabs.Tab value='images'>Images</Tabs.Tab>
+          <Tabs.Tab value='layout'>Layout</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel
+          className={classes['content_settings_modal_content_tabs_panel']}
+          value='layout'
+        >
+          {/* Whole Carousel Edit */}
+          <div
+            className={classes['content_settings_modal_content_inner_group']}
           >
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-          </Select>
-        )}
-        <TextInput
-          label='Caption'
-          placeholder='Add a caption here'
-          onChange={setCaptionText}
-          value={captionText}
-          data-test-id='carousel-modal-caption-text-input'
-        />
-        {carouselType !== 'slideshow' && (
-          <Select
-            value={imageGap ? imageGap : '0.25rem'}
-            label='Image Gap'
-            name='image-gap-all'
-            id='image-gap-all-select'
-            onChange={handleImageGapChange}
-          >
-            <option value='0'>0</option>
-            <option value='0.25rem'>0.25</option>
-            <option value='0.5rem'>0.5</option>
-            <option value='0.75rem'>0.75</option>
-            <option value='1rem'>1</option>
-            <option value='1.25rem'>1.25</option>
-            <option value='1.5rem'>1.5</option>
-            <option value='2rem'>2</option>
-          </Select>
-        )}
-        <Select
-          style={{ marginBottom: '1em', width: '208px' }}
-          value={blockAlignment}
-          label='Alignment'
-          name='alignment'
-          id='alignment-select'
-          onChange={handleAlignmentChange}
-        >
-          <option value='left'>Left</option>
-          <option value='center'>Center</option>
-          <option value='right'>Right</option>
-        </Select>
-        <Select
-          value={imageList[0].aspectRatio ? imageList[0].aspectRatio : '4 / 3'}
-          label='Aspect Ratio'
-          name='aspect-ratio-all'
-          id='aspect-ratio-all-select'
-          onChange={handleAspectRatioChange}
-        >
-          <option value='1 / 1'>1:1</option>
-          <option value='3 / 4'>3:4</option>
-          <option value='4 / 5'>4:5</option>
-          <option value='4 / 3'>4:3</option>
-          <option value='1.91 / 1'>1.91:1</option>
-          <option value='16 / 9'>16:9</option>
-        </Select>
-      </div>
-
-      {/* Individual Image Edit */}
-      <div className='Input__carouselInputGroup'>
-        {imageList.map((image, index) => {
-          return (
-            <div key={image.id}>
-              <div className='Input__carouselInputGroupTitle'>{`Edit Image ${
-                index + 1
-              }:`}</div>
-              <TextInput
-                label='Alt Text'
-                placeholder='Descriptive alternative text'
-                onChange={(value) => handleImageChange(image, 'altText', value)}
-                value={image.altText}
-                data-test-id='carousel-image-modal-alt-text-input'
-              />
-              <Select
-                value={image.objectPosition ? image.objectPosition : 'center'}
-                label='Position'
-                name='position'
-                id='position-select'
-                onChange={(e) => handleImageChange(image, 'position', e)}
+            <Select
+              label='Carousel Type'
+              data={[
+                { value: 'slideshow', label: 'Slideshow' },
+                { value: 'slider', label: 'Slider' },
+              ]}
+              value={carouselType}
+              onChange={(value, _option) => handleCarouselTypeChange(value)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+            <Divider />
+            <Select
+              label='Carousel Aspect Ratio'
+              data={[
+                { value: '16 / 9', label: '16:9' },
+                { value: '4 / 3', label: '4:3' },
+                { value: '1.91 / 3', label: '1.91:1' },
+                { value: '1 / 1', label: '1:1' },
+                { value: '3 / 4', label: '3:4' },
+                { value: '4 / 5', label: '4:5' },
+                { value: '9 / 16', label: '9:16' },
+              ]}
+              value={
+                imageList[0].aspectRatio ? imageList[0].aspectRatio : '4 / 3'
+              }
+              onChange={(value, _option) => handleAspectRatioChange(value)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+            {carouselType === 'slider' && (
+              <div
+                className={
+                  classes['content_settings_modal_content_slider_container']
+                }
+                style={{ marginBottom: '24px' }}
               >
-                <option value='center'>Center</option>
-                <option value='left'>Left</option>
-                <option value='right'>Right</option>
-                <option value='top'>Top</option>
-                <option value='bottom'>Bottom</option>
-              </Select>
-              {carouselType !== 'slideshow' && (
-                <Select
-                  value={image.aspectRatio ? image.aspectRatio : '4 / 3'}
-                  label='Aspect Ratio'
-                  name='aspect-ratio'
-                  id='aspect-ratio-select'
-                  onChange={(e) => handleImageChange(image, 'aspect-ratio', e)}
+                <Text>Max Images in View</Text>
+                <Slider
+                  label={null}
+                  min={1}
+                  max={4}
+                  marks={[
+                    { value: 1, label: '1' },
+                    { value: 2, label: '2' },
+                    { value: 3, label: '3' },
+                    { value: 4, label: '4' },
+                  ]}
+                  step={1}
+                  value={imagesInView ? imagesInView : 1}
+                  onChange={handleImagesInViewChange}
+                />
+              </div>
+            )}
+            {carouselType === 'slider' && (
+              <div
+                className={
+                  classes['content_settings_modal_content_slider_container']
+                }
+              >
+                <Text>Spacing</Text>
+                <div
+                  className={
+                    classes['content_settings_modal_content_slider_group']
+                  }
                 >
-                  <option value='1 / 1'>1:1</option>
-                  <option value=' 3 / 4'>3:4</option>
-                  <option value='4 / 5'>4:5</option>
-                  <option value=' 4 / 3'>4:3</option>
-                  <option value=' 1.91 / 1'>1.91:1</option>
-                  <option value=' 16 / 9'>16:9</option>
-                </Select>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                  <Slider
+                    min={0}
+                    max={100}
+                    value={imageGap ? Number(imageGap.slice(0, -2)) : 8}
+                    onChange={handleImageGapChange}
+                  />
+                  <NumberInput
+                    min={0}
+                    max={100}
+                    startValue={imageGap ? Number(imageGap.slice(0, -2)) : 8}
+                    suffix='px'
+                    value={imageGap ? Number(imageGap.slice(0, -2)) : '8'}
+                    onChange={handleImageGapChange}
+                  />
+                </div>
+              </div>
+            )}
+            <Divider />
+            <Select
+              label='Alignment on Page'
+              data={[
+                { value: 'left', label: 'Left' },
+                { value: 'center', label: 'Center' },
+                { value: 'right', label: 'Right' },
+              ]}
+              value={blockAlignment}
+              onChange={(value, _option) => handleAlignmentChange(value)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+            <Divider />
+            <TextInput
+              label='Caption'
+              placeholder='Add a caption here'
+              value={captionText}
+              onChange={(e) => setCaptionText(e.currentTarget.value)}
+            />
+          </div>
+        </Tabs.Panel>
+        <Tabs.Panel
+          className={classes['content_settings_modal_content_tabs_panel']}
+          value='images'
+        >
+          {/* Individual Image Edits */}
+          <div
+            className={classes['content_settings_modal_content_inner_group']}
+          >
+            {imageList.map((image, index) => {
+              return (
+                <div
+                  className={
+                    classes['content_settings_modal_content_inner_subgroup']
+                  }
+                  key={image.id}
+                >
+                  <Text>{`Image ${index + 1}`}</Text>
+                  <TextInput
+                    label='Alt Text'
+                    placeholder='Descriptive alternative text'
+                    value={image.altText}
+                    onChange={(e) =>
+                      handleImageChange(image, 'altText', e.currentTarget.value)
+                    }
+                  />
+                  <Select
+                    label='Image Position within Container'
+                    data={[
+                      { value: 'center', label: 'Center' },
+                      { value: 'left', label: 'Left' },
+                      { value: 'right', label: 'Right' },
+                      { value: 'top', label: 'Top' },
+                      { value: 'bottom', label: 'Bottom' },
+                    ]}
+                    value={
+                      image.objectPosition ? image.objectPosition : 'center'
+                    }
+                    onChange={(value, _option) =>
+                      handleImageChange(image, 'position', value)
+                    }
+                    allowDeselect={false}
+                    withCheckIcon={false}
+                  />
+                  {carouselType === 'slider' && (
+                    <Select
+                      label='Image Aspect Ratio'
+                      data={[
+                        { value: '16 / 9', label: '16:9' },
+                        { value: '4 / 3', label: '4:3' },
+                        { value: '1.91 / 3', label: '1.91:1' },
+                        { value: '1 / 1', label: '1:1' },
+                        { value: '3 / 4', label: '3:4' },
+                        { value: '4 / 5', label: '4:5' },
+                        { value: '9 / 16', label: '9:16' },
+                      ]}
+                      value={image.aspectRatio ? image.aspectRatio : '1 / 1'}
+                      onChange={(value, _option) =>
+                        handleImageChange(image, 'aspect-ratio', value)
+                      }
+                      allowDeselect={false}
+                      withCheckIcon={false}
+                    />
+                  )}
+                  {index < imageList.length - 1 && <Divider />}
+                </div>
+              );
+            })}
+          </div>
+        </Tabs.Panel>
+      </Tabs>
     </ContentSettingsModalInner>
   );
 }

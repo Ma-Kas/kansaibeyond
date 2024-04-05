@@ -367,31 +367,32 @@ export function UpdateGalleryDialog({
               allowDeselect={false}
               withCheckIcon={false}
             />
-            <div
-              className={
-                classes['content_settings_modal_content_slider_container']
-              }
-              style={{ marginBottom: '24px' }}
-            >
-              <Text>Images per Row</Text>
-              <Slider
-                disabled={gridType !== 'static-type' ? true : false}
-                label={null}
-                min={1}
-                max={6}
-                marks={[
-                  { value: 1, label: '1' },
-                  { value: 2, label: '2' },
-                  { value: 3, label: '3' },
-                  { value: 4, label: '4' },
-                  { value: 5, label: '5' },
-                  { value: 6, label: '6' },
-                ]}
-                step={1}
-                value={columns ? columns : 3}
-                onChange={handleColumnsChange}
-              />
-            </div>
+            {gridType === 'static-type' && (
+              <div
+                className={
+                  classes['content_settings_modal_content_slider_container']
+                }
+                style={{ marginBottom: '24px' }}
+              >
+                <Text>Images per Row</Text>
+                <Slider
+                  label={null}
+                  min={1}
+                  max={6}
+                  marks={[
+                    { value: 1, label: '1' },
+                    { value: 2, label: '2' },
+                    { value: 3, label: '3' },
+                    { value: 4, label: '4' },
+                    { value: 5, label: '5' },
+                    { value: 6, label: '6' },
+                  ]}
+                  step={1}
+                  value={columns ? columns : 3}
+                  onChange={handleColumnsChange}
+                />
+              </div>
+            )}
             <div
               className={
                 classes['content_settings_modal_content_slider_container']
