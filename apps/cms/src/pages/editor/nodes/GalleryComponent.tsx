@@ -44,7 +44,71 @@ import {
   Divider,
   Tabs,
 } from '@mantine/core';
+import cx from 'clsx';
+import { ASPECT_RATIO_DATA } from '../../../utils/editor-constants';
 import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
+
+const GALLERY_TYPE_DATA = [
+  {
+    label: 'Dynamic Column Generation',
+    value: 'dynamic-type',
+    icon: () => {
+      return (
+        <>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='50'
+            height='50'
+            fill='currentColor'
+            viewBox='0 0 50 50'
+          >
+            <path d='M 3 2 h 20 a 1 1 0 0 1 1 1 v 20 a 1 1 0 0 1 -1 1 H 3 a 1 1 0 0 1 -1 -1 V 3 a 1 1 0 0 1 1 -1 z m 0 1 v 20 h 20 V 3 H 3 z m 24 -1 h 20 a 1 1 0 0 1 1 1 v 20 a 1 1 0 0 1 -1 1 H 27 a 1 1 0 0 1 -1 -1 V 3 a 1 1 0 0 1 1 -1 z m 0 1 v 20 h 20 V 3 H 27 z M 3 26 h 20 a 1 1 0 0 1 1 1 v 20 a 1 1 0 0 1 -1 1 H 3 a 1 1 0 0 1 -1 -1 V 27 a 1 1 0 0 1 1 -1 z m 0 1 v 20 h 20 V 27 H 3 z z v 20 z' />
+          </svg>
+        </>
+      );
+    },
+  },
+  {
+    label: 'Fixed Column Number',
+    value: 'static-type',
+    icon: () => {
+      return (
+        <>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='50'
+            height='50'
+            fill='currentColor'
+            fillRule='evenodd'
+            viewBox='0 0 50 50'
+          >
+            <path d='M3 2h11a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h11V3H3zm15-1h14a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h14V3H18zm18-1h11a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1H36a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h11V3H36z' />
+          </svg>
+        </>
+      );
+    },
+  },
+  {
+    label: 'Stretch Last Image Across',
+    value: 'flex-type',
+    icon: () => {
+      return (
+        <>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='50'
+            height='50'
+            fill='currentColor'
+            viewBox='0 0 50 50'
+            transform='scale (1, -1)'
+          >
+            <path d='M 3 2 h 44 a 1 1 90 0 1 1 1 v 31 a 1 1 90 0 1 -1 1 H 3 a 1 1 90 0 1 -1 -1 V 3 a 1 1 90 0 1 1 -1 z m 0 1 v 31 h 44 V 3 H 3 z m 0 34 h 12 a 1 1 90 0 1 1 1 v 9 a 1 1 90 0 1 -1 1 H 3 a 1 1 90 0 1 -1 -1 v -9 a 1 1 90 0 1 1 -1 z m 0 1 v 9 h 12 v -9 H 3 z m 16 -1 h 12 a 1 1 90 0 1 1 1 v 9 a 1 1 90 0 1 -1 1 H 19 a 1 1 90 0 1 -1 -1 v -9 a 1 1 90 0 1 1 -1 z m 0 1 v 9 h 12 v -9 H 19 z m 16 -1 h 12 a 1 1 90 0 1 1 1 v 9 a 1 1 90 0 1 -1 1 H 35 a 1 1 90 0 1 -1 -1 v -9 a 1 1 90 0 1 1 -1 z m 0 1 v 9 h 12 v -9 H 35 z z z' />
+          </svg>
+        </>
+      );
+    },
+  },
+];
 
 type ImageStyleType = {
   objectPosition?: GalleryImageObjectPosition;
@@ -336,37 +400,87 @@ export function UpdateGalleryDialog({
           <div
             className={classes['content_settings_modal_content_inner_group']}
           >
-            <Select
-              label='Gallery Type'
-              data={[
-                { value: 'dynamic-type', label: 'Dynamic' },
-                { value: 'static-type', label: 'Fixed Column Number' },
-                { value: 'flex-type', label: 'Last Row Stretched' },
-              ]}
-              value={gridType}
-              onChange={(value, _option) => handleGridTypeChange(value)}
-              allowDeselect={false}
-              withCheckIcon={false}
-            />
-            <Divider />
-            <Select
-              label='Image Aspect Ratio'
-              data={[
-                { value: '16 / 9', label: '16:9' },
-                { value: '4 / 3', label: '4:3' },
-                { value: '1.91 / 3', label: '1.91:1' },
-                { value: '1 / 1', label: '1:1' },
-                { value: '3 / 4', label: '3:4' },
-                { value: '4 / 5', label: '4:5' },
-                { value: '9 / 16', label: '9:16' },
-              ]}
-              value={
-                imageList[0].aspectRatio ? imageList[0].aspectRatio : '1 / 1'
+            {/* Gallery Type Pick */}
+            <div
+              className={
+                classes['content_settings_modal_content_pick_container']
               }
-              onChange={(value, _option) => handleAspectRatioChange(value)}
-              allowDeselect={false}
-              withCheckIcon={false}
-            />
+            >
+              <Text>Choose Gallery Layout</Text>
+              <div
+                className={
+                  classes[
+                    'content_settings_modal_content_pick_container_group_type'
+                  ]
+                }
+              >
+                {GALLERY_TYPE_DATA.map((type) => {
+                  const Icon = type.icon;
+                  return (
+                    <button
+                      key={type.label}
+                      onClick={() => handleGridTypeChange(type.value)}
+                      className={
+                        // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                        cx(
+                          classes[
+                            'content_settings_modal_content_pick_container_button'
+                          ],
+                          {
+                            [classes.active]: gridType === type.value,
+                          }
+                        )
+                      }
+                    >
+                      <Icon />
+                      <span>{type.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <Divider />
+            {/* Aspect Ratio Pick */}
+            <div
+              className={
+                classes['content_settings_modal_content_pick_container']
+              }
+            >
+              <Text>Global Image Aspect Ratio</Text>
+              <div
+                className={
+                  classes['content_settings_modal_content_pick_container_group']
+                }
+              >
+                {ASPECT_RATIO_DATA.map((item) => {
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() => handleAspectRatioChange(item.value)}
+                      className={
+                        // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                        cx(
+                          classes[
+                            'content_settings_modal_content_pick_container_button'
+                          ],
+                          {
+                            [classes.active]: imageList[0].aspectRatio
+                              ? imageList[0].aspectRatio === item.value
+                              : '4 / 3' === item.value,
+                          }
+                        )
+                      }
+                    >
+                      <div
+                        className={classes['aspect_ratio_symbol']}
+                        style={{ aspectRatio: `${item.value}` }}
+                      ></div>
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             {gridType === 'static-type' && (
               <div
                 className={
@@ -513,24 +627,54 @@ export function UpdateGalleryDialog({
                     allowDeselect={false}
                     withCheckIcon={false}
                   />
-                  <Select
-                    label='Image Aspect Ratio'
-                    data={[
-                      { value: '16 / 9', label: '16:9' },
-                      { value: '4 / 3', label: '4:3' },
-                      { value: '1.91 / 3', label: '1.91:1' },
-                      { value: '1 / 1', label: '1:1' },
-                      { value: '3 / 4', label: '3:4' },
-                      { value: '4 / 5', label: '4:5' },
-                      { value: '9 / 16', label: '9:16' },
-                    ]}
-                    value={image.aspectRatio ? image.aspectRatio : '1 / 1'}
-                    onChange={(value, _option) =>
-                      handleImageChange(image, 'aspect-ratio', value)
+                  <div
+                    className={
+                      classes['content_settings_modal_content_pick_container']
                     }
-                    allowDeselect={false}
-                    withCheckIcon={false}
-                  />
+                  >
+                    <Text>Image Aspect Ratio</Text>
+                    <div
+                      className={
+                        classes[
+                          'content_settings_modal_content_pick_container_group'
+                        ]
+                      }
+                    >
+                      {ASPECT_RATIO_DATA.map((item) => {
+                        return (
+                          <button
+                            key={item.label}
+                            onClick={() =>
+                              handleImageChange(
+                                image,
+                                'aspect-ratio',
+                                item.value
+                              )
+                            }
+                            className={
+                              // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                              cx(
+                                classes[
+                                  'content_settings_modal_content_pick_container_button'
+                                ],
+                                {
+                                  [classes.active]: image.aspectRatio
+                                    ? image.aspectRatio === item.value
+                                    : '1 / 1' === item.value,
+                                }
+                              )
+                            }
+                          >
+                            <div
+                              className={classes['aspect_ratio_symbol']}
+                              style={{ aspectRatio: `${item.value}` }}
+                            ></div>
+                            <span>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                   <div
                     className={
                       classes['content_settings_modal_content_slider_container']

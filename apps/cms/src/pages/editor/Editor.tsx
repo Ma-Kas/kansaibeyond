@@ -62,7 +62,7 @@ export default function Editor(): JSX.Element {
   const [settingsModalOpen, { open, close }] = useDisclosure(false);
   const [settingsModalContent, setSettingsModalContent] = useState(<></>);
 
-  const placeholder = <Placeholder>{'Enter some text...'}</Placeholder>;
+  const placeholder = <Placeholder>{'Start writing your post...'}</Placeholder>;
   const [floatingAnchorElem, setFloatingAnchorElem] =
     useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);

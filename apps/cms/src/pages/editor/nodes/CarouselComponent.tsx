@@ -47,7 +47,50 @@ import {
   Divider,
   Tabs,
 } from '@mantine/core';
+import cx from 'clsx';
+import { ASPECT_RATIO_DATA } from '../../../utils/editor-constants';
 import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
+
+const CAROUSEL_TYPES_DATA = [
+  {
+    label: 'Slideshow',
+    value: 'slideshow',
+    icon: () => {
+      return (
+        <>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='50'
+            height='50'
+            fill='currentColor'
+            viewBox='0 0 50 50'
+          >
+            <path d='M3 2h44a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h44V3H3zm8.32 24.616a.5.5 0 1 1-.64.768l-3-2.5a.5.5 0 0 1 0-.768l3-2.5a.5.5 0 1 1 .64.768L8.781 25.5l2.54 2.116zm27.36-4.232a.5.5 0 1 1 .64-.768l3 2.5a.5.5 0 0 1 0 .768l-3 2.5a.5.5 0 1 1-.64-.768l2.539-2.116-2.54-2.116z' />
+          </svg>
+        </>
+      );
+    },
+  },
+  {
+    label: 'Slider',
+    value: 'slider',
+    icon: () => {
+      return (
+        <>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='50'
+            height='50'
+            fill='currentColor'
+            viewBox='0 0 50 50'
+          >
+            <path d='M3 2h5a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h5V3H3zm9-1h26a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1H12a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h26V3H12zm30-1h5a1 1 0 0 1 1 1v44a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 1v44h5V3h-5z' />
+          </svg>
+        </>
+      );
+    },
+  },
+];
 
 type ImageStyleType = {
   objectPosition?: CarouselImageObjectPosition;
@@ -308,36 +351,87 @@ export function UpdateCarouselDialog({
           <div
             className={classes['content_settings_modal_content_inner_group']}
           >
-            <Select
-              label='Carousel Type'
-              data={[
-                { value: 'slideshow', label: 'Slideshow' },
-                { value: 'slider', label: 'Slider' },
-              ]}
-              value={carouselType}
-              onChange={(value, _option) => handleCarouselTypeChange(value)}
-              allowDeselect={false}
-              withCheckIcon={false}
-            />
-            <Divider />
-            <Select
-              label='Carousel Aspect Ratio'
-              data={[
-                { value: '16 / 9', label: '16:9' },
-                { value: '4 / 3', label: '4:3' },
-                { value: '1.91 / 3', label: '1.91:1' },
-                { value: '1 / 1', label: '1:1' },
-                { value: '3 / 4', label: '3:4' },
-                { value: '4 / 5', label: '4:5' },
-                { value: '9 / 16', label: '9:16' },
-              ]}
-              value={
-                imageList[0].aspectRatio ? imageList[0].aspectRatio : '4 / 3'
+            {/* Carousel Type Pick */}
+            <div
+              className={
+                classes['content_settings_modal_content_pick_container']
               }
-              onChange={(value, _option) => handleAspectRatioChange(value)}
-              allowDeselect={false}
-              withCheckIcon={false}
-            />
+            >
+              <Text>Choose Carousel Layout</Text>
+              <div
+                className={
+                  classes[
+                    'content_settings_modal_content_pick_container_group_type'
+                  ]
+                }
+              >
+                {CAROUSEL_TYPES_DATA.map((type) => {
+                  const Icon = type.icon;
+                  return (
+                    <button
+                      key={type.label}
+                      onClick={() => handleCarouselTypeChange(type.value)}
+                      className={
+                        // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                        cx(
+                          classes[
+                            'content_settings_modal_content_pick_container_button'
+                          ],
+                          {
+                            [classes.active]: carouselType === type.value,
+                          }
+                        )
+                      }
+                    >
+                      <Icon />
+                      <span>{type.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <Divider />
+            {/* Aspect Ratio Pick */}
+            <div
+              className={
+                classes['content_settings_modal_content_pick_container']
+              }
+            >
+              <Text>Carousel Aspect Ratio</Text>
+              <div
+                className={
+                  classes['content_settings_modal_content_pick_container_group']
+                }
+              >
+                {ASPECT_RATIO_DATA.map((item) => {
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() => handleAspectRatioChange(item.value)}
+                      className={
+                        // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                        cx(
+                          classes[
+                            'content_settings_modal_content_pick_container_button'
+                          ],
+                          {
+                            [classes.active]: imageList[0].aspectRatio
+                              ? imageList[0].aspectRatio === item.value
+                              : '4 / 3' === item.value,
+                          }
+                        )
+                      }
+                    >
+                      <div
+                        className={classes['aspect_ratio_symbol']}
+                        style={{ aspectRatio: `${item.value}` }}
+                      ></div>
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             {carouselType === 'slider' && (
               <div
                 className={
@@ -456,26 +550,58 @@ export function UpdateCarouselDialog({
                     allowDeselect={false}
                     withCheckIcon={false}
                   />
+
                   {carouselType === 'slider' && (
-                    <Select
-                      label='Image Aspect Ratio'
-                      data={[
-                        { value: '16 / 9', label: '16:9' },
-                        { value: '4 / 3', label: '4:3' },
-                        { value: '1.91 / 3', label: '1.91:1' },
-                        { value: '1 / 1', label: '1:1' },
-                        { value: '3 / 4', label: '3:4' },
-                        { value: '4 / 5', label: '4:5' },
-                        { value: '9 / 16', label: '9:16' },
-                      ]}
-                      value={image.aspectRatio ? image.aspectRatio : '1 / 1'}
-                      onChange={(value, _option) =>
-                        handleImageChange(image, 'aspect-ratio', value)
+                    <div
+                      className={
+                        classes['content_settings_modal_content_pick_container']
                       }
-                      allowDeselect={false}
-                      withCheckIcon={false}
-                    />
+                    >
+                      <Text>Image Aspect Ratio</Text>
+                      <div
+                        className={
+                          classes[
+                            'content_settings_modal_content_pick_container_group'
+                          ]
+                        }
+                      >
+                        {ASPECT_RATIO_DATA.map((item) => {
+                          return (
+                            <button
+                              key={item.label}
+                              onClick={() =>
+                                handleImageChange(
+                                  image,
+                                  'aspect-ratio',
+                                  item.value
+                                )
+                              }
+                              className={
+                                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                                cx(
+                                  classes[
+                                    'content_settings_modal_content_pick_container_button'
+                                  ],
+                                  {
+                                    [classes.active]: image.aspectRatio
+                                      ? image.aspectRatio === item.value
+                                      : '1 / 1' === item.value,
+                                  }
+                                )
+                              }
+                            >
+                              <div
+                                className={classes['aspect_ratio_symbol']}
+                                style={{ aspectRatio: `${item.value}` }}
+                              ></div>
+                              <span>{item.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
+
                   {index < imageList.length - 1 && <Divider />}
                 </div>
               );

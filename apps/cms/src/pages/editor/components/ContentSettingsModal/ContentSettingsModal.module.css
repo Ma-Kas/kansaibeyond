@@ -74,7 +74,7 @@
 .content_settings_modal_content_tabs_panel {
   flex-grow: 1;
   padding: var(--gap);
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .content_settings_modal_content_inner {
@@ -99,14 +99,83 @@
   color: var(--mantine-primary-color-filled);
 }
 
-.content_settings_modal_content_slider_container {
+.content_settings_modal_content_slider_container,
+.content_settings_modal_content_pick_container {
   display: flex;
   flex-direction: column;
 }
 
-.content_settings_modal_content_slider_container > p:first-child {
+.content_settings_modal_content_slider_container > p:first-child,
+.content_settings_modal_content_pick_container > p:first-child {
   font-size: var(--font-size-editor);
   font-weight: var(--font-weight-menu);
+}
+
+.content_settings_modal_content_pick_container_group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: rem(15px);
+  margin-top: rem(5px);
+}
+
+.content_settings_modal_content_pick_container_group_type {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(15px);
+  margin-top: rem(5px);
+}
+
+.content_settings_modal_content_pick_container_button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(5px);
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--color-menu-text-light);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: none;
+
+  @mixin hover {
+    background-color: var(--transparent-blue-hover-bg);
+  }
+}
+
+.content_settings_modal_content_pick_container_button.active > svg {
+  height: rem(32px);
+  width: auto;
+  stroke-width: 1;
+  stroke: var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content_pick_container_button.active
+  > .aspect_ratio_symbol {
+  height: rem(22px);
+  border: 1px solid var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content_pick_container_button.active > span {
+  color: var(--mantine-primary-color-filled);
+  font-size: var(--font-size-composer-sidebar-small);
+}
+
+.content_settings_modal_content_pick_container_button > svg {
+  height: rem(32px);
+  width: auto;
+  stroke-width: 1;
+  stroke: var(--color-menu-text-light);
+}
+
+.content_settings_modal_content_pick_container_button > .aspect_ratio_symbol {
+  height: rem(22px);
+  border: 1px solid var(--color-menu-text-light);
+}
+
+.content_settings_modal_content_pick_container_button > span {
+  font-size: var(--font-size-composer-sidebar-small);
 }
 
 .content_settings_modal_content_slider_group {
