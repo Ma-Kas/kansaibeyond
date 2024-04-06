@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import classes from './PostEditorTitle.module.css';
 
-const PostEditorTitle = () => {
+const PostEditorTitle = ({
+  setToolbarEnabled,
+}: {
+  setToolbarEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [value, setValue] = useState('');
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -17,6 +21,8 @@ const PostEditorTitle = () => {
   return (
     <div className={classes['editor-post-title-container']}>
       <textarea
+        onFocus={() => setToolbarEnabled(false)}
+        onBlur={() => setToolbarEnabled(true)}
         name='post-title'
         className={classes['editor-post-title-inner']}
         data-editor-component='post-title-textarea'

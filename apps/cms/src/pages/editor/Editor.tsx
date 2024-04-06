@@ -59,6 +59,7 @@ export default function Editor(): JSX.Element {
     settings: { tableCellMerge, tableCellBackgroundColor },
   } = useSettings();
   const isEditable = useLexicalEditable();
+  const [toolbarEnabled, setToolbarEnabled] = useState(true);
   const [settingsModalOpen, { open, close }] = useDisclosure(false);
   const [settingsModalContent, setSettingsModalContent] = useState(<></>);
 
@@ -80,9 +81,12 @@ export default function Editor(): JSX.Element {
 
   return (
     <>
-      <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+      <ToolbarPlugin
+        toolbarEnabled={toolbarEnabled}
+        setIsLinkEditMode={setIsLinkEditMode}
+      />
       <div className='editor-container'>
-        <PostEditorTitle />
+        <PostEditorTitle setToolbarEnabled={setToolbarEnabled} />
         <div className='editor-container-inner'>
           <DragDropPaste />
           <AutoFocusPlugin />

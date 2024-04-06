@@ -465,8 +465,10 @@ function ElementFormatDropdown({
 }
 
 function ToolbarPlugin({
+  toolbarEnabled,
   setIsLinkEditMode,
 }: {
+  toolbarEnabled: boolean;
   setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element {
   const [editor] = useLexicalComposerContext();
@@ -768,7 +770,7 @@ function ToolbarPlugin({
         {blockType in blockTypeToBlockName && activeEditor === editor && (
           <>
             <BlockFormatDropDown
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
               blockType={blockType}
               rootType={rootType}
               editor={editor}
@@ -779,14 +781,14 @@ function ToolbarPlugin({
           // Code Language Dropdown
           <CodeLanguageDropDown
             onCodeLanguageSelect={onCodeLanguageSelect}
-            disabled={!isEditable}
+            disabled={!isEditable || !toolbarEnabled}
             currentValue={codeLanguage}
             editor={editor}
           />
         ) : (
           <>
             <FontDropDown
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
               style={'font-family'}
               currentValue={fontFamily}
               editor={editor}
@@ -794,7 +796,7 @@ function ToolbarPlugin({
             <FontSizeDropdown
               selectionFontSize={fontSize.slice(0, -2)}
               editor={editor}
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
             />
 
             {/* TEXT FORMAT ACTION BUTTONS */}
@@ -807,7 +809,7 @@ function ToolbarPlugin({
                     [classes.active]: isBold,
                   })
                 }
-                disabled={!isEditable}
+                disabled={!isEditable || !toolbarEnabled}
                 onClick={() => {
                   activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
                 }}
@@ -824,7 +826,7 @@ function ToolbarPlugin({
                     [classes.active]: isItalic,
                   })
                 }
-                disabled={!isEditable}
+                disabled={!isEditable || !toolbarEnabled}
                 onClick={() => {
                   activeEditor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
                 }}
@@ -841,7 +843,7 @@ function ToolbarPlugin({
                     [classes.active]: isUnderline,
                   })
                 }
-                disabled={!isEditable}
+                disabled={!isEditable || !toolbarEnabled}
                 onClick={() => {
                   activeEditor.dispatchCommand(
                     FORMAT_TEXT_COMMAND,
@@ -861,7 +863,7 @@ function ToolbarPlugin({
                     [classes.active]: isLink,
                   })
                 }
-                disabled={!isEditable}
+                disabled={!isEditable || !toolbarEnabled}
                 onClick={insertLink}
                 title='Insert link'
                 aria-label='Insert link'
@@ -871,7 +873,7 @@ function ToolbarPlugin({
               <ActionIcon
                 variant='transparent'
                 className={classes['plain-button']}
-                disabled={!isEditable}
+                disabled={!isEditable || !toolbarEnabled}
                 onClick={clearFormatting}
                 title='Clear Formatting'
                 aria-label='Clear formatting'
@@ -880,7 +882,7 @@ function ToolbarPlugin({
               </ActionIcon>
             </Group>
             <TextFormatDropdown
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
               editor={activeEditor}
               isStrikethrough={isStrikethrough}
               isSuperscript={isSuperscript}
@@ -892,17 +894,17 @@ function ToolbarPlugin({
               color={fontColor}
               onChange={onFontColorSelect}
               ariaLabel='Formatting text color'
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
             />
             <ColorPickerDropdown
               type='bg-color'
               color={bgColor}
               onChange={onBgColorSelect}
               ariaLabel='Formatting background color'
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
             />
             <ElementFormatDropdown
-              disabled={!isEditable}
+              disabled={!isEditable || !toolbarEnabled}
               value={elementFormat}
               editor={editor}
             />

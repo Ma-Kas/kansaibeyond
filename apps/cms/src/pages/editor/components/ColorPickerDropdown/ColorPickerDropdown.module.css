@@ -29,3 +29,7 @@ svg {
   height: rem(20px);
   width: rem(20px);
 }
+
+.editor_toolbar_plain_button:disabled svg {
+  color: var(--color-menu-text-disabled);
+}
