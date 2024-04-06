@@ -1,0 +1,18 @@
+.page_composer {
+  display: flex;
+  padding-top: var(--composer-header-height);
+  height: 100%;
+  z-index: 1;
+  background-color: var(--mantine-color-body);
+  overflow-y: hidden;
+
+  @mixin light {
+    background-color: var(--mantine-color-gray-2);
+    box-shadow: var(--mantine-shadow-sm);
+  }
+
+  @mixin dark {
+    background-color: var(--mantine-color-dark-7);
+    box-shadow: none;
+  }
+}

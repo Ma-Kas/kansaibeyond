@@ -1,0 +1,39 @@
+.composer_sidebar_drawer {
+  --gap: rem(24px);
+
+  font-size: var(--font-size-composer-sidebar-regular);
+  color: var(--color-menu-text-light);
+  z-index: var(--z-index-composer-drawer);
+  height: 100%;
+  width: var(--composer-sidebar-drawer-width);
+  margin-left: calc(var(--composer-sidebar-drawer-width) * -1);
+  padding: var(--gap);
+  border-right: var(--editor-menu-border);
+  transition: margin-left 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.composer_sidebar_drawer.open {
+  margin-left: 0;
+}
+
+.composer_sidebar_drawer_header p {
+  font-size: var(--font-size-composer-sidebar-heading);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-menu-text-light);
+}
+
+.composer_sidebar_drawer_close_button > svg > path {
+  fill: var(--mantine-primary-color-filled);
+}
+
+.composer_sidebar_drawer_content {
+  font-size: var(--font-size-composer-sidebar-regular);
+  flex-grow: 1;
+  gap: rem(36px);
+  height: 100%;
+  position: relative;
+  overflow: auto;
+}

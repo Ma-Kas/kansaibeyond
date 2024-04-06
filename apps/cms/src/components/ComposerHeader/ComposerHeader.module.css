@@ -1,0 +1,57 @@
+.composerheader {
+  position: fixed;
+  min-width: var(--composer-header-min-width);
+  z-index: var(--z-index-composer-header);
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  height: var(--composer-header-height);
+  background-color: var(--mantine-color-white);
+  border-bottom: var(--editor-menu-border);
+}
+
+.composerheader-inner {
+  height: var(--composer-header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: rem(12px);
+}
+
+.plain-button {
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
+  font-weight: var(--font-weight-menu);
+  background-color: transparent;
+
+  @mixin hover {
+    color: light-dark(
+      var(--color-menu-text-light),
+      var(--color-menu-text-dark)
+    );
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+.color-button {
+  font-weight: var(--font-weight-menu);
+  background-color: transparent;
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+svg.action-button {
+  stroke-width: var(--editor-toolbar-icon-stroke);
+  color: var(--color-menu-text-light);
+}
+
+button:disabled svg.action-button {
+  color: var(--color-menu-text-disabled);
+}

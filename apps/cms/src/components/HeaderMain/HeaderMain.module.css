@@ -1,0 +1,41 @@
+.header {
+  position: fixed;
+  z-index: var(--z-index-header);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  margin-bottom: 0;
+  background-color: var(--mantine-color-body);
+  border-bottom: var(--editor-menu-border);
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+.inner {
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  display: block;
+  line-height: 1;
+  padding: rem(8px) rem(12px);
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
+  font-size: var(--mantine-font-size-sm);
+  font-weight: var(--font-weight-menu);
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+.linkLabel {
+  margin-right: rem(5px);
+}

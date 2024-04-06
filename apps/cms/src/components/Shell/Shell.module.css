@@ -1,0 +1,16 @@
+.shell_main,
+.shell_composer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell_main {
+  padding-left: var(--navbar-main-width);
+  padding-top: var(--header-height);
+}
+
+.shell_composer {
+  padding-left: 0;
+  padding-top: var(--header-height);
+}

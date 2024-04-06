@@ -1,0 +1,46 @@
+.floating-text-format-popup {
+  display: flex;
+  background: var(--mantine-color-white);
+  padding: rem(4px);
+  vertical-align: middle;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: var(--z-index-modals);
+  opacity: 0;
+  box-shadow: var(--mantine-shadow-md);
+  border: var(--editor-menu-border);
+  border-radius: rem(4px);
+  transition: opacity 0.5s;
+  will-change: transform;
+}
+
+.plain-button {
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
+  font-weight: var(--font-weight-editor);
+  background-color: transparent;
+
+  @mixin hover {
+    color: light-dark(
+      var(--color-menu-text-light),
+      var(--color-menu-text-dark)
+    );
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}
+
+.plain-button.active {
+  background-color: var(--transparent-blue-hover-bg);
+}
+
+svg.action-button {
+  stroke-width: var(--editor-toolbar-icon-stroke);
+  color: var(--color-menu-text-light);
+}
+
+button:disabled svg.action-button {
+  color: var(--color-menu-text-disabled);
+}

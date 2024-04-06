@@ -1,0 +1,14 @@
+{
+  "name": "shared",
+  "private": "true",
+  "keywords": [
+    "react",
+    "lexical",
+    "editor",
+    "rich-text"
+  ],
+  "version": "0.13.1",
+  "dependencies": {
+    "lexical": "0.13.1"
+  }
+}

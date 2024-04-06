@@ -1,0 +1,28 @@
+.navbar {
+  z-index: var(--z-index-navbar-main);
+  position: fixed;
+  top: var(--header-height);
+  bottom: 0;
+  left: 0;
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+  width: var(--navbar-main-width);
+  display: flex;
+  flex-direction: column;
+  border-right: var(--editor-menu-border);
+}
+
+.navbar_scrollarea {
+  flex: 1;
+}
+
+.navbar_body {
+  padding-top: var(--mantine-spacing-md);
+  padding-bottom: rem(100px);
+}
+
+.navbar_links {
+  padding: 0;
+}

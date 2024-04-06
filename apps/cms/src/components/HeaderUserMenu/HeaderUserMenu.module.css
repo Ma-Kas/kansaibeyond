@@ -1,0 +1,27 @@
+.user {
+  color: light-dark(var(--mantine-color-black), var(--color-menu-text-dark));
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-sm);
+  transition: background-color 100ms ease;
+
+  &:hover {
+    background-color: light-dark(
+      var(--mantine-color-white),
+      var(--mantine-color-dark-8)
+    );
+  }
+}
+
+.userActive {
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-8)
+  );
+}
+
+.user svg {
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
+  width: rem(16px);
+  height: rem(16px);
+  stroke-width: rem(1.5px);
+}

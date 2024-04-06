@@ -1,0 +1,23 @@
+.editor_colorpick_input_field {
+  color: var(--color-menu-text-light);
+  padding-bottom: rem(8px);
+}
+
+.editor_colorpick_input_field > div {
+  display: flex;
+
+  padding: 0;
+}
+
+.editor_colorpick_input_field > div > div {
+  color: var(--color-menu-text-light);
+  font-size: var(--font-size-editor);
+  width: max-content;
+  padding-left: rem(10px);
+}
+
+.editor_colorpick_input_field input {
+  color: var(--color-menu-text-light);
+  text-transform: uppercase;
+  padding-left: rem(10ch);
+}

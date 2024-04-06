@@ -1,0 +1,216 @@
+.content_settings_modal_container:has(.open) {
+  position: fixed;
+  inset: 0;
+  background-color: var(--editor-embed-content-settings-modal-bg);
+  z-index: calc(var(--z-index-modals) - 1);
+}
+
+.content_settings_modal {
+  --gap: rem(24px);
+  --group-gap: rem(20px);
+
+  position: fixed;
+  font-size: var(--font-size-composer-sidebar-regular);
+  color: var(--color-menu-text-light);
+  z-index: var(--z-index-modals);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--editor-embed-content-settings-modal-width);
+  margin-right: calc(var(--editor-embed-content-settings-modal-width) * -1);
+  padding: var(--gap);
+  transition: margin-right 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.content_settings_modal.open {
+  margin-right: 0;
+}
+
+.content_settings_modal_header p {
+  font-size: var(--font-size-composer-sidebar-heading);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-menu-text-light);
+}
+
+.content_settings_modal_close_button > svg > path {
+  fill: var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content {
+  margin: 0 calc(var(--gap) * -1);
+  font-size: var(--font-size-composer-sidebar-regular);
+  flex-grow: 1;
+  gap: rem(36px);
+  height: 100%;
+  position: relative;
+  overflow: auto;
+  border-top: var(--editor-menu-border);
+  border-bottom: var(--editor-menu-border);
+}
+
+.content_settings_modal_content_tabs {
+  display: flex;
+  flex-direction: column;
+  margin: 0 calc(var(--gap) * -1);
+  font-size: var(--font-size-composer-sidebar-regular);
+  flex-grow: 1;
+  height: 100%;
+  overflow-y: hidden;
+  border-bottom: var(--editor-menu-border);
+}
+
+.content_settings_modal_content_tabs_list {
+  font-weight: var(--font-weight-menu);
+  justify-content: center;
+  gap: var(--gap);
+}
+.content_settings_modal_content_tabs_list::before {
+  border-bottom: var(--editor-menu-border);
+}
+
+.content_settings_modal_content_tabs_panel {
+  flex-grow: 1;
+  padding: var(--gap);
+  overflow-y: scroll;
+}
+
+.content_settings_modal_content_inner {
+  padding: var(--gap);
+}
+
+.content_settings_modal_content_inner_group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--group-gap);
+}
+
+.content_settings_modal_content_inner_subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--group-gap);
+}
+
+.content_settings_modal_content_inner_subgroup > p:first-child {
+  font-size: var(--font-size-editor);
+  font-weight: var(--font-weight-menu);
+  color: var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content_slider_container,
+.content_settings_modal_content_pick_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.content_settings_modal_content_slider_container > p:first-child,
+.content_settings_modal_content_pick_container > p:first-child {
+  font-size: var(--font-size-editor);
+  font-weight: var(--font-weight-menu);
+}
+
+.content_settings_modal_content_pick_container_group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: rem(15px);
+  margin-top: rem(5px);
+}
+
+.content_settings_modal_content_pick_container_group_type {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(15px);
+  margin-top: rem(5px);
+}
+
+.content_settings_modal_content_pick_container_button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(5px);
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--color-menu-text-light);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: none;
+
+  @mixin hover {
+    background-color: var(--transparent-blue-hover-bg);
+  }
+}
+
+.content_settings_modal_content_pick_container_button.active > svg {
+  height: rem(32px);
+  width: auto;
+  stroke-width: 1;
+  stroke: var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content_pick_container_button.active
+  > .aspect_ratio_symbol {
+  height: rem(22px);
+  border: 1px solid var(--mantine-primary-color-filled);
+}
+
+.content_settings_modal_content_pick_container_button.active > span {
+  color: var(--mantine-primary-color-filled);
+  font-size: var(--font-size-composer-sidebar-small);
+}
+
+.content_settings_modal_content_pick_container_button > svg {
+  height: rem(32px);
+  width: auto;
+  stroke-width: 1;
+  stroke: var(--color-menu-text-light);
+}
+
+.content_settings_modal_content_pick_container_button > .aspect_ratio_symbol {
+  height: rem(22px);
+  border: 1px solid var(--color-menu-text-light);
+}
+
+.content_settings_modal_content_pick_container_button > span {
+  font-size: var(--font-size-composer-sidebar-small);
+}
+
+.content_settings_modal_content_slider_group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.content_settings_modal_content_slider_group > div:first-child {
+  flex-grow: 1;
+}
+
+.content_settings_modal_content_slider_group > div:last-child {
+  max-width: rem(85px);
+}
+
+.content_settings_modal_footer {
+  margin-left: auto;
+}
+
+.content_settings_modal_cancel_button {
+  background-color: transparent;
+  color: var(--mantine-primary-color-filled);
+  border: 1px solid var(--mantine-primary-color-filled);
+
+  @mixin hover {
+    color: var(--mantine-primary-color-filled-hover);
+    background-color: transparent;
+    border: 1px solid var(--mantine-primary-color-filled-hover);
+  }
+}
+
+.content_settings_modal_confirm_button,
+.content_settings_modal_cancel_button {
+  border-radius: rem(32px);
+  padding: 0 rem(32px);
+}

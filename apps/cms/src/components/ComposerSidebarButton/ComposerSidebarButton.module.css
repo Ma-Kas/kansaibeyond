@@ -1,0 +1,58 @@
+.button_root {
+  color: light-dark(var(--color-menu-text-light), var(--color-menu-text-dark));
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(6px);
+
+  @mixin hover {
+    color: var(--mantine-color-blue-light-color);
+    stroke: var(--mantine-color-blue-light-color);
+
+    .icon_container {
+      background-color: var(--transparent-blue-hover-bg);
+      stroke: var(--mantine-color-blue-light-color);
+    }
+    .icon_container svg {
+      stroke: var(--mantine-color-blue-light-color);
+    }
+  }
+}
+
+.button_root.active {
+  color: var(--mantine-color-blue-light-color);
+  stroke: var(--mantine-primary-color-filled);
+
+  .icon_container {
+    background-color: var(--mantine-primary-color-filled);
+  }
+  .icon_container svg {
+    stroke: var(--mantine-color-body);
+  }
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: rem(36px);
+  height: rem(36px);
+  padding: rem(6px);
+  border: var(--editor-menu-border);
+  border-radius: 50%;
+  stroke: light-dark(
+    var(--color-menu-border-light),
+    var(--color-menu-border-dark)
+  );
+}
+
+.icon_container svg {
+  stroke-width: rem(1px);
+}
+
+.button_label {
+  font-size: var(--font-size-composer-sidebar-small);
+  font-weight: var(--font-weight-menu);
+}
