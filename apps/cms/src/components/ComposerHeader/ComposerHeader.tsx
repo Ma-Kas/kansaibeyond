@@ -1,4 +1,4 @@
-import { Container, Button, Divider, ActionIcon, Group } from '@mantine/core';
+import { Button, Divider, ActionIcon, Group } from '@mantine/core';
 
 import {
   IconArrowLeft,
