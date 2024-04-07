@@ -422,9 +422,7 @@ export function InsertGeneralDialog({
       const existingScript = document.querySelectorAll(
         `[data-type="${newScript.src}"]`
       );
-      console.log(existingScript);
       if (!existingScript.length) {
-        console.log(newScript);
         document.body?.appendChild(newScript);
       }
     }

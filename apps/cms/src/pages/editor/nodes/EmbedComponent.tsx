@@ -36,7 +36,7 @@ import ContentSettingsModalInner from '../components/ContentSettingsModal/Conten
 import { Textarea, Select } from '@mantine/core';
 import classes from '../components/ContentSettingsModal/ContentSettingsModal.module.css';
 
-const INSTAGRAM_SCRIPT_URL = 'http://www.instagram.com/embed.js';
+const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
 
 function getBlockParentNode(
   editorState: EditorState,
