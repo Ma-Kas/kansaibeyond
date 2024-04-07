@@ -29,16 +29,16 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import useModal from '../../pages/editor/hooks/useModal';
-import { InsertCarouselContainerDialog } from '../../pages/editor/plugins/ImageCarouselPlugin';
-import { InsertEmbedDialog } from '../../pages/editor/plugins/EmbedPlugin';
-import { InsertTableDialog } from '../../pages/editor/plugins/TablePlugin';
+import useModal from '../../pages/Editor/hooks/useModal';
+import { InsertCarouselContainerDialog } from '../../pages/Editor/plugins/ImageCarouselPlugin';
+import { InsertEmbedDialog } from '../../pages/Editor/plugins/EmbedPlugin';
+import { InsertTableDialog } from '../../pages/Editor/plugins/TablePlugin';
 import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode';
-import InsertLayoutDialog from '../../pages/editor/plugins/LayoutPlugin/InsertLayoutDialog';
-import { $createStickyNode } from '../../pages/editor/nodes/StickyNode';
-import { INSERT_COLLAPSIBLE_COMMAND } from '../../pages/editor/plugins/CollapsiblePlugin';
-import { InsertImageDialog } from '../../pages/editor/plugins/ImagesPlugin';
-import { InsertGalleryContainerDialog } from '../../pages/editor/plugins/ImageGalleryPlugin';
+import InsertLayoutDialog from '../../pages/Editor/plugins/LayoutPlugin/InsertLayoutDialog';
+import { $createStickyNode } from '../../pages/Editor/nodes/StickyNode';
+import { INSERT_COLLAPSIBLE_COMMAND } from '../../pages/Editor/plugins/CollapsiblePlugin';
+import { InsertImageDialog } from '../../pages/Editor/plugins/ImagesPlugin';
+import { InsertGalleryContainerDialog } from '../../pages/Editor/plugins/ImageGalleryPlugin';
 
 // Style Imports
 import classes from './ComposerSidebar.module.css';

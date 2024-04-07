@@ -1,20 +1,13 @@
-import '@mantine/core/styles.css';
-import { MantineProvider } from '@mantine/core';
+import NavbarMain from '../NavbarMain/NavbarMain';
+import classes from './Shell.module.css';
 
-// Page Imports
-import Shell from './components/Shell/Shell';
-import PageBase from './components/PageBase/PageBase';
-import PageComposer from './components/PageComposer/PageComposer';
-import { theme } from './theme';
-
-const showNavbar = false;
-
-const App = () => {
+const MainShell = () => {
   return (
-    <MantineProvider theme={theme}>
-      <Shell withNavbar={showNavbar}>
-        {showNavbar && (
-          <PageBase>
+    <>
+      <NavbarMain />
+      <main className={classes['shell_main']}>
+        <div className={classes['page_main']}>
+          <div className={classes['page_main_content_wrapper']}>
             <div>
               dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf
               dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf
@@ -81,12 +74,11 @@ const App = () => {
               dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf
               dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf dsfsdfdsfsdf
             </div>
-          </PageBase>
-        )}
-        {!showNavbar && <PageComposer></PageComposer>}
-      </Shell>
-    </MantineProvider>
+          </div>
+        </div>
+      </main>
+    </>
   );
 };
 
-export default App;
+export default MainShell;

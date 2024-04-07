@@ -2,6 +2,7 @@ import { Menu, Group, Center, Burger, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown } from '@tabler/icons-react';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
+
 import classes from './HeaderMain.module.css';
 
 const menuLinks = [
@@ -17,7 +18,10 @@ const menuLinks = [
     ],
   },
 ];
-const titleLink = { link: '/kansaibeyond', label: 'Kansai & Beyond' };
+const titleLink = {
+  link: 'http://www.kansaibeyond.com',
+  label: 'Kansai & Beyond',
+};
 
 const HeaderMain = () => {
   const [opened, { toggle }] = useDisclosure(false);
@@ -71,8 +75,8 @@ const HeaderMain = () => {
           <a
             key={titleLink.link}
             href={titleLink.link}
+            target='_blank'
             className={classes.link}
-            onClick={(event) => event.preventDefault()}
           >
             {titleLink.label}
           </a>

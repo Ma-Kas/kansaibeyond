@@ -5,7 +5,6 @@ import {
   IconArrowBackUp,
   IconArrowForwardUp,
 } from '@tabler/icons-react';
-import classes from './ComposerHeader.module.css';
 import { useCallback, useEffect, useState } from 'react';
 import {
   CAN_REDO_COMMAND,
@@ -18,6 +17,10 @@ import {
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { mergeRegister } from '@lexical/utils';
 
+import { useNavigate } from 'react-router-dom';
+
+import classes from './ComposerHeader.module.css';
+
 const DEBUG_IMPORT_DATA = '';
 
 const ComposerHeader = () => {
@@ -26,6 +29,8 @@ const ComposerHeader = () => {
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+
+  const navigate = useNavigate();
 
   // Update lexical editor selection
   useEffect(() => {
@@ -89,6 +94,7 @@ const ComposerHeader = () => {
           leftSection={<IconArrowLeft size={14} />}
           className={classes['plain-button']}
           variant='transparent'
+          onClick={() => navigate('/dashboard/blog/posts')}
         >
           Back
         </Button>

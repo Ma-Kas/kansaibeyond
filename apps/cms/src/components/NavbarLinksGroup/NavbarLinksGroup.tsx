@@ -4,11 +4,11 @@ import {
   Box,
   Collapse,
   ThemeIcon,
-  Text,
   UnstyledButton,
   rem,
 } from '@mantine/core';
-import { IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
+import { Link, useNavigate } from 'react-router-dom';
 import classes from './NavbarLinksGroup.module.css';
 
 interface LinksGroupProps {
@@ -17,32 +17,29 @@ interface LinksGroupProps {
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
+  link?: string;
 }
 
-export function LinksGroup({
+const NavbarLinksGroup = ({
   icon: Icon,
   label,
   initiallyOpened,
   links,
-}: LinksGroupProps) {
+  link,
+}: LinksGroupProps) => {
+  const navigate = useNavigate();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (
-    <Text<'a'>
-      component='a'
-      className={classes.link}
-      href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
-    >
+    <Link className={classes.link} to={link.link} key={link.label}>
       {link.label}
-    </Text>
+    </Link>
   ));
 
   return (
     <>
       <UnstyledButton
-        onClick={() => setOpened((o) => !o)}
+        onClick={link ? () => navigate(link) : () => setOpened((o) => !o)}
         className={classes.control}
       >
         <Group justify='space-between' gap={0}>
@@ -68,22 +65,6 @@ export function LinksGroup({
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   );
-}
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
 };
 
-export function NavbarLinksGroup() {
-  return (
-    <Box mih={220} p='md'>
-      <LinksGroup {...mockdata} />
-    </Box>
-  );
-}
+export default NavbarLinksGroup;
