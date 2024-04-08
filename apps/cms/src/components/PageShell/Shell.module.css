@@ -20,7 +20,7 @@
   position: relative;
   z-index: 1;
   background-color: var(--mantine-color-body);
-  padding-bottom: rem(80px);
+  overflow-y: hidden;
 
   @mixin light {
     background-color: var(--mantine-color-white);
@@ -31,17 +31,6 @@
     background-color: var(--mantine-color-dark-7);
     box-shadow: none;
   }
-}
-
-.page_main_content_wrapper {
-  z-index: 1;
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  padding-top: var(--mantine-spacing-xl);
-  padding-left: calc(var(--mantine-spacing-xl) * 2);
-  padding-right: calc(var(--mantine-spacing-xl) * 2);
-  background-color: var(--mantine-color-body);
 }
 
 .page_composer {

@@ -1,0 +1,16 @@
+.card_inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.card_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  background-color: var(--mantine-color-white);
+  height: var(--dashboard-content-card-sticky-header-height);
+  border-bottom: var(--editor-menu-border);
+  border-top-left-radius: var(--dashboard-content-card-radius);
+  border-top-right-radius: var(--dashboard-content-card-radius);
+}
