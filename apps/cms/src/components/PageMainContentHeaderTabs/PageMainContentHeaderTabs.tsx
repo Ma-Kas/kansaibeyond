@@ -1,5 +1,5 @@
 import { Tabs } from '@mantine/core';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import classes from './PageMainContentHeaderTabs.module.css';
@@ -7,18 +7,45 @@ import classes from './PageMainContentHeaderTabs.module.css';
 export type TabData = {
   value: string;
   label: string;
-  panelData: React.ReactNode;
+  panelData: { headerData: React.ReactNode; bodyData: React.ReactNode };
 };
 
 type TabDataProps = {
+  mainContentHeaderElement: HTMLDivElement | null;
+  mainContentBodyElement: HTMLDivElement | null;
   tabData: TabData[];
   cardElement: HTMLDivElement | null;
 };
 
-const MainContentHeaderTabs = ({ tabData, cardElement }: TabDataProps) => {
+const MainContentHeaderTabs = ({
+  mainContentHeaderElement,
+  mainContentBodyElement,
+  tabData,
+  cardElement,
+}: TabDataProps) => {
   const [activeTab, setActiveTab] = useState<string | null>(tabData[0].value);
+  const [headerTopStyle, setHeaderTopStyle] = useState('');
 
-  if (!cardElement) {
+  // Calculate the top of the sticky card header based on content_header height
+  // and margin-top of body passed as ref (useEffect, to force re-render when they change)
+  useEffect(() => {
+    if (mainContentHeaderElement && mainContentBodyElement) {
+      const contentHeaderHeight = window.getComputedStyle(
+        mainContentHeaderElement
+      ).height;
+      const contentBodyMarginTop = window.getComputedStyle(
+        mainContentBodyElement
+      ).marginTop;
+
+      const top = `${
+        Number(contentHeaderHeight.slice(0, -2)) +
+        Number(contentBodyMarginTop.slice(0, -2))
+      }px`;
+      setHeaderTopStyle(top);
+    }
+  }, [mainContentBodyElement, mainContentHeaderElement]);
+
+  if (!cardElement || !mainContentHeaderElement || !mainContentBodyElement) {
     return null;
   }
 
@@ -45,7 +72,17 @@ const MainContentHeaderTabs = ({ tabData, cardElement }: TabDataProps) => {
                 className={classes['page_main_content_card_tabs_panel']}
                 value={tab.value}
               >
-                {tab.panelData}
+                <div className={classes['card_inner']}>
+                  <div
+                    style={{ top: headerTopStyle }}
+                    className={classes['card_header']}
+                  >
+                    {tab.panelData.headerData}
+                  </div>
+                  <div className={classes['card_body']}>
+                    {tab.panelData.bodyData}
+                  </div>
+                </div>
               </Tabs.Panel>,
               cardElement
             )}

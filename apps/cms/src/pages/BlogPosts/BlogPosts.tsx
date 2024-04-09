@@ -10,86 +10,117 @@ import MainContentHeaderTabs, {
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './BlogPosts.module.css';
 
-const tabData: TabData[] = [
-  {
-    value: 'published',
-    label: 'Published',
-    panelData: (
-      <div className={localClasses['card_inner']}>
-        <div className={localClasses['card_header']}>Published</div>
-        <div className={localClasses['card_body']}>
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published Published Published Published Published
-          Published Published Published
-        </div>
-      </div>
-    ),
-  },
-  { value: 'drafts', label: 'Drafts', panelData: <div>Drafts</div> },
-  { value: 'pending', label: 'Pending Review', panelData: <div>Pending</div> },
-  { value: 'trash', label: 'Trash', panelData: <div>Trash</div> },
-];
-
 const BlogPosts = () => {
   const navigate = useNavigate();
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
+  const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
   const [cardElement, setCardElement] = useState<HTMLDivElement | null>(null);
+  const [mainContentHeaderElement, setMainContentHeaderElement] =
+    useState<HTMLDivElement | null>(null);
+  const [mainContentBodyElement, setMainContentBodyElement] =
+    useState<HTMLDivElement | null>(null);
 
   // Set ref of cardElement when rendered,
   // so tabs in header can get that ref and createPortal to it
   // Otherwise header gets rendered first, and card to portal to doesn't exist yet
   useEffect(() => {
     setCardElement(cardRef.current);
+    setMainContentHeaderElement(mainContentHeaderRef.current);
+    setMainContentBodyElement(mainContentBodyRef.current);
   }, []);
+
+  const tabData: TabData[] = [
+    {
+      value: 'published',
+      label: 'Published',
+      panelData: {
+        headerData: <div>Published</div>,
+        bodyData: (
+          <div>
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+            Published Published Published Published Published Published
+          </div>
+        ),
+      },
+    },
+    {
+      value: 'drafts',
+      label: 'Drafts',
+      panelData: { headerData: <div>Drafts</div>, bodyData: <div></div> },
+    },
+    {
+      value: 'pending',
+      label: 'Pending Review',
+      panelData: {
+        headerData: <div>Pending Review</div>,
+        bodyData: <div></div>,
+      },
+    },
+    {
+      value: 'trash',
+      label: 'Trash',
+      panelData: { headerData: <div>Trash</div>, bodyData: <div></div> },
+    },
+  ];
 
   const blogPostHeader = (
     <>
@@ -106,16 +137,26 @@ const BlogPosts = () => {
       <div className={classes['page_main_content_header_sub']}>
         Manage your blog posts.
       </div>
-      <MainContentHeaderTabs tabData={tabData} cardElement={cardElement} />
+      <MainContentHeaderTabs
+        mainContentHeaderElement={mainContentHeaderElement}
+        mainContentBodyElement={mainContentBodyElement}
+        tabData={tabData}
+        cardElement={cardElement}
+      />
     </>
   );
 
   return (
-    <PageMainContent header={blogPostHeader}>
+    <PageMainContent
+      mainContentHeaderRef={mainContentHeaderRef}
+      mainContentBodyRef={mainContentBodyRef}
+      header={blogPostHeader}
+    >
       <div
         className={classes['page_main_content_body_card']}
         ref={cardRef}
       ></div>
+      <div>Pagination Placeholder</div>
     </PageMainContent>
   );
 };
