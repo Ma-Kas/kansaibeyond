@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from '../pages/App/App';
 import MainShell from './PageShell/MainShell';
 import ComposerShell from './PageShell/ComposerShell';
+import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
 // Sub-Route Imports
 import BlogPosts from '../pages/BlogPosts/BlogPosts';
@@ -18,9 +19,17 @@ const Router = () => {
       children: [
         { index: true, element: <MainShell /> },
         {
+          path: '*',
+          element: <ErrorPage />,
+        },
+        {
           path: 'dashboard',
           element: <MainShell />,
           children: [
+            {
+              path: '*',
+              element: <ErrorPage />,
+            },
             {
               path: 'blog/posts',
               element: <BlogPosts />,
