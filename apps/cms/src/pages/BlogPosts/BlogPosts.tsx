@@ -9,7 +9,7 @@ import BlogPostTabs, {
 
 import { MOCK_BLOG_POSTS } from '../../utils/mockdata';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-import { BlogTableData } from '../../components/ContentCardTable/ContentCardTable';
+import { PostTableData } from '../../components/CardTablePosts/CardTablePosts';
 // import localClasses from './BlogPosts.module.css';
 
 const BlogPosts = () => {
@@ -38,28 +38,28 @@ const BlogPosts = () => {
       label: 'Published',
       blogTableData: MOCK_BLOG_POSTS.filter(
         (post) => post.status === 'published'
-      ) as BlogTableData[],
+      ) as PostTableData[],
     },
     {
       value: 'drafts',
       label: 'Drafts',
       blogTableData: MOCK_BLOG_POSTS.filter(
         (post) => post.status === 'drafts'
-      ) as BlogTableData[],
+      ) as PostTableData[],
     },
     {
       value: 'pending',
       label: 'Pending Review',
       blogTableData: MOCK_BLOG_POSTS.filter(
         (post) => post.status === 'pending'
-      ) as BlogTableData[],
+      ) as PostTableData[],
     },
     {
       value: 'trash',
       label: 'Trash',
       blogTableData: MOCK_BLOG_POSTS.filter(
         (post) => post.status === 'trash'
-      ) as BlogTableData[],
+      ) as PostTableData[],
     },
   ];
 
@@ -97,7 +97,6 @@ const BlogPosts = () => {
         className={classes['page_main_content_body_card']}
         ref={cardRef}
       ></div>
-      <div>Pagination Placeholder</div>
     </PageMainContent>
   );
 };

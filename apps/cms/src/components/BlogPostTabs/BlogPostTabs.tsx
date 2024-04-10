@@ -2,15 +2,15 @@ import { Tabs } from '@mantine/core';
 import { Fragment, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import ContentCardTable, {
-  BlogTableData,
-} from '../ContentCardTable/ContentCardTable';
+import CardTablePosts, {
+  PostTableData,
+} from '../CardTablePosts/CardTablePosts';
 import classes from './BlogPostTabs.module.css';
 
 export type TabData = {
   value: string;
   label: string;
-  blogTableData: BlogTableData[];
+  blogTableData: PostTableData[];
 };
 
 type TabDataProps = {
@@ -75,8 +75,7 @@ const BlogPostTabs = ({
                 className={classes['page_main_content_card_tabs_panel']}
                 value={tab.value}
               >
-                <ContentCardTable
-                  type='posts'
+                <CardTablePosts
                   headerTopStyle={headerTopStyle}
                   blogTableData={tab.blogTableData}
                 />

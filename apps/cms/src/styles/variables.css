@@ -57,7 +57,8 @@
   --content-card-table-row-padding-vertical: rem(15px);
   --content-card-table-row-padding-horizontal: rem(24px);
   --content-card-table-row-gap: rem(12px);
-  --content-card-table-image-width: rem(85px);
+  --content-card-table-posts-image-width: rem(85px);
+  --content-card-table-category-image-width: rem(64px);
   --content-card-table-checkbox-width: rem(20px);
   --content-card-table-button-group-gap: rem(10px);
   --content-card-table-button-group-height: rem(30px);
