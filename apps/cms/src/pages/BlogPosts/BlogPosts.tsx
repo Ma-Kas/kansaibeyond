@@ -3,12 +3,14 @@ import { IconPlus } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
-import MainContentHeaderTabs, {
+import BlogPostTabs, {
   TabData,
-} from '../../components/PageMainContentHeaderTabs/PageMainContentHeaderTabs';
+} from '../../components/BlogPostTabs/BlogPostTabs';
 
+import { MOCK_BLOG_POSTS } from '../../utils/mockdata';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-import localClasses from './BlogPosts.module.css';
+import { BlogTableData } from '../../components/ContentCardTable/ContentCardTable';
+// import localClasses from './BlogPosts.module.css';
 
 const BlogPosts = () => {
   const navigate = useNavigate();
@@ -34,91 +36,30 @@ const BlogPosts = () => {
     {
       value: 'published',
       label: 'Published',
-      panelData: {
-        headerData: <div>Published</div>,
-        bodyData: (
-          <div>
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-            Published Published Published Published Published Published
-          </div>
-        ),
-      },
+      blogTableData: MOCK_BLOG_POSTS.filter(
+        (post) => post.status === 'published'
+      ) as BlogTableData[],
     },
     {
       value: 'drafts',
       label: 'Drafts',
-      panelData: { headerData: <div>Drafts</div>, bodyData: <div></div> },
+      blogTableData: MOCK_BLOG_POSTS.filter(
+        (post) => post.status === 'drafts'
+      ) as BlogTableData[],
     },
     {
       value: 'pending',
       label: 'Pending Review',
-      panelData: {
-        headerData: <div>Pending Review</div>,
-        bodyData: <div></div>,
-      },
+      blogTableData: MOCK_BLOG_POSTS.filter(
+        (post) => post.status === 'pending'
+      ) as BlogTableData[],
     },
     {
       value: 'trash',
       label: 'Trash',
-      panelData: { headerData: <div>Trash</div>, bodyData: <div></div> },
+      blogTableData: MOCK_BLOG_POSTS.filter(
+        (post) => post.status === 'trash'
+      ) as BlogTableData[],
     },
   ];
 
@@ -137,7 +78,7 @@ const BlogPosts = () => {
       <div className={classes['page_main_content_header_sub']}>
         Manage your blog posts.
       </div>
-      <MainContentHeaderTabs
+      <BlogPostTabs
         mainContentHeaderElement={mainContentHeaderElement}
         mainContentBodyElement={mainContentBodyElement}
         tabData={tabData}

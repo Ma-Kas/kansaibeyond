@@ -1,0 +1,25 @@
+.page_main_content_card_tabs {
+  margin-top: var(--dashboard-content-tabs-margin-top);
+}
+
+.page_main_content_card_tabs span {
+  font-size: var(--font-size-regular);
+}
+
+.page_main_content_card_tabs_list {
+  justify-content: left;
+  gap: var(--dashboard-content-tabs-gap);
+}
+
+.page_main_content_card_tabs_list::before {
+  border-bottom: var(--editor-menu-border);
+}
+
+.page_main_content_card_tabs_list > button[data-active='true'] {
+  color: var(--mantine-primary-color-filled);
+}
+
+.page_main_content_card_tabs_panel {
+  font-size: var(--font-size-regular);
+  flex-grow: 1;
+}

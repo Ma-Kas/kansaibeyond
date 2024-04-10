@@ -28,6 +28,8 @@ out/
 build
 dist
 
+**/mockdata.ts
+
 
 # Debug
 npm-debug.log*

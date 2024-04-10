@@ -2,12 +2,15 @@ import { Tabs } from '@mantine/core';
 import { Fragment, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import classes from './PageMainContentHeaderTabs.module.css';
+import ContentCardTable, {
+  BlogTableData,
+} from '../ContentCardTable/ContentCardTable';
+import classes from './BlogPostTabs.module.css';
 
 export type TabData = {
   value: string;
   label: string;
-  panelData: { headerData: React.ReactNode; bodyData: React.ReactNode };
+  blogTableData: BlogTableData[];
 };
 
 type TabDataProps = {
@@ -17,7 +20,7 @@ type TabDataProps = {
   cardElement: HTMLDivElement | null;
 };
 
-const MainContentHeaderTabs = ({
+const BlogPostTabs = ({
   mainContentHeaderElement,
   mainContentBodyElement,
   tabData,
@@ -59,7 +62,7 @@ const MainContentHeaderTabs = ({
         {tabData.map((tab) => {
           return (
             <Tabs.Tab key={tab.value} value={tab.value}>
-              {tab.label.concat(' (0)')}
+              {tab.label.concat(` (${tab.blogTableData.length})`)}
             </Tabs.Tab>
           );
         })}
@@ -72,17 +75,11 @@ const MainContentHeaderTabs = ({
                 className={classes['page_main_content_card_tabs_panel']}
                 value={tab.value}
               >
-                <div className={classes['card_inner']}>
-                  <div
-                    style={{ top: headerTopStyle }}
-                    className={classes['card_header']}
-                  >
-                    {tab.panelData.headerData}
-                  </div>
-                  <div className={classes['card_body']}>
-                    {tab.panelData.bodyData}
-                  </div>
-                </div>
+                <ContentCardTable
+                  type='posts'
+                  headerTopStyle={headerTopStyle}
+                  blogTableData={tab.blogTableData}
+                />
               </Tabs.Panel>,
               cardElement
             )}
@@ -93,4 +90,4 @@ const MainContentHeaderTabs = ({
   );
 };
 
-export default MainContentHeaderTabs;
+export default BlogPostTabs;
