@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../app';
 
 const basePost = {
-  routeName: 'test-post',
+  postSlug: 'test-post',
   title: 'test post title',
   content: 'test HTML code',
   media: { name: 'testImage', url: 'http://testImageUrl' },
@@ -49,7 +49,7 @@ describe('creating a new post', () => {
 
   test('fails with 400 with invalid post data format', async () => {
     const newPost = {
-      routeName: 'test-post',
+      postSlug: 'test-post',
       title: 400,
       content: 'test HTML code',
       media: { name: 'testImage', url: 'http://testImageUrl' },
@@ -74,9 +74,9 @@ describe('creating a new post', () => {
     });
   });
 
-  test('fails with 400 on already existing routeName', async () => {
+  test('fails with 400 on already existing postSlug', async () => {
     const newPost = {
-      routeName: 'test-post',
+      postSlug: 'test-post',
       title: 'other test post title',
       content: 'test HTML code',
       media: { name: 'testImage', url: 'http://testImageUrl' },
@@ -93,7 +93,7 @@ describe('creating a new post', () => {
     expect(response.body).toMatchObject({
       errors: [
         {
-          message: 'SequelizeUniqueConstraintError: route_name must be unique',
+          message: 'SequelizeUniqueConstraintError: post_slug must be unique',
         },
       ],
     });
@@ -110,7 +110,7 @@ describe('getting post data', () => {
     expect(response.body[0].category.categoryName).toEqual('testPostCategory');
   });
 
-  test('with valid routeName as param returns specific post', async () => {
+  test('with valid postSlug as param returns specific post', async () => {
     const response = await request(app)
       .get('/api/posts/test-post')
       .expect('Content-Type', /application\/json/);
@@ -120,7 +120,7 @@ describe('getting post data', () => {
     expect(response.body.category.categoryName).toEqual('testPostCategory');
   });
 
-  test('with non-existing routeName as param returns 404', async () => {
+  test('with non-existing postSlug as param returns 404', async () => {
     const response = await request(app)
       .get('/api/posts/nonexisting')
       .expect('Content-Type', /application\/json/);

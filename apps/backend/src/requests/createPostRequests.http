@@ -4,7 +4,7 @@ content-type: application/json
 
 {
   "userId": 1,
-  "routeName": "post-route",
+  "postSlug": "post-route",
   "title": "This is a post title",
   "content": "HTML goes here",
   "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},

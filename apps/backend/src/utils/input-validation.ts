@@ -35,7 +35,7 @@ const postTagSchema = z.array(z.string());
 
 const newPostSchema = z
   .object({
-    routeName: z.string(),
+    postSlug: z.string(),
     title: z.string(),
     content: z.string(),
     media: postMediaSchema,
@@ -172,7 +172,7 @@ const validateNewPost = (input: unknown): Omit<NewPost, 'userId'> => {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
 
-  if (!('routeName' in input)) {
+  if (!('postSlug' in input)) {
     throw new BadRequestError({ message: 'Route Name is required.' });
   }
 

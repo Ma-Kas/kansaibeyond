@@ -33,7 +33,7 @@ type PostMedia = {
 
 type Post = {
   id: number;
-  routeName: string;
+  postSlug: string;
   title: string;
   content: string;
   media: PostMedia;

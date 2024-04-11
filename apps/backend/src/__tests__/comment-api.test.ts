@@ -24,7 +24,7 @@ beforeAll(async () => {
   };
 
   const commentTestPost = {
-    routeName: 'test-post',
+    postSlug: 'test-post',
     title: 'test post title',
     content: 'test HTML code',
     media: { name: 'testImage', url: 'http://testImageUrl' },
@@ -128,7 +128,7 @@ describe('getting comment data', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body[0].content).toEqual('test comment');
-    expect(response.body[0].post.routeName).toEqual('test-post');
+    expect(response.body[0].post.postSlug).toEqual('test-post');
   });
 
   test('with valid id as param returns specific comment', async () => {
@@ -138,7 +138,7 @@ describe('getting comment data', () => {
     expect(response.status).toEqual(200);
     expect(response.body.content).toEqual('test comment');
     expect(response.body.user.username).toEqual('commentTestUser');
-    expect(response.body.post.routeName).toEqual('test-post');
+    expect(response.body.post.postSlug).toEqual('test-post');
   });
 
   test('with non-existing id as param returns 404', async () => {

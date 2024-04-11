@@ -49,17 +49,11 @@ router.get('/', async (_req, res, next) => {
 });
 
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:routeName', async (req, res, next) => {
+router.get('/:postSlug', async (req, res, next) => {
   try {
     const post = await Post.findOne({
       attributes: {
-        exclude: [
-          'createdAt',
-          'updatedAt',
-          'userId',
-          'categoryId',
-          'routeName',
-        ],
+        exclude: ['createdAt', 'updatedAt', 'userId', 'categoryId', 'postSlug'],
       },
       include: [
         {
@@ -81,7 +75,7 @@ router.get('/:routeName', async (req, res, next) => {
           ],
         },
       ],
-      where: { routeName: req.params.routeName },
+      where: { postSlug: req.params.postSlug },
     });
     if (!post) {
       throw new NotFoundError({ message: 'Post not found.' });
@@ -118,10 +112,10 @@ router.post('/', async (req, res, next) => {
 });
 
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.put('/:routeName', async (req, res, next) => {
+router.put('/:postSlug', async (req, res, next) => {
   try {
     const postToUpdate = await Post.findOne({
-      where: { routeName: req.params.routeName },
+      where: { postSlug: req.params.postSlug },
     });
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
@@ -129,7 +123,7 @@ router.put('/:routeName', async (req, res, next) => {
     const validatedUpdateData = validatePostUpdate(req.body);
     if (validatedUpdateData) {
       const updatedPost = await Post.update(validatedUpdateData, {
-        where: { routeName: postToUpdate.routeName },
+        where: { postSlug: postToUpdate.postSlug },
         returning: true,
       });
       res.status(200).json(updatedPost[1][0]);
@@ -143,17 +137,17 @@ router.put('/:routeName', async (req, res, next) => {
 });
 
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:routeName', async (req, res, next) => {
+router.delete('/:postSlug', async (req, res, next) => {
   try {
     const postToDelete = await Post.findOne({
-      where: { routeName: req.params.routeName },
+      where: { postSlug: req.params.postSlug },
     });
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
 
     await postToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${postToDelete.routeName}` });
+    res.status(200).json({ message: `Deleted ${postToDelete.postSlug}` });
   } catch (err: unknown) {
     next(err);
   }

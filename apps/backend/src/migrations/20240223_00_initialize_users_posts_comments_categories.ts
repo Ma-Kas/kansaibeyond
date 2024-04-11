@@ -17,6 +17,25 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    first_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
+    display_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     password: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -44,6 +63,11 @@ const up: Migration = async ({ context: queryInterface }) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    post_slug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+    },
     title: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -54,11 +78,11 @@ const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
     },
     media: {
-      type: DataTypes.TEXT,
+      type: DataTypes.JSONB,
       allowNull: false,
     },
     tags: {
-      type: DataTypes.TEXT,
+      type: DataTypes.ARRAY(DataTypes.TEXT),
       allowNull: false,
     },
     views: {

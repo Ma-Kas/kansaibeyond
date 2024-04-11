@@ -13,7 +13,7 @@ import Category from './category';
 
 class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
-  declare routeName: string;
+  declare postSlug: string;
   declare title: string;
   declare content: string;
   declare media: object;
@@ -31,7 +31,7 @@ Post.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    routeName: {
+    postSlug: {
       type: DataTypes.TEXT,
       allowNull: false,
       unique: true,

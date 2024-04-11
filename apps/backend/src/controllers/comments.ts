@@ -24,7 +24,7 @@ router.get('/', async (_req, res, next) => {
         },
         {
           model: Post,
-          attributes: ['id', 'routeName'],
+          attributes: ['id', 'postSlug'],
         },
       ],
     });
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res, next) => {
         },
         {
           model: Post,
-          attributes: ['id', 'routeName'],
+          attributes: ['id', 'postSlug'],
         },
       ],
     });
