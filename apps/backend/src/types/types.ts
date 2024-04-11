@@ -10,7 +10,7 @@ type User = {
   password: string;
   status: 'Admin' | 'Writer' | 'Tech' | 'Guest';
   disabled: boolean;
-  blogs?: number[];
+  posts?: number[];
   comments?: number[];
 };
 
@@ -21,22 +21,22 @@ type NewUser = Pick<
 
 // Omit original userIcon, re-add in intersection to disallow null when updating
 type UpdateUser = Partial<
-  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'blogs' | 'comments'>
+  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'posts' | 'comments'>
 > & { userIcon?: string };
 
-// Blog Model Types
-type BlogMedia = {
+// Post Model Types
+type PostMedia = {
   name: string;
   url: string;
   caption?: string;
 };
 
-type Blog = {
+type Post = {
   id: number;
   routeName: string;
   title: string;
   content: string;
-  media: BlogMedia;
+  media: PostMedia;
   tags: string[];
   views?: number;
   readTime?: number;
@@ -44,9 +44,9 @@ type Blog = {
   categoryId: number;
 };
 
-type NewBlog = Omit<Blog, 'id' | 'views' | 'readTime'>;
+type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
 
-type UpdateBlog = Partial<Omit<NewBlog, 'userId'>>;
+type UpdatePost = Partial<Omit<NewPost, 'userId'>>;
 
 // Category Model Types
 type Category = {
@@ -63,15 +63,15 @@ type Comment = {
   name?: string;
   email?: string;
   userId?: number;
-  blogId: number;
+  postId: number;
 };
 
-type NewComment = Pick<Comment, 'content' | 'blogId'> & {
+type NewComment = Pick<Comment, 'content' | 'postId'> & {
   name: string;
   email: string;
 };
 
-type NewRegisteredComment = Pick<Comment, 'content' | 'blogId'> & {
+type NewRegisteredComment = Pick<Comment, 'content' | 'postId'> & {
   userId: number;
 };
 
@@ -79,9 +79,9 @@ export {
   User,
   NewUser,
   UpdateUser,
-  Blog,
-  NewBlog,
-  UpdateBlog,
+  Post,
+  NewPost,
+  UpdatePost,
   Category,
   CategoryExId,
   Comment,

@@ -91,11 +91,11 @@ describe('updating category', () => {
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/categories/testcategory')
+      .delete('/api/categories/testcategory');
     // prettier-ignore
     await request(app)
       .post('/api/categories')
-      .send(baseCategory)
+      .send(baseCategory);
   });
 
   test('succeeds with valid update data on existing category', async () => {

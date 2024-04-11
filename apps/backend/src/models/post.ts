@@ -11,7 +11,7 @@ import { sequelize } from '../utils/db';
 import User from './user';
 import Category from './category';
 
-class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
+class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
   declare routeName: string;
   declare title: string;
@@ -24,7 +24,7 @@ class Blog extends Model<InferAttributes<Blog>, InferCreationAttributes<Blog>> {
   declare categoryId: ForeignKey<Category['id']>;
 }
 
-Blog.init(
+Post.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -76,8 +76,8 @@ Blog.init(
     sequelize,
     underscored: true,
     timestamps: true,
-    modelName: 'blog',
+    modelName: 'post',
   }
 );
 
-export default Blog;
+export default Post;

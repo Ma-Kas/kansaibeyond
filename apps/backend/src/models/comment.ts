@@ -8,7 +8,7 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
-import Blog from './blog';
+import Post from './post';
 import User from './user';
 
 class Comment extends Model<
@@ -19,7 +19,7 @@ class Comment extends Model<
   declare content: string;
   declare name: CreationOptional<string>;
   declare email: CreationOptional<string>;
-  declare blogId: ForeignKey<Blog['id']>;
+  declare postId: ForeignKey<Post['id']>;
   declare userId: ForeignKey<User['id']>;
 }
 
@@ -45,10 +45,10 @@ Comment.init(
         isEmail: true,
       },
     },
-    blogId: {
+    postId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'blogs', key: 'id' },
+      references: { model: 'posts', key: 'id' },
     },
     userId: {
       type: DataTypes.INTEGER,

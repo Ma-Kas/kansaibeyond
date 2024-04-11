@@ -5,10 +5,10 @@ const baseComment = {
   content: 'test comment',
   name: 'test comment author',
   email: 'testauthor@test.com',
-  blogId: 1,
+  postId: 1,
 };
 
-// Need to create user, category and blog first to satisfy foreign key requirements
+// Need to create user, category and post first to satisfy foreign key requirements
 beforeAll(async () => {
   const commentTestCategory = {
     categoryName: 'commentTestCategory',
@@ -23,9 +23,9 @@ beforeAll(async () => {
     password: 'testPassword',
   };
 
-  const commentTestBlog = {
-    routeName: 'test-blog',
-    title: 'test blog title',
+  const commentTestPost = {
+    routeName: 'test-post',
+    title: 'test post title',
     content: 'test HTML code',
     media: { name: 'testImage', url: 'http://testImageUrl' },
     tags: ['test', 'test2'],
@@ -34,34 +34,58 @@ beforeAll(async () => {
 
   // prettier-ignore
   await request(app)
-      .post('/api/categories')
-      .send(commentTestCategory)
+    .post('/api/categories')
+    .send(commentTestCategory);
 
   // prettier-ignore
   await request(app)
-      .post('/api/users')
-      .send(commentTestUser)
+    .post('/api/users')
+    .send(commentTestUser);
 
   // prettier-ignore
   await request(app)
-    .post('/api/blogs')
-    .send(commentTestBlog)
+    .post('/api/posts')
+    .send(commentTestPost);
 });
 
 describe('creating a new comment', () => {
-  test('succeeds with valid comment data non-registered user', async () => {
-    // prettier-ignore
-    const response = await request(app).post('/api/comments')
-      .send(baseComment)
-      .expect('Content-Type', /application\/json/);
-    expect(response.status).toEqual(201);
-    expect(response.body.content).toEqual(baseComment.content);
+  describe('if not logged in', () => {
+    beforeEach(async () => {
+      // Delete user to simulate not logged in
+      // prettier-ignore
+      await request(app)
+        .delete('/api/users/commentTestUser');
+    });
+
+    test('succeeds with valid comment data non-registered user', async () => {
+      // prettier-ignore
+      const response = await request(app).post('/api/comments')
+        .send(baseComment)
+        .expect('Content-Type', /application\/json/);
+      expect(response.status).toEqual(201);
+      expect(response.body.content).toEqual(baseComment.content);
+    });
+
+    afterEach(async () => {
+      const commentTestUser = {
+        username: 'commentTestUser',
+        firstName: 'testy',
+        lastName: 'McTester',
+        email: 'testy@test.com',
+        displayName: 'the tester',
+        password: 'testPassword',
+      };
+      // prettier-ignore
+      await request(app)
+        .post('/api/users')
+        .send(commentTestUser);
+    });
   });
 
   test('succeeds with valid comment data registered user', async () => {
     const registeredComment = {
       content: 'test comment',
-      blogId: 1,
+      postId: 1,
     };
     // prettier-ignore
     const response = await request(app).post('/api/comments')
@@ -76,7 +100,7 @@ describe('creating a new comment', () => {
       content: 404,
       name: 'test comment author',
       email: 'testauthor@test.com',
-      blogId: 1,
+      postId: 1,
     };
 
     // prettier-ignore
@@ -104,7 +128,7 @@ describe('getting comment data', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body[0].content).toEqual('test comment');
-    expect(response.body[0].blog.routeName).toEqual('test-blog');
+    expect(response.body[0].post.routeName).toEqual('test-post');
   });
 
   test('with valid id as param returns specific comment', async () => {
@@ -114,7 +138,7 @@ describe('getting comment data', () => {
     expect(response.status).toEqual(200);
     expect(response.body.content).toEqual('test comment');
     expect(response.body.user.username).toEqual('commentTestUser');
-    expect(response.body.blog.routeName).toEqual('test-blog');
+    expect(response.body.post.routeName).toEqual('test-post');
   });
 
   test('with non-existing id as param returns 404', async () => {

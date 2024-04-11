@@ -106,11 +106,11 @@ describe('updating user data', () => {
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/users/testuser')
+      .delete('/api/users/testuser');
     // prettier-ignore
     await request(app)
       .post('/api/users')
-      .send(baseUser)
+      .send(baseUser);
   });
 
   test('succeeds with valid update data on existing user', async () => {

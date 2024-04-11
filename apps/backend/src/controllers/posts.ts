@@ -1,7 +1,8 @@
 import express from 'express';
 
-import { Blog, Category, User, Comment } from '../models';
-import { validateNewBlog, validateBlogUpdate } from '../utils/input-validation';
+import { Post, Category, User, Comment } from '../models';
+import { validateNewPost, validatePostUpdate } from '../utils/input-validation';
+import { NewPost } from '../types/types';
 
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
@@ -11,7 +12,7 @@ const router = express.Router();
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
 router.get('/', async (_req, res, next) => {
   try {
-    const allBlogs = await Blog.findAll({
+    const allPosts = await Post.findAll({
       attributes: {
         exclude: ['createdAt', 'updatedAt', 'userId', 'categoryId'],
       },
@@ -37,11 +38,11 @@ router.get('/', async (_req, res, next) => {
       ],
     });
 
-    if (!allBlogs) {
-      throw new NotFoundError({ message: 'No blogs found' });
+    if (!allPosts) {
+      throw new NotFoundError({ message: 'No posts found' });
     }
 
-    res.status(200).json(allBlogs);
+    res.status(200).json(allPosts);
   } catch (err: unknown) {
     next(err);
   }
@@ -50,7 +51,7 @@ router.get('/', async (_req, res, next) => {
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
 router.get('/:routeName', async (req, res, next) => {
   try {
-    const blog = await Blog.findOne({
+    const post = await Post.findOne({
       attributes: {
         exclude: [
           'createdAt',
@@ -82,10 +83,10 @@ router.get('/:routeName', async (req, res, next) => {
       ],
       where: { routeName: req.params.routeName },
     });
-    if (!blog) {
-      throw new NotFoundError({ message: 'Blog not found.' });
+    if (!post) {
+      throw new NotFoundError({ message: 'Post not found.' });
     }
-    res.status(200).json(blog);
+    res.status(200).json(post);
   } catch (err: unknown) {
     next(err);
   }
@@ -100,14 +101,16 @@ router.post('/', async (req, res, next) => {
       throw new NotFoundError({ message: 'User not found' });
     }
 
-    const validatedBlogData = validateNewBlog(req.body);
-    if (validatedBlogData) {
-      validatedBlogData.userId = user.id;
+    const validatedPostDataExUser = validateNewPost(req.body);
 
-      const addedBlog = await Blog.create(validatedBlogData);
-      res.status(201).json(addedBlog);
+    if (validatedPostDataExUser) {
+      const validatedPostData = validatedPostDataExUser as NewPost;
+      validatedPostData.userId = user.id;
+
+      const addedPost = await Post.create(validatedPostData);
+      res.status(201).json(addedPost);
     } else {
-      throw new BadRequestError({ message: 'Invalid Blog data.' });
+      throw new BadRequestError({ message: 'Invalid Post data.' });
     }
   } catch (err: unknown) {
     next(err);
@@ -117,21 +120,21 @@ router.post('/', async (req, res, next) => {
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
 router.put('/:routeName', async (req, res, next) => {
   try {
-    const blogToUpdate = await Blog.findOne({
+    const postToUpdate = await Post.findOne({
       where: { routeName: req.params.routeName },
     });
-    if (!blogToUpdate) {
-      throw new NotFoundError({ message: 'Blog to update was not found.' });
+    if (!postToUpdate) {
+      throw new NotFoundError({ message: 'Post to update was not found.' });
     }
-    const validatedUpdateData = validateBlogUpdate(req.body);
+    const validatedUpdateData = validatePostUpdate(req.body);
     if (validatedUpdateData) {
-      const updatedBlog = await Blog.update(validatedUpdateData, {
-        where: { routeName: blogToUpdate.routeName },
+      const updatedPost = await Post.update(validatedUpdateData, {
+        where: { routeName: postToUpdate.routeName },
         returning: true,
       });
-      res.status(200).json(updatedBlog[1][0]);
+      res.status(200).json(updatedPost[1][0]);
     } else {
-      // No update data => return original blog
+      // No update data => return original post
       res.status(204).send();
     }
   } catch (err: unknown) {
@@ -142,15 +145,15 @@ router.put('/:routeName', async (req, res, next) => {
 // eslint-disable-next-line  @typescript-eslint/no-misused-promises
 router.delete('/:routeName', async (req, res, next) => {
   try {
-    const blogToDelete = await Blog.findOne({
+    const postToDelete = await Post.findOne({
       where: { routeName: req.params.routeName },
     });
-    if (!blogToDelete) {
-      throw new NotFoundError({ message: 'Blog to delete was not found.' });
+    if (!postToDelete) {
+      throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
 
-    await blogToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${blogToDelete.routeName}` });
+    await postToDelete.destroy();
+    res.status(200).json({ message: `Deleted ${postToDelete.routeName}` });
   } catch (err: unknown) {
     next(err);
   }

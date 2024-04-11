@@ -2,11 +2,11 @@ import { z } from 'zod';
 import {
   NewUser,
   UpdateUser,
-  NewBlog,
-  UpdateBlog,
+  NewPost,
+  UpdatePost,
   CategoryExId,
   NewComment,
-  NewRegisteredComment,
+  Comment,
 } from '../types/types';
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
@@ -25,21 +25,21 @@ const newUserSchema = z
   })
   .strict();
 
-const blogMediaSchema = z.object({
+const postMediaSchema = z.object({
   name: z.string(),
   url: z.string().url(),
   caption: z.string().optional(),
 });
 
-const blogTagSchema = z.array(z.string());
+const postTagSchema = z.array(z.string());
 
-const newBlogSchema = z
+const newPostSchema = z
   .object({
     routeName: z.string(),
     title: z.string(),
     content: z.string(),
-    media: blogMediaSchema,
-    tags: blogTagSchema,
+    media: postMediaSchema,
+    tags: postTagSchema,
     categoryId: z.number(),
   })
   .strict();
@@ -48,12 +48,12 @@ const newCommentSchema = z.object({
   content: z.string(),
   name: z.string(),
   email: z.string().email(),
-  blogId: z.number(),
+  postId: z.number(),
 });
 
 const newRegisteredCommentSchema = z.object({
   content: z.string(),
-  blogId: z.number(),
+  postId: z.number(),
 });
 
 // Type Validation with Error Handling
@@ -167,7 +167,7 @@ const validateUserUpdate = (input: unknown): UpdateUser | null => {
   return updateData;
 };
 
-const validateNewBlog = (input: unknown): NewBlog => {
+const validateNewPost = (input: unknown): Omit<NewPost, 'userId'> => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
@@ -177,11 +177,11 @@ const validateNewBlog = (input: unknown): NewBlog => {
   }
 
   if (!('title' in input)) {
-    throw new BadRequestError({ message: 'Blog Title is required.' });
+    throw new BadRequestError({ message: 'Post Title is required.' });
   }
 
   if (!('content' in input)) {
-    throw new BadRequestError({ message: 'Blog Content is required.' });
+    throw new BadRequestError({ message: 'Post Content is required.' });
   }
 
   if (!('media' in input)) {
@@ -196,10 +196,10 @@ const validateNewBlog = (input: unknown): NewBlog => {
     throw new BadRequestError({ message: 'Category Id is required.' });
   }
 
-  return zodSchemaParser(newBlogSchema, input);
+  return zodSchemaParser(newPostSchema, input);
 };
 
-const validateBlogUpdate = (input: unknown): UpdateBlog | null => {
+const validatePostUpdate = (input: unknown): UpdatePost | null => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
@@ -215,7 +215,7 @@ const validateBlogUpdate = (input: unknown): UpdateBlog | null => {
     return null;
   }
 
-  const updateData: UpdateBlog = {};
+  const updateData: UpdatePost = {};
 
   if ('title' in input) {
     updateData.title = parseStringInput(input.title, 'title');
@@ -226,11 +226,11 @@ const validateBlogUpdate = (input: unknown): UpdateBlog | null => {
   }
 
   if ('media' in input) {
-    updateData.media = zodSchemaParser(blogMediaSchema, input);
+    updateData.media = zodSchemaParser(postMediaSchema, input);
   }
 
   if ('tags' in input) {
-    updateData.tags = zodSchemaParser(blogTagSchema, input);
+    updateData.tags = zodSchemaParser(postTagSchema, input);
   }
 
   if ('categoryId' in input) {
@@ -285,14 +285,16 @@ const validateNewComment = (input: unknown): NewComment => {
     throw new BadRequestError({ message: 'Email is required.' });
   }
 
-  if (!('blogId' in input)) {
-    throw new BadRequestError({ message: 'Blog Id is required.' });
+  if (!('postId' in input)) {
+    throw new BadRequestError({ message: 'Post Id is required.' });
   }
 
   return zodSchemaParser(newCommentSchema, input);
 };
 
-const validateNewRegisteredComment = (input: unknown): NewRegisteredComment => {
+const validateNewRegisteredComment = (
+  input: unknown
+): Pick<Comment, 'content' | 'postId'> => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
@@ -301,8 +303,8 @@ const validateNewRegisteredComment = (input: unknown): NewRegisteredComment => {
     throw new BadRequestError({ message: 'Content is required.' });
   }
 
-  if (!('blogId' in input)) {
-    throw new BadRequestError({ message: 'Blog Id is required.' });
+  if (!('postId' in input)) {
+    throw new BadRequestError({ message: 'Post Id is required.' });
   }
 
   return zodSchemaParser(newRegisteredCommentSchema, input);
@@ -311,8 +313,8 @@ const validateNewRegisteredComment = (input: unknown): NewRegisteredComment => {
 export {
   validateNewUser,
   validateUserUpdate,
-  validateNewBlog,
-  validateBlogUpdate,
+  validateNewPost,
+  validatePostUpdate,
   validateNewCategory,
   validateCategoryUpdate,
   validateNewComment,

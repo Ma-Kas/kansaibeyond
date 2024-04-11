@@ -1,5 +1,5 @@
 import express from 'express';
-import { Comment, User, Blog } from '../models';
+import { Comment, User, Post } from '../models';
 import NotFoundError from '../errors/NotFoundError';
 import {
   validateNewComment,
@@ -15,7 +15,7 @@ router.get('/', async (_req, res, next) => {
   try {
     const allComments = await Comment.findAll({
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'blogId'],
+        exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
       },
       include: [
         {
@@ -23,7 +23,7 @@ router.get('/', async (_req, res, next) => {
           attributes: ['username', 'userIcon', 'status'],
         },
         {
-          model: Blog,
+          model: Post,
           attributes: ['id', 'routeName'],
         },
       ],
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
   try {
     const comment = await Comment.findByPk(req.params.id, {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'blogId'],
+        exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
       },
       include: [
         {
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res, next) => {
           attributes: ['username', 'userIcon', 'status'],
         },
         {
-          model: Blog,
+          model: Post,
           attributes: ['id', 'routeName'],
         },
       ],
@@ -72,11 +72,13 @@ router.post('/', async (req, res, next) => {
     // Split validation whether user is found (=logged in) or not
     // Different mandatory fields
     if (user) {
-      validatedCommentData = validateNewRegisteredComment(req.body);
-      if (!validatedCommentData) {
+      const validatedCommentDataExUser = validateNewRegisteredComment(req.body);
+
+      if (!validatedCommentDataExUser) {
         throw new BadRequestError({ message: 'Invalid Comment data.' });
       }
       // Add userId
+      validatedCommentData = validatedCommentDataExUser as NewRegisteredComment;
       validatedCommentData.userId = user.id;
     } else {
       validatedCommentData = validateNewComment(req.body);

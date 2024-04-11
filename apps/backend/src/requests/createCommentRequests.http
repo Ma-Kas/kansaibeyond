@@ -6,5 +6,5 @@ content-type: application/json
   "content": "test comment",
   "name": "test comment author",
   "email": "testauthor@test.com",
-  "blogId": 2
+  "postId": 2
 }

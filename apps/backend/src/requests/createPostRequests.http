@@ -1,12 +1,13 @@
 // POST valid new user
-POST http://localhost:3001/api/blogs
+POST http://localhost:3001/api/posts
 content-type: application/json
 
 {
-  "routeName": "blog-route",
-  "title": "This is a blog title",
+  "userId": 1,
+  "routeName": "post-route",
+  "title": "This is a post title",
   "content": "HTML goes here",
   "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
-  "tags": ["personal", "blog", "nice"],
+  "tags": ["personal", "post", "nice"],
   "categoryId": 1
 }

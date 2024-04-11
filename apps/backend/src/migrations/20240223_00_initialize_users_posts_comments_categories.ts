@@ -38,7 +38,7 @@ const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
     },
   });
-  await queryInterface.createTable('blogs', {
+  await queryInterface.createTable('posts', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -120,21 +120,21 @@ const up: Migration = async ({ context: queryInterface }) => {
       unique: true,
     },
   });
-  await queryInterface.addColumn('blogs', 'user_id', {
+  await queryInterface.addColumn('posts', 'user_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'users', key: 'id' },
   });
-  await queryInterface.addColumn('blogs', 'category_id', {
+  await queryInterface.addColumn('posts', 'category_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'categories', key: 'id' },
   });
 
-  await queryInterface.addColumn('comments', 'blog_id', {
+  await queryInterface.addColumn('comments', 'post_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: { model: 'blogs', key: 'id' },
+    references: { model: 'posts', key: 'id' },
   });
   await queryInterface.addColumn('comments', 'user_id', {
     type: DataTypes.INTEGER,
@@ -147,7 +147,7 @@ const down: Migration = async ({ context: queryInterface }) => {
   await queryInterface.dropTable('users', {
     cascade: true,
   });
-  await queryInterface.dropTable('blogs', {
+  await queryInterface.dropTable('posts', {
     cascade: true,
   });
   await queryInterface.dropTable('comments', {

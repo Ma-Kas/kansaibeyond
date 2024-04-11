@@ -1,9 +1,9 @@
 import request from 'supertest';
 import app from '../app';
 
-const baseBlog = {
-  routeName: 'test-blog',
-  title: 'test blog title',
+const basePost = {
+  routeName: 'test-post',
+  title: 'test post title',
   content: 'test HTML code',
   media: { name: 'testImage', url: 'http://testImageUrl' },
   tags: ['test', 'test2'],
@@ -12,12 +12,12 @@ const baseBlog = {
 
 // Need to create user and category first to satisfy foreign key requirements
 beforeAll(async () => {
-  const blogTestCategory = {
-    categoryName: 'testBlogCategory',
+  const postTestCategory = {
+    categoryName: 'testPostCategory',
   };
 
-  const blogTestUser = {
-    username: 'testBlogUser',
+  const postTestUser = {
+    username: 'testPostUser',
     firstName: 'testy',
     lastName: 'McTester',
     email: 'testy@test.com',
@@ -28,28 +28,28 @@ beforeAll(async () => {
   // prettier-ignore
   await request(app)
       .post('/api/categories')
-      .send(blogTestCategory)
+      .send(postTestCategory);
 
   // prettier-ignore
   await request(app)
       .post('/api/users')
-      .send(blogTestUser)
+      .send(postTestUser);
 });
 
-describe('creating a new blog', () => {
-  test('succeeds with valid blog data', async () => {
+describe('creating a new post', () => {
+  test('succeeds with valid post data', async () => {
     // prettier-ignore
-    const response = await request(app).post('/api/blogs')
-      .send(baseBlog)
+    const response = await request(app).post('/api/posts')
+      .send(basePost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
-    expect(response.body.title).toEqual(baseBlog.title);
-    expect(response.body.content).toEqual(baseBlog.content);
+    expect(response.body.title).toEqual(basePost.title);
+    expect(response.body.content).toEqual(basePost.content);
   });
 
-  test('fails with 400 with invalid blog data format', async () => {
-    const newBlog = {
-      routeName: 'test-blog',
+  test('fails with 400 with invalid post data format', async () => {
+    const newPost = {
+      routeName: 'test-post',
       title: 400,
       content: 'test HTML code',
       media: { name: 'testImage', url: 'http://testImageUrl' },
@@ -59,8 +59,8 @@ describe('creating a new blog', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/blogs')
-      .send(newBlog)
+      .post('/api/posts')
+      .send(newPost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
     expect(response.body).toMatchObject({
@@ -75,9 +75,9 @@ describe('creating a new blog', () => {
   });
 
   test('fails with 400 on already existing routeName', async () => {
-    const newBlog = {
-      routeName: 'test-blog',
-      title: 'other test blog title',
+    const newPost = {
+      routeName: 'test-post',
+      title: 'other test post title',
       content: 'test HTML code',
       media: { name: 'testImage', url: 'http://testImageUrl' },
       tags: ['test', 'test2'],
@@ -86,8 +86,8 @@ describe('creating a new blog', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/blogs')
-      .send(newBlog)
+      .post('/api/posts')
+      .send(newPost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
     expect(response.body).toMatchObject({
@@ -100,74 +100,74 @@ describe('creating a new blog', () => {
   });
 });
 
-describe('getting blog data', () => {
-  test('without params returns all blogs as json', async () => {
+describe('getting post data', () => {
+  test('without params returns all posts as json', async () => {
     const response = await request(app)
-      .get('/api/blogs')
+      .get('/api/posts')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
-    expect(response.body[0].user.username).toEqual('testBlogUser');
-    expect(response.body[0].category.categoryName).toEqual('testBlogCategory');
+    expect(response.body[0].user.username).toEqual('testPostUser');
+    expect(response.body[0].category.categoryName).toEqual('testPostCategory');
   });
 
-  test('with valid routeName as param returns specific blog', async () => {
+  test('with valid routeName as param returns specific post', async () => {
     const response = await request(app)
-      .get('/api/blogs/test-blog')
+      .get('/api/posts/test-post')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
-    expect(response.body.title).toEqual('test blog title');
-    expect(response.body.user.username).toEqual('testBlogUser');
-    expect(response.body.category.categoryName).toEqual('testBlogCategory');
+    expect(response.body.title).toEqual('test post title');
+    expect(response.body.user.username).toEqual('testPostUser');
+    expect(response.body.category.categoryName).toEqual('testPostCategory');
   });
 
   test('with non-existing routeName as param returns 404', async () => {
     const response = await request(app)
-      .get('/api/blogs/nonexisting')
+      .get('/api/posts/nonexisting')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
-      errors: [{ message: 'Blog not found.' }],
+      errors: [{ message: 'Post not found.' }],
     });
   });
 });
 
-describe('updating blog', () => {
-  // Delete the changed baseBlog and re-create it
+describe('updating post', () => {
+  // Delete the changed basePost and re-create it
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/blogs/test-blog')
+      .delete('/api/posts/test-post');
     // prettier-ignore
     await request(app)
-      .post('/api/blogs')
-      .send(baseBlog)
+      .post('/api/posts')
+      .send(basePost);
   });
 
-  test('succeeds with valid update data on existing blog', async () => {
-    const updateData = { title: 'changed Test Blog Title' };
+  test('succeeds with valid update data on existing post', async () => {
+    const updateData = { title: 'changed Test Post Title' };
 
     const response = await request(app)
-      .put('/api/blogs/test-blog')
+      .put('/api/posts/test-post')
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.title).toEqual(updateData.title);
   });
 
-  test('returns 204 with empty update data on existing blog', async () => {
+  test('returns 204 with empty update data on existing post', async () => {
     const updateData = {};
 
     const response = await request(app)
-      .put('/api/blogs/test-blog')
+      .put('/api/posts/test-post')
       .send(updateData);
     expect(response.status).toEqual(204);
   });
 
-  test('fails with 400 with invalid update data on existing blog', async () => {
+  test('fails with 400 with invalid update data on existing post', async () => {
     const updateData = { title: 400 };
 
     const response = await request(app)
-      .put('/api/blogs/test-blog')
+      .put('/api/posts/test-post')
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -181,40 +181,40 @@ describe('updating blog', () => {
     });
   });
 
-  test('fails with 404 with valid update data on non-existing blog', async () => {
-    const updateData = { title: 'changed Test Blog Title' };
+  test('fails with 404 with valid update data on non-existing post', async () => {
+    const updateData = { title: 'changed Test Post Title' };
 
     const response = await request(app)
-      .put('/api/blogs/nonexisting')
+      .put('/api/posts/nonexisting')
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
-      errors: [{ message: 'Blog to update was not found.' }],
+      errors: [{ message: 'Post to update was not found.' }],
     });
   });
 });
 
-describe('deleting blog', () => {
-  test('succeeds on existing blog', async () => {
+describe('deleting post', () => {
+  test('succeeds on existing post', async () => {
     const response = await request(app)
-      .delete('/api/blogs/test-blog')
+      .delete('/api/posts/test-post')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
-    expect(response.body).toMatchObject({ message: 'Deleted test-blog' });
+    expect(response.body).toMatchObject({ message: 'Deleted test-post' });
   });
 
-  test('fails with 404 on non-existing blog', async () => {
+  test('fails with 404 on non-existing post', async () => {
     // prettier-ignore
     const response = await request(app)
-      .delete('/api/blogs/nonexisting')
+      .delete('/api/posts/nonexisting')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
       errors: [
         {
           context: {},
-          message: 'Blog to delete was not found.',
+          message: 'Post to delete was not found.',
         },
       ],
     });

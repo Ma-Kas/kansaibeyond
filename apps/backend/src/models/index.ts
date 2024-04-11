@@ -1,24 +1,24 @@
-import Blog from './blog';
+import Post from './post';
 import User from './user';
 import Category from './category';
 import Comment from './comment';
 
 void (function createAssociations() {
   try {
-    User.hasMany(Blog);
-    Blog.belongsTo(User);
+    User.hasMany(Post);
+    Post.belongsTo(User);
 
-    Category.hasMany(Blog);
-    Blog.belongsTo(Category);
+    Category.hasMany(Post);
+    Post.belongsTo(Category);
 
     User.hasMany(Comment);
     Comment.belongsTo(User);
 
-    Blog.hasMany(Comment);
-    Comment.belongsTo(Blog);
+    Post.hasMany(Comment);
+    Comment.belongsTo(Post);
   } catch (err: unknown) {
     console.log('Error', err);
   }
 })();
 
-export { User, Blog, Category, Comment };
+export { User, Post, Category, Comment };
