@@ -7,50 +7,40 @@ import {
   IconPhoto,
   IconUsers,
 } from '@tabler/icons-react';
-import { LinksGroup } from '../NavbarLinksGroup/NavbarLinksGroup';
+import NavbarLinksGroup from '../NavbarLinksGroup/NavbarLinksGroup';
 import classes from './NavbarMain.module.css';
 
-const mockdata = [
-  { label: 'Home', icon: IconHome },
+const navbarData = [
+  { label: 'Home', icon: IconHome, link: '/dashboard' },
   {
     label: 'Blog',
     icon: IconNotes,
     links: [
-      { label: 'Overview', link: '/' },
-      { label: 'Posts', link: '/' },
-      { label: 'Comments', link: '/' },
-      { label: 'Categories', link: '/' },
-      { label: 'Tags', link: '/' },
+      { label: 'Overview', link: '/dashboard/blog/overview' },
+      { label: 'Posts', link: '/dashboard/blog/posts' },
+      { label: 'Comments', link: '/dashboard/blog/comments' },
+      { label: 'Categories', link: '/dashboard/blog/categories' },
+      { label: 'Tags', link: '/dashboard/blog/tags' },
     ],
   },
-  { label: 'People', icon: IconUsers },
-  { label: 'Image Library', icon: IconPhoto },
+  { label: 'People', icon: IconUsers, link: '/dashboard/people' },
+  { label: 'Image Library', icon: IconPhoto, link: '/dashboard/images' },
   {
     label: 'Analytics',
     icon: IconPresentationAnalytics,
     links: [
-      { label: 'Overview', link: '/' },
-      { label: 'Real-time', link: '/' },
-      { label: 'Insights', link: '/' },
-      { label: 'Alerts and Emails', link: '/' },
+      { label: 'Overview', link: '/dashboard/analytics/overview' },
+      { label: 'Real-time', link: '/dashboard/analytics/realtime' },
+      { label: 'Insights', link: '//dashboard/analytics/insights' },
+      { label: 'Alerts and Emails', link: '//dashboard/analytics/alerts' },
     ],
   },
-  {
-    label: 'Analytics2',
-    icon: IconPresentationAnalytics,
-    links: [
-      { label: 'Overview2', link: '/' },
-      { label: 'Real-time2', link: '/' },
-      { label: 'Insights2', link: '/' },
-      { label: 'Alerts and Emails2', link: '/' },
-    ],
-  },
-  { label: 'Settings', icon: IconSettings },
+  { label: 'Settings', icon: IconSettings, link: '/dashboard/settings' },
 ];
 
 const NavbarMain = () => {
-  const links = mockdata.map((item) => (
-    <LinksGroup {...item} key={item.label} />
+  const links = navbarData.map((item) => (
+    <NavbarLinksGroup {...item} key={item.label} />
   ));
 
   return (

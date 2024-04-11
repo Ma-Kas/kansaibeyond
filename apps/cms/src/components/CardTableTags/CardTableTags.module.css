@@ -1,0 +1,124 @@
+.card_inner {
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-regular);
+  position: relative;
+  height: 100%;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.card_header {
+  z-index: var(--z-index-editor-toolbar);
+  position: sticky;
+  top: 0;
+  background-color: var(--mantine-color-white);
+  /* This is a horrendous hack to hide scroll behind border radius */
+  box-shadow: 0px 0px 0px 30px var(--mantine-color-white);
+  clip-path: inset(-30px -10px -1px -10px);
+  height: var(--dashboard-content-card-sticky-header-height);
+  outline: var(--editor-menu-border);
+  border-top-left-radius: var(--dashboard-content-card-radius);
+  border-top-right-radius: var(--dashboard-content-card-radius);
+}
+
+thead.card_header {
+  text-align: left;
+
+  th {
+    font-weight: var(--font-weight-menu);
+  }
+}
+
+.card_body {
+  position: relative;
+}
+
+.card_body tr:not(:last-child) {
+  border-bottom: var(--editor-menu-border);
+}
+
+.card_inner {
+  th,
+  td {
+    padding: var(--content-card-table-row-padding-vertical)
+      var(--content-card-table-row-gap);
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: calc(
+      var(--content-card-table-row-padding-horizontal) +
+        var(--content-card-table-row-gap) +
+        var(--content-card-table-checkbox-width)
+    );
+    padding-left: var(--content-card-table-row-padding-horizontal);
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    font-weight: var(--font-weight-bold);
+  }
+
+  th:nth-last-child(2),
+  td:nth-last-child(2) {
+    padding-right: calc(var(--content-card-table-row-padding-horizontal) * 2);
+  }
+
+  th:last-child,
+  td:last-child {
+    width: calc(
+      var(--content-card-table-row-padding-horizontal) +
+        var(--content-card-table-row-gap) +
+        var(--content-card-table-button-group-width)
+    );
+    padding-right: var(--content-card-table-row-padding-horizontal);
+  }
+}
+
+.card_body_table_row_button_group {
+  display: flex;
+  gap: var(--content-card-table-button-group-gap);
+}
+
+.card_body_table_row_button_group > button {
+  height: var(--content-card-table-button-group-height);
+}
+
+.card_body_table_row_button_group > button:first-child {
+  flex-grow: 1;
+
+  span {
+    font-weight: var(--font-weight-regular);
+  }
+}
+
+.card_body_table_row_button_group > button:last-child {
+  cursor: pointer;
+  width: var(--content-card-table-button-group-height);
+  background-color: transparent;
+  border-radius: 50%;
+  border: var(--editor-menu-border);
+  outline: none;
+
+  span {
+    color: var(--mantine-primary-color-filled);
+  }
+
+  @mixin hover {
+    background-color: var(--mantine-primary-color-filled);
+    border: none;
+
+    span {
+      color: var(--mantine-color-white);
+    }
+  }
+}
+
+.rowSelected {
+  background-color: var(--mantine-color-blue-light);
+}

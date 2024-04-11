@@ -1,9 +1,12 @@
+import '@mantine/core/styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import Router from './components/Router';
 import './styles/index.css';
 import './styles/variables.css';
 import './styles/editor.css';
+import { MantineProvider } from '@mantine/core';
+import { theme } from './theme';
 
 // Handle runtime errors
 const showErrorOverlay = (err: Event) => {
@@ -28,11 +31,13 @@ const showErrorOverlay = (err: Event) => {
 
 window.addEventListener('error', showErrorOverlay);
 window.addEventListener('unhandledrejection', ({ reason }) =>
-  showErrorOverlay(reason)
+  showErrorOverlay(reason as Event)
 );
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <MantineProvider theme={theme}>
+      <Router />
+    </MantineProvider>
   </React.StrictMode>
 );
