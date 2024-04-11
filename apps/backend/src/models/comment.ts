@@ -45,16 +45,6 @@ Comment.init(
         isEmail: true,
       },
     },
-    postId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: 'posts', key: 'id' },
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: { model: 'users', key: 'id' },
-    },
   },
   {
     sequelize,

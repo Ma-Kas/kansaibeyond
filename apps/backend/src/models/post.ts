@@ -9,7 +9,6 @@ import {
 
 import { sequelize } from '../utils/db';
 import User from './user';
-import Category from './category';
 
 class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
@@ -21,7 +20,6 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
-  declare categoryId: ForeignKey<Category['id']>;
 }
 
 Post.init(
@@ -60,16 +58,6 @@ Post.init(
     readTime: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: 'users', key: 'id' },
-    },
-    categoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: 'category', key: 'id' },
     },
   },
   {
