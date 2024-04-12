@@ -108,6 +108,14 @@ export const delete_one_category = async (
       throw new NotFoundError({ message: 'Category to delete was not found.' });
     }
 
+    const postCount = await categoryToDelete.countPosts();
+
+    if (postCount) {
+      throw new BadRequestError({
+        message: `Cannot delete. Category is used in ${postCount} posts.`,
+      });
+    }
+
     await categoryToDelete.destroy();
     res
       .status(200)

@@ -31,7 +31,7 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare readTime: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
 
-  declare getCategories: HasManyGetAssociationsMixin<Category>; // Note the null assertions!
+  declare getCategories: HasManyGetAssociationsMixin<Category>;
   declare addCategory: HasManyAddAssociationMixin<Category, number>;
   declare addCategories: HasManyAddAssociationsMixin<Category, number>;
   declare setCategories: HasManySetAssociationsMixin<Category, number>;

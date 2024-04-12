@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 
 import { Post, Category, User, Comment } from '../models';
 import {
-  validateNewPost,
-  validatePostUpdate,
+  validateNewPostData,
+  validatePostUpdateData,
 } from '../utils/validate-post-data';
 import { NewPost } from '../types/types';
 
@@ -108,17 +108,17 @@ export const post_new_post = async (
       throw new NotFoundError({ message: 'User not found' });
     }
 
-    // TODO: Clean up this mess here in terms of typing
-    const validatedPostDataExUser = validateNewPost(req.body);
+    // Validated raw data
+    const validatedPostDataExUser = validateNewPostData(req.body);
 
     if (validatedPostDataExUser) {
-      const validatedPostData = validatedPostDataExUser as NewPost;
+      // Add user_id from logged in user to validated data
+      const validatedPostData = validatedPostDataExUser.postData as NewPost;
       validatedPostData.userId = user.id;
 
       const addedPost = await Post.create(validatedPostData);
 
-      // This here will crash if categories that are being associated don't exist
-      // Add safeguard against it
+      // Add association to categories table
       await addedPost.addCategories(validatedPostDataExUser.categories);
       res.status(201).json(addedPost);
     } else {
@@ -141,13 +141,27 @@ export const update_one_post = async (
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
-    const validatedUpdateData = validatePostUpdate(req.body);
+    const validatedUpdateData = validatePostUpdateData(req.body);
+
+    // If update data is not empty, proceed
     if (validatedUpdateData) {
-      const updatedPost = await Post.update(validatedUpdateData, {
-        where: { postSlug: postToUpdate.postSlug },
-        returning: true,
-      });
-      res.status(200).json(updatedPost[1][0]);
+      const keys = Object.keys(validatedUpdateData);
+      // Check whether only categories is updated, then all queries regarding
+      // post itself are unneccessary
+      if (keys.length === 1 && keys[0] === 'categories') {
+        await postToUpdate.setCategories(validatedUpdateData.categories);
+        res.status(200).json(postToUpdate);
+      } else {
+        const updatedPost = await Post.update(validatedUpdateData, {
+          where: { postSlug: postToUpdate.postSlug },
+          returning: true,
+        });
+        // Set associated categories to updated categories
+        if (validatedUpdateData.categories) {
+          await updatedPost[1][0].setCategories(validatedUpdateData.categories);
+          res.status(200).json(updatedPost[1][0]);
+        }
+      }
     } else {
       // No update data => return original post
       res.status(204).send();
@@ -169,6 +183,9 @@ export const delete_one_post = async (
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
+
+    // Remove all associated categories, by setting to empty array
+    await postToDelete.setCategories([]);
 
     await postToDelete.destroy();
     res.status(200).json({ message: `Deleted ${postToDelete.postSlug}` });

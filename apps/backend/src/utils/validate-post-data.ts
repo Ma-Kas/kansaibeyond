@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { NewPost, UpdatePost } from '../types/types';
+import { NewPostValidationResult, UpdatePost } from '../types/types';
 import { parseStringInput } from './validation-helpers';
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
@@ -24,9 +24,22 @@ const newPostSchema = z.object(
     media: postMediaSchema,
     tags: postTagSchema,
     categories: z.number().array(),
-  }).strict();
+  }
+).strict();
 
-const validateNewPost = (input: unknown): Omit<NewPost, 'userId'> => {
+// prettier-ignore
+const updatePostSchema = z.object(
+  {
+    postSlug: z.string().optional(),
+    title: z.string().optional(),
+    content: z.string().optional(),
+    media: postMediaSchema.optional(),
+    tags: postTagSchema.optional(),
+    categories: z.number().array().optional(),
+  }
+).strict();
+
+const validateNewPostData = (input: unknown): NewPostValidationResult => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
@@ -55,16 +68,28 @@ const validateNewPost = (input: unknown): Omit<NewPost, 'userId'> => {
     throw new BadRequestError({ message: 'Categories are required.' });
   }
 
-  return zodSchemaParser(newPostSchema, input);
+  const parseResult = zodSchemaParser(newPostSchema, input);
+
+  return {
+    postData: {
+      postSlug: parseResult.postSlug,
+      title: parseResult.title,
+      content: parseResult.content,
+      media: parseResult.media,
+      tags: parseResult.tags,
+    },
+    categories: parseResult.categories,
+  };
 };
 
-const validatePostUpdate = (input: unknown): UpdatePost | null => {
+const validatePostUpdateData = (input: unknown): UpdatePost | null => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
 
   // No update data present
   if (
+    !('postSlug' in input) &&
     !('title' in input) &&
     !('content' in input) &&
     !('media' in input) &&
@@ -76,6 +101,10 @@ const validatePostUpdate = (input: unknown): UpdatePost | null => {
 
   const updateData: UpdatePost = {};
 
+  if ('postSlug' in input) {
+    updateData.postSlug = parseStringInput(input.postSlug, 'postSlug');
+  }
+
   if ('title' in input) {
     updateData.title = parseStringInput(input.title, 'title');
   }
@@ -85,18 +114,23 @@ const validatePostUpdate = (input: unknown): UpdatePost | null => {
   }
 
   if ('media' in input) {
-    updateData.media = zodSchemaParser(postMediaSchema, input);
+    updateData.media = zodSchemaParser(postMediaSchema, input.media);
   }
 
   if ('tags' in input) {
-    updateData.tags = zodSchemaParser(postTagSchema, input);
+    updateData.tags = zodSchemaParser(postTagSchema, input.tags);
   }
 
   if ('categories' in input) {
-    updateData.categories = zodSchemaParser(numberArraySchema, input);
+    updateData.categories = zodSchemaParser(
+      numberArraySchema,
+      input.categories
+    );
   }
 
   return updateData;
+
+  return zodSchemaParser(updatePostSchema, input);
 };
 
-export { validateNewPost, validatePostUpdate };
+export { validateNewPostData, validatePostUpdateData };

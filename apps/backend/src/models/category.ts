@@ -25,7 +25,7 @@ class Category extends Model<
   declare id: CreationOptional<number>;
   declare categoryName: string;
 
-  declare getPosts: HasManyGetAssociationsMixin<Post>; // Note the null assertions!
+  declare getPosts: HasManyGetAssociationsMixin<Post>;
   declare addPost: HasManyAddAssociationMixin<Post, number>;
   declare addPosts: HasManyAddAssociationsMixin<Post, number>;
   declare setPosts: HasManySetAssociationsMixin<Post, number>;

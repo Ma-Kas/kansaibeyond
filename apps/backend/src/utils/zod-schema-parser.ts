@@ -10,7 +10,9 @@ const zodSchemaParser = <T extends z.ZodTypeAny>(schema: T, input: unknown) => {
     const validationError = fromZodError(result.error, {
       includePath: true,
     });
-    throw new BadRequestError({ message: validationError.toString() });
+    throw new BadRequestError({
+      message: validationError.toString(),
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return

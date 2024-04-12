@@ -1,12 +1,12 @@
-// POST valid new post
-POST http://localhost:3001/api/posts
+// UPDATE valid post
+PUT http://localhost:3001/api/posts/post-route-3
 content-type: application/json
 
 {
-  "postSlug": "post-route-3",
+  "postSlug": "post-route",
   "title": "This is a post title",
   "content": "HTML goes here",
   "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
   "tags": ["personal", "post", "nice"],
-  "categories": [1]
+  "categories": [1, 2]
 }

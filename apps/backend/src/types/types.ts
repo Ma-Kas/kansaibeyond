@@ -43,11 +43,18 @@ type Post = {
   userId: number;
 };
 
-type NewPost = Omit<Post, 'id' | 'views' | 'readTime'> & {
+type NewPostRequestData = Omit<Post, 'id' | 'views' | 'readTime'> & {
   categories: number[];
 };
 
-type UpdatePost = Partial<Omit<NewPost, 'userId'>>;
+type NewPostValidationResult = {
+  postData: Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>;
+  categories: number[];
+};
+
+type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
+
+type UpdatePost = Partial<Omit<NewPostRequestData, 'userId'>>;
 
 // Category Model Types
 type Category = {
@@ -81,6 +88,8 @@ export {
   NewUser,
   UpdateUser,
   Post,
+  NewPostRequestData,
+  NewPostValidationResult,
   NewPost,
   UpdatePost,
   Category,
