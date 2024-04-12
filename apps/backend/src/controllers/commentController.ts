@@ -4,7 +4,7 @@ import NotFoundError from '../errors/NotFoundError';
 import {
   validateNewComment,
   validateNewRegisteredComment,
-} from '../utils/input-validation';
+} from '../utils/validate-comment-data';
 import { NewComment, NewRegisteredComment } from '../types/types';
 import BadRequestError from '../errors/BadRequestError';
 

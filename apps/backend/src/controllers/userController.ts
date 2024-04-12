@@ -2,7 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 
 import { User } from '../models';
-import { validateNewUser, validateUserUpdate } from '../utils/input-validation';
+import {
+  validateNewUser,
+  validateUserUpdate,
+} from '../utils/validate-user-data';
 
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';

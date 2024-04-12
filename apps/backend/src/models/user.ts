@@ -73,6 +73,7 @@ User.init(
     sequelize,
     underscored: true,
     timestamps: true,
+    paranoid: true,
     modelName: 'user',
   }
 );

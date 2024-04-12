@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { Post, Category, User, Comment } from '../models';
-import { validateNewPost, validatePostUpdate } from '../utils/input-validation';
+import {
+  validateNewPost,
+  validatePostUpdate,
+} from '../utils/validate-post-data';
 import { NewPost } from '../types/types';
 
 import BadRequestError from '../errors/BadRequestError';
