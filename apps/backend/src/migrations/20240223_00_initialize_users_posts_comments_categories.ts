@@ -56,6 +56,10 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   });
   await queryInterface.createTable('posts', {
     id: {
