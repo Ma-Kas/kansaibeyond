@@ -2,10 +2,10 @@
 import express from 'express';
 
 // Project Dependencies
-import userRouter from './controllers/users';
-import categoryRouter from './controllers/categories';
-import postRouter from './controllers/posts';
-import commentRouter from './controllers/comments';
+import userRouter from './routes/users';
+import categoryRouter from './routes/categories';
+import postRouter from './routes/posts';
+import commentRouter from './routes/comments';
 
 import errorHandler from './middleware/errorHandler';
 

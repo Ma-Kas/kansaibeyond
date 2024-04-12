@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { Comment, User, Post } from '../models';
 import NotFoundError from '../errors/NotFoundError';
 import {
@@ -8,10 +8,11 @@ import {
 import { NewComment, NewRegisteredComment } from '../types/types';
 import BadRequestError from '../errors/BadRequestError';
 
-const router = express.Router();
-
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/', async (_req, res, next) => {
+export const get_all_comments = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const allComments = await Comment.findAll({
       attributes: {
@@ -32,10 +33,13 @@ router.get('/', async (_req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:id', async (req, res, next) => {
+export const get_one_comment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const comment = await Comment.findByPk(req.params.id, {
       attributes: {
@@ -59,10 +63,13 @@ router.get('/:id', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.post('/', async (req, res, next) => {
+export const post_new_comment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     let validatedCommentData: NewComment | NewRegisteredComment;
 
@@ -92,10 +99,13 @@ router.post('/', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:id', async (req, res, next) => {
+export const delete_one_comment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const commentToDelete = await Comment.findByPk(req.params.id);
     if (!commentToDelete) {
@@ -107,6 +117,4 @@ router.delete('/:id', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
-
-export default router;
+};

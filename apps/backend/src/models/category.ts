@@ -4,9 +4,19 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
+import Post from './post';
 
 class Category extends Model<
   InferAttributes<Category>,
@@ -14,6 +24,16 @@ class Category extends Model<
 > {
   declare id: CreationOptional<number>;
   declare categoryName: string;
+
+  declare getPosts: HasManyGetAssociationsMixin<Post>; // Note the null assertions!
+  declare addPost: HasManyAddAssociationMixin<Post, number>;
+  declare addPosts: HasManyAddAssociationsMixin<Post, number>;
+  declare setPosts: HasManySetAssociationsMixin<Post, number>;
+  declare removePost: HasManyRemoveAssociationMixin<Post, number>;
+  declare removePosts: HasManyRemoveAssociationsMixin<Post, number>;
+  declare hasPost: HasManyHasAssociationMixin<Post, number>;
+  declare hasPosts: HasManyHasAssociationsMixin<Post, number>;
+  declare countPosts: HasManyCountAssociationsMixin;
 }
 
 Category.init(

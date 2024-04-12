@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import { Post, Category, User, Comment } from '../models';
 import { validateNewPost, validatePostUpdate } from '../utils/input-validation';
@@ -7,10 +7,11 @@ import { NewPost } from '../types/types';
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
 
-const router = express.Router();
-
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/', async (_req, res, next) => {
+export const get_all_posts = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const allPosts = await Post.findAll({
       attributes: {
@@ -24,6 +25,9 @@ router.get('/', async (_req, res, next) => {
         {
           model: Category,
           attributes: ['categoryName'],
+          through: {
+            attributes: [],
+          },
         },
         {
           model: Comment,
@@ -46,10 +50,13 @@ router.get('/', async (_req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:postSlug', async (req, res, next) => {
+export const get_one_post = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const post = await Post.findOne({
       attributes: {
@@ -84,10 +91,13 @@ router.get('/:postSlug', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.post('/', async (req, res, next) => {
+export const post_new_post = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = await User.findOne();
 
@@ -95,6 +105,7 @@ router.post('/', async (req, res, next) => {
       throw new NotFoundError({ message: 'User not found' });
     }
 
+    // TODO: Clean up this mess here in terms of typing
     const validatedPostDataExUser = validateNewPost(req.body);
 
     if (validatedPostDataExUser) {
@@ -102,6 +113,10 @@ router.post('/', async (req, res, next) => {
       validatedPostData.userId = user.id;
 
       const addedPost = await Post.create(validatedPostData);
+
+      // This here will crash if categories that are being associated don't exist
+      // Add safeguard against it
+      await addedPost.addCategories(validatedPostDataExUser.categories);
       res.status(201).json(addedPost);
     } else {
       throw new BadRequestError({ message: 'Invalid Post data.' });
@@ -109,10 +124,13 @@ router.post('/', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.put('/:postSlug', async (req, res, next) => {
+export const update_one_post = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const postToUpdate = await Post.findOne({
       where: { postSlug: req.params.postSlug },
@@ -134,10 +152,13 @@ router.put('/:postSlug', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:postSlug', async (req, res, next) => {
+export const delete_one_post = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const postToDelete = await Post.findOne({
       where: { postSlug: req.params.postSlug },
@@ -151,6 +172,4 @@ router.delete('/:postSlug', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
-
-export default router;
+};

@@ -144,17 +144,29 @@ const up: Migration = async ({ context: queryInterface }) => {
       unique: true,
     },
   });
+  await queryInterface.createTable('posts_categories', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    post_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'posts', key: 'id' },
+    },
+    category_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'categories', key: 'id' },
+    },
+  });
+
   await queryInterface.addColumn('posts', 'user_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'users', key: 'id' },
   });
-  await queryInterface.addColumn('posts', 'category_id', {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: { model: 'categories', key: 'id' },
-  });
-
   await queryInterface.addColumn('comments', 'post_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -178,6 +190,9 @@ const down: Migration = async ({ context: queryInterface }) => {
     cascade: true,
   });
   await queryInterface.dropTable('categories', {
+    cascade: true,
+  });
+  await queryInterface.dropTable('posts_categories', {
     cascade: true,
   });
 };

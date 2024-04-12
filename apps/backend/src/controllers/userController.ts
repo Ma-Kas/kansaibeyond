@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 
 import { User } from '../models';
@@ -7,12 +7,11 @@ import { validateNewUser, validateUserUpdate } from '../utils/input-validation';
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
 
-const router = express.Router();
-
-// Disabling this rule since solving error would require .then.catch
-// or update to Express 5 (currently beta), or typecast as RequestHandler
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/', async (_req, res, next) => {
+export const get_all_users = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const allUsers = await User.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -22,10 +21,13 @@ router.get('/', async (_req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:username', async (req, res, next) => {
+export const get_one_user = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = await User.findOne({
       where: { username: req.params.username },
@@ -37,10 +39,13 @@ router.get('/:username', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.post('/', async (req, res, next) => {
+export const post_new_user = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const newUser = validateNewUser(req.body);
     if (newUser) {
@@ -53,10 +58,13 @@ router.post('/', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.put('/:username', async (req, res, next) => {
+export const update_one_user = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userToUpdate = await User.findOne({
       where: { username: req.params.username },
@@ -85,10 +93,13 @@ router.put('/:username', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:username', async (req, res, next) => {
+export const delete_one_user = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userToDelete = await User.findOne({
       where: { username: req.params.username },
@@ -102,6 +113,4 @@ router.delete('/:username', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
-
-export default router;
+};

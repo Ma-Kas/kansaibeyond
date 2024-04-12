@@ -41,10 +41,11 @@ type Post = {
   views?: number;
   readTime?: number;
   userId: number;
-  categoryId: number;
 };
 
-type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
+type NewPost = Omit<Post, 'id' | 'views' | 'readTime'> & {
+  categories: number[];
+};
 
 type UpdatePost = Partial<Omit<NewPost, 'userId'>>;
 

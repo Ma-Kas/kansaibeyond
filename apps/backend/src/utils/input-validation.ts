@@ -13,7 +13,8 @@ import BadRequestError from '../errors/BadRequestError';
 
 // Zod Schemas
 const stringSchema = z.string();
-const numberSchema = z.number();
+// const numberSchema = z.number();
+const numberArraySchema = z.number().array();
 const newUserSchema = z
   .object({
     username: z.string(),
@@ -40,7 +41,7 @@ const newPostSchema = z
     content: z.string(),
     media: postMediaSchema,
     tags: postTagSchema,
-    categoryId: z.number(),
+    categories: z.number().array(),
   })
   .strict();
 
@@ -70,18 +71,18 @@ const parseStringInput = (input: unknown, path: string): string => {
   return parseResult.data;
 };
 
-const parseNumberInput = (input: unknown, path: string): number => {
-  const parseResult = numberSchema.safeParse(input);
-  if (!parseResult.success) {
-    const error = parseResult.error.issues[0];
-    // Path array of ZodError is empty, as only single string is parsed
-    // thus manual path is passed as second argument to function
-    throw new BadRequestError({
-      message: `Validation error: ${error.message.toString()} at "${path}";`,
-    });
-  }
-  return parseResult.data;
-};
+// const parseNumberInput = (input: unknown, path: string): number => {
+//   const parseResult = numberSchema.safeParse(input);
+//   if (!parseResult.success) {
+//     const error = parseResult.error.issues[0];
+//     // Path array of ZodError is empty, as only single string is parsed
+//     // thus manual path is passed as second argument to function
+//     throw new BadRequestError({
+//       message: `Validation error: ${error.message.toString()} at "${path}";`,
+//     });
+//   }
+//   return parseResult.data;
+// };
 
 // Exported Form Data Validators
 const validateNewUser = (input: unknown): NewUser => {
@@ -192,8 +193,8 @@ const validateNewPost = (input: unknown): Omit<NewPost, 'userId'> => {
     throw new BadRequestError({ message: 'Tags are required.' });
   }
 
-  if (!('categoryId' in input)) {
-    throw new BadRequestError({ message: 'Category Id is required.' });
+  if (!('categories' in input)) {
+    throw new BadRequestError({ message: 'Categories are required.' });
   }
 
   return zodSchemaParser(newPostSchema, input);
@@ -210,7 +211,7 @@ const validatePostUpdate = (input: unknown): UpdatePost | null => {
     !('content' in input) &&
     !('media' in input) &&
     !('tags' in input) &&
-    !('categoryId' in input)
+    !('categories' in input)
   ) {
     return null;
   }
@@ -233,8 +234,8 @@ const validatePostUpdate = (input: unknown): UpdatePost | null => {
     updateData.tags = zodSchemaParser(postTagSchema, input);
   }
 
-  if ('categoryId' in input) {
-    updateData.categoryId = parseNumberInput(input.categoryId, 'categoryId');
+  if ('categories' in input) {
+    updateData.categories = zodSchemaParser(numberArraySchema, input);
   }
 
   return updateData;

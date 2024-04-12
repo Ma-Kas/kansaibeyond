@@ -5,10 +5,20 @@ import {
   InferCreationAttributes,
   CreationOptional,
   ForeignKey,
+  HasManyGetAssociationsMixin,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManySetAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyCountAssociationsMixin,
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
 import User from './user';
+import Category from './category';
 
 class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
@@ -20,6 +30,16 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
+
+  declare getCategories: HasManyGetAssociationsMixin<Category>; // Note the null assertions!
+  declare addCategory: HasManyAddAssociationMixin<Category, number>;
+  declare addCategories: HasManyAddAssociationsMixin<Category, number>;
+  declare setCategories: HasManySetAssociationsMixin<Category, number>;
+  declare removeCategory: HasManyRemoveAssociationMixin<Category, number>;
+  declare removeCategories: HasManyRemoveAssociationsMixin<Category, number>;
+  declare hasCategory: HasManyHasAssociationMixin<Category, number>;
+  declare hasCategories: HasManyHasAssociationsMixin<Category, number>;
+  declare countCategories: HasManyCountAssociationsMixin;
 }
 
 Post.init(

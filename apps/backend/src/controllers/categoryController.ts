@@ -1,6 +1,6 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-import { Category } from '../models';
+import { Category, Post } from '../models';
 import {
   validateNewCategory,
   validateCategoryUpdate,
@@ -8,21 +8,34 @@ import {
 import NotFoundError from '../errors/NotFoundError';
 import BadRequestError from '../errors/BadRequestError';
 
-const router = express.Router();
-
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/', async (_req, res, next) => {
+export const get_all_categories = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const categories = await Category.findAll();
+    const categories = await Category.findAll({
+      include: [
+        {
+          model: Post,
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
 
     res.status(200).json(categories);
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:categoryName', async (req, res, next) => {
+export const get_one_category = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const category = await Category.findOne({
       where: { categoryName: req.params.categoryName },
@@ -34,10 +47,13 @@ router.get('/:categoryName', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.post('/', async (req, res, next) => {
+export const post_new_category = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const newCategory = validateNewCategory(req.body);
     if (newCategory) {
@@ -49,10 +65,13 @@ router.post('/', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.put('/:categoryName', async (req, res, next) => {
+export const update_one_category = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const categoryToUpdate = await Category.findOne({
       where: { categoryName: req.params.categoryName },
@@ -74,10 +93,13 @@ router.put('/:categoryName', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:categoryName', async (req, res, next) => {
+export const delete_one_category = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const categoryToDelete = await Category.findOne({
       where: { categoryName: req.params.categoryName },
@@ -93,6 +115,4 @@ router.delete('/:categoryName', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
-
-export default router;
+};
