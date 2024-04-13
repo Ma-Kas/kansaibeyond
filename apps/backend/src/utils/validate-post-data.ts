@@ -3,6 +3,8 @@ import { NewPostValidationResult, UpdatePost } from '../types/types';
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
 
+import { MAX_CATEGORIES_PER_POST, MAX_TAGS_PER_POST } from './constants';
+
 // Zod Schemas
 const postMediaSchema = z.object({
   name: z.string(),
@@ -17,8 +19,8 @@ const newPostSchema = z.object(
     title: z.string(),
     content: z.string(),
     media: postMediaSchema,
-    tags: z.number().array(),
-    categories: z.number().array(),
+    tags: z.number().array().max(MAX_TAGS_PER_POST),
+    categories: z.number().array().max(MAX_CATEGORIES_PER_POST),
   }
 ).strict();
 
@@ -29,8 +31,8 @@ const updatePostSchema = z.object(
     title: z.string().optional(),
     content: z.string().optional(),
     media: postMediaSchema.optional(),
-    tags: z.number().array().optional(),
-    categories: z.number().array().optional(),
+    tags: z.number().array().max(MAX_TAGS_PER_POST).optional(),
+    categories: z.number().array().max(MAX_CATEGORIES_PER_POST).optional(),
   }
 ).strict();
 
