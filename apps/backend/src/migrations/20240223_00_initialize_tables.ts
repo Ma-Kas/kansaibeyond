@@ -85,10 +85,6 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.JSONB,
       allowNull: false,
     },
-    tags: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
-      allowNull: false,
-    },
     views: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -148,6 +144,23 @@ const up: Migration = async ({ context: queryInterface }) => {
       unique: true,
     },
   });
+  await queryInterface.createTable('tags', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    tag_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+    },
+    tag_slug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+    },
+  });
   await queryInterface.createTable('posts_categories', {
     id: {
       type: DataTypes.INTEGER,
@@ -163,6 +176,23 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'categories', key: 'id' },
+    },
+  });
+  await queryInterface.createTable('posts_tags', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    post_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'posts', key: 'id' },
+    },
+    tag_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'tags', key: 'id' },
     },
   });
 
@@ -196,7 +226,13 @@ const down: Migration = async ({ context: queryInterface }) => {
   await queryInterface.dropTable('categories', {
     cascade: true,
   });
+  await queryInterface.dropTable('tags', {
+    cascade: true,
+  });
   await queryInterface.dropTable('posts_categories', {
+    cascade: true,
+  });
+  await queryInterface.dropTable('posts_tags', {
     cascade: true,
   });
 };

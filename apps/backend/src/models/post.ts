@@ -19,6 +19,7 @@ import {
 import { sequelize } from '../utils/db';
 import User from './user';
 import Category from './category';
+import Tag from './tag';
 
 class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
@@ -26,7 +27,6 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare title: string;
   declare content: string;
   declare media: object;
-  declare tags: string[];
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
@@ -40,6 +40,16 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare hasCategory: HasManyHasAssociationMixin<Category, number>;
   declare hasCategories: HasManyHasAssociationsMixin<Category, number>;
   declare countCategories: HasManyCountAssociationsMixin;
+
+  declare getTags: HasManyGetAssociationsMixin<Tag>;
+  declare addTag: HasManyAddAssociationMixin<Tag, number>;
+  declare addTags: HasManyAddAssociationsMixin<Tag, number>;
+  declare setTags: HasManySetAssociationsMixin<Tag, number>;
+  declare removeTag: HasManyRemoveAssociationMixin<Tag, number>;
+  declare removeTags: HasManyRemoveAssociationsMixin<Tag, number>;
+  declare hasTag: HasManyHasAssociationMixin<Tag, number>;
+  declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
+  declare countTags: HasManyCountAssociationsMixin;
 }
 
 Post.init(
@@ -65,10 +75,6 @@ Post.init(
     },
     media: {
       type: DataTypes.JSONB,
-      allowNull: false,
-    },
-    tags: {
-      type: DataTypes.ARRAY(DataTypes.TEXT),
       allowNull: false,
     },
     views: {

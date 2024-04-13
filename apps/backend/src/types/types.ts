@@ -37,7 +37,6 @@ type Post = {
   title: string;
   content: string;
   media: PostMedia;
-  tags: string[];
   views?: number;
   readTime?: number;
   userId: number;
@@ -45,11 +44,13 @@ type Post = {
 
 type NewPostRequestData = Omit<Post, 'id' | 'views' | 'readTime'> & {
   categories: number[];
+  tags: number[];
 };
 
 type NewPostValidationResult = {
   postData: Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>;
   categories: number[];
+  tags: number[];
 };
 
 type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
@@ -63,6 +64,17 @@ type Category = {
 };
 
 type CategoryExId = Omit<Category, 'id'>;
+
+// Tag Model Types
+type Tag = {
+  id: number;
+  tagName: string;
+  tagSlug: string;
+};
+
+type NewTag = Omit<Tag, 'id'>;
+
+type UpdateTag = Partial<NewTag>;
 
 // Comment Model Types
 type Comment = {
@@ -94,6 +106,9 @@ export {
   UpdatePost,
   Category,
   CategoryExId,
+  Tag,
+  NewTag,
+  UpdateTag,
   Comment,
   NewComment,
   NewRegisteredComment,

@@ -1,27 +1,23 @@
 import Post from './post';
 import User from './user';
 import Category from './category';
+import Tag from './tag';
 import Comment from './comment';
 
 // Import join tables
 import PostCategory from './postCategory';
+import PostTag from './postTag';
 
 void (function createAssociations() {
   try {
     User.hasMany(Post);
     Post.belongsTo(User);
 
-    // Is equal to:
     Post.belongsToMany(Category, { through: PostCategory });
     Category.belongsToMany(Post, { through: PostCategory });
 
-    // Post.hasMany(PostCategory);
-    // PostCategory.belongsTo(Post);
-    // Category.hasMany(PostCategory);
-    // PostCategory.belongsTo(Category);
-
-    // Category.hasMany(Post);
-    // Post.belongsTo(Category);
+    Post.belongsToMany(Tag, { through: PostTag });
+    Tag.belongsToMany(Post, { through: PostTag });
 
     User.hasMany(Comment);
     Comment.belongsTo(User);
@@ -33,4 +29,4 @@ void (function createAssociations() {
   }
 })();
 
-export { User, Post, Category, Comment };
+export { User, Post, Category, Comment, Tag };

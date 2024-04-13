@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { Post, Category, User, Comment } from '../models';
+import { Post, Category, User, Comment, Tag } from '../models';
 import {
   validateNewPostData,
   validatePostUpdateData,
@@ -28,6 +28,13 @@ export const get_all_posts = async (
         {
           model: Category,
           attributes: ['categoryName'],
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: Tag,
+          attributes: ['tagName'],
           through: {
             attributes: [],
           },
@@ -73,6 +80,16 @@ export const get_one_post = async (
         {
           model: Category,
           attributes: ['categoryName'],
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: Tag,
+          attributes: ['tagName'],
+          through: {
+            attributes: [],
+          },
         },
         {
           model: Comment,
@@ -118,8 +135,9 @@ export const post_new_post = async (
 
       const addedPost = await Post.create(validatedPostData);
 
-      // Add association to categories table
+      // Add association to categories, tags table
       await addedPost.addCategories(validatedPostDataExUser.categories);
+      await addedPost.addTags(validatedPostDataExUser.tags);
       res.status(201).json(addedPost);
     } else {
       throw new BadRequestError({ message: 'Invalid Post data.' });
@@ -143,13 +161,26 @@ export const update_one_post = async (
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
 
-    // If update data is not empty, proceed
-    if (validatedUpdateData) {
+    // No update data => return original post
+    if (!validatedUpdateData) {
+      res.status(204).send();
+    } else {
       const keys = Object.keys(validatedUpdateData);
-      // Check whether only categories is updated, then all queries regarding
+
+      // Check whether only categories or tags are updated, then all queries regarding
       // post itself are unneccessary
-      if (keys.length === 1 && keys[0] === 'categories') {
+      if (
+        keys.length === 2 &&
+        ['tags', 'categories'].every((i) => keys.includes(i))
+      ) {
         await postToUpdate.setCategories(validatedUpdateData.categories);
+        await postToUpdate.setTags(validatedUpdateData.tags);
+        res.status(200).json(postToUpdate);
+      } else if (keys.length === 1 && keys[0] === 'categories') {
+        await postToUpdate.setCategories(validatedUpdateData.categories);
+        res.status(200).json(postToUpdate);
+      } else if (keys.length === 1 && keys[0] === 'tags') {
+        await postToUpdate.setTags(validatedUpdateData.tags);
         res.status(200).json(postToUpdate);
       } else {
         const updatedPost = await Post.update(validatedUpdateData, {
@@ -159,12 +190,13 @@ export const update_one_post = async (
         // Set associated categories to updated categories
         if (validatedUpdateData.categories) {
           await updatedPost[1][0].setCategories(validatedUpdateData.categories);
-          res.status(200).json(updatedPost[1][0]);
         }
+        // Set associated tag to updated categories
+        if (validatedUpdateData.tags) {
+          await updatedPost[1][0].setTags(validatedUpdateData.tags);
+        }
+        res.status(200).json(updatedPost[1][0]);
       }
-    } else {
-      // No update data => return original post
-      res.status(204).send();
     }
   } catch (err: unknown) {
     next(err);
@@ -184,11 +216,12 @@ export const delete_one_post = async (
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
 
-    // Remove all associated categories, by setting to empty array
+    // Remove all associated categories, tags by setting to empty array
     await postToDelete.setCategories([]);
+    await postToDelete.setTags([]);
 
     await postToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${postToDelete.postSlug}` });
+    res.status(200).json({ message: `Deleted ${postToDelete.title}` });
   } catch (err: unknown) {
     next(err);
   }

@@ -5,6 +5,7 @@ import express from 'express';
 import userRouter from './routes/users';
 import categoryRouter from './routes/categories';
 import postRouter from './routes/posts';
+import tagRouter from './routes/tags';
 import commentRouter from './routes/comments';
 
 import errorHandler from './middleware/errorHandler';
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/tags', tagRouter);
 app.use('/api/comments', commentRouter);
 
 // Error Handling

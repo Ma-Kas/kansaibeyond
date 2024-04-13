@@ -1,19 +1,14 @@
 import { z } from 'zod';
 import { NewPostValidationResult, UpdatePost } from '../types/types';
-import { parseStringInput } from './validation-helpers';
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
 
 // Zod Schemas
-const numberArraySchema = z.number().array();
-
 const postMediaSchema = z.object({
   name: z.string(),
   url: z.string().url(),
   caption: z.string().optional(),
 });
-
-const postTagSchema = z.array(z.string());
 
 // prettier-ignore
 const newPostSchema = z.object(
@@ -22,7 +17,7 @@ const newPostSchema = z.object(
     title: z.string(),
     content: z.string(),
     media: postMediaSchema,
-    tags: postTagSchema,
+    tags: z.number().array(),
     categories: z.number().array(),
   }
 ).strict();
@@ -34,7 +29,7 @@ const updatePostSchema = z.object(
     title: z.string().optional(),
     content: z.string().optional(),
     media: postMediaSchema.optional(),
-    tags: postTagSchema.optional(),
+    tags: z.number().array().optional(),
     categories: z.number().array().optional(),
   }
 ).strict();
@@ -76,9 +71,9 @@ const validateNewPostData = (input: unknown): NewPostValidationResult => {
       title: parseResult.title,
       content: parseResult.content,
       media: parseResult.media,
-      tags: parseResult.tags,
     },
     categories: parseResult.categories,
+    tags: parseResult.tags,
   };
 };
 
@@ -98,37 +93,6 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
   ) {
     return null;
   }
-
-  const updateData: UpdatePost = {};
-
-  if ('postSlug' in input) {
-    updateData.postSlug = parseStringInput(input.postSlug, 'postSlug');
-  }
-
-  if ('title' in input) {
-    updateData.title = parseStringInput(input.title, 'title');
-  }
-
-  if ('content' in input) {
-    updateData.content = parseStringInput(input.content, 'content');
-  }
-
-  if ('media' in input) {
-    updateData.media = zodSchemaParser(postMediaSchema, input.media);
-  }
-
-  if ('tags' in input) {
-    updateData.tags = zodSchemaParser(postTagSchema, input.tags);
-  }
-
-  if ('categories' in input) {
-    updateData.categories = zodSchemaParser(
-      numberArraySchema,
-      input.categories
-    );
-  }
-
-  return updateData;
 
   return zodSchemaParser(updatePostSchema, input);
 };

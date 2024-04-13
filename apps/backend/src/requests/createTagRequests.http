@@ -1,0 +1,8 @@
+// POST valid new tag
+POST http://localhost:3001/api/tags
+content-type: application/json
+
+{
+  "tagName": "test tag",
+  "tagSlug": "test-tag"
+}

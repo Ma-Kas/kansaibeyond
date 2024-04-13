@@ -3,10 +3,10 @@ POST http://localhost:3001/api/posts
 content-type: application/json
 
 {
-  "postSlug": "post-route-3",
+  "postSlug": "post-route",
   "title": "This is a post title",
   "content": "HTML goes here",
   "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
-  "tags": ["personal", "post", "nice"],
+  "tags": [1, 2],
   "categories": [1]
 }
