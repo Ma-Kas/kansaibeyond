@@ -221,7 +221,7 @@ export const delete_one_post = async (
     await postToDelete.setTags([]);
 
     await postToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${postToDelete.title}` });
+    res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
   } catch (err: unknown) {
     next(err);
   }

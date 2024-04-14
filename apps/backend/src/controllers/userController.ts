@@ -112,7 +112,9 @@ export const delete_one_user = async (
     }
 
     await userToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${userToDelete.username}` });
+    res
+      .status(200)
+      .json({ message: `Deleted user "${userToDelete.username}"` });
   } catch (err: unknown) {
     next(err);
   }

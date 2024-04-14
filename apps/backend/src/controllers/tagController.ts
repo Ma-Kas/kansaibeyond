@@ -114,7 +114,7 @@ export const delete_one_tag = async (
     }
 
     await tagToDelete.destroy();
-    res.status(200).json({ message: `Deleted ${tagToDelete.tagName}` });
+    res.status(200).json({ message: `Deleted tag "${tagToDelete.tagName}"` });
   } catch (err: unknown) {
     next(err);
   }

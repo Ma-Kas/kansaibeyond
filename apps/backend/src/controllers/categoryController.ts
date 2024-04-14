@@ -119,7 +119,7 @@ export const delete_one_category = async (
     await categoryToDelete.destroy();
     res
       .status(200)
-      .json({ message: `Deleted ${categoryToDelete.categoryName}` });
+      .json({ message: `Deleted category "${categoryToDelete.categoryName}"` });
   } catch (err: unknown) {
     next(err);
   }

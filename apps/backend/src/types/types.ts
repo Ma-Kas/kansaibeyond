@@ -25,6 +25,8 @@ type UpdateUser = Partial<
 > & { userIcon?: string };
 
 // Post Model Types
+type PostStatus = 'published' | 'draft' | 'pending' | 'trash';
+
 type PostMedia = {
   name: string;
   url: string;
@@ -37,6 +39,7 @@ type Post = {
   title: string;
   content: string;
   media: PostMedia;
+  status?: PostStatus;
   views?: number;
   readTime?: number;
   userId: number;
@@ -100,6 +103,7 @@ export {
   NewUser,
   UpdateUser,
   Post,
+  PostStatus,
   NewPostRequestData,
   NewPostValidationResult,
   NewPost,

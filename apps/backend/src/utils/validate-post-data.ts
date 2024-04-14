@@ -12,6 +12,13 @@ const postMediaSchema = z.object({
   caption: z.string().optional(),
 });
 
+const postStatusSchema = z.union([
+  z.literal('published'),
+  z.literal('draft'),
+  z.literal('pending'),
+  z.literal('trash'),
+]);
+
 // prettier-ignore
 const newPostSchema = z.object(
   {
@@ -19,6 +26,7 @@ const newPostSchema = z.object(
     title: z.string(),
     content: z.string(),
     media: postMediaSchema,
+    status: postStatusSchema.optional(),
     tags: z.number().array().max(MAX_TAGS_PER_POST),
     categories: z.number().array().max(MAX_CATEGORIES_PER_POST),
   }
@@ -31,6 +39,7 @@ const updatePostSchema = z.object(
     title: z.string().optional(),
     content: z.string().optional(),
     media: postMediaSchema.optional(),
+    status: postStatusSchema.optional(),
     tags: z.number().array().max(MAX_TAGS_PER_POST).optional(),
     categories: z.number().array().max(MAX_CATEGORIES_PER_POST).optional(),
   }
@@ -73,6 +82,7 @@ const validateNewPostData = (input: unknown): NewPostValidationResult => {
       title: parseResult.title,
       content: parseResult.content,
       media: parseResult.media,
+      status: parseResult.status,
     },
     categories: parseResult.categories,
     tags: parseResult.tags,
@@ -90,6 +100,7 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     !('title' in input) &&
     !('content' in input) &&
     !('media' in input) &&
+    !('status' in input) &&
     !('tags' in input) &&
     !('categories' in input)
   ) {

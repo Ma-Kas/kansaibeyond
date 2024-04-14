@@ -20,6 +20,7 @@ import { sequelize } from '../utils/db';
 import User from './user';
 import Category from './category';
 import Tag from './tag';
+import { PostStatus } from '../types/types';
 
 class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
@@ -27,6 +28,7 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare title: string;
   declare content: string;
   declare media: object;
+  declare status: CreationOptional<PostStatus>;
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
   declare userId: ForeignKey<User['id']>;
@@ -77,6 +79,10 @@ Post.init(
       type: DataTypes.JSONB,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'draft',
+    },
     views: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -90,6 +96,7 @@ Post.init(
     sequelize,
     underscored: true,
     timestamps: true,
+    paranoid: true,
     modelName: 'post',
   }
 );

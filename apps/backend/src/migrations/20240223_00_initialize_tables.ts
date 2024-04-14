@@ -85,6 +85,10 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.JSONB,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'draft',
+    },
     views: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -100,6 +104,10 @@ const up: Migration = async ({ context: queryInterface }) => {
     updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   });
   await queryInterface.createTable('comments', {

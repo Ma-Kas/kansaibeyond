@@ -6,6 +6,7 @@ content-type: application/json
   "postSlug": "post-route2",
   "title": "This is a post title2",
   "content": "HTML goes here",
+  "status": "trash",
   "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
   "tags": [1],
   "categories": [1, 2]
