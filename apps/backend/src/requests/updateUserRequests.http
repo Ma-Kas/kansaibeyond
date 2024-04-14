@@ -5,7 +5,8 @@ content-type: application/json
 
 {
   "firstName": "former testy",
-  "displayName": "the former tester"
+  "displayName": "the former tester",
+  "contact": {"email": null}
 }
 
 ###

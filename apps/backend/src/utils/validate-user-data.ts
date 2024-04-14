@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { NewUser, UpdateUser } from '../types/types';
-import { parseStringInput } from './validation-helpers';
 
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
@@ -10,12 +9,35 @@ import BadRequestError from '../errors/BadRequestError';
 const newUserSchema = z.object(
   {
     username: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
     email: z.string().email(),
     displayName: z.string(),
     password: z.string(),
-  }).strict();
+    firstName: z.string(),
+    lastName: z.string()
+  }
+).strict();
+
+// prettier-ignore
+const updateUserSchema = z.object(
+  {
+    username: z.string().optional(),
+    email: z.string().email().optional(),
+    displayName: z.string().optional(),
+    password: z.string().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    introduction: z.string().optional(),
+    contact: z.object(
+      {
+        email: z.string().email().optional().nullable(),
+        homepage: z.string().url().optional().nullable(),
+        twitter: z.string().url().optional().nullable(),
+        instagram: z.string().url().optional().nullable(),
+        youtube: z.string().url().optional().nullable(),
+        linkedin: z.string().url().optional().nullable(),
+    }).optional(),
+  }
+).strict();
 
 const validateNewUser = (input: unknown): NewUser => {
   if (!input || !(typeof input === 'object')) {
@@ -24,14 +46,6 @@ const validateNewUser = (input: unknown): NewUser => {
 
   if (!('username' in input)) {
     throw new BadRequestError({ message: 'Username is required.' });
-  }
-
-  if (!('firstName' in input)) {
-    throw new BadRequestError({ message: 'First Name is required.' });
-  }
-
-  if (!('lastName' in input)) {
-    throw new BadRequestError({ message: 'Last Name is required.' });
   }
 
   if (!('email' in input)) {
@@ -46,6 +60,14 @@ const validateNewUser = (input: unknown): NewUser => {
     throw new BadRequestError({ message: 'Password is required' });
   }
 
+  if (!('firstName' in input)) {
+    throw new BadRequestError({ message: 'First Name is required.' });
+  }
+
+  if (!('lastName' in input)) {
+    throw new BadRequestError({ message: 'Last Name is required.' });
+  }
+
   return zodSchemaParser(newUserSchema, input);
 };
 
@@ -57,47 +79,19 @@ const validateUserUpdate = (input: unknown): UpdateUser | null => {
   // No update data present
   if (
     !('username' in input) &&
+    !('email' in input) &&
+    !('displayName' in input) &&
+    !('password' in input) &&
     !('userIcon' in input) &&
     !('firstName' in input) &&
     !('lastName' in input) &&
-    !('email' in input) &&
-    !('displayName' in input) &&
-    !('password' in input)
+    !('introduction' in input) &&
+    !('contact' in input)
   ) {
     return null;
   }
 
-  const updateData: UpdateUser = {};
-
-  if ('username' in input) {
-    updateData.username = parseStringInput(input.username, 'username');
-  }
-
-  if ('userIcon' in input) {
-    updateData.userIcon = parseStringInput(input.userIcon, 'userIcon');
-  }
-
-  if ('firstName' in input) {
-    updateData.firstName = parseStringInput(input.firstName, 'firstName');
-  }
-
-  if ('lastName' in input) {
-    updateData.lastName = parseStringInput(input.lastName, 'lastName');
-  }
-
-  if ('email' in input) {
-    updateData.email = parseStringInput(input.email, 'email');
-  }
-
-  if ('displayName' in input) {
-    updateData.displayName = parseStringInput(input.displayName, 'displayName');
-  }
-
-  if ('password' in input) {
-    updateData.password = parseStringInput(input.password, 'password');
-  }
-
-  return updateData;
+  return zodSchemaParser(updateUserSchema, input);
 };
 
 export { validateNewUser, validateUserUpdate };

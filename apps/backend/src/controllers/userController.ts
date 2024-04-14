@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { User } from '../models';
+import { Comment, Contact, Post, User } from '../models';
 import {
   validateNewUser,
   validateUserUpdate,
@@ -18,6 +18,7 @@ export const get_all_users = async (
   try {
     const allUsers = await User.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
+      include: [{ model: Post }, { model: Comment }, { model: Contact }],
     });
 
     res.status(200).json(allUsers);
@@ -54,6 +55,7 @@ export const post_new_user = async (
     if (newUser) {
       newUser.password = await bcrypt.hash(newUser.password, 10);
       const addedUser = await User.create(newUser);
+      await addedUser.createContact();
       res.status(201).json(addedUser);
     } else {
       throw new BadRequestError({ message: 'Invalid User data.' });
@@ -76,11 +78,14 @@ export const update_one_user = async (
       throw new NotFoundError({ message: 'User to update was not found.' });
     }
     const userUpdateData = validateUserUpdate(req.body);
-    if (userUpdateData) {
+    // No update data => return original user
+    if (!userUpdateData) {
+      res.status(204).send();
+    } else {
       // Only re-crypt password if password has changed
-      if ('password' in userUpdateData) {
+      if (userUpdateData.password) {
         userUpdateData.password = await bcrypt.hash(
-          userUpdateData.password!,
+          userUpdateData.password,
           10
         );
       }
@@ -88,10 +93,13 @@ export const update_one_user = async (
         where: { username: userToUpdate.username },
         returning: true,
       });
+      // Update contact table entry if contact data in update data
+      if (userUpdateData.contact) {
+        await Contact.update(userUpdateData.contact, {
+          where: { userId: userToUpdate.id },
+        });
+      }
       res.status(200).json(updatedUser[1][0]);
-    } else {
-      // No update data => return original user
-      res.status(204).send();
     }
   } catch (err: unknown) {
     next(err);
@@ -111,6 +119,11 @@ export const delete_one_user = async (
       throw new NotFoundError({ message: 'User to delete was not found.' });
     }
 
+    // Get associated contact row in contact table to delete along with user
+    const contactToDelete = await Contact.findOne({
+      where: { userId: userToDelete.id },
+    });
+    await contactToDelete?.destroy();
     await userToDelete.destroy();
     res
       .status(200)

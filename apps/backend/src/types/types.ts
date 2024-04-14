@@ -1,28 +1,38 @@
+// Contact Model Types
+type Contact = {
+  id: number;
+  email?: string | null;
+  homepage?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  youtube?: string | null;
+  linkedin?: string | null;
+};
+
 // User Model Types
 type User = {
   id: number;
   username: string;
-  userIcon: string | null;
-  firstName: string;
-  lastName: string;
   email: string;
   displayName: string;
   password: string;
+  userIcon: string | null;
+  firstName: string;
+  lastName: string;
+  introduction?: string;
   status: 'Admin' | 'Writer' | 'Tech' | 'Guest';
   disabled: boolean;
-  posts?: number[];
-  comments?: number[];
 };
 
 type NewUser = Pick<
   User,
-  'username' | 'firstName' | 'lastName' | 'email' | 'displayName' | 'password'
+  'username' | 'email' | 'displayName' | 'password' | 'firstName' | 'lastName'
 >;
 
 // Omit original userIcon, re-add in intersection to disallow null when updating
 type UpdateUser = Partial<
-  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'posts' | 'comments'>
-> & { userIcon?: string };
+  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled'>
+> & { userIcon?: string; contact?: Omit<Contact, 'id'> };
 
 // Post Model Types
 type PostStatus = 'published' | 'draft' | 'pending' | 'trash';

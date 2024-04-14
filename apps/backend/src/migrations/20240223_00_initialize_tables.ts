@@ -13,18 +13,6 @@ const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
       unique: true,
     },
-    user_icon: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    first_name: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    last_name: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
     email: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -39,6 +27,22 @@ const up: Migration = async ({ context: queryInterface }) => {
     password: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    user_icon: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    first_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    introduction: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     status: {
       type: DataTypes.TEXT,
@@ -59,6 +63,63 @@ const up: Migration = async ({ context: queryInterface }) => {
     deleted_at: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+  });
+  await queryInterface.createTable('contacts', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    email: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    homepage: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+    twitter: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+    instagram: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+    youtube: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+    linkedin: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   });
   await queryInterface.createTable('posts', {
@@ -204,6 +265,11 @@ const up: Migration = async ({ context: queryInterface }) => {
     },
   });
 
+  await queryInterface.addColumn('contacts', 'user_id', {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: { model: 'users', key: 'id' },
+  });
   await queryInterface.addColumn('posts', 'user_id', {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -223,6 +289,9 @@ const up: Migration = async ({ context: queryInterface }) => {
 
 const down: Migration = async ({ context: queryInterface }) => {
   await queryInterface.dropTable('users', {
+    cascade: true,
+  });
+  await queryInterface.dropTable('contacts', {
     cascade: true,
   });
   await queryInterface.dropTable('posts', {

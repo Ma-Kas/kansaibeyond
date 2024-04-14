@@ -4,21 +4,28 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasOneGetAssociationMixin,
+  HasOneCreateAssociationMixin,
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
+import Contact from './contact';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
   declare username: string;
-  declare userIcon: CreationOptional<string>;
-  declare firstName: string;
-  declare lastName: string;
   declare email: string;
   declare displayName: string;
   declare password: string;
+  declare userIcon: CreationOptional<string>;
+  declare firstName: string;
+  declare lastName: string;
+  declare introduction: CreationOptional<string>;
   declare status: CreationOptional<'Admin' | 'Writer' | 'Tech' | 'Guest'>;
   declare disabled: CreationOptional<boolean>;
+
+  declare getContact: HasOneGetAssociationMixin<Contact>;
+  declare createContact: HasOneCreateAssociationMixin<Contact>;
 }
 
 User.init(
@@ -32,18 +39,6 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
       unique: true,
-    },
-    userIcon: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    firstName: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.TEXT,
-      allowNull: false,
     },
     email: {
       type: DataTypes.TEXT,
@@ -59,6 +54,22 @@ User.init(
     password: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    userIcon: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    firstName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    introduction: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     status: {
       type: DataTypes.TEXT,

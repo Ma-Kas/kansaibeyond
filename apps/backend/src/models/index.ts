@@ -1,5 +1,6 @@
 import Post from './post';
 import User from './user';
+import Contact from './contact';
 import Category from './category';
 import Tag from './tag';
 import Comment from './comment';
@@ -10,6 +11,9 @@ import PostTag from './postTag';
 
 void (function createAssociations() {
   try {
+    User.hasOne(Contact);
+    Contact.belongsTo(User);
+
     User.hasMany(Post);
     Post.belongsTo(User);
 
@@ -29,4 +33,4 @@ void (function createAssociations() {
   }
 })();
 
-export { User, Post, Category, Comment, Tag };
+export { User, Contact, Post, Category, Comment, Tag };
