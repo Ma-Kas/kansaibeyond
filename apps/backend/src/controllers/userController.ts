@@ -106,6 +106,34 @@ export const update_one_user = async (
   }
 };
 
+export const disable_one_user = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userToDisable = await User.findOne({
+      where: { username: req.params.username },
+    });
+    if (!userToDisable) {
+      throw new NotFoundError({ message: 'User to disable was not found.' });
+    }
+
+    const disabledUser = await User.update(
+      { disabled: true },
+      {
+        where: { username: userToDisable.username },
+        returning: true,
+      }
+    );
+    res
+      .status(200)
+      .json({ message: `Disabled user "${disabledUser[1][0].username}"` });
+  } catch (err: unknown) {
+    next(err);
+  }
+};
+
 export const delete_one_user = async (
   req: Request,
   res: Response,
