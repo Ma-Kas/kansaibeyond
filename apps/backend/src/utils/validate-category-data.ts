@@ -1,9 +1,36 @@
-import { CategoryExId } from '../types/types';
-import { parseStringInput } from './validation-helpers';
+import { z } from 'zod';
+import { NewCategory, UpdateCategory } from '../types/types';
+import zodSchemaParser from './zod-schema-parser';
 
 import BadRequestError from '../errors/BadRequestError';
 
-const validateNewCategory = (input: unknown): CategoryExId => {
+// Zod Schemas
+const categoryCoverImageSchema = z.object({
+  urlSlug: z.string(),
+  altText: z.string(),
+});
+
+// prettier-ignore
+const newCategorySchema = z.object(
+  {
+    categoryName: z.string(),
+    categorySlug: z.string(),
+    description: z.string().optional(),
+    coverImage: categoryCoverImageSchema.optional(),
+  }
+).strict();
+
+// prettier-ignore
+const updateCategorySchema = z.object(
+  {
+    categoryName: z.string().optional(),
+    categorySlug: z.string().optional(),
+    description: z.string().optional(),
+    coverImage: categoryCoverImageSchema.optional(),
+  }
+).strict();
+
+const validateNewCategory = (input: unknown): NewCategory => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
@@ -12,23 +39,28 @@ const validateNewCategory = (input: unknown): CategoryExId => {
     throw new BadRequestError({ message: 'CategoryName is required.' });
   }
 
-  return {
-    categoryName: parseStringInput(input.categoryName, 'categoryName'),
-  };
+  if (!('categorySlug' in input)) {
+    throw new BadRequestError({ message: 'CategorySlug is required.' });
+  }
+
+  return zodSchemaParser(newCategorySchema, input);
 };
 
-const validateCategoryUpdate = (input: unknown): CategoryExId | null => {
+const validateCategoryUpdate = (input: unknown): UpdateCategory | null => {
   if (!input || !(typeof input === 'object')) {
     throw new BadRequestError({ message: 'Malformed input format.' });
   }
 
-  if (!('categoryName' in input)) {
+  if (
+    !('categoryName' in input) &&
+    !('categorySlug' in input) &&
+    !('description' in input) &&
+    !('coverImage' in input)
+  ) {
     return null;
   }
 
-  return {
-    categoryName: parseStringInput(input.categoryName, 'categoryName'),
-  };
+  return zodSchemaParser(updateCategorySchema, input);
 };
 
 export { validateNewCategory, validateCategoryUpdate };

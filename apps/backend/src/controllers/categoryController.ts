@@ -38,7 +38,7 @@ export const get_one_category = async (
 ) => {
   try {
     const category = await Category.findOne({
-      where: { categoryName: req.params.categoryName },
+      where: { categorySlug: req.params.categorySlug },
     });
     if (!category) {
       throw new NotFoundError({ message: 'Category not found.' });
@@ -74,21 +74,22 @@ export const update_one_category = async (
 ) => {
   try {
     const categoryToUpdate = await Category.findOne({
-      where: { categoryName: req.params.categoryName },
+      where: { categorySlug: req.params.categorySlug },
     });
     if (!categoryToUpdate) {
       throw new NotFoundError({ message: 'Category to update was not found.' });
     }
     const categoryUpdateData = validateCategoryUpdate(req.body);
-    if (categoryUpdateData) {
+
+    if (!categoryUpdateData) {
+      // No update data => return original category
+      res.status(204).send();
+    } else {
       const updatedCategory = await Category.update(categoryUpdateData, {
-        where: { categoryName: categoryToUpdate.categoryName },
+        where: { categorySlug: categoryToUpdate.categorySlug },
         returning: true,
       });
       res.status(200).json(updatedCategory[1][0]);
-    } else {
-      // No update data => return original category
-      res.status(204).send();
     }
   } catch (err: unknown) {
     next(err);
@@ -102,7 +103,7 @@ export const delete_one_category = async (
 ) => {
   try {
     const categoryToDelete = await Category.findOne({
-      where: { categoryName: req.params.categoryName },
+      where: { categorySlug: req.params.categorySlug },
     });
     if (!categoryToDelete) {
       throw new NotFoundError({ message: 'Category to delete was not found.' });

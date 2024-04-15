@@ -24,6 +24,9 @@ class Category extends Model<
 > {
   declare id: CreationOptional<number>;
   declare categoryName: string;
+  declare categorySlug: string;
+  declare description: CreationOptional<string>;
+  declare coverImage: CreationOptional<object | null>;
 
   declare getPosts: HasManyGetAssociationsMixin<Post>;
   declare addPost: HasManyAddAssociationMixin<Post, number>;
@@ -46,6 +49,18 @@ Category.init(
     categoryName: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    categorySlug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    coverImage: {
+      type: DataTypes.JSONB,
+      allowNull: true,
     },
   },
   {

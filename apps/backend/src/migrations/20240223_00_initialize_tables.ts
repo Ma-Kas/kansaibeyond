@@ -212,6 +212,18 @@ const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
       unique: true,
     },
+    category_slug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    cover_image: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
   });
   await queryInterface.createTable('tags', {
     id: {

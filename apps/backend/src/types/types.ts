@@ -1,3 +1,8 @@
+type CoverImage = {
+  urlSlug: string;
+  altText: string;
+};
+
 // Contact Model Types
 type Contact = {
   id: number;
@@ -37,11 +42,6 @@ type UpdateUser = Partial<
 // Post Model Types
 type PostStatus = 'published' | 'draft' | 'pending' | 'trash';
 
-type CoverImage = {
-  urlSlug: string;
-  altText: string;
-};
-
 type Post = {
   id: number;
   postSlug: string;
@@ -73,9 +73,14 @@ type UpdatePost = Partial<Omit<NewPostRequestData, 'userId'>>;
 type Category = {
   id: number;
   categoryName: string;
+  categorySlug: string;
+  description?: string;
+  coverImage?: CoverImage;
 };
 
-type CategoryExId = Omit<Category, 'id'>;
+type NewCategory = Omit<Category, 'id'>;
+
+type UpdateCategory = Partial<NewCategory>;
 
 // Tag Model Types
 type Tag = {
@@ -118,7 +123,8 @@ export {
   NewPost,
   UpdatePost,
   Category,
-  CategoryExId,
+  NewCategory,
+  UpdateCategory,
   Tag,
   NewTag,
   UpdateTag,
