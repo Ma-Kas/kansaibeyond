@@ -37,10 +37,9 @@ type UpdateUser = Partial<
 // Post Model Types
 type PostStatus = 'published' | 'draft' | 'pending' | 'trash';
 
-type PostMedia = {
-  name: string;
-  url: string;
-  caption?: string;
+type CoverImage = {
+  urlSlug: string;
+  altText: string;
 };
 
 type Post = {
@@ -48,7 +47,7 @@ type Post = {
   postSlug: string;
   title: string;
   content: string;
-  media: PostMedia;
+  coverImage?: CoverImage;
   status?: PostStatus;
   views?: number;
   readTime?: number;

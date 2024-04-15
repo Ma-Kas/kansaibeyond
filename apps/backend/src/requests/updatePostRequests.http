@@ -7,7 +7,7 @@ content-type: application/json
   "title": "This is a post title2",
   "content": "HTML goes here",
   "status": "trash",
-  "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
+  "coverImage": {"urlSlug": "http://ImageURL", "altText": "An image"},
   "tags": [1],
   "categories": [1, 2]
 }

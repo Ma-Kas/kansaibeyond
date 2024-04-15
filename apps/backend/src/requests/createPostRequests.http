@@ -6,7 +6,7 @@ content-type: application/json
   "postSlug": "post-route",
   "title": "This is a post title",
   "content": "HTML goes here",
-  "media": {"name": "imageName", "url": "http://ImageURL", "caption": "An image"},
+  "coverImage": {"urlSlug": "pagage.jpg", "altText": "An image"},
   "tags": [1],
   "categories": [1]
 }

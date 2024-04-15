@@ -27,7 +27,7 @@ class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare postSlug: string;
   declare title: string;
   declare content: string;
-  declare media: object;
+  declare coverImage: CreationOptional<object | null>;
   declare status: CreationOptional<PostStatus>;
   declare views: CreationOptional<number>;
   declare readTime: CreationOptional<number>;
@@ -75,9 +75,9 @@ Post.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    media: {
+    coverImage: {
       type: DataTypes.JSONB,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.STRING,

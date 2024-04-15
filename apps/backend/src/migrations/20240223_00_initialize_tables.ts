@@ -142,9 +142,9 @@ const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    media: {
+    cover_image: {
       type: DataTypes.JSONB,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.STRING,

@@ -6,10 +6,9 @@ import BadRequestError from '../errors/BadRequestError';
 import { MAX_CATEGORIES_PER_POST, MAX_TAGS_PER_POST } from './constants';
 
 // Zod Schemas
-const postMediaSchema = z.object({
-  name: z.string(),
-  url: z.string().url(),
-  caption: z.string().optional(),
+const postCoverImageSchema = z.object({
+  urlSlug: z.string(),
+  altText: z.string(),
 });
 
 const postStatusSchema = z.union([
@@ -25,7 +24,7 @@ const newPostSchema = z.object(
     postSlug: z.string(),
     title: z.string(),
     content: z.string(),
-    media: postMediaSchema,
+    coverImage: postCoverImageSchema.optional(),
     status: postStatusSchema.optional(),
     tags: z.number().array().max(MAX_TAGS_PER_POST),
     categories: z.number().array().max(MAX_CATEGORIES_PER_POST),
@@ -38,7 +37,7 @@ const updatePostSchema = z.object(
     postSlug: z.string().optional(),
     title: z.string().optional(),
     content: z.string().optional(),
-    media: postMediaSchema.optional(),
+    coverImage: postCoverImageSchema.optional(),
     status: postStatusSchema.optional(),
     tags: z.number().array().max(MAX_TAGS_PER_POST).optional(),
     categories: z.number().array().max(MAX_CATEGORIES_PER_POST).optional(),
@@ -62,10 +61,6 @@ const validateNewPostData = (input: unknown): NewPostValidationResult => {
     throw new BadRequestError({ message: 'Post Content is required.' });
   }
 
-  if (!('media' in input)) {
-    throw new BadRequestError({ message: 'Media is required.' });
-  }
-
   if (!('tags' in input)) {
     throw new BadRequestError({ message: 'Tags are required.' });
   }
@@ -81,7 +76,7 @@ const validateNewPostData = (input: unknown): NewPostValidationResult => {
       postSlug: parseResult.postSlug,
       title: parseResult.title,
       content: parseResult.content,
-      media: parseResult.media,
+      coverImage: parseResult.coverImage,
       status: parseResult.status,
     },
     categories: parseResult.categories,
@@ -99,7 +94,7 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     !('postSlug' in input) &&
     !('title' in input) &&
     !('content' in input) &&
-    !('media' in input) &&
+    !('coverImage' in input) &&
     !('status' in input) &&
     !('tags' in input) &&
     !('categories' in input)
