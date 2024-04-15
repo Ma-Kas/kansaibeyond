@@ -3,7 +3,11 @@ import { NewPostValidationResult, UpdatePost } from '../types/types';
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
 
-import { MAX_CATEGORIES_PER_POST, MAX_TAGS_PER_POST } from './constants';
+import {
+  MAX_CATEGORIES_PER_POST,
+  MAX_TAGS_PER_POST,
+  MAX_RELATED_POSTS,
+} from './constants';
 
 // Zod Schemas
 const postCoverImageSchema = z.object({
@@ -28,6 +32,7 @@ const newPostSchema = z.object(
     status: postStatusSchema.optional(),
     tags: z.number().array().min(1).max(MAX_TAGS_PER_POST),
     categories: z.number().array().min(1).max(MAX_CATEGORIES_PER_POST),
+    relatedPosts: z.number().array().max(MAX_RELATED_POSTS).optional(),
   }
 ).strict();
 
@@ -41,6 +46,7 @@ const updatePostSchema = z.object(
     status: postStatusSchema.optional(),
     tags: z.number().array().min(1).max(MAX_TAGS_PER_POST).optional(),
     categories: z.number().array().min(1).max(MAX_CATEGORIES_PER_POST).optional(),
+    relatedPosts: z.number().array().max(MAX_RELATED_POSTS).optional(),
   }
 ).strict();
 
@@ -81,6 +87,7 @@ const validateNewPostData = (input: unknown): NewPostValidationResult => {
     },
     categories: parseResult.categories,
     tags: parseResult.tags,
+    relatedPosts: parseResult.relatedPosts,
   };
 };
 
@@ -97,14 +104,15 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     !('coverImage' in input) &&
     !('status' in input) &&
     !('tags' in input) &&
-    !('categories' in input)
+    !('categories' in input) &&
+    !('relatedPosts' in input)
   ) {
     return null;
   }
 
   const parseResult = zodSchemaParser(updatePostSchema, input);
 
-  // No postData updated, only associated categories or tags
+  // No postData updated, only associated categories, tags or relatedPosts
   if (
     !parseResult.postSlug &&
     !parseResult.title &&
@@ -116,6 +124,7 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
       postData: undefined,
       categories: parseResult.categories,
       tags: parseResult.tags,
+      relatedPosts: parseResult.relatedPosts,
     };
   }
 
@@ -130,6 +139,7 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     },
     categories: parseResult.categories,
     tags: parseResult.tags,
+    relatedPosts: parseResult.relatedPosts,
   };
 };
 

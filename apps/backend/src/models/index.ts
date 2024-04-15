@@ -8,6 +8,7 @@ import Comment from './comment';
 // Import join tables
 import PostCategory from './postCategory';
 import PostTag from './postTag';
+import RelatedPost from './relatedPost';
 
 void (function createAssociations() {
   try {
@@ -19,6 +20,8 @@ void (function createAssociations() {
 
     Post.belongsToMany(Category, { through: PostCategory });
     Category.belongsToMany(Post, { through: PostCategory });
+
+    Post.belongsToMany(Post, { as: 'relatedPosts', through: RelatedPost });
 
     Post.belongsToMany(Tag, { through: PostTag });
     Tag.belongsToMany(Post, { through: PostTag });

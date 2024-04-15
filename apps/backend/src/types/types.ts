@@ -68,12 +68,14 @@ type Post = {
 type NewPostRequestData = Omit<Post, 'id' | 'views' | 'readTime'> & {
   categories: number[];
   tags: number[];
+  relatedPosts?: number[];
 };
 
 type NewPostValidationResult = {
   postData: Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>;
   categories: number[];
   tags: number[];
+  relatedPosts?: number[];
 };
 
 type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
@@ -82,6 +84,7 @@ type UpdatePost = {
   postData?: Partial<Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>>;
   categories?: number[];
   tags?: number[];
+  relatedPosts?: number[];
 };
 
 // Category Model Types

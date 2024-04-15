@@ -3,8 +3,8 @@ POST http://localhost:3001/api/posts
 content-type: application/json
 
 {
-  "postSlug": "post-route11",
-  "title": "This is a post title11",
+  "postSlug": "post-route",
+  "title": "This is a post title",
   "content": "HTML goes here",
   "coverImage": {"urlSlug": "pagage.jpg", "altText": "An image"},
   "tags": [1],

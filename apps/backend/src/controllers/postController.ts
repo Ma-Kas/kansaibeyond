@@ -26,15 +26,23 @@ export const get_all_posts = async (
           attributes: ['username', 'userIcon', 'status'],
         },
         {
+          model: Post,
+          as: 'relatedPosts',
+          attributes: ['id', 'title'],
+          through: {
+            attributes: [],
+          },
+        },
+        {
           model: Category,
-          attributes: ['categoryName'],
+          attributes: ['id', 'categoryName'],
           through: {
             attributes: [],
           },
         },
         {
           model: Tag,
-          attributes: ['tagName'],
+          attributes: ['id', 'tagName'],
           through: {
             attributes: [],
           },
@@ -126,18 +134,21 @@ export const post_new_post = async (
     }
 
     // Validated raw data
-    const validatedPostDataExUser = validateNewPostData(req.body);
+    const validatedData = validateNewPostData(req.body);
 
-    if (validatedPostDataExUser) {
+    if (validatedData) {
       // Add user_id from logged in user to validated data
-      const validatedPostData = validatedPostDataExUser.postData as NewPost;
+      const validatedPostData = validatedData.postData as NewPost;
       validatedPostData.userId = user.id;
 
       const addedPost = await Post.create(validatedPostData);
 
       // Add association to categories, tags table
-      await addedPost.addCategories(validatedPostDataExUser.categories);
-      await addedPost.addTags(validatedPostDataExUser.tags);
+      await addedPost.addCategories(validatedData.categories);
+      await addedPost.addTags(validatedData.tags);
+      if (validatedData.relatedPosts) {
+        await addedPost.addRelatedPosts(validatedData.relatedPosts);
+      }
       res.status(201).json(addedPost);
     } else {
       throw new BadRequestError({ message: 'Invalid Post data.' });
@@ -160,6 +171,7 @@ export const update_one_post = async (
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
+    console.log(validatedUpdateData);
 
     // No update data => return original post
     if (!validatedUpdateData) {
@@ -174,6 +186,9 @@ export const update_one_post = async (
         if (validatedUpdateData.tags) {
           await postToUpdate.setTags(validatedUpdateData.tags);
         }
+        if (validatedUpdateData.relatedPosts) {
+          await postToUpdate.setRelatedPosts(validatedUpdateData.relatedPosts);
+        }
         res.status(200).json(postToUpdate);
       } else {
         const updatedPost = await Post.update(validatedUpdateData.postData, {
@@ -187,6 +202,12 @@ export const update_one_post = async (
         // Set associated tags to updated tags
         if (validatedUpdateData.tags) {
           await updatedPost[1][0].setTags(validatedUpdateData.tags);
+        }
+        // Set associated relatedPosts to updated relatedPosts
+        if (validatedUpdateData.relatedPosts) {
+          await updatedPost[1][0].setRelatedPosts(
+            validatedUpdateData.relatedPosts
+          );
         }
         res.status(200).json(updatedPost[1][0]);
       }
@@ -255,9 +276,10 @@ export const delete_one_post = async (
         .json({ message: `Trashed post "${updatedPost[1][0].title}"` });
     }
 
-    // Remove all associated categories, tags by setting to empty array
+    // Remove all associated categories, tags, relatedPosts by setting to empty array
     await postToDelete.setCategories([]);
     await postToDelete.setTags([]);
+    await postToDelete.setRelatedPosts([]);
 
     await postToDelete.destroy();
     res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });

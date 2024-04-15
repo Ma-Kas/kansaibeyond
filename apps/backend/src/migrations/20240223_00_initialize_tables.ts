@@ -276,6 +276,23 @@ const up: Migration = async ({ context: queryInterface }) => {
       references: { model: 'tags', key: 'id' },
     },
   });
+  await queryInterface.createTable('related_posts', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    post_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'posts', key: 'id' },
+    },
+    related_post_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'posts', key: 'id' },
+    },
+  });
 
   await queryInterface.addColumn('contacts', 'user_id', {
     type: DataTypes.INTEGER,
@@ -322,6 +339,9 @@ const down: Migration = async ({ context: queryInterface }) => {
     cascade: true,
   });
   await queryInterface.dropTable('posts_tags', {
+    cascade: true,
+  });
+  await queryInterface.dropTable('related_posts', {
     cascade: true,
   });
 };
