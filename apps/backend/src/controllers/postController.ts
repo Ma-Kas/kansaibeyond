@@ -274,15 +274,15 @@ export const delete_one_post = async (
       res
         .status(200)
         .json({ message: `Trashed post "${updatedPost[1][0].title}"` });
+    } else {
+      // Remove all associated categories, tags, relatedPosts by setting to empty array
+      await postToDelete.setCategories([]);
+      await postToDelete.setTags([]);
+      await postToDelete.setRelatedPosts([]);
+
+      await postToDelete.destroy();
+      res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
     }
-
-    // Remove all associated categories, tags, relatedPosts by setting to empty array
-    await postToDelete.setCategories([]);
-    await postToDelete.setTags([]);
-    await postToDelete.setRelatedPosts([]);
-
-    await postToDelete.destroy();
-    res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
   } catch (err: unknown) {
     next(err);
   }

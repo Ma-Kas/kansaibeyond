@@ -6,10 +6,12 @@ import {
   CreationOptional,
   HasOneGetAssociationMixin,
   HasOneCreateAssociationMixin,
+  ForeignKey,
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
 import Contact from './contact';
+import Affiliate from './affiliate';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
@@ -23,6 +25,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare introduction: CreationOptional<string>;
   declare status: CreationOptional<'Admin' | 'Writer' | 'Tech' | 'Guest'>;
   declare disabled: CreationOptional<boolean>;
+  declare affiliateId: ForeignKey<Affiliate['id']>;
 
   declare getContact: HasOneGetAssociationMixin<Contact>;
   declare createContact: HasOneCreateAssociationMixin<Contact>;

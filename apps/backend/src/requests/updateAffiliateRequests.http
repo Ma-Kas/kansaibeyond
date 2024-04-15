@@ -1,0 +1,10 @@
+// POST valid new affiliate
+PUT http://localhost:3001/api/affiliates/2
+content-type: application/json
+
+{
+  "blogName": "changed test affiliate blog2",
+  "blogUrl": "http://www.2222testblog.com",
+  "blogDescription": "A changed test affiliate",
+  "userId": 1
+}

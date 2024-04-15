@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////////////////////
+// Utility Types                                                              //
+////////////////////////////////////////////////////////////////////////////////
+
 type CoverImage = {
   urlSlug: string;
   altText: string;
@@ -14,7 +18,10 @@ type Subset<K> = {
     : K[attr];
 };
 
-// Contact Model Types
+////////////////////////////////////////////////////////////////////////////////
+// Contact Model Types                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
 type Contact = {
   id: number;
   email?: string | null;
@@ -25,7 +32,10 @@ type Contact = {
   linkedin?: string | null;
 };
 
-// User Model Types
+////////////////////////////////////////////////////////////////////////////////
+// User Model Types                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
 type User = {
   id: number;
   username: string;
@@ -50,7 +60,10 @@ type UpdateUser = Partial<
   Omit<User, 'id' | 'userIcon' | 'status' | 'disabled'>
 > & { userIcon?: string; contact?: Omit<Contact, 'id'> };
 
-// Post Model Types
+////////////////////////////////////////////////////////////////////////////////
+// Post Model Types                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
 type PostStatus = 'published' | 'draft' | 'pending' | 'trash';
 
 type Post = {
@@ -87,7 +100,10 @@ type UpdatePost = {
   relatedPosts?: number[];
 };
 
-// Category Model Types
+////////////////////////////////////////////////////////////////////////////////
+// Category Model Types                                                       //
+////////////////////////////////////////////////////////////////////////////////
+
 type Category = {
   id: number;
   categoryName: string;
@@ -100,7 +116,10 @@ type NewCategory = Omit<Category, 'id'>;
 
 type UpdateCategory = Partial<NewCategory>;
 
-// Tag Model Types
+////////////////////////////////////////////////////////////////////////////////
+// Tag Model Types                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 type Tag = {
   id: number;
   tagName: string;
@@ -111,7 +130,10 @@ type NewTag = Omit<Tag, 'id'>;
 
 type UpdateTag = Partial<NewTag>;
 
-// Comment Model Types
+////////////////////////////////////////////////////////////////////////////////
+// Comment Model Types                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
 type Comment = {
   id: number;
   content: string;
@@ -129,6 +151,22 @@ type NewComment = Pick<Comment, 'content' | 'postId'> & {
 type NewRegisteredComment = Pick<Comment, 'content' | 'postId'> & {
   userId: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Affiliate Model Types                                                      //
+////////////////////////////////////////////////////////////////////////////////
+
+type Affiliate = {
+  id: number;
+  blogName: string;
+  blogUrl: string;
+  blogDescription: string;
+  userId?: number;
+};
+
+type NewAffiliate = Omit<Affiliate, 'id'>;
+
+type UpdateAffiliate = Partial<NewAffiliate>;
 
 export {
   Subset,
@@ -150,4 +188,7 @@ export {
   Comment,
   NewComment,
   NewRegisteredComment,
+  Affiliate,
+  NewAffiliate,
+  UpdateAffiliate,
 };

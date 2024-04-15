@@ -1,0 +1,3 @@
+###
+// DELETE valid user 
+DELETE http://localhost:3001/api/affiliates/1
