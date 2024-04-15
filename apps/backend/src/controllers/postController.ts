@@ -203,6 +203,38 @@ export const update_one_post = async (
   }
 };
 
+export const trash_one_post = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const postToDelete = await Post.findOne({
+      where: { postSlug: req.params.postSlug },
+    });
+    if (!postToDelete) {
+      throw new NotFoundError({ message: 'Post to delete was not found.' });
+    }
+
+    if (postToDelete.status === 'trash') {
+      res.status(204).end();
+    }
+
+    const updatedPost = await Post.update(
+      { status: 'trash' },
+      {
+        where: { postSlug: postToDelete.postSlug },
+        returning: true,
+      }
+    );
+    res
+      .status(200)
+      .json({ message: `Trashed post "${updatedPost[1][0].title}"` });
+  } catch (err: unknown) {
+    next(err);
+  }
+};
+
 export const delete_one_post = async (
   req: Request,
   res: Response,
@@ -214,6 +246,20 @@ export const delete_one_post = async (
     });
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
+    }
+
+    // If post is not trashed yet, just trash instead of deleting outright
+    if (postToDelete.status !== 'trash') {
+      const updatedPost = await Post.update(
+        { status: 'trash' },
+        {
+          where: { postSlug: postToDelete.postSlug },
+          returning: true,
+        }
+      );
+      res
+        .status(200)
+        .json({ message: `Trashed post "${updatedPost[1][0].title}"` });
     }
 
     // Remove all associated categories, tags by setting to empty array
