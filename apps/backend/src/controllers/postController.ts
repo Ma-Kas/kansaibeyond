@@ -165,25 +165,18 @@ export const update_one_post = async (
     if (!validatedUpdateData) {
       res.status(204).send();
     } else {
-      const keys = Object.keys(validatedUpdateData);
-
-      // Check whether only categories or tags are updated, then all queries regarding
-      // post itself are unneccessary
-      if (
-        keys.length === 2 &&
-        ['tags', 'categories'].every((i) => keys.includes(i))
-      ) {
-        await postToUpdate.setCategories(validatedUpdateData.categories);
-        await postToUpdate.setTags(validatedUpdateData.tags);
-        res.status(200).json(postToUpdate);
-      } else if (keys.length === 1 && keys[0] === 'categories') {
-        await postToUpdate.setCategories(validatedUpdateData.categories);
-        res.status(200).json(postToUpdate);
-      } else if (keys.length === 1 && keys[0] === 'tags') {
-        await postToUpdate.setTags(validatedUpdateData.tags);
+      if (!validatedUpdateData.postData) {
+        // No actual postdata to update, but only associations, then all queries
+        // to posts table itself unneccessary
+        if (validatedUpdateData.categories) {
+          await postToUpdate.setCategories(validatedUpdateData.categories);
+        }
+        if (validatedUpdateData.tags) {
+          await postToUpdate.setTags(validatedUpdateData.tags);
+        }
         res.status(200).json(postToUpdate);
       } else {
-        const updatedPost = await Post.update(validatedUpdateData, {
+        const updatedPost = await Post.update(validatedUpdateData.postData, {
           where: { postSlug: postToUpdate.postSlug },
           returning: true,
         });
@@ -191,7 +184,7 @@ export const update_one_post = async (
         if (validatedUpdateData.categories) {
           await updatedPost[1][0].setCategories(validatedUpdateData.categories);
         }
-        // Set associated tag to updated categories
+        // Set associated tags to updated tags
         if (validatedUpdateData.tags) {
           await updatedPost[1][0].setTags(validatedUpdateData.tags);
         }

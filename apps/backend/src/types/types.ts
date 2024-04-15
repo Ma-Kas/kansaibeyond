@@ -3,6 +3,17 @@ type CoverImage = {
   altText: string;
 };
 
+// Utility type that works as a nested Partial
+type Subset<K> = {
+  [attr in keyof K]?: K[attr] extends object
+    ? Subset<K[attr]>
+    : K[attr] extends object | null
+    ? Subset<K[attr]> | null
+    : K[attr] extends object | null | undefined
+    ? Subset<K[attr]> | null | undefined
+    : K[attr];
+};
+
 // Contact Model Types
 type Contact = {
   id: number;
@@ -67,7 +78,11 @@ type NewPostValidationResult = {
 
 type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
 
-type UpdatePost = Partial<Omit<NewPostRequestData, 'userId'>>;
+type UpdatePost = {
+  postData?: Partial<Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>>;
+  categories?: number[];
+  tags?: number[];
+};
 
 // Category Model Types
 type Category = {
@@ -113,6 +128,7 @@ type NewRegisteredComment = Pick<Comment, 'content' | 'postId'> & {
 };
 
 export {
+  Subset,
   User,
   NewUser,
   UpdateUser,

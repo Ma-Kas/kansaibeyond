@@ -26,8 +26,8 @@ const newPostSchema = z.object(
     content: z.string(),
     coverImage: postCoverImageSchema.optional(),
     status: postStatusSchema.optional(),
-    tags: z.number().array().max(MAX_TAGS_PER_POST),
-    categories: z.number().array().max(MAX_CATEGORIES_PER_POST),
+    tags: z.number().array().min(1).max(MAX_TAGS_PER_POST),
+    categories: z.number().array().min(1).max(MAX_CATEGORIES_PER_POST),
   }
 ).strict();
 
@@ -39,8 +39,8 @@ const updatePostSchema = z.object(
     content: z.string().optional(),
     coverImage: postCoverImageSchema.optional(),
     status: postStatusSchema.optional(),
-    tags: z.number().array().max(MAX_TAGS_PER_POST).optional(),
-    categories: z.number().array().max(MAX_CATEGORIES_PER_POST).optional(),
+    tags: z.number().array().min(1).max(MAX_TAGS_PER_POST).optional(),
+    categories: z.number().array().min(1).max(MAX_CATEGORIES_PER_POST).optional(),
   }
 ).strict();
 
@@ -102,7 +102,35 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     return null;
   }
 
-  return zodSchemaParser(updatePostSchema, input);
+  const parseResult = zodSchemaParser(updatePostSchema, input);
+
+  // No postData updated, only associated categories or tags
+  if (
+    !parseResult.postSlug &&
+    !parseResult.title &&
+    !parseResult.content &&
+    !parseResult.coverImage &&
+    !parseResult.status
+  ) {
+    return {
+      postData: undefined,
+      categories: parseResult.categories,
+      tags: parseResult.tags,
+    };
+  }
+
+  // postData updated
+  return {
+    postData: {
+      postSlug: parseResult.postSlug,
+      title: parseResult.title,
+      content: parseResult.content,
+      coverImage: parseResult.coverImage,
+      status: parseResult.status,
+    },
+    categories: parseResult.categories,
+    tags: parseResult.tags,
+  };
 };
 
 export { validateNewPostData, validatePostUpdateData };

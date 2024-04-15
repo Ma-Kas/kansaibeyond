@@ -9,5 +9,5 @@ content-type: application/json
   "status": "trash",
   "coverImage": {"urlSlug": "http://ImageURL", "altText": "An image"},
   "tags": [1],
-  "categories": [1, 2]
+  "categories": [1]
 }
