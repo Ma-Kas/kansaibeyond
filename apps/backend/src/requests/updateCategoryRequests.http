@@ -4,7 +4,11 @@ PUT http://localhost:3001/api/categories/testcategory
 content-type: application/json
 
 {
-  "categoryName": "former testcategory"
+  "categoryName": "former testcategory",
+  "categorySlug": "former-testcategory",
+  "description": "this is a description",
+  "coverImage": {"urlSlug": "image.png", "altText": "Alt text"}
+
 }
 
 ###
@@ -13,7 +17,10 @@ PUT http://localhost:3001/api/categories/testcategory
 content-type: application/json
 
 {
-  "categoryName": 400
+  "categoryName": 400,
+  "categorySlug": "testcategory",
+  "description": "this is a description",
+  "coverImage": {"urlSlug": "image.png", "altText": "Alt text"}
 }
 
 ###
@@ -22,5 +29,8 @@ PUT http://localhost:3001/api/categories/nonexisting
 content-type: application/json
 
 {
-  "categoryName": "former testcategory"
+  "categoryName": "former testcategory",
+  "categorySlug": "testcategory",
+  "description": "this is a description",
+  "coverImage": {"urlSlug": "image.png", "altText": "Alt text"}
 }

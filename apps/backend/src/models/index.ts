@@ -1,24 +1,43 @@
-import Blog from './blog';
+import Post from './post';
 import User from './user';
+import Contact from './contact';
 import Category from './category';
+import Tag from './tag';
 import Comment from './comment';
+import Affiliate from './affiliate';
+
+// Import join tables
+import PostCategory from './postCategory';
+import PostTag from './postTag';
+import RelatedPost from './relatedPost';
 
 void (function createAssociations() {
   try {
-    User.hasMany(Blog);
-    Blog.belongsTo(User);
+    User.hasOne(Contact);
+    Contact.belongsTo(User);
 
-    Category.hasMany(Blog);
-    Blog.belongsTo(Category);
+    User.hasMany(Post);
+    Post.belongsTo(User);
+
+    Post.belongsToMany(Category, { through: PostCategory });
+    Category.belongsToMany(Post, { through: PostCategory });
+
+    Post.belongsToMany(Post, { as: 'relatedPosts', through: RelatedPost });
+
+    Post.belongsToMany(Tag, { through: PostTag });
+    Tag.belongsToMany(Post, { through: PostTag });
 
     User.hasMany(Comment);
     Comment.belongsTo(User);
 
-    Blog.hasMany(Comment);
-    Comment.belongsTo(Blog);
+    Post.hasMany(Comment);
+    Comment.belongsTo(Post);
+
+    User.hasOne(Affiliate);
+    Affiliate.belongsTo(User);
   } catch (err: unknown) {
     console.log('Error', err);
   }
 })();
 
-export { User, Blog, Category, Comment };
+export { User, Contact, Post, Category, Comment, Tag, Affiliate };

@@ -1,0 +1,3 @@
+###
+// DELETE valid post
+DELETE http://localhost:3001/api/posts/post-route

@@ -1,0 +1,3 @@
+###
+// DELETE valid tag
+DELETE http://localhost:3001/api/tags/test-tag

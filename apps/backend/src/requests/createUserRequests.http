@@ -3,11 +3,11 @@ POST http://localhost:3001/api/users
 content-type: application/json
 
 {
-  "username": "testUser2",
+  "username": "testUser",
   "firstName": "testy",
   "lastName": "mctester",
   "email": "testy@test.com",
-  "displayName": "the tester",
+  "displayName": "the tester ",
   "password": "testPassword"
 }
 

@@ -1,0 +1,21 @@
+// POST valid new affiliate
+POST http://localhost:3001/api/affiliates
+content-type: application/json
+
+{
+  "blogName": "test affiliate blog",
+  "blogUrl": "http://testblog.com",
+  "blogDescription": "A test affiliate"
+}
+
+###
+// POST valid new affiliate with userId
+POST http://localhost:3001/api/affiliates
+content-type: application/json
+
+{
+  "blogName": "test affiliate blog 2",
+  "blogUrl": "http://testblog2.com",
+  "blogDescription": "A test affiliate",
+  "userId": 1
+}

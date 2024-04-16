@@ -1,90 +1,194 @@
-// User Model Types
+////////////////////////////////////////////////////////////////////////////////
+// Utility Types                                                              //
+////////////////////////////////////////////////////////////////////////////////
+
+type CoverImage = {
+  urlSlug: string;
+  altText: string;
+};
+
+// Utility type that works as a nested Partial
+type Subset<K> = {
+  [attr in keyof K]?: K[attr] extends object
+    ? Subset<K[attr]>
+    : K[attr] extends object | null
+    ? Subset<K[attr]> | null
+    : K[attr] extends object | null | undefined
+    ? Subset<K[attr]> | null | undefined
+    : K[attr];
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Contact Model Types                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
+type Contact = {
+  id: number;
+  email?: string | null;
+  homepage?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  youtube?: string | null;
+  linkedin?: string | null;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// User Model Types                                                           //
+////////////////////////////////////////////////////////////////////////////////
+
 type User = {
   id: number;
   username: string;
-  userIcon: string | null;
-  firstName: string;
-  lastName: string;
   email: string;
   displayName: string;
   password: string;
+  userIcon: string | null;
+  firstName: string;
+  lastName: string;
+  introduction?: string;
   status: 'Admin' | 'Writer' | 'Tech' | 'Guest';
   disabled: boolean;
-  blogs?: number[];
-  comments?: number[];
 };
 
 type NewUser = Pick<
   User,
-  'username' | 'firstName' | 'lastName' | 'email' | 'displayName' | 'password'
+  'username' | 'email' | 'displayName' | 'password' | 'firstName' | 'lastName'
 >;
 
 // Omit original userIcon, re-add in intersection to disallow null when updating
 type UpdateUser = Partial<
-  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled' | 'blogs' | 'comments'>
-> & { userIcon?: string };
+  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled'>
+> & { userIcon?: string; contact?: Omit<Contact, 'id'> };
 
-// Blog Model Types
-type BlogMedia = {
-  name: string;
-  url: string;
-  caption?: string;
-};
+////////////////////////////////////////////////////////////////////////////////
+// Post Model Types                                                           //
+////////////////////////////////////////////////////////////////////////////////
 
-type Blog = {
+type PostStatus = 'published' | 'draft' | 'pending' | 'trash';
+
+type Post = {
   id: number;
-  routeName: string;
+  postSlug: string;
   title: string;
   content: string;
-  media: BlogMedia;
-  tags: string[];
+  coverImage?: CoverImage;
+  status?: PostStatus;
   views?: number;
   readTime?: number;
   userId: number;
-  categoryId: number;
 };
 
-type NewBlog = Omit<Blog, 'id' | 'views' | 'readTime'>;
+type NewPostRequestData = Omit<Post, 'id' | 'views' | 'readTime'> & {
+  categories: number[];
+  tags: number[];
+  relatedPosts?: number[];
+};
 
-type UpdateBlog = Partial<Omit<NewBlog, 'userId'>>;
+type NewPostValidationResult = {
+  postData: Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>;
+  categories: number[];
+  tags: number[];
+  relatedPosts?: number[];
+};
 
-// Category Model Types
+type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
+
+type UpdatePost = {
+  postData?: Partial<Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>>;
+  categories?: number[];
+  tags?: number[];
+  relatedPosts?: number[];
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Category Model Types                                                       //
+////////////////////////////////////////////////////////////////////////////////
+
 type Category = {
   id: number;
   categoryName: string;
+  categorySlug: string;
+  description?: string;
+  coverImage?: CoverImage;
 };
 
-type CategoryExId = Omit<Category, 'id'>;
+type NewCategory = Omit<Category, 'id'>;
 
-// Comment Model Types
+type UpdateCategory = Partial<NewCategory>;
+
+////////////////////////////////////////////////////////////////////////////////
+// Tag Model Types                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+type Tag = {
+  id: number;
+  tagName: string;
+  tagSlug: string;
+};
+
+type NewTag = Omit<Tag, 'id'>;
+
+type UpdateTag = Partial<NewTag>;
+
+////////////////////////////////////////////////////////////////////////////////
+// Comment Model Types                                                        //
+////////////////////////////////////////////////////////////////////////////////
+
 type Comment = {
   id: number;
   content: string;
   name?: string;
   email?: string;
   userId?: number;
-  blogId: number;
+  postId: number;
 };
 
-type NewComment = Pick<Comment, 'content' | 'blogId'> & {
+type NewComment = Pick<Comment, 'content' | 'postId'> & {
   name: string;
   email: string;
 };
 
-type NewRegisteredComment = Pick<Comment, 'content' | 'blogId'> & {
+type NewRegisteredComment = Pick<Comment, 'content' | 'postId'> & {
   userId: number;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+// Affiliate Model Types                                                      //
+////////////////////////////////////////////////////////////////////////////////
+
+type Affiliate = {
+  id: number;
+  blogName: string;
+  blogUrl: string;
+  blogDescription: string;
+  userId?: number | null;
+};
+
+type NewAffiliate = Omit<Affiliate, 'id'>;
+
+type UpdateAffiliate = Partial<NewAffiliate>;
+
 export {
+  Subset,
   User,
   NewUser,
   UpdateUser,
-  Blog,
-  NewBlog,
-  UpdateBlog,
+  Post,
+  PostStatus,
+  NewPostRequestData,
+  NewPostValidationResult,
+  NewPost,
+  UpdatePost,
   Category,
-  CategoryExId,
+  NewCategory,
+  UpdateCategory,
+  Tag,
+  NewTag,
+  UpdateTag,
   Comment,
   NewComment,
   NewRegisteredComment,
+  Affiliate,
+  NewAffiliate,
+  UpdateAffiliate,
 };

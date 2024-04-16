@@ -4,21 +4,31 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasOneGetAssociationMixin,
+  HasOneCreateAssociationMixin,
+  ForeignKey,
 } from 'sequelize';
 
 import { sequelize } from '../utils/db';
+import Contact from './contact';
+import Affiliate from './affiliate';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
   declare username: string;
-  declare userIcon: CreationOptional<string>;
-  declare firstName: string;
-  declare lastName: string;
   declare email: string;
   declare displayName: string;
   declare password: string;
+  declare userIcon: CreationOptional<string>;
+  declare firstName: string;
+  declare lastName: string;
+  declare introduction: CreationOptional<string>;
   declare status: CreationOptional<'Admin' | 'Writer' | 'Tech' | 'Guest'>;
   declare disabled: CreationOptional<boolean>;
+  declare affiliateId: ForeignKey<Affiliate['id']>;
+
+  declare getContact: HasOneGetAssociationMixin<Contact>;
+  declare createContact: HasOneCreateAssociationMixin<Contact>;
 }
 
 User.init(
@@ -33,6 +43,23 @@ User.init(
       allowNull: false,
       unique: true,
     },
+    email: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+      unique: true,
+    },
+    displayName: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     userIcon: {
       type: DataTypes.TEXT,
       allowNull: true,
@@ -45,20 +72,9 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    email: {
+    introduction: {
       type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        isEmail: true,
-      },
-    },
-    displayName: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.TEXT,
@@ -73,6 +89,7 @@ User.init(
     sequelize,
     underscored: true,
     timestamps: true,
+    paranoid: true,
     modelName: 'user',
   }
 );

@@ -1,0 +1,12 @@
+// POST valid new post
+POST http://localhost:3001/api/posts
+content-type: application/json
+
+{
+  "postSlug": "post-route",
+  "title": "This is a post title",
+  "content": "HTML goes here",
+  "coverImage": {"urlSlug": "pagage.jpg", "altText": "An image"},
+  "tags": [1,2],
+  "categories": [1]
+}

@@ -1,0 +1,14 @@
+// UPDATE valid post
+PUT http://localhost:3001/api/posts/post-route2
+content-type: application/json
+
+{
+  "postSlug": "post-route2",
+  "title": "I have now related posts",
+  "content": "HTML goes here",
+  "status": "trash",
+  "coverImage": {"urlSlug": "http://ImageURL", "altText": "An image"},
+  "tags": [1],
+  "categories": [1],
+  "relatedPosts": [1]
+}

@@ -3,7 +3,8 @@ POST http://localhost:3001/api/categories
 content-type: application/json
 
 {
-  "categoryName": "testcategory"
+  "categoryName": "test category",
+  "categorySlug": "testcategory"
 }
 
 ###
@@ -21,7 +22,8 @@ POST http://localhost:3001/api/categories
 content-type: application/json
 
 {
-  "categoryName": 400
+  "categoryName": 400,
+  "categorySlug": "testcategory"
 }
 
 ###
@@ -30,5 +32,6 @@ POST http://localhost:3001/api/categories
 content-type: application/json
 
 {
-  "categoryName": "testcategory"
+  "categoryName": "testcategory",
+  "categorySlug": "testcategory"
 }

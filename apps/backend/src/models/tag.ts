@@ -18,15 +18,10 @@ import {
 import { sequelize } from '../utils/db';
 import Post from './post';
 
-class Category extends Model<
-  InferAttributes<Category>,
-  InferCreationAttributes<Category>
-> {
+class Tag extends Model<InferAttributes<Tag>, InferCreationAttributes<Tag>> {
   declare id: CreationOptional<number>;
-  declare categoryName: string;
-  declare categorySlug: string;
-  declare description: CreationOptional<string>;
-  declare coverImage: CreationOptional<object | null>;
+  declare tagName: string;
+  declare tagSlug: string;
 
   declare getPosts: HasManyGetAssociationsMixin<Post>;
   declare addPost: HasManyAddAssociationMixin<Post, number>;
@@ -39,38 +34,30 @@ class Category extends Model<
   declare countPosts: HasManyCountAssociationsMixin;
 }
 
-Category.init(
+Tag.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    categoryName: {
+    tagName: {
       type: DataTypes.TEXT,
       allowNull: false,
       unique: true,
     },
-    categorySlug: {
+    tagSlug: {
       type: DataTypes.TEXT,
       allowNull: false,
       unique: true,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    coverImage: {
-      type: DataTypes.JSONB,
-      allowNull: true,
     },
   },
   {
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: 'category',
+    modelName: 'tag',
   }
 );
 
-export default Category;
+export default Tag;

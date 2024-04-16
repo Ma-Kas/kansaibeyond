@@ -1,4 +1,4 @@
-// POST valid new user
+// POST valid new comment
 POST http://localhost:3001/api/comments
 content-type: application/json
 
@@ -6,5 +6,5 @@ content-type: application/json
   "content": "test comment",
   "name": "test comment author",
   "email": "testauthor@test.com",
-  "blogId": 2
+  "postId": 1
 }

@@ -1,6 +1,6 @@
 ###
 // DELETE valid user 
-DELETE http://localhost:3001/api/users/testUser2
+DELETE http://localhost:3001/api/users/testUser 2
 
 
 ###

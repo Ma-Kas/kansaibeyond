@@ -44,6 +44,7 @@ const errorHandler = (
 
   // Unhandled errors
   console.error(JSON.stringify(err, null, 2));
+  console.log(err);
   res
     .status(500)
     .send({ errors: [{ message: 'UNHANDLED! Something went wrong' }] });

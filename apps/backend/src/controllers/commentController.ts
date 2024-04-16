@@ -1,21 +1,22 @@
-import express from 'express';
-import { Comment, User, Blog } from '../models';
+import { Request, Response, NextFunction } from 'express';
+import { Comment, User, Post } from '../models';
 import NotFoundError from '../errors/NotFoundError';
 import {
   validateNewComment,
   validateNewRegisteredComment,
-} from '../utils/input-validation';
+} from '../utils/validate-comment-data';
 import { NewComment, NewRegisteredComment } from '../types/types';
 import BadRequestError from '../errors/BadRequestError';
 
-const router = express.Router();
-
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/', async (_req, res, next) => {
+export const get_all_comments = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const allComments = await Comment.findAll({
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'blogId'],
+        exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
       },
       include: [
         {
@@ -23,8 +24,8 @@ router.get('/', async (_req, res, next) => {
           attributes: ['username', 'userIcon', 'status'],
         },
         {
-          model: Blog,
-          attributes: ['id', 'routeName'],
+          model: Post,
+          attributes: ['id', 'postSlug'],
         },
       ],
     });
@@ -32,14 +33,17 @@ router.get('/', async (_req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.get('/:id', async (req, res, next) => {
+export const get_one_comment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const comment = await Comment.findByPk(req.params.id, {
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'blogId'],
+        exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
       },
       include: [
         {
@@ -47,8 +51,8 @@ router.get('/:id', async (req, res, next) => {
           attributes: ['username', 'userIcon', 'status'],
         },
         {
-          model: Blog,
-          attributes: ['id', 'routeName'],
+          model: Post,
+          attributes: ['id', 'postSlug'],
         },
       ],
     });
@@ -59,10 +63,13 @@ router.get('/:id', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.post('/', async (req, res, next) => {
+export const post_new_comment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     let validatedCommentData: NewComment | NewRegisteredComment;
 
@@ -72,11 +79,13 @@ router.post('/', async (req, res, next) => {
     // Split validation whether user is found (=logged in) or not
     // Different mandatory fields
     if (user) {
-      validatedCommentData = validateNewRegisteredComment(req.body);
-      if (!validatedCommentData) {
+      const validatedCommentDataExUser = validateNewRegisteredComment(req.body);
+
+      if (!validatedCommentDataExUser) {
         throw new BadRequestError({ message: 'Invalid Comment data.' });
       }
       // Add userId
+      validatedCommentData = validatedCommentDataExUser as NewRegisteredComment;
       validatedCommentData.userId = user.id;
     } else {
       validatedCommentData = validateNewComment(req.body);
@@ -90,10 +99,13 @@ router.post('/', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
+};
 
-// eslint-disable-next-line  @typescript-eslint/no-misused-promises
-router.delete('/:id', async (req, res, next) => {
+export const delete_one_comment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const commentToDelete = await Comment.findByPk(req.params.id);
     if (!commentToDelete) {
@@ -105,6 +117,4 @@ router.delete('/:id', async (req, res, next) => {
   } catch (err: unknown) {
     next(err);
   }
-});
-
-export default router;
+};
