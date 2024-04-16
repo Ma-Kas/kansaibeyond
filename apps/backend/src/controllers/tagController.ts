@@ -6,6 +6,7 @@ import { validateNewTag, validateTagUpdate } from '../utils/validate-tag-data';
 import { MIN_TAGS_PER_POST } from '../utils/constants';
 import NotFoundError from '../errors/NotFoundError';
 import BadRequestError from '../errors/BadRequestError';
+import { sequelize } from '../utils/db';
 
 export const get_all_tags = async (
   _req: Request,
@@ -100,6 +101,7 @@ export const delete_one_tag = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const tagToDelete = await Tag.findOne({
       where: { tagSlug: req.params.tagSlug },
@@ -120,7 +122,9 @@ export const delete_one_tag = async (
         if (tagCount === MIN_TAGS_PER_POST) {
           blockingPosts.push(posts[i]);
         } else {
-          await posts[i].removeTag(tagToDelete);
+          await posts[i].removeTag(tagToDelete, {
+            transaction: transaction,
+          });
         }
       }
       // If tagToDelete is only tag for any post, block deletion,
@@ -137,9 +141,13 @@ export const delete_one_tag = async (
     }
 
     // Not associated posts that would block deletion
-    await tagToDelete.destroy();
+    await tagToDelete.destroy({
+      transaction: transaction,
+    });
+    await transaction.commit();
     res.status(200).json({ message: `Deleted tag "${tagToDelete.tagName}"` });
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };

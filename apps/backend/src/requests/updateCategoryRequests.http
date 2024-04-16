@@ -5,7 +5,7 @@ content-type: application/json
 
 {
   "categoryName": "former testcategory",
-  "categorySlug": "testcategory",
+  "categorySlug": "former-testcategory",
   "description": "this is a description",
   "coverImage": {"urlSlug": "image.png", "altText": "Alt text"}
 

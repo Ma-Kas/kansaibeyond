@@ -6,5 +6,5 @@ content-type: application/json
   "blogName": "changed test affiliate blog2",
   "blogUrl": "http://www.2222testblog.com",
   "blogDescription": "A changed test affiliate",
-  "userId": 1
+  "userId": null
 }

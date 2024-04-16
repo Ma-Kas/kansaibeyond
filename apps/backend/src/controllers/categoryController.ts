@@ -9,6 +9,7 @@ import {
 import { MIN_CATEGORIES_PER_POST } from '../utils/constants';
 import NotFoundError from '../errors/NotFoundError';
 import BadRequestError from '../errors/BadRequestError';
+import { sequelize } from '../utils/db';
 
 export const get_all_categories = async (
   _req: Request,
@@ -103,6 +104,7 @@ export const delete_one_category = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const categoryToDelete = await Category.findOne({
       where: { categorySlug: req.params.categorySlug },
@@ -123,7 +125,9 @@ export const delete_one_category = async (
         if (categoryCount === MIN_CATEGORIES_PER_POST) {
           blockingPosts.push(posts[i]);
         } else {
-          await posts[i].removeCategory(categoryToDelete);
+          await posts[i].removeCategory(categoryToDelete, {
+            transaction: transaction,
+          });
         }
       }
       // If categoryToDelete is only category for any post, block deletion,
@@ -140,11 +144,15 @@ export const delete_one_category = async (
     }
 
     // Not associated posts that would block deletion
-    await categoryToDelete.destroy();
+    await categoryToDelete.destroy({
+      transaction: transaction,
+    });
+    await transaction.commit();
     res
       .status(200)
       .json({ message: `Deleted category "${categoryToDelete.categoryName}"` });
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };

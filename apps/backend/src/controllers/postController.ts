@@ -9,6 +9,7 @@ import { NewPost } from '../types/types';
 
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
+import { sequelize } from '../utils/db';
 
 export const get_all_posts = async (
   _req: Request,
@@ -126,6 +127,7 @@ export const post_new_post = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const user = await User.findOne();
 
@@ -141,19 +143,29 @@ export const post_new_post = async (
       const validatedPostData = validatedData.postData as NewPost;
       validatedPostData.userId = user.id;
 
-      const addedPost = await Post.create(validatedPostData);
+      const addedPost = await Post.create(validatedPostData, {
+        transaction: transaction,
+      });
 
       // Add association to categories, tags table
-      await addedPost.addCategories(validatedData.categories);
-      await addedPost.addTags(validatedData.tags);
+      await addedPost.addCategories(validatedData.categories, {
+        transaction: transaction,
+      });
+      await addedPost.addTags(validatedData.tags, {
+        transaction: transaction,
+      });
       if (validatedData.relatedPosts) {
-        await addedPost.addRelatedPosts(validatedData.relatedPosts);
+        await addedPost.addRelatedPosts(validatedData.relatedPosts, {
+          transaction: transaction,
+        });
       }
+      await transaction.commit();
       res.status(201).json(addedPost);
     } else {
       throw new BadRequestError({ message: 'Invalid Post data.' });
     }
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };
@@ -163,9 +175,11 @@ export const update_one_post = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const postToUpdate = await Post.findOne({
       where: { postSlug: req.params.postSlug },
+      transaction: transaction,
     });
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
@@ -174,44 +188,65 @@ export const update_one_post = async (
 
     // No update data => return original post
     if (!validatedUpdateData) {
+      await transaction.rollback();
       res.status(204).send();
     } else {
       if (!validatedUpdateData.postData) {
         // No actual postdata to update, but only associations, then all queries
         // to posts table itself unneccessary
         if (validatedUpdateData.categories) {
-          await postToUpdate.setCategories(validatedUpdateData.categories);
+          await postToUpdate.setCategories(validatedUpdateData.categories, {
+            transaction: transaction,
+          });
         }
         if (validatedUpdateData.tags) {
-          await postToUpdate.setTags(validatedUpdateData.tags);
+          await postToUpdate.setTags(validatedUpdateData.tags, {
+            transaction: transaction,
+          });
         }
         if (validatedUpdateData.relatedPosts) {
-          await postToUpdate.setRelatedPosts(validatedUpdateData.relatedPosts);
+          await postToUpdate.setRelatedPosts(validatedUpdateData.relatedPosts, {
+            transaction: transaction,
+          });
         }
+        await transaction.commit();
         res.status(200).json(postToUpdate);
       } else {
         const updatedPost = await Post.update(validatedUpdateData.postData, {
           where: { postSlug: postToUpdate.postSlug },
+          transaction: transaction,
           returning: true,
         });
         // Set associated categories to updated categories
         if (validatedUpdateData.categories) {
-          await updatedPost[1][0].setCategories(validatedUpdateData.categories);
+          await updatedPost[1][0].setCategories(
+            validatedUpdateData.categories,
+            {
+              transaction: transaction,
+            }
+          );
         }
         // Set associated tags to updated tags
         if (validatedUpdateData.tags) {
-          await updatedPost[1][0].setTags(validatedUpdateData.tags);
+          await updatedPost[1][0].setTags(validatedUpdateData.tags, {
+            transaction: transaction,
+          });
         }
         // Set associated relatedPosts to updated relatedPosts
         if (validatedUpdateData.relatedPosts) {
           await updatedPost[1][0].setRelatedPosts(
-            validatedUpdateData.relatedPosts
+            validatedUpdateData.relatedPosts,
+            {
+              transaction: transaction,
+            }
           );
         }
+        await transaction.commit();
         res.status(200).json(updatedPost[1][0]);
       }
     }
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };
@@ -253,6 +288,7 @@ export const delete_one_post = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const postToDelete = await Post.findOne({
       where: { postSlug: req.params.postSlug },
@@ -267,26 +303,38 @@ export const delete_one_post = async (
         { status: 'trash' },
         {
           where: { postSlug: postToDelete.postSlug },
+          transaction: transaction,
           returning: true,
         }
       );
+      await transaction.commit();
       res
         .status(200)
         .json({ message: `Trashed post "${updatedPost[1][0].title}"` });
     } else {
       // Remove all associated categories, tags, relatedPosts by setting to empty array
-      await postToDelete.setCategories([]);
-      await postToDelete.setTags([]);
-      await postToDelete.setRelatedPosts([]);
+      await postToDelete.setCategories([], {
+        transaction: transaction,
+      });
+      await postToDelete.setTags([], {
+        transaction: transaction,
+      });
+      await postToDelete.setRelatedPosts([], {
+        transaction: transaction,
+      });
 
       if (req.query.force && req.query.force === 'true') {
-        await postToDelete.destroy({ force: true });
+        await postToDelete.destroy({ force: true, transaction: transaction });
       } else {
-        await postToDelete.destroy();
+        await postToDelete.destroy({
+          transaction: transaction,
+        });
       }
+      await transaction.commit();
       res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
     }
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };

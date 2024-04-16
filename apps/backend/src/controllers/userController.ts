@@ -9,6 +9,7 @@ import {
 
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
+import { sequelize } from '../utils/db';
 
 export const get_all_users = async (
   _req: Request,
@@ -72,9 +73,11 @@ export const update_one_user = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const userToUpdate = await User.findOne({
       where: { username: req.params.username },
+      transaction: transaction,
     });
     if (!userToUpdate) {
       throw new NotFoundError({ message: 'User to update was not found.' });
@@ -82,6 +85,7 @@ export const update_one_user = async (
     const userUpdateData = validateUserUpdate(req.body);
     // No update data => return original user
     if (!userUpdateData) {
+      await transaction.rollback();
       res.status(204).send();
     } else {
       // Only re-crypt password if password has changed
@@ -93,17 +97,21 @@ export const update_one_user = async (
       }
       const updatedUser = await User.update(userUpdateData, {
         where: { username: userToUpdate.username },
+        transaction: transaction,
         returning: true,
       });
       // Update contact table entry if contact data in update data
       if (userUpdateData.contact) {
         await Contact.update(userUpdateData.contact, {
           where: { userId: userToUpdate.id },
+          transaction: transaction,
         });
       }
+      await transaction.commit();
       res.status(200).json(updatedUser[1][0]);
     }
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };
@@ -141,6 +149,7 @@ export const delete_one_user = async (
   res: Response,
   next: NextFunction
 ) => {
+  const transaction = await sequelize.transaction();
   try {
     const userToDelete = await User.findOne({
       where: { username: req.params.username },
@@ -152,19 +161,26 @@ export const delete_one_user = async (
     // Get associated contact row in contact table to delete along with user
     const contactToDelete = await Contact.findOne({
       where: { userId: userToDelete.id },
+      transaction: transaction,
     });
-    await contactToDelete?.destroy();
+    await contactToDelete?.destroy({
+      transaction: transaction,
+    });
 
     if (req.query.force && req.query.force === 'true') {
-      await userToDelete.destroy({ force: true });
+      await userToDelete.destroy({ force: true, transaction: transaction });
     } else {
-      await userToDelete.destroy();
+      await userToDelete.destroy({
+        transaction: transaction,
+      });
     }
 
+    await transaction.commit();
     res
       .status(200)
       .json({ message: `Deleted user "${userToDelete.username}"` });
   } catch (err: unknown) {
+    await transaction.rollback();
     next(err);
   }
 };

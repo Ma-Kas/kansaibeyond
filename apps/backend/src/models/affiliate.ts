@@ -18,7 +18,7 @@ class Affiliate extends Model<
   declare blogName: string;
   declare blogUrl: string;
   declare blogDescription: string;
-  declare userId: ForeignKey<User['id']>;
+  declare userId: ForeignKey<User['id']> | null;
 }
 
 Affiliate.init(

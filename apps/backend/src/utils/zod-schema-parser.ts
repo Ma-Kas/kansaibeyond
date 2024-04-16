@@ -13,10 +13,10 @@ const zodSchemaParser = <T extends z.ZodTypeAny>(schema: T, input: unknown) => {
     throw new BadRequestError({
       message: validationError.toString(),
     });
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return result.data as z.infer<T>;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return result.data as z.infer<T>;
 };
 
 export default zodSchemaParser;

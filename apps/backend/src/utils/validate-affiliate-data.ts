@@ -12,7 +12,7 @@ const newAffiliateSchema = z.object(
     blogName: z.string(),
     blogUrl: z.string().url(),
     blogDescription: z.string(),
-    userId: z.number().optional(),
+    userId: z.number().nullable().optional(),
   }
 ).strict();
 
@@ -22,7 +22,7 @@ const updateAffiliateSchema = z.object(
     blogName: z.string().optional(),
     blogUrl: z.string().url().optional(),
     blogDescription: z.string().optional(),
-    userId: z.number().optional(),
+    userId: z.number().nullable().optional(),
   }
 ).strict();
 

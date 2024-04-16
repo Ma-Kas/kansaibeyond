@@ -161,7 +161,7 @@ type Affiliate = {
   blogName: string;
   blogUrl: string;
   blogDescription: string;
-  userId?: number;
+  userId?: number | null;
 };
 
 type NewAffiliate = Omit<Affiliate, 'id'>;

@@ -7,6 +7,6 @@ content-type: application/json
   "title": "This is a post title",
   "content": "HTML goes here",
   "coverImage": {"urlSlug": "pagage.jpg", "altText": "An image"},
-  "tags": [1],
+  "tags": [1,2],
   "categories": [1]
 }
