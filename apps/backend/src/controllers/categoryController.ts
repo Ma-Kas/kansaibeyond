@@ -21,6 +21,7 @@ export const get_all_categories = async (
       include: [
         {
           model: Post,
+          attributes: ['id', 'postSlug'],
           through: {
             attributes: [],
           },
@@ -42,6 +43,15 @@ export const get_one_category = async (
   try {
     const category = await Category.findOne({
       where: { categorySlug: req.params.categorySlug },
+      include: [
+        {
+          model: Post,
+          attributes: ['id', 'postSlug'],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
     });
     if (!category) {
       throw new NotFoundError({ message: 'Category not found.' });
