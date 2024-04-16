@@ -19,12 +19,12 @@ export const get_all_posts = async (
   try {
     const allPosts = await Post.findAll({
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'categoryId'],
+        exclude: ['createdAt', 'userId', 'categoryId'],
       },
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'status'],
         },
         {
           model: Post,
@@ -36,14 +36,14 @@ export const get_all_posts = async (
         },
         {
           model: Category,
-          attributes: ['id', 'categoryName'],
+          attributes: ['id', 'categoryName', 'categorySlug'],
           through: {
             attributes: [],
           },
         },
         {
           model: Tag,
-          attributes: ['id', 'tagName'],
+          attributes: ['id', 'tagName', 'tagSlug'],
           through: {
             attributes: [],
           },
@@ -79,23 +79,23 @@ export const get_one_post = async (
   try {
     const post = await Post.findOne({
       attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'categoryId', 'postSlug'],
+        exclude: ['createdAt', 'userId', 'categoryId', 'postSlug'],
       },
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'status'],
         },
         {
           model: Category,
-          attributes: ['categoryName'],
+          attributes: ['id', 'categoryName', 'categorySlug'],
           through: {
             attributes: [],
           },
         },
         {
           model: Tag,
-          attributes: ['tagName'],
+          attributes: ['id', 'tagName', 'tagSlug'],
           through: {
             attributes: [],
           },

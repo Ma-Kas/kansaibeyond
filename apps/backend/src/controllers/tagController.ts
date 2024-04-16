@@ -18,6 +18,7 @@ export const get_all_tags = async (
       include: [
         {
           model: Post,
+          attributes: ['id', 'postSlug'],
           through: {
             attributes: [],
           },
@@ -39,6 +40,15 @@ export const get_one_tag = async (
   try {
     const tag = await Tag.findOne({
       where: { tagSlug: req.params.tagSlug },
+      include: [
+        {
+          model: Post,
+          attributes: ['id', 'postSlug'],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
     });
     if (!tag) {
       throw new NotFoundError({ message: 'Tag not found.' });
