@@ -5,6 +5,8 @@ import {
   validateNewCategory,
   validateCategoryUpdate,
 } from '../utils/validate-category-data';
+
+import { MIN_CATEGORIES_PER_POST } from '../utils/constants';
 import NotFoundError from '../errors/NotFoundError';
 import BadRequestError from '../errors/BadRequestError';
 
@@ -111,12 +113,33 @@ export const delete_one_category = async (
 
     const postCount = await categoryToDelete.countPosts();
 
+    // Category is associated with posts, check for each affected post, if it has
+    // other categories associated with it
     if (postCount) {
-      throw new BadRequestError({
-        message: `Cannot delete. Category is used in ${postCount} posts.`,
-      });
+      const posts = await categoryToDelete.getPosts();
+      const blockingPosts = [];
+      for (let i = 0; i < postCount; i++) {
+        const categoryCount = await posts[i].countCategories();
+        if (categoryCount === MIN_CATEGORIES_PER_POST) {
+          blockingPosts.push(posts[i]);
+        } else {
+          await posts[i].removeCategory(categoryToDelete);
+        }
+      }
+      // If categoryToDelete is only category for any post, block deletion,
+      // list blockingPosts
+      if (blockingPosts.length) {
+        throw new BadRequestError({
+          message: `Cannot delete. Category is only category in ${
+            blockingPosts.length
+          } posts. Affected posts: ${blockingPosts
+            .map((post) => post.postSlug)
+            .join(' | ')}`,
+        });
+      }
     }
 
+    // Not associated posts that would block deletion
     await categoryToDelete.destroy();
     res
       .status(200)

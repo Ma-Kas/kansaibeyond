@@ -44,10 +44,12 @@ Tag.init(
     tagName: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     tagSlug: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
   },
   {

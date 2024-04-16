@@ -8,10 +8,16 @@ const baseComment = {
   postId: 1,
 };
 
-// Need to create user, category and post first to satisfy foreign key requirements
+// Need to create user, category, tag and post first to satisfy foreign key requirements
 beforeAll(async () => {
   const commentTestCategory = {
-    categoryName: 'commentTestCategory',
+    categoryName: 'Comment Test Category',
+    categorySlug: 'comment-test-category',
+  };
+
+  const commentTestTag = {
+    tagName: 'Comment Test Tag',
+    tagSlug: 'comment-test-tag',
   };
 
   const commentTestUser = {
@@ -27,15 +33,21 @@ beforeAll(async () => {
     postSlug: 'test-post',
     title: 'test post title',
     content: 'test HTML code',
-    media: { name: 'testImage', url: 'http://testImageUrl' },
-    tags: ['test', 'test2'],
-    categoryId: 1,
+    coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
+    status: 'trash',
+    tags: [1],
+    categories: [1],
   };
 
   // prettier-ignore
   await request(app)
     .post('/api/categories')
     .send(commentTestCategory);
+
+  // prettier-ignore
+  await request(app)
+    .post('/api/tags')
+    .send(commentTestTag);
 
   // prettier-ignore
   await request(app)
@@ -54,7 +66,7 @@ describe('creating a new comment', () => {
       // Delete user to simulate not logged in
       // prettier-ignore
       await request(app)
-        .delete('/api/users/commentTestUser');
+        .delete('/api/users/commentTestUser?force=true');
     });
 
     test('succeeds with valid comment data non-registered user', async () => {

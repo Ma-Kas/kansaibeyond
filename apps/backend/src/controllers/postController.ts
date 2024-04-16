@@ -171,7 +171,6 @@ export const update_one_post = async (
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
-    console.log(validatedUpdateData);
 
     // No update data => return original post
     if (!validatedUpdateData) {
@@ -280,7 +279,11 @@ export const delete_one_post = async (
       await postToDelete.setTags([]);
       await postToDelete.setRelatedPosts([]);
 
-      await postToDelete.destroy();
+      if (req.query.force && req.query.force === 'true') {
+        await postToDelete.destroy({ force: true });
+      } else {
+        await postToDelete.destroy();
+      }
       res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
     }
   } catch (err: unknown) {

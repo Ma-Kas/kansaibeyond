@@ -49,10 +49,12 @@ Category.init(
     categoryName: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     categorySlug: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     description: {
       type: DataTypes.TEXT,

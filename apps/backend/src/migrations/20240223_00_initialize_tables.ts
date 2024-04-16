@@ -19,10 +19,12 @@ const up: Migration = async ({ context: queryInterface }) => {
       validate: {
         isEmail: true,
       },
+      unique: true,
     },
     display_name: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.TEXT,
@@ -215,6 +217,7 @@ const up: Migration = async ({ context: queryInterface }) => {
     category_slug: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     description: {
       type: DataTypes.TEXT,

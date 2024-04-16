@@ -11,10 +11,12 @@ const up: Migration = async ({ context: queryInterface }) => {
     blog_name: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     blog_url: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     blog_description: {
       type: DataTypes.TEXT,

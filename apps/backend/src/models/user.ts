@@ -49,10 +49,12 @@ User.init(
       validate: {
         isEmail: true,
       },
+      unique: true,
     },
     displayName: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.TEXT,

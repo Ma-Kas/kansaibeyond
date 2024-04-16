@@ -5,15 +5,22 @@ const basePost = {
   postSlug: 'test-post',
   title: 'test post title',
   content: 'test HTML code',
-  media: { name: 'testImage', url: 'http://testImageUrl' },
-  tags: ['test', 'test2'],
-  categoryId: 1,
+  coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
+  status: 'trash',
+  tags: [1],
+  categories: [1],
 };
 
-// Need to create user and category first to satisfy foreign key requirements
+// Need to create user, category and tag first to satisfy foreign key requirements
 beforeAll(async () => {
   const postTestCategory = {
-    categoryName: 'testPostCategory',
+    categoryName: 'Test Post Category',
+    categorySlug: 'test-post-category',
+  };
+
+  const postTestTag = {
+    tagName: 'Test Post Tag',
+    tagSlug: 'test-post-tag',
   };
 
   const postTestUser = {
@@ -29,6 +36,11 @@ beforeAll(async () => {
   await request(app)
       .post('/api/categories')
       .send(postTestCategory);
+
+  // prettier-ignore
+  await request(app)
+    .post('/api/tags')
+    .send(postTestTag);
 
   // prettier-ignore
   await request(app)
@@ -49,12 +61,12 @@ describe('creating a new post', () => {
 
   test('fails with 400 with invalid post data format', async () => {
     const newPost = {
-      postSlug: 'test-post',
+      postSlug: 'test-post-2',
       title: 400,
       content: 'test HTML code',
-      media: { name: 'testImage', url: 'http://testImageUrl' },
-      tags: ['test', 'test2'],
-      categoryId: 1,
+      coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
+      tags: [1],
+      categories: [1],
     };
 
     // prettier-ignore
@@ -79,9 +91,9 @@ describe('creating a new post', () => {
       postSlug: 'test-post',
       title: 'other test post title',
       content: 'test HTML code',
-      media: { name: 'testImage', url: 'http://testImageUrl' },
-      tags: ['test', 'test2'],
-      categoryId: 1,
+      coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
+      tags: [1],
+      categories: [1],
     };
 
     // prettier-ignore
@@ -107,7 +119,9 @@ describe('getting post data', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body[0].user.username).toEqual('testPostUser');
-    expect(response.body[0].category.categoryName).toEqual('testPostCategory');
+    expect(response.body[0].categories[0].categoryName).toEqual(
+      'Test Post Category'
+    );
   });
 
   test('with valid postSlug as param returns specific post', async () => {
@@ -117,7 +131,9 @@ describe('getting post data', () => {
     expect(response.status).toEqual(200);
     expect(response.body.title).toEqual('test post title');
     expect(response.body.user.username).toEqual('testPostUser');
-    expect(response.body.category.categoryName).toEqual('testPostCategory');
+    expect(response.body.categories[0].categoryName).toEqual(
+      'Test Post Category'
+    );
   });
 
   test('with non-existing postSlug as param returns 404', async () => {
@@ -136,7 +152,7 @@ describe('updating post', () => {
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/posts/test-post');
+      .delete('/api/posts/test-post?force=true');
     // prettier-ignore
     await request(app)
       .post('/api/posts')
@@ -175,7 +191,7 @@ describe('updating post', () => {
       errors: [
         {
           message:
-            'Validation error: Expected string, received number at "title";',
+            'Validation error: Expected string, received number at "title"',
         },
       ],
     });
@@ -198,10 +214,12 @@ describe('updating post', () => {
 describe('deleting post', () => {
   test('succeeds on existing post', async () => {
     const response = await request(app)
-      .delete('/api/posts/test-post')
+      .delete('/api/posts/test-post?force=true')
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
-    expect(response.body).toMatchObject({ message: 'Deleted test-post' });
+    expect(response.body).toMatchObject({
+      message: 'Deleted post "test post title"',
+    });
   });
 
   test('fails with 404 on non-existing post', async () => {

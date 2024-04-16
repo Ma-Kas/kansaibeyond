@@ -35,6 +35,8 @@ export const get_one_user = async (
   try {
     const user = await User.findOne({
       where: { username: req.params.username },
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      include: [{ model: Post }, { model: Comment }, { model: Contact }],
     });
     if (!user) {
       throw new NotFoundError({ message: 'User not found.' });
@@ -152,7 +154,13 @@ export const delete_one_user = async (
       where: { userId: userToDelete.id },
     });
     await contactToDelete?.destroy();
-    await userToDelete.destroy();
+
+    if (req.query.force && req.query.force === 'true') {
+      await userToDelete.destroy({ force: true });
+    } else {
+      await userToDelete.destroy();
+    }
+
     res
       .status(200)
       .json({ message: `Deleted user "${userToDelete.username}"` });
