@@ -1,12 +1,15 @@
 import '@mantine/core/styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MantineProvider } from '@mantine/core';
 import Router from './components/Router';
 import './styles/index.css';
 import './styles/variables.css';
 import './styles/editor.css';
-import { MantineProvider } from '@mantine/core';
 import { theme } from './theme';
+
+const queryClient = new QueryClient();
 
 // Handle runtime errors
 const showErrorOverlay = (err: Event) => {
@@ -36,8 +39,10 @@ window.addEventListener('unhandledrejection', ({ reason }) =>
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <MantineProvider theme={theme}>
-      <Router />
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme}>
+        <Router />
+      </MantineProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

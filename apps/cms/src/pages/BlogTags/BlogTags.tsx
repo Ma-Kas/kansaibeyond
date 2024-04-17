@@ -1,11 +1,12 @@
-import { Button } from '@mantine/core';
+import { Button, Loader } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 
 import CardTableTags from '../../components/CardTableTags/CardTableTags';
-import { MOCK_BLOG_TAGS } from '../../utils/mockdata';
+import { getAllTags } from '../../requests/tagRequests';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 
 // import localClasses from './BlogTags.module.css';
@@ -19,6 +20,12 @@ const BlogTags = () => {
   const [mainContentBodyElement, setMainContentBodyElement] =
     useState<HTMLDivElement | null>(null);
   const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ['tags'],
+    queryFn: getAllTags,
+    retry: 1,
+  });
 
   // Set ref of cardElement when rendered,
   // so tabs in header can get that ref and createPortal to it
@@ -66,18 +73,45 @@ const BlogTags = () => {
     </>
   );
 
+  const switchOnFetchResult = () => {
+    if (isPending) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error_loading']}>
+            <Loader size='xl' />
+          </div>
+        </div>
+      );
+    }
+    if (error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error_loading']}>
+            {error.message}
+          </div>
+        </div>
+      );
+    }
+    const tagTableData = data.map((entry) => {
+      return { ...entry, posts: entry.posts.length };
+    });
+    return (
+      <div className={classes['page_main_content_body_card']}>
+        <CardTableTags
+          headerTopStyle={headerTopStyle}
+          tagTableData={tagTableData}
+        />
+      </div>
+    );
+  };
+
   return (
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
       header={blogPostHeader}
     >
-      <div className={classes['page_main_content_body_card']}>
-        <CardTableTags
-          headerTopStyle={headerTopStyle}
-          tagTableData={MOCK_BLOG_TAGS}
-        />
-      </div>
+      {switchOnFetchResult()}
     </PageMainContent>
   );
 };

@@ -1,4 +1,3 @@
-export const BACKEND_BASE_URL =
-  process.env.NODE_ENV === 'development'
-    ? process.env.BACKEND_BASE_URL_DEV
-    : process.env.BACKEND_BASE_URL_PRODUCTION;
+export const BACKEND_BASE_URL = import.meta.env.DEV
+  ? import.meta.env.VITE_BACKEND_BASE_URL_DEV
+  : import.meta.env.VITE_BACKEND_BASE_URL_PROD;

@@ -80,7 +80,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
               }
             />
           </th>
-          <th>Category Name</th>
+          <th>Tag Name</th>
           <th>URL Slug</th>
           <th>Posts</th>
           <th></th>

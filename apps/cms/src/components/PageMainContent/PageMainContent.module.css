@@ -61,3 +61,10 @@
   display: flex;
   flex-direction: column;
 }
+
+.page_main_content_body_card_error_loading {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
