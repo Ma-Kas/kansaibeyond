@@ -7,8 +7,8 @@ import classes from './CardTableTags.module.css';
 
 export type TagTableData = {
   id: number;
-  name: string;
-  urlSlug: string;
+  tagName: string;
+  tagSlug: string;
   posts: number;
 };
 
@@ -50,8 +50,8 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
             onChange={() => toggleRow(item.id)}
           />
         </td>
-        <td>{item.name}</td>
-        <td>{`/${item.urlSlug}`}</td>
+        <td>{item.tagName}</td>
+        <td>{`/${item.tagSlug}`}</td>
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
         <td>
           <div className={classes['card_body_table_row_button_group']}>
