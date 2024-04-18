@@ -6,7 +6,6 @@ import { fromZodError } from 'zod-validation-error';
 const zodSchemaParser = <T extends z.ZodTypeAny>(schema: T, input: unknown) => {
   const result = schema.safeParse(input);
   if (!result.success) {
-    console.log('bad');
     const validationError = fromZodError(result.error, {
       includePath: true,
     });

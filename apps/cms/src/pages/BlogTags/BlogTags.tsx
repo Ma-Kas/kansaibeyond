@@ -8,8 +8,7 @@ import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import CardTableTags from '../../components/CardTableTags/CardTableTags';
 import { getAllTags } from '../../requests/tagRequests';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-
-// import localClasses from './BlogTags.module.css';
+import { ZodError } from 'zod';
 
 const BlogTags = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const BlogTags = () => {
     useState<HTMLDivElement | null>(null);
   const [headerTopStyle, setHeaderTopStyle] = useState('');
 
-  const { isPending, error, data } = useQuery({
+  const tagsQuery = useQuery({
     queryKey: ['tags'],
     queryFn: getAllTags,
     retry: 1,
@@ -73,8 +72,8 @@ const BlogTags = () => {
     </>
   );
 
-  const switchOnFetchResult = () => {
-    if (isPending) {
+  const switchRenderOnFetchResult = () => {
+    if (tagsQuery.isPending) {
       return (
         <div className={classes['page_main_content_body_card']}>
           <div className={classes['page_main_content_body_card_error_loading']}>
@@ -83,26 +82,32 @@ const BlogTags = () => {
         </div>
       );
     }
-    if (error) {
+    if (tagsQuery.data) {
+      const tagTableData = tagsQuery.data.map((entry) => {
+        return { ...entry, posts: entry.posts.length };
+      });
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <CardTableTags
+            headerTopStyle={headerTopStyle}
+            tagTableData={tagTableData}
+          />
+        </div>
+      );
+    }
+    if (tagsQuery.error) {
       return (
         <div className={classes['page_main_content_body_card']}>
           <div className={classes['page_main_content_body_card_error_loading']}>
-            {error.message}
+            {tagsQuery.error instanceof ZodError
+              ? 'Incoming Data Validation Error'
+              : tagsQuery.error.message}
           </div>
         </div>
       );
     }
-    const tagTableData = data.map((entry) => {
-      return { ...entry, posts: entry.posts.length };
-    });
-    return (
-      <div className={classes['page_main_content_body_card']}>
-        <CardTableTags
-          headerTopStyle={headerTopStyle}
-          tagTableData={tagTableData}
-        />
-      </div>
-    );
+
+    return <div></div>;
   };
 
   return (
@@ -111,7 +116,7 @@ const BlogTags = () => {
       mainContentBodyRef={mainContentBodyRef}
       header={blogPostHeader}
     >
-      {switchOnFetchResult()}
+      {switchRenderOnFetchResult()}
     </PageMainContent>
   );
 };
