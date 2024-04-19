@@ -51,6 +51,7 @@
   --dashboard-content-tabs-margin-top: rem(32px);
   --dashboard-content-tabs-gap: rem(16px);
   --dashboard-content-card-radius: rem(8px);
+  --dashboard-content-edit-card-padding: rem(24px) rem(24px) rem(36px);
   --dashboard-content-card-padding-horizontal: rem(24px);
   --dashboard-content-card-padding-vertical: rem(15px);
   --dashboard-content-card-sticky-header-height: rem(60px);

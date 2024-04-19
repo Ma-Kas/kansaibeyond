@@ -55,7 +55,18 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
         <td>
           <div className={classes['card_body_table_row_button_group']}>
-            <Button radius={'xl'} onClick={() => navigate('/composer')}>
+            <Button
+              radius={'xl'}
+              onClick={() =>
+                navigate(`${item.tagSlug}/edit`, {
+                  state: {
+                    type: 'update',
+                    tagName: item.tagName,
+                    tagSlug: item.tagSlug,
+                  },
+                })
+              }
+            >
               Edit
             </Button>
             <button>

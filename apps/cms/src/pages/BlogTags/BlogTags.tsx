@@ -53,14 +53,18 @@ const BlogTags = () => {
     }
   }, [mainContentBodyElement, mainContentHeaderElement]);
 
-  const blogPostHeader = (
+  const blogTagsHeader = (
     <>
       <div className={classes['page_main_content_header_main']}>
         <h1 className={classes['page_main_content_header_title']}>Tags</h1>
         <Button
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('/composer')}
+          onClick={() =>
+            navigate('create-tag', {
+              state: { type: 'create', tagName: 'Untitled Tag', tagSlug: '' },
+            })
+          }
         >
           Create Tag
         </Button>
@@ -114,7 +118,7 @@ const BlogTags = () => {
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
-      header={blogPostHeader}
+      header={blogTagsHeader}
     >
       {switchRenderOnFetchResult()}
     </PageMainContent>

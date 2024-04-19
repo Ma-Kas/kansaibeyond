@@ -23,6 +23,11 @@ const tagSchema = z.object(
 
 const allTagsSchema = z.array(tagSchema);
 
+type TagType = {
+  tagName: string;
+  tagSlug: string;
+};
+
 export const getAllTags = async () => {
   const response = await axios.get(`${BACKEND_BASE_URL}/tags`);
   return allTagsSchema.parse(response.data);
@@ -31,6 +36,20 @@ export const getAllTags = async () => {
 export const getOneTag = async (tagSlug: string) => {
   const response = await axios.get(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
   return tagSchema.parse(response.data);
+};
+
+export const postTag = async (tagData: TagType) => {
+  const response = await axios.post(`${BACKEND_BASE_URL}/tags`, tagData);
+  return response.data;
+};
+
+export const updateTag = async (tagData: TagType) => {
+  console.log(tagData);
+  const response = await axios.put(
+    `${BACKEND_BASE_URL}/tags/${tagData.tagSlug}`,
+    tagData
+  );
+  return response.data;
 };
 
 // Response can be 200 if ok, 400, 401,404, 500 otherwise
