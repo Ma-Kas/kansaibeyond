@@ -43,12 +43,17 @@ export const postTag = async (tagData: TagType) => {
   return response.data;
 };
 
-export const updateTag = async (tagData: TagType) => {
+export const updateTag = async (urlSlug: string, tagData: TagType) => {
   console.log(tagData);
   const response = await axios.put(
-    `${BACKEND_BASE_URL}/tags/${tagData.tagSlug}`,
+    `${BACKEND_BASE_URL}/tags/${urlSlug}`,
     tagData
   );
+  return response.data;
+};
+
+export const deleteTag = async (tagSlug: string) => {
+  const response = await axios.delete(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
   return response.data;
 };
 

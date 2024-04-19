@@ -21,6 +21,7 @@ const EditBlogTag = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { type, tagName, tagSlug } = location.state as LocationState;
+  const urlSlug = tagSlug;
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
@@ -54,6 +55,8 @@ const EditBlogTag = () => {
     },
     validate: zodResolver(tagSchema),
   });
+
+  type Tag = z.infer<typeof tagSchema>;
 
   useEffect(() => {
     setMainContentHeaderElement(mainContentHeaderRef.current);
@@ -89,7 +92,8 @@ const EditBlogTag = () => {
   });
 
   const tagUpdateMutation = useMutation({
-    mutationFn: updateTag,
+    mutationFn: ({ urlSlug, values }: { urlSlug: string; values: Tag }) =>
+      updateTag(urlSlug, values),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['tags'] });
       navigate('../..', { relative: 'path' });
@@ -105,7 +109,7 @@ const EditBlogTag = () => {
       if (type === 'create') {
         tagPostMutation.mutate(parseResult.data);
       } else {
-        tagUpdateMutation.mutate(parseResult.data);
+        tagUpdateMutation.mutate({ urlSlug, values: parseResult.data });
       }
     }
   };

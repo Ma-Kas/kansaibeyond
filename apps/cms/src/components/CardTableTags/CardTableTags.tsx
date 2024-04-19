@@ -4,6 +4,8 @@ import { Checkbox, Button } from '@mantine/core';
 
 import { useNavigate } from 'react-router-dom';
 import classes from './CardTableTags.module.css';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteTag } from '../../requests/tagRequests';
 
 export type TagTableData = {
   id: number;
@@ -20,6 +22,18 @@ type TableProps = {
 const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
+
+  const queryClient = useQueryClient();
+
+  const tagDeleteMutation = useMutation({
+    mutationFn: (urlSlug: string) => deleteTag(urlSlug),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['tags'] });
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
 
   const toggleRow = (id: number) =>
     setSelection((current) =>
@@ -69,7 +83,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
             >
               Edit
             </Button>
-            <button>
+            <button onClick={() => tagDeleteMutation.mutate(item.tagSlug)}>
               <span>...</span>
             </button>
           </div>
