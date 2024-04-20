@@ -1,6 +1,22 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
+
+// Axios instances (for interceptors)
+const getInstance = axios.create({
+  baseURL: `${BACKEND_BASE_URL}/tags`,
+  timeout: 1000,
+});
+
+const postPutInstance = axios.create({
+  baseURL: `${BACKEND_BASE_URL}/tags`,
+  timeout: 1000,
+});
+
+const deleteInstance = axios.create({
+  baseURL: `${BACKEND_BASE_URL}/tags`,
+  timeout: 1000,
+});
 
 // Zod Schemas
 // prettier-ignore
@@ -29,32 +45,36 @@ type TagType = {
 };
 
 export const getAllTags = async () => {
-  const response = await axios.get(`${BACKEND_BASE_URL}/tags`);
+  const response = await getInstance.get(`/`);
   return allTagsSchema.parse(response.data);
 };
 
 export const getOneTag = async (tagSlug: string) => {
-  const response = await axios.get(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
+  const response = await getInstance.get(`/${tagSlug}`);
   return tagSchema.parse(response.data);
 };
 
+// TODO: Error formatting and forward to display
 export const postTag = async (tagData: TagType) => {
-  const response = await axios.post(`${BACKEND_BASE_URL}/tags`, tagData);
-  return response.data;
+  try {
+    const response = await postPutInstance.post(`/`, tagData);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.errors[0].message as string);
+    }
+  }
 };
 
 export const updateTag = async (urlSlug: string, tagData: TagType) => {
   console.log(tagData);
-  const response = await axios.put(
-    `${BACKEND_BASE_URL}/tags/${urlSlug}`,
-    tagData
-  );
+  const response = await postPutInstance.put(`/${urlSlug}`, tagData);
   return response.data;
 };
 
 export const deleteTag = async (tagSlug: string) => {
-  const response = await axios.delete(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
+  const response = await deleteInstance.delete(`/${tagSlug}`);
   return response.data;
 };
 
-// Response can be 200 if ok, 400, 401,404, 500 otherwise
+// Response can be 200 if ok, 400, 401, 404, 500 otherwise

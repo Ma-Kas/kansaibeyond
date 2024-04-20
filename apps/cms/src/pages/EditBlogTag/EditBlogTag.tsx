@@ -87,6 +87,7 @@ const EditBlogTag = () => {
       navigate('..', { relative: 'path' });
     },
     onError: (err) => {
+      tagForm.setFieldError('tagName', 'Tag Name already exists');
       console.log(err);
     },
   });
