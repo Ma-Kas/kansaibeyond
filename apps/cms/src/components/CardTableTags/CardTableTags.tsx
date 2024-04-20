@@ -31,7 +31,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
       void queryClient.invalidateQueries({ queryKey: ['tags'] });
     },
     onError: (err) => {
-      console.log(err);
+      alert(err.message);
     },
   });
 

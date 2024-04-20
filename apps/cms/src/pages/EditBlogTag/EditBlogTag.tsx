@@ -10,6 +10,7 @@ import classes from '../../components/PageMainContent/PageMainContent.module.css
 import localClasses from './EditBlogTag.module.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postTag, updateTag } from '../../requests/tagRequests';
+import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
 
 type LocationState = {
   type: 'create' | 'update';
@@ -87,8 +88,12 @@ const EditBlogTag = () => {
       navigate('..', { relative: 'path' });
     },
     onError: (err) => {
-      tagForm.setFieldError('tagName', 'Tag Name already exists');
-      console.log(err);
+      const formFieldErrors = tagSetFormFieldError(err.message);
+      if (formFieldErrors && formFieldErrors.field) {
+        tagForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
+      } else {
+        alert(formFieldErrors.error);
+      }
     },
   });
 
@@ -100,7 +105,12 @@ const EditBlogTag = () => {
       navigate('../..', { relative: 'path' });
     },
     onError: (err) => {
-      console.log(err);
+      const formFieldErrors = tagSetFormFieldError(err.message);
+      if (formFieldErrors && formFieldErrors.field) {
+        tagForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
+      } else {
+        alert(formFieldErrors.error);
+      }
     },
   });
 

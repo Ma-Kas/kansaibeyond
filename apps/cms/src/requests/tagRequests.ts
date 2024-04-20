@@ -1,22 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
-
-// Axios instances (for interceptors)
-const getInstance = axios.create({
-  baseURL: `${BACKEND_BASE_URL}/tags`,
-  timeout: 1000,
-});
-
-const postPutInstance = axios.create({
-  baseURL: `${BACKEND_BASE_URL}/tags`,
-  timeout: 1000,
-});
-
-const deleteInstance = axios.create({
-  baseURL: `${BACKEND_BASE_URL}/tags`,
-  timeout: 1000,
-});
+import { handleRequestErrors } from '../utils/backend-error-response-validation';
 
 // Zod Schemas
 // prettier-ignore
@@ -39,42 +24,64 @@ const tagSchema = z.object(
 
 const allTagsSchema = z.array(tagSchema);
 
-type TagType = {
-  tagName: string;
-  tagSlug: string;
-};
+const newUpdateTagSchema = tagSchema.omit({ posts: true });
+
+// prettier-ignore
+const deleteTagSchema = z.object(
+  {
+    message: z.string(),
+  }
+).strict();
 
 export const getAllTags = async () => {
-  const response = await getInstance.get(`/`);
-  return allTagsSchema.parse(response.data);
-};
-
-export const getOneTag = async (tagSlug: string) => {
-  const response = await getInstance.get(`/${tagSlug}`);
-  return tagSchema.parse(response.data);
-};
-
-// TODO: Error formatting and forward to display
-export const postTag = async (tagData: TagType) => {
   try {
-    const response = await postPutInstance.post(`/`, tagData);
-    return response.data;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.errors[0].message as string);
-    }
+    const response = await axios.get(`${BACKEND_BASE_URL}/tags`);
+    return allTagsSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
   }
 };
 
-export const updateTag = async (urlSlug: string, tagData: TagType) => {
-  console.log(tagData);
-  const response = await postPutInstance.put(`/${urlSlug}`, tagData);
-  return response.data;
+export const getOneTag = async (tagSlug: string) => {
+  try {
+    const response = await axios.get(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
+    return tagSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
+export const postTag = async (tagData: unknown) => {
+  try {
+    const response = await axios.post(`${BACKEND_BASE_URL}/tags`, tagData);
+    return newUpdateTagSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
+export const updateTag = async (urlSlug: string, tagData: unknown) => {
+  try {
+    const response = await axios.put(
+      `${BACKEND_BASE_URL}/tags/${urlSlug}`,
+      tagData
+    );
+    return newUpdateTagSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
 };
 
 export const deleteTag = async (tagSlug: string) => {
-  const response = await deleteInstance.delete(`/${tagSlug}`);
-  return response.data;
+  try {
+    const response = await axios.delete(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
+    return deleteTagSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
 };
-
-// Response can be 200 if ok, 400, 401, 404, 500 otherwise
