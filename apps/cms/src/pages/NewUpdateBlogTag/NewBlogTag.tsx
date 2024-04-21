@@ -93,15 +93,19 @@ const NewBlogTag = () => {
             ? tagForm.getValues().tagName
             : 'Untitled Tag'}
         </h1>
-        <Group>
+        <Group className={classes['page_main_header_button_group']}>
           <Button
-            radius={'xl'}
+            className={classes['page_main_header_cancel_button']}
             onClick={() => navigate('..', { relative: 'path' })}
           >
             Cancel
           </Button>
 
-          <Button radius={'xl'} form='edit-form' type='submit'>
+          <Button
+            className={classes['page_main_header_confirm_button']}
+            form='edit-form'
+            type='submit'
+          >
             Save
           </Button>
         </Group>
