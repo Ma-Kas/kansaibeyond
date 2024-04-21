@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Group, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
 
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
@@ -67,7 +68,12 @@ const NewBlogTag = () => {
       if (formFieldErrors && formFieldErrors.field) {
         tagForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
       } else {
-        alert(formFieldErrors.error);
+        notifications.show({
+          title: 'An error occured',
+          message: formFieldErrors.error,
+          color: 'red',
+          withCloseButton: true,
+        });
       }
     },
   });
