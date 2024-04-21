@@ -10,7 +10,8 @@ import ErrorPage from '../pages/ErrorPage/ErrorPage';
 import BlogPosts from '../pages/BlogPosts/BlogPosts';
 import BlogCategories from '../pages/BlogCategories/BlogCategories';
 import BlogTags from '../pages/BlogTags/BlogTags';
-import EditBlogTag from '../pages/EditBlogTag/EditBlogTag';
+import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
+import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -45,11 +46,11 @@ const Router = () => {
             },
             {
               path: 'blog/tags/create-tag',
-              element: <EditBlogTag />,
+              element: <NewBlogTag />,
             },
             {
               path: 'blog/tags/:tagSlug/edit',
-              element: <EditBlogTag />,
+              element: <UpdateBlogTag />,
             },
           ],
         },

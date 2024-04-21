@@ -1,11 +1,12 @@
 import cx from 'clsx';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Checkbox, Button } from '@mantine/core';
 
-import { useNavigate } from 'react-router-dom';
-import classes from './CardTableTags.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteTag } from '../../requests/tagRequests';
+
+import classes from './CardTableTags.module.css';
 
 export type TagTableData = {
   id: number;
@@ -27,8 +28,8 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
 
   const tagDeleteMutation = useMutation({
     mutationFn: (urlSlug: string) => deleteTag(urlSlug),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['tags'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['tags'] });
     },
     onError: (err) => {
       alert(err.message);

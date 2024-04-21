@@ -1,28 +1,22 @@
-import { Button, Group, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import PageMainContent from '../../components/PageMainContent/PageMainContent';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button, Group, Loader, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { zodResolver } from 'mantine-form-zod-resolver';
-import { z } from 'zod';
+
+import PageMainContent from '../../components/PageMainContent/PageMainContent';
+import { getOneTag, updateTag } from '../../requests/tagRequests';
+import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
+import { tagSchema, Tag } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-import localClasses from './EditBlogTag.module.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postTag, updateTag } from '../../requests/tagRequests';
-import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
+import localClasses from './NewUpdataBlogTag.module.css';
 
-type LocationState = {
-  type: 'create' | 'update';
-  tagName: string;
-  tagSlug: string;
-};
-
-const EditBlogTag = () => {
+const UpdateBlogTag = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { type, tagName, tagSlug } = location.state as LocationState;
-  const urlSlug = tagSlug;
+  const { tagSlug } = useParams();
+  const urlSlug = tagSlug!;
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
@@ -33,31 +27,20 @@ const EditBlogTag = () => {
   const [headerTopStyle, setHeaderTopStyle] = useState('');
 
   const queryClient = useQueryClient();
-
-  // prettier-ignore
-  const tagSchema = z.object(
-    {
-      tagName: z
-        .string()
-        .min(2, { message: 'Must be at least 2 characters long.' })
-        .max(100, { message: 'Must be under 100 characters.' }),
-      tagSlug: z
-        .string()
-        .min(2, { message: 'Must be at least 2 characters long.' })
-        .max(100, { message: 'Must be under 100 characters.' }),
-    }
-  ).strict();
+  const tagQuery = useQuery({
+    queryKey: [urlSlug],
+    queryFn: () => getOneTag(urlSlug),
+    retry: 1,
+  });
 
   const tagForm = useForm({
     mode: 'controlled',
     initialValues: {
-      tagName: tagName,
-      tagSlug: tagSlug,
+      tagName: '',
+      tagSlug: '',
     },
     validate: zodResolver(tagSchema),
   });
-
-  type Tag = z.infer<typeof tagSchema>;
 
   useEffect(() => {
     setMainContentHeaderElement(mainContentHeaderRef.current);
@@ -81,27 +64,23 @@ const EditBlogTag = () => {
     }
   }, [mainContentBodyElement, mainContentHeaderElement]);
 
-  const tagPostMutation = useMutation({
-    mutationFn: postTag,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['tags'] });
-      navigate('..', { relative: 'path' });
-    },
-    onError: (err) => {
-      const formFieldErrors = tagSetFormFieldError(err.message);
-      if (formFieldErrors && formFieldErrors.field) {
-        tagForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
-      } else {
-        alert(formFieldErrors.error);
-      }
-    },
-  });
+  useEffect(() => {
+    if (tagQuery.isSuccess && tagQuery.data) {
+      tagForm.initialize({
+        tagName: tagQuery.data.tagName,
+        tagSlug: tagQuery.data.tagSlug,
+      });
+    }
+  }, [tagForm, tagQuery.isSuccess, tagQuery.data]);
 
   const tagUpdateMutation = useMutation({
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: Tag }) =>
       updateTag(urlSlug, values),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['tags'] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['tags'] }),
+        queryClient.invalidateQueries({ queryKey: [urlSlug] }),
+      ]);
       navigate('../..', { relative: 'path' });
     },
     onError: (err) => {
@@ -114,14 +93,26 @@ const EditBlogTag = () => {
     },
   });
 
+  if (tagQuery.isPending || tagQuery.isRefetching) {
+    return (
+      <div className={localClasses['page_main_loading_error_container']}>
+        <Loader size='xl' />
+      </div>
+    );
+  }
+
+  if (tagQuery.error) {
+    return (
+      <div className={localClasses['page_main_loading_error_container']}>
+        {tagQuery.error.message}
+      </div>
+    );
+  }
+
   const handleSubmit = (values: unknown) => {
     const parseResult = tagSchema.safeParse(values);
     if (parseResult.success) {
-      if (type === 'create') {
-        tagPostMutation.mutate(parseResult.data);
-      } else {
-        tagUpdateMutation.mutate({ urlSlug, values: parseResult.data });
-      }
+      tagUpdateMutation.mutate({ urlSlug, values: parseResult.data });
     }
   };
 
@@ -134,29 +125,20 @@ const EditBlogTag = () => {
             : 'Untitled Tag'}
         </h1>
         <Group>
-          {type === 'create' && (
-            <Button
-              radius={'xl'}
-              onClick={() => navigate('..', { relative: 'path' })}
-            >
-              Cancel
-            </Button>
-          )}
-          {type === 'update' && (
-            <Button
-              radius={'xl'}
-              onClick={() => navigate('../..', { relative: 'path' })}
-            >
-              Cancel
-            </Button>
-          )}
+          <Button
+            radius={'xl'}
+            onClick={() => navigate('../..', { relative: 'path' })}
+          >
+            Cancel
+          </Button>
+
           <Button radius={'xl'} form='edit-form' type='submit'>
             Save
           </Button>
         </Group>
       </div>
       <div className={classes['page_main_content_header_sub']}>
-        Set the SEO and social sharing images and help readers navigate your
+        Set the title and url slug for SEO, and to help readers navigate your
         blog.
       </div>
     </>
@@ -192,7 +174,7 @@ const EditBlogTag = () => {
               />
               <TextInput
                 leftSection={<span>/tag/</span>}
-                label='Tag Slug'
+                label='URL Slug'
                 placeholder='e.g. /japan'
                 description='URL slug displayed for this tag'
                 {...tagForm.getInputProps('tagSlug')}
@@ -206,4 +188,4 @@ const EditBlogTag = () => {
   );
 };
 
-export default EditBlogTag;
+export default UpdateBlogTag;
