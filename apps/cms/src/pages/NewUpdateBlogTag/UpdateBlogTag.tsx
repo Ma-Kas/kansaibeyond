@@ -77,10 +77,20 @@ const UpdateBlogTag = () => {
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: Tag }) =>
       updateTag(urlSlug, values),
     onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['tags'] }),
-        queryClient.invalidateQueries({ queryKey: [urlSlug] }),
-      ]);
+      // Avoid background refetch if urlSlug changed, as it can't be reached on
+      // that url anymore. Delete cache entry instead
+      if (urlSlug === tagForm.getValues().tagSlug) {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['tags'] }),
+          queryClient.invalidateQueries({ queryKey: [urlSlug] }),
+        ]);
+      } else {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['tags'] }),
+          queryClient.removeQueries({ queryKey: [urlSlug], exact: true }),
+        ]);
+      }
+
       navigate('../..', { relative: 'path' });
     },
     onError: (err) => {
@@ -173,9 +183,12 @@ const UpdateBlogTag = () => {
                 autoFocus
               />
               <TextInput
-                leftSection={<span>/tag/</span>}
+                leftSection={
+                  <div style={{ paddingLeft: '12px' }}>/blog/tags/</div>
+                }
+                leftSectionWidth={'10ch'}
                 label='URL Slug'
-                placeholder='e.g. /japan'
+                placeholder='your-tag-here'
                 description='URL slug displayed for this tag'
                 {...tagForm.getInputProps('tagSlug')}
                 required

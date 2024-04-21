@@ -142,9 +142,12 @@ const NewBlogTag = () => {
                 autoFocus
               />
               <TextInput
-                leftSection={<span>/tag/</span>}
+                leftSection={
+                  <div style={{ paddingLeft: '12px' }}>/blog/tags/</div>
+                }
+                leftSectionWidth={'10ch'}
                 label='URL Slug'
-                placeholder='e.g. /japan'
+                placeholder='your-tag-here'
                 description='URL slug displayed for this tag'
                 {...tagForm.getInputProps('tagSlug')}
                 required
