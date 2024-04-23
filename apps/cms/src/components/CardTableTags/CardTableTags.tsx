@@ -2,7 +2,15 @@ import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Checkbox, Button } from '@mantine/core';
+import { Checkbox, Button, Text } from '@mantine/core';
+import { modals } from '@mantine/modals';
+// import { notifications } from '@mantine/notifications';
+import { IconTrash, IconEdit } from '@tabler/icons-react';
+import {
+  ConfirmDeleteModal,
+  ErrorNotificationModal,
+} from '../FeedbackModals/FeedbackModals';
+import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 
 import { deleteTag } from '../../requests/tagRequests';
 
@@ -32,7 +40,19 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
       await queryClient.invalidateQueries({ queryKey: ['tags'] });
     },
     onError: (err) => {
-      alert(err.message);
+      modals.open(
+        ErrorNotificationModal({
+          titleText: 'And error has occured',
+          bodyText: err.message,
+        })
+      );
+      // notifications.show({
+      //   title: 'An error occured',
+      //   message: err.message,
+      //   color: 'red',
+      //   withCloseButton: true,
+      // });
+      // alert(err.message);
     },
   });
 
@@ -52,6 +72,33 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
 
   const tagRows = tagTableData.map((item) => {
     const selected = selection.includes(item.id);
+    const furtherEditDropdownItems = [
+      {
+        text: 'Edit Tag',
+        icon: IconEdit,
+        onClick: () =>
+          navigate(`${item.tagSlug}/edit`, {
+            state: {
+              type: 'update',
+              tagName: item.tagName,
+              tagSlug: item.tagSlug,
+            },
+          }),
+      },
+      {
+        text: 'Delete tag',
+        icon: IconTrash,
+        onClick: () =>
+          modals.openConfirmModal(
+            ConfirmDeleteModal({
+              titleText: `Delete tag "${item.tagName}?`,
+              bodyText: `Are you sure you want to delete tag "${item.tagName}? This action cannot be undone.`,
+              onConfirm: () => tagDeleteMutation.mutate(item.tagSlug),
+            })
+          ),
+      },
+    ];
+
     return (
       <tr
         key={item.id}
@@ -84,9 +131,20 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
             >
               Edit
             </Button>
-            <button onClick={() => tagDeleteMutation.mutate(item.tagSlug)}>
+            <FurtherEditDropdown items={furtherEditDropdownItems} />
+            {/* <button
+              onClick={() =>
+                modals.openConfirmModal(
+                  ConfirmDeleteModal({
+                    titleText: `Delete tag "${item.tagName}?`,
+                    bodyText: `Are you sure you want to delete tag "${item.tagName}? This action cannot be undone.`,
+                    onConfirm: () => tagDeleteMutation.mutate(item.tagSlug),
+                  })
+                )
+              }
+            >
               <span>...</span>
-            </button>
+            </button> */}
           </div>
         </td>
       </tr>

@@ -1,0 +1,27 @@
+.title {
+  color: var(--color-menu-text-light);
+  font-weight: var(--font-weight-bold);
+}
+
+.body {
+  color: var(--color-menu-text-light);
+  font-weight: var(--font-weight-regular);
+}
+
+.cancelBtn,
+.confirmBtn,
+.deleteBtn {
+  font-weight: var(--font-weight-bold);
+}
+
+.cancelBtn {
+  color: var(--color-menu-text-light);
+}
+
+.deleteBtn {
+  background-color: var(--mantine-color-red-7);
+}
+
+.deleteBtn:hover {
+  background-color: var(--mantine-color-red-9);
+}

@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import Router from './components/Router';
 import './styles/index.css';
@@ -43,8 +44,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme}>
-        <Notifications position='top-right' />
-        <Router />
+        <ModalsProvider>
+          <Notifications position='top-right' />
+          <Router />
+        </ModalsProvider>
       </MantineProvider>
     </QueryClientProvider>
   </React.StrictMode>
