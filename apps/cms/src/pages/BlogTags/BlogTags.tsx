@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { ZodError } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Loader } from '@mantine/core';
@@ -8,6 +7,7 @@ import { IconPlus } from '@tabler/icons-react';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import CardTableTags from '../../components/CardTableTags/CardTableTags';
 import { getAllTags } from '../../requests/tagRequests';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 
@@ -104,9 +104,7 @@ const BlogTags = () => {
       return (
         <div className={classes['page_main_content_body_card']}>
           <div className={classes['page_main_content_body_card_error_loading']}>
-            {tagsQuery.error instanceof ZodError
-              ? 'Incoming Data Validation Error'
-              : tagsQuery.error.message}
+            <DynamicErrorPage error={tagsQuery.error} />
           </div>
         </div>
       );
