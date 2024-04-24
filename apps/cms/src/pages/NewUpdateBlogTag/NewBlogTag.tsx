@@ -9,7 +9,12 @@ import { zodResolver } from 'mantine-form-zod-resolver';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import { postTag } from '../../requests/tagRequests';
 import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from '../../components/FeedbackPopups/FeedbackPopups';
 import { tagSchema } from './types';
+
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdataBlogTag.module.css';
 
@@ -59,21 +64,21 @@ const NewBlogTag = () => {
 
   const tagPostMutation = useMutation({
     mutationFn: postTag,
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: ['tags'] });
       navigate('..', { relative: 'path' });
+      notifications.show(
+        SuccessNotification({ bodyText: `Created new tag: ${data?.tagName}` })
+      );
     },
     onError: (err) => {
       const formFieldErrors = tagSetFormFieldError(err.message);
       if (formFieldErrors && formFieldErrors.field) {
         tagForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
       } else {
-        notifications.show({
-          title: 'An error occured',
-          message: formFieldErrors.error,
-          color: 'red',
-          withCloseButton: true,
-        });
+        notifications.show(
+          ErrorNotification({ bodyText: formFieldErrors.error })
+        );
       }
     },
   });

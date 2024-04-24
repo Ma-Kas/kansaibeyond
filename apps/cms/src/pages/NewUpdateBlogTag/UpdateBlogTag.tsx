@@ -3,11 +3,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Group, Loader, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
 
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import { getOneTag, updateTag } from '../../requests/tagRequests';
 import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from '../../components/FeedbackPopups/FeedbackPopups';
 import { tagSchema, Tag } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -76,7 +81,7 @@ const UpdateBlogTag = () => {
   const tagUpdateMutation = useMutation({
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: Tag }) =>
       updateTag(urlSlug, values),
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       // Avoid background refetch if urlSlug changed, as it can't be reached on
       // that url anymore. Delete cache entry instead
       if (urlSlug === tagForm.getValues().tagSlug) {
@@ -92,13 +97,20 @@ const UpdateBlogTag = () => {
       }
 
       navigate('../..', { relative: 'path' });
+      if (data) {
+        notifications.show(
+          SuccessNotification({ bodyText: `Tag updated: ${data.tagName}` })
+        );
+      }
     },
     onError: (err) => {
       const formFieldErrors = tagSetFormFieldError(err.message);
       if (formFieldErrors && formFieldErrors.field) {
         tagForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
       } else {
-        alert(formFieldErrors.error);
+        notifications.show(
+          ErrorNotification({ bodyText: formFieldErrors.error })
+        );
       }
     },
   });
@@ -113,7 +125,7 @@ const UpdateBlogTag = () => {
 
   if (tagQuery.error) {
     return (
-      <div className={localClasses['page_main_loading_error_container']}>
+      <div className={classes['page_main_loading_error_container']}>
         {tagQuery.error.message}
       </div>
     );

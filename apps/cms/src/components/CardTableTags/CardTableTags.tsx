@@ -2,14 +2,15 @@ import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Checkbox, Button, Text } from '@mantine/core';
+import { Checkbox, Button } from '@mantine/core';
 import { modals } from '@mantine/modals';
-// import { notifications } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { IconTrash, IconEdit } from '@tabler/icons-react';
+import { ConfirmDeleteModal } from '../FeedbackModals/FeedbackModals';
 import {
-  ConfirmDeleteModal,
-  ErrorNotificationModal,
-} from '../FeedbackModals/FeedbackModals';
+  SuccessNotification,
+  ErrorNotification,
+} from '../FeedbackPopups/FeedbackPopups';
 import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 
 import { deleteTag } from '../../requests/tagRequests';
@@ -36,23 +37,12 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
 
   const tagDeleteMutation = useMutation({
     mutationFn: (urlSlug: string) => deleteTag(urlSlug),
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: ['tags'] });
+      notifications.show(SuccessNotification({ bodyText: data?.message }));
     },
     onError: (err) => {
-      modals.open(
-        ErrorNotificationModal({
-          titleText: 'And error has occured',
-          bodyText: err.message,
-        })
-      );
-      // notifications.show({
-      //   title: 'An error occured',
-      //   message: err.message,
-      //   color: 'red',
-      //   withCloseButton: true,
-      // });
-      // alert(err.message);
+      notifications.show(ErrorNotification({ bodyText: err.message }));
     },
   });
 
@@ -132,19 +122,6 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
               Edit
             </Button>
             <FurtherEditDropdown items={furtherEditDropdownItems} />
-            {/* <button
-              onClick={() =>
-                modals.openConfirmModal(
-                  ConfirmDeleteModal({
-                    titleText: `Delete tag "${item.tagName}?`,
-                    bodyText: `Are you sure you want to delete tag "${item.tagName}? This action cannot be undone.`,
-                    onConfirm: () => tagDeleteMutation.mutate(item.tagSlug),
-                  })
-                )
-              }
-            >
-              <span>...</span>
-            </button> */}
           </div>
         </td>
       </tr>

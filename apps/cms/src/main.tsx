@@ -45,7 +45,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme}>
         <ModalsProvider>
-          <Notifications position='top-right' />
+          <Notifications position='top-center' />
           <Router />
         </ModalsProvider>
       </MantineProvider>
