@@ -66,14 +66,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
       {
         text: 'Edit Tag',
         icon: IconEdit,
-        onClick: () =>
-          navigate(`${item.tagSlug}/edit`, {
-            state: {
-              type: 'update',
-              tagName: item.tagName,
-              tagSlug: item.tagSlug,
-            },
-          }),
+        onClick: () => navigate(`${item.tagSlug}/edit`),
       },
       {
         text: 'Delete tag',
@@ -109,15 +102,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
           <div className={classes['card_body_table_row_button_group']}>
             <Button
               radius={'xl'}
-              onClick={() =>
-                navigate(`${item.tagSlug}/edit`, {
-                  state: {
-                    type: 'update',
-                    tagName: item.tagName,
-                    tagSlug: item.tagSlug,
-                  },
-                })
-              }
+              onClick={() => navigate(`${item.tagSlug}/edit`)}
             >
               Edit
             </Button>

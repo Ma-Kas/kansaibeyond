@@ -1,14 +1,14 @@
-import { Button } from '@mantine/core';
+import { Button, Loader } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 
 import CardTableCategories from '../../components/CardTableCategories/CardTableCategories';
-import { MOCK_BLOG_CATEGORIES } from '../../utils/mockdata';
+import { getAllCategories } from '../../requests/categoryRequests';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-
-// import localClasses from './BlogCategories.module.css';
 
 const BlogCategories = () => {
   const navigate = useNavigate();
@@ -19,6 +19,12 @@ const BlogCategories = () => {
   const [mainContentBodyElement, setMainContentBodyElement] =
     useState<HTMLDivElement | null>(null);
   const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const categoriesQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: getAllCategories,
+    retry: 1,
+  });
 
   // Set ref of cardElement when rendered,
   // so tabs in header can get that ref and createPortal to it
@@ -56,7 +62,7 @@ const BlogCategories = () => {
         <Button
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('/composer')}
+          onClick={() => navigate('create-category')}
         >
           Create Category
         </Button>
@@ -68,18 +74,49 @@ const BlogCategories = () => {
     </>
   );
 
+  const switchRenderOnFetchResult = () => {
+    if (categoriesQuery.isPending || categoriesQuery.isRefetching) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error_loading']}>
+            <Loader size='xl' />
+          </div>
+        </div>
+      );
+    }
+    if (categoriesQuery.data) {
+      const categoryTableData = categoriesQuery.data.map((entry) => {
+        return { ...entry, posts: entry.posts.length };
+      });
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <CardTableCategories
+            headerTopStyle={headerTopStyle}
+            categoryTableData={categoryTableData}
+          />
+        </div>
+      );
+    }
+    if (categoriesQuery.error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error_loading']}>
+            <DynamicErrorPage error={categoriesQuery.error} />
+          </div>
+        </div>
+      );
+    }
+
+    return <div></div>;
+  };
+
   return (
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
       header={blogPostHeader}
     >
-      <div className={classes['page_main_content_body_card']}>
-        <CardTableCategories
-          headerTopStyle={headerTopStyle}
-          categoryTableData={MOCK_BLOG_CATEGORIES}
-        />
-      </div>
+      {switchRenderOnFetchResult()}
     </PageMainContent>
   );
 };

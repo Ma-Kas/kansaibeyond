@@ -9,6 +9,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage';
 // Sub-Route Imports
 import BlogPosts from '../pages/BlogPosts/BlogPosts';
 import BlogCategories from '../pages/BlogCategories/BlogCategories';
+import NewBlogCategory from '../pages/NewUpdateBlogCategory/NewBlogCategory';
 import BlogTags from '../pages/BlogTags/BlogTags';
 import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
 import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
@@ -39,6 +40,10 @@ const Router = () => {
             {
               path: 'blog/categories',
               element: <BlogCategories />,
+            },
+            {
+              path: 'blog/categories/create-category',
+              element: <NewBlogCategory />,
             },
             {
               path: 'blog/tags',

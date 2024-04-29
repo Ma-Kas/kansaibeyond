@@ -2,26 +2,6 @@ import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
-// Axios errors
-// error.code ERR_BAD_REQUEST is everything in the 400 range
-// Backend Side Errors:
-// Sequelize Errors:
-// Response status = html code
-// Actual message: errors[0].message: "Whatever message"
-
-// Unhandled Errors:
-// Response status: 500
-// Actual message: errors[0].message: "UNHANDLED! Something went wrong"
-
-// Sequelize Errors:
-// Response status = html code
-// Actual message: errors[0].message: "SequelizeXXXError: message"
-
-// Received data validation with zod errors
-
-// Takes in any zod schema and input, returns data if validation succeeds
-// Throws correct validation error if not
-
 export const handleRequestErrors = (err: unknown) => {
   if (err === null) {
     throw new Error('Unexpected error!');
@@ -72,6 +52,23 @@ export const tagSetFormFieldError = (errMessage: string) => {
       return { field: 'tagName', error: 'Tag Name already exists.' };
     } else if (stringsInString(tagSlugArr, errMessage)) {
       return { field: 'tagSlug', error: 'Tag Slug already exists.' };
+    } else {
+      return { field: null, error: errMessage };
+    }
+  }
+};
+
+export const categorySetFormFieldError = (errMessage: string) => {
+  if (!errMessage.includes('SequelizeUniqueConstraintError')) {
+    // Not an error that should be displayed in form fields
+    return { field: null, error: errMessage };
+  } else {
+    const categoryNameArr = ['category_name', 'Category Name', 'categoryName'];
+    const categorySlugArr = ['category_slug', 'Category Slug', 'categorySlug'];
+    if (stringsInString(categoryNameArr, errMessage)) {
+      return { field: 'categoryName', error: 'Category Name already exists.' };
+    } else if (stringsInString(categorySlugArr, errMessage)) {
+      return { field: 'categorySlug', error: 'Category Slug already exists.' };
     } else {
       return { field: null, error: errMessage };
     }

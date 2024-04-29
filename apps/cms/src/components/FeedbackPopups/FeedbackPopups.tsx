@@ -6,7 +6,7 @@ type NotificationProps = {
 };
 
 export const ErrorNotification = ({
-  titleText = 'Success',
+  titleText = 'An Error occured!',
   bodyText,
 }: NotificationProps) => {
   return {
@@ -20,7 +20,7 @@ export const ErrorNotification = ({
 };
 
 export const SuccessNotification = ({
-  titleText = 'An Error occured!',
+  titleText = 'Success',
   bodyText,
 }: NotificationProps) => {
   return {

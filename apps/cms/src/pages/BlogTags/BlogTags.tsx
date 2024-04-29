@@ -61,11 +61,7 @@ const BlogTags = () => {
         <Button
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() =>
-            navigate('create-tag', {
-              state: { type: 'create', tagName: 'Untitled Tag', tagSlug: '' },
-            })
-          }
+          onClick={() => navigate('create-tag')}
         >
           Create Tag
         </Button>
