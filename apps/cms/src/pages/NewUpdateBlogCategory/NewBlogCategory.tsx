@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Group, TextInput, Textarea } from '@mantine/core';
@@ -13,6 +13,16 @@ import {
   SuccessNotification,
   ErrorNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
+import { destroyWidgets } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-helpers';
+import CardEditCoverImage from '../../components/CardEditCoverImage/CardEditCoverImage';
+import {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_CLOUD_NAME,
+} from '../../config/constants';
+import {
+  ReturnDataAsset,
+  InsertReturnData,
+} from '../../components/CloudinaryMediaLibraryWidget/cloudinary-types';
 import { categorySchema } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -37,7 +47,7 @@ const NewBlogCategory = () => {
       categoryName: '',
       categorySlug: '',
       description: '',
-      urlSlug: '/v1713099656/categories/category_travel_k8e1ap.jpg',
+      urlSlug: '',
       altText: '',
     },
     validate: zodResolver(categorySchema),
@@ -90,6 +100,33 @@ const NewBlogCategory = () => {
       }
     },
   });
+
+  const createCloudinaryMediaLibraryWidget = useCallback(() => {
+    destroyWidgets();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    window.cloudinary.openMediaLibrary(
+      {
+        cloud_name: CLOUDINARY_CLOUD_NAME,
+        api_key: CLOUDINARY_API_KEY,
+        remove_header: false,
+        max_files: '1',
+        multiple: false,
+        insert_caption: 'Insert',
+        default_transformations: [[]],
+      },
+      {
+        insertHandler: function (data: InsertReturnData) {
+          data.assets.forEach((asset: ReturnDataAsset) => {
+            categoryForm.setFieldValue(
+              'urlSlug',
+              `/${asset.public_id}.${asset.format}`
+            );
+          });
+        },
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = (values: unknown) => {
     const parseResult = categorySchema.safeParse(values);
@@ -191,12 +228,19 @@ const NewBlogCategory = () => {
               </div>
               <div className={localClasses['card_body_inner_right']}>
                 <TextInput
+                  // classNames={{ wrapper: localClasses.hidden }}
                   label='Category Image'
                   placeholder='e.g.'
                   description='Cover image for this category'
                   {...categoryForm.getInputProps('urlSlug')}
                   required
                 />
+                <CardEditCoverImage
+                  openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                  imageUrl={categoryForm.getValues().urlSlug}
+                  altText={categoryForm.getValues().altText}
+                />
+
                 <TextInput
                   label='Image Alternative Text'
                   placeholder='e.g. Mount Fuji and cherry blossoms'

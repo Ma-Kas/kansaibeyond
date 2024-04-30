@@ -56,3 +56,7 @@
 .card_body_inner_right > * {
   margin-top: 12px;
 }
+
+.hidden {
+  display: none;
+}
