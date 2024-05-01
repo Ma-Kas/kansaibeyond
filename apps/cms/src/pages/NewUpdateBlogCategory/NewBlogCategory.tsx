@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Group, TextInput, Textarea } from '@mantine/core';
+import {
+  Button,
+  Group,
+  InputWrapper,
+  TextInput,
+  Textarea,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
@@ -47,8 +53,10 @@ const NewBlogCategory = () => {
       categoryName: '',
       categorySlug: '',
       description: '',
-      urlSlug: '',
-      altText: '',
+      coverImage: {
+        urlSlug: '',
+        altText: '',
+      },
     },
     validate: zodResolver(categorySchema),
   });
@@ -118,7 +126,7 @@ const NewBlogCategory = () => {
         insertHandler: function (data: InsertReturnData) {
           data.assets.forEach((asset: ReturnDataAsset) => {
             categoryForm.setFieldValue(
-              'urlSlug',
+              'coverImage.urlSlug',
               `/${asset.public_id}.${asset.format}`
             );
           });
@@ -131,16 +139,7 @@ const NewBlogCategory = () => {
   const handleSubmit = (values: unknown) => {
     const parseResult = categorySchema.safeParse(values);
     if (parseResult.success) {
-      const newCategoryData = {
-        categoryName: parseResult.data.categoryName,
-        categorySlug: parseResult.data.categorySlug,
-        description: parseResult.data.description,
-        coverImage: {
-          urlSlug: parseResult.data.urlSlug,
-          altText: parseResult.data.altText,
-        },
-      };
-      categoryPostMutation.mutate(newCategoryData);
+      categoryPostMutation.mutate(parseResult.data);
     }
   };
 
@@ -162,7 +161,7 @@ const NewBlogCategory = () => {
 
           <Button
             className={classes['page_main_header_confirm_button']}
-            form='edit-form'
+            form='new-category-form'
             type='submit'
           >
             Save
@@ -194,7 +193,7 @@ const NewBlogCategory = () => {
           <div className={localClasses['card_body']}>
             <form
               className={localClasses['card_body_inner']}
-              id='edit-form'
+              id='new-category-form'
               onSubmit={categoryForm.onSubmit((values) => handleSubmit(values))}
             >
               <div className={localClasses['card_body_inner_left']}>
@@ -227,25 +226,28 @@ const NewBlogCategory = () => {
                 />
               </div>
               <div className={localClasses['card_body_inner_right']}>
-                <TextInput
-                  // classNames={{ wrapper: localClasses.hidden }}
+                <InputWrapper
+                  id='category-image'
                   label='Category Image'
-                  placeholder='e.g.'
-                  description='Cover image for this category'
-                  {...categoryForm.getInputProps('urlSlug')}
-                  required
-                />
+                  description='Set a cover image for this category'
+                  withAsterisk
+                >
+                  <input
+                    id='category-image'
+                    type='hidden'
+                    {...categoryForm.getInputProps('coverImage.urlSlug')}
+                  />
+                </InputWrapper>
                 <CardEditCoverImage
                   openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                  imageUrl={categoryForm.getValues().urlSlug}
-                  altText={categoryForm.getValues().altText}
+                  coverImage={categoryForm.getValues().coverImage}
                 />
 
                 <TextInput
                   label='Image Alternative Text'
                   placeholder='e.g. Mount Fuji and cherry blossoms'
                   description='Help screen readers announce image'
-                  {...categoryForm.getInputProps('altText')}
+                  {...categoryForm.getInputProps('coverImage.altText')}
                   required
                 />
               </div>

@@ -8,18 +8,20 @@ import classes from './CardEditCoverImage.module.css';
 
 type Props = {
   openMediaLibrary: () => void;
-  imageUrl?: string;
-  altText?: string;
+  coverImage?: {
+    urlSlug?: string;
+    altText?: string;
+  };
 };
 
-const CardEditCoverImage = ({ openMediaLibrary, imageUrl, altText }: Props) => {
-  if (imageUrl) {
+const CardEditCoverImage = ({ openMediaLibrary, coverImage }: Props) => {
+  if (coverImage && coverImage.urlSlug) {
     return (
       <div className={classes['cover_image_container_edit']}>
         <div className={classes['cover_image_inner_edit']}>
           <img
-            src={`${CLOUDINARY_BASE_URL}${COVER_IMAGE_EDIT_TRANSFORM}${imageUrl}`}
-            alt={altText}
+            src={`${CLOUDINARY_BASE_URL}${COVER_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}`}
+            alt={coverImage.altText}
           />
         </div>
         <div className={classes['cover_image_button_container']}>

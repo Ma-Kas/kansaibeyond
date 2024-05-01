@@ -15,8 +15,12 @@ export const categorySchema = z.object(
         .max(100, { message: 'Must be under 100 characters.' })
         .regex(urlSlugRegex, { message: 'Invalid format. Only lowercase letters and numbers. Hyphen instead of spaces.' }),
       description: z.string().optional(),
-      urlSlug: z.string().min(2, { message: 'Must be at least 2 characters long.' }),
-      altText: z.string().min(2, { message: 'Must be at least 2 characters long.' }),
+      coverImage: z.object(
+        {
+          urlSlug: z.string().min(2, { message: 'Must be at least 2 characters long.' }),
+          altText: z.string().min(2, { message: 'Must be at least 2 characters long.' }),
+        }  
+      ).strict(),
     }
   ).strict();
 
