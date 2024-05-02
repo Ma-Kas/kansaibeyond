@@ -94,6 +94,7 @@ thead.card_header {
 
 .card_body_table_row_image_container {
   width: var(--content-card-table-category-image-width);
+  aspect-ratio: 4 / 3;
   display: flex;
   justify-content: center;
   align-items: center;

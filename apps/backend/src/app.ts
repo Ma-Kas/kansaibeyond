@@ -1,5 +1,6 @@
 // Global Dependencies
 import express from 'express';
+import cors from 'cors';
 
 // Project Dependencies
 import userRouter from './routes/users';
@@ -15,6 +16,15 @@ import errorHandler from './middleware/errorHandler';
 const app = express();
 
 // Middleware
+// Setting allowed addresses to communicate with backend
+// const allowedOrigins = [''];
+
+// Pass to cors below
+// const options: cors.CorsOptions = {
+//   origin: allowedOrigins,
+// };
+
+app.use(cors());
 app.use(express.json());
 
 // Routes

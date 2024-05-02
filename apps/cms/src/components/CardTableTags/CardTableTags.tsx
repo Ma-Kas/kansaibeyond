@@ -1,14 +1,26 @@
 import cx from 'clsx';
 import { useState } from 'react';
-import { Checkbox, Button } from '@mantine/core';
-
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Checkbox, Button } from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
+import { IconTrash, IconEdit } from '@tabler/icons-react';
+import { ConfirmDeleteModal } from '../FeedbackModals/FeedbackModals';
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from '../FeedbackPopups/FeedbackPopups';
+import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
+
+import { deleteTag } from '../../requests/tagRequests';
+
 import classes from './CardTableTags.module.css';
 
 export type TagTableData = {
   id: number;
-  name: string;
-  urlSlug: string;
+  tagName: string;
+  tagSlug: string;
   posts: number;
 };
 
@@ -20,6 +32,19 @@ type TableProps = {
 const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
+
+  const queryClient = useQueryClient();
+
+  const tagDeleteMutation = useMutation({
+    mutationFn: (urlSlug: string) => deleteTag(urlSlug),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ['tags'] });
+      notifications.show(SuccessNotification({ bodyText: data?.message }));
+    },
+    onError: (err) => {
+      notifications.show(ErrorNotification({ bodyText: err.message }));
+    },
+  });
 
   const toggleRow = (id: number) =>
     setSelection((current) =>
@@ -37,6 +62,26 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
 
   const tagRows = tagTableData.map((item) => {
     const selected = selection.includes(item.id);
+    const furtherEditDropdownItems = [
+      {
+        text: 'Edit Tag',
+        icon: IconEdit,
+        onClick: () => navigate(`${item.tagSlug}/edit`),
+      },
+      {
+        text: 'Delete tag',
+        icon: IconTrash,
+        onClick: () =>
+          modals.openConfirmModal(
+            ConfirmDeleteModal({
+              titleText: `Delete tag "${item.tagName}?`,
+              bodyText: `Are you sure you want to delete tag "${item.tagName}? This action cannot be undone.`,
+              onConfirm: () => tagDeleteMutation.mutate(item.tagSlug),
+            })
+          ),
+      },
+    ];
+
     return (
       <tr
         key={item.id}
@@ -50,17 +95,18 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
             onChange={() => toggleRow(item.id)}
           />
         </td>
-        <td>{item.name}</td>
-        <td>{`/${item.urlSlug}`}</td>
+        <td>{item.tagName}</td>
+        <td>{`/${item.tagSlug}`}</td>
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
         <td>
           <div className={classes['card_body_table_row_button_group']}>
-            <Button radius={'xl'} onClick={() => navigate('/composer')}>
+            <Button
+              radius={'xl'}
+              onClick={() => navigate(`${item.tagSlug}/edit`)}
+            >
               Edit
             </Button>
-            <button>
-              <span>...</span>
-            </button>
+            <FurtherEditDropdown items={furtherEditDropdownItems} />
           </div>
         </td>
       </tr>
@@ -80,7 +126,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
               }
             />
           </th>
-          <th>Category Name</th>
+          <th>Tag Name</th>
           <th>URL Slug</th>
           <th>Posts</th>
           <th></th>

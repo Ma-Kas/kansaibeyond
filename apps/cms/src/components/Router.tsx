@@ -4,12 +4,16 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from '../pages/App/App';
 import MainShell from './PageShell/MainShell';
 import ComposerShell from './PageShell/ComposerShell';
-import ErrorPage from '../pages/ErrorPage/ErrorPage';
+import NotFoundPage from '../pages/ErrorPages/NotFoundPage';
 
 // Sub-Route Imports
 import BlogPosts from '../pages/BlogPosts/BlogPosts';
 import BlogCategories from '../pages/BlogCategories/BlogCategories';
+import NewBlogCategory from '../pages/NewUpdateBlogCategory/NewBlogCategory';
+import UpdateBlogCategory from '../pages/NewUpdateBlogCategory/UpdateBlogCategory';
 import BlogTags from '../pages/BlogTags/BlogTags';
+import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
+import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -20,7 +24,7 @@ const Router = () => {
         { index: true, element: <MainShell /> },
         {
           path: '*',
-          element: <ErrorPage />,
+          element: <NotFoundPage />,
         },
         {
           path: 'dashboard',
@@ -28,7 +32,7 @@ const Router = () => {
           children: [
             {
               path: '*',
-              element: <ErrorPage />,
+              element: <NotFoundPage />,
             },
             {
               path: 'blog/posts',
@@ -39,8 +43,24 @@ const Router = () => {
               element: <BlogCategories />,
             },
             {
+              path: 'blog/categories/create-category',
+              element: <NewBlogCategory />,
+            },
+            {
+              path: 'blog/categories/:categorySlug/edit',
+              element: <UpdateBlogCategory />,
+            },
+            {
               path: 'blog/tags',
               element: <BlogTags />,
+            },
+            {
+              path: 'blog/tags/create-tag',
+              element: <NewBlogTag />,
+            },
+            {
+              path: 'blog/tags/:tagSlug/edit',
+              element: <UpdateBlogTag />,
             },
           ],
         },

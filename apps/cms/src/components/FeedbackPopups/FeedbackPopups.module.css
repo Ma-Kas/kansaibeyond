@@ -1,0 +1,9 @@
+.title {
+  color: var(--color-menu-text-light);
+  font-weight: var(--font-weight-bold);
+}
+
+.description {
+  color: var(--color-menu-text-light);
+  font-weight: var(--font-weight-regular);
+}

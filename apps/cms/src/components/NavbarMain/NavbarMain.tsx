@@ -31,8 +31,8 @@ const navbarData = [
     links: [
       { label: 'Overview', link: '/dashboard/analytics/overview' },
       { label: 'Real-time', link: '/dashboard/analytics/realtime' },
-      { label: 'Insights', link: '//dashboard/analytics/insights' },
-      { label: 'Alerts and Emails', link: '//dashboard/analytics/alerts' },
+      { label: 'Insights', link: '/dashboard/analytics/insights' },
+      { label: 'Alerts and Emails', link: '/dashboard/analytics/alerts' },
     ],
   },
   { label: 'Settings', icon: IconSettings, link: '/dashboard/settings' },

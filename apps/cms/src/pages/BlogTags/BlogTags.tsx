@@ -1,14 +1,15 @@
-import { Button } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { Button, Loader } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
+
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
-
 import CardTableTags from '../../components/CardTableTags/CardTableTags';
-import { MOCK_BLOG_TAGS } from '../../utils/mockdata';
-import classes from '../../components/PageMainContent/PageMainContent.module.css';
+import { getAllTags } from '../../requests/tagRequests';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 
-// import localClasses from './BlogTags.module.css';
+import classes from '../../components/PageMainContent/PageMainContent.module.css';
 
 const BlogTags = () => {
   const navigate = useNavigate();
@@ -19,6 +20,12 @@ const BlogTags = () => {
   const [mainContentBodyElement, setMainContentBodyElement] =
     useState<HTMLDivElement | null>(null);
   const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const tagsQuery = useQuery({
+    queryKey: ['tags'],
+    queryFn: getAllTags,
+    retry: 1,
+  });
 
   // Set ref of cardElement when rendered,
   // so tabs in header can get that ref and createPortal to it
@@ -47,14 +54,14 @@ const BlogTags = () => {
     }
   }, [mainContentBodyElement, mainContentHeaderElement]);
 
-  const blogPostHeader = (
+  const blogTagsHeader = (
     <>
       <div className={classes['page_main_content_header_main']}>
         <h1 className={classes['page_main_content_header_title']}>Tags</h1>
         <Button
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('/composer')}
+          onClick={() => navigate('create-tag')}
         >
           Create Tag
         </Button>
@@ -66,18 +73,49 @@ const BlogTags = () => {
     </>
   );
 
+  const switchRenderOnFetchResult = () => {
+    if (tagsQuery.isPending || tagsQuery.isRefetching) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error_loading']}>
+            <Loader size='xl' />
+          </div>
+        </div>
+      );
+    }
+    if (tagsQuery.data) {
+      const tagTableData = tagsQuery.data.map((entry) => {
+        return { ...entry, posts: entry.posts.length };
+      });
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <CardTableTags
+            headerTopStyle={headerTopStyle}
+            tagTableData={tagTableData}
+          />
+        </div>
+      );
+    }
+    if (tagsQuery.error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error_loading']}>
+            <DynamicErrorPage error={tagsQuery.error} />
+          </div>
+        </div>
+      );
+    }
+
+    return <div></div>;
+  };
+
   return (
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
-      header={blogPostHeader}
+      header={blogTagsHeader}
     >
-      <div className={classes['page_main_content_body_card']}>
-        <CardTableTags
-          headerTopStyle={headerTopStyle}
-          tagTableData={MOCK_BLOG_TAGS}
-        />
-      </div>
+      {switchRenderOnFetchResult()}
     </PageMainContent>
   );
 };

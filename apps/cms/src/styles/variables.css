@@ -42,6 +42,7 @@
   --color-menu-border-light: var(--mantine-color-gray-3);
   --color-menu-border-dark: var(--mantine-color-dark-4);
   --transparent-blue-hover-bg: rgba(34, 139, 230, 0.1);
+  --content-card-cover-image-edit-hover: rgba(13, 27, 95, 0.415);
 
   /* Main Dashboard Variables */
   --dashboard-content-max-width: rem(1250px);
@@ -51,6 +52,11 @@
   --dashboard-content-tabs-margin-top: rem(32px);
   --dashboard-content-tabs-gap: rem(16px);
   --dashboard-content-card-radius: rem(8px);
+  --dashboard-content-input-radius: rem(4px);
+  --dashboard-content-input-border-color: rgb(206, 212, 218);
+  --dashboard-content-input-border: 1px solid
+    var(--dashboard-content-input-border-color);
+  --dashboard-content-edit-card-padding: rem(24px) rem(24px) rem(36px);
   --dashboard-content-card-padding-horizontal: rem(24px);
   --dashboard-content-card-padding-vertical: rem(15px);
   --dashboard-content-card-sticky-header-height: rem(60px);

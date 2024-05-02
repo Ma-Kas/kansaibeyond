@@ -1,15 +1,31 @@
 import cx from 'clsx';
 import { useState } from 'react';
-import { Checkbox, Button } from '@mantine/core';
-
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Checkbox, Button } from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
+import { IconTrash, IconEdit } from '@tabler/icons-react';
+import { ConfirmDeleteModal } from '../FeedbackModals/FeedbackModals';
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from '../FeedbackPopups/FeedbackPopups';
+import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
+import { deleteCategory } from '../../requests/categoryRequests';
+import {
+  CLOUDINARY_BASE_URL,
+  CATEGORY_LIST_THUMB_TRANSFORM,
+} from '../../config/constants';
+
 import classes from './CardTableCategories.module.css';
 
 export type CategoryTableData = {
   id: number;
-  image: string;
-  name: string;
-  urlSlug: string;
+  categoryName: string;
+  categorySlug: string;
+  description: string | null;
+  coverImage: { altText: string; urlSlug: string } | null;
   posts: number;
 };
 
@@ -24,6 +40,19 @@ const CardTableCategories = ({
 }: TableProps) => {
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
+
+  const queryClient = useQueryClient();
+
+  const categoryDeleteMutation = useMutation({
+    mutationFn: (urlSlug: string) => deleteCategory(urlSlug),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ['categories'] });
+      notifications.show(SuccessNotification({ bodyText: data?.message }));
+    },
+    onError: (err) => {
+      notifications.show(ErrorNotification({ bodyText: err.message }));
+    },
+  });
 
   const toggleRow = (id: number) =>
     setSelection((current) =>
@@ -41,6 +70,26 @@ const CardTableCategories = ({
 
   const categoryRows = categoryTableData.map((item) => {
     const selected = selection.includes(item.id);
+    const furtherEditDropdownItems = [
+      {
+        text: 'Edit Category',
+        icon: IconEdit,
+        onClick: () => navigate(`${item.categorySlug}/edit`),
+      },
+      {
+        text: 'Delete Category',
+        icon: IconTrash,
+        onClick: () =>
+          modals.openConfirmModal(
+            ConfirmDeleteModal({
+              titleText: `Delete category "${item.categoryName}?`,
+              bodyText: `Are you sure you want to delete category "${item.categoryName}? This action cannot be undone.`,
+              onConfirm: () => categoryDeleteMutation.mutate(item.categorySlug),
+            })
+          ),
+      },
+    ];
+
     return (
       <tr
         key={item.id}
@@ -56,20 +105,24 @@ const CardTableCategories = ({
         </td>
         <td>
           <div className={classes['card_body_table_row_image_container']}>
-            <img src={item.image} />
+            <img
+              src={`${CLOUDINARY_BASE_URL}${CATEGORY_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}`}
+              alt={item.coverImage?.altText}
+            />
           </div>
         </td>
-        <td>{item.name}</td>
-        <td>{`/${item.urlSlug}`}</td>
+        <td>{item.categoryName}</td>
+        <td>{`/${item.categorySlug}`}</td>
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
         <td>
           <div className={classes['card_body_table_row_button_group']}>
-            <Button radius={'xl'} onClick={() => navigate('/composer')}>
+            <Button
+              radius={'xl'}
+              onClick={() => navigate(`${item.categorySlug}/edit`)}
+            >
               Edit
             </Button>
-            <button>
-              <span>...</span>
-            </button>
+            <FurtherEditDropdown items={furtherEditDropdownItems} />
           </div>
         </td>
       </tr>
@@ -90,10 +143,8 @@ const CardTableCategories = ({
               }
             />
           </th>
-          <th>
-            {selection.length === 0
-              ? 'Select all'
-              : `${selection.length} Selected`}
+          <th style={{ textAlign: 'center' }}>
+            {selection.length === 0 ? 'Select all' : `${selection.length}`}
           </th>
           <th>Category Name</th>
           <th>URL Slug</th>
