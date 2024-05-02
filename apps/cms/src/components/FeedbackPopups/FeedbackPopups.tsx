@@ -31,3 +31,14 @@ export const SuccessNotification = ({
     withCloseButton: true,
   };
 };
+
+export const LoadingNotification = ({ bodyText }: NotificationProps) => {
+  return {
+    message: bodyText ? bodyText : '',
+    classNames: classes,
+    withBorder: true,
+    loading: true,
+    autoClose: false,
+    withCloseButton: false,
+  };
+};

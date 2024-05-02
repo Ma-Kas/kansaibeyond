@@ -17,7 +17,7 @@ export const categorySchema = z.object(
       description: z.string().optional(),
       coverImage: z.object(
         {
-          urlSlug: z.string().min(2, { message: 'Must be at least 2 characters long.' }),
+          urlSlug: z.string().min(2, { message: 'Please select a cover image' }),
           altText: z.string().min(2, { message: 'Must be at least 2 characters long.' }),
         }  
       ).strict(),

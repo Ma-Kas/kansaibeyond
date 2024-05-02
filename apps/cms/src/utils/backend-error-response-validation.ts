@@ -49,9 +49,9 @@ export const tagSetFormFieldError = (errMessage: string) => {
     const tagNameArr = ['tag_name', 'Tag Name', 'tagName'];
     const tagSlugArr = ['tag_slug', 'Tag Slug', 'tagSlug'];
     if (stringsInString(tagNameArr, errMessage)) {
-      return { field: 'tagName', error: 'Tag Name already exists.' };
+      return { field: 'tagName', error: 'This tag name already exists.' };
     } else if (stringsInString(tagSlugArr, errMessage)) {
-      return { field: 'tagSlug', error: 'Tag Slug already exists.' };
+      return { field: 'tagSlug', error: 'This url slug already exists.' };
     } else {
       return { field: null, error: errMessage };
     }
@@ -66,9 +66,12 @@ export const categorySetFormFieldError = (errMessage: string) => {
     const categoryNameArr = ['category_name', 'Category Name', 'categoryName'];
     const categorySlugArr = ['category_slug', 'Category Slug', 'categorySlug'];
     if (stringsInString(categoryNameArr, errMessage)) {
-      return { field: 'categoryName', error: 'Category Name already exists.' };
+      return {
+        field: 'categoryName',
+        error: 'This category name already exists.',
+      };
     } else if (stringsInString(categorySlugArr, errMessage)) {
-      return { field: 'categorySlug', error: 'Category Slug already exists.' };
+      return { field: 'categorySlug', error: 'This url slug already exists.' };
     } else {
       return { field: null, error: errMessage };
     }

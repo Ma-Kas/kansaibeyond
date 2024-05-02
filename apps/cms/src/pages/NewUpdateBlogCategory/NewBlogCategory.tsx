@@ -8,7 +8,7 @@ import {
   TextInput,
   Textarea,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, FormErrors } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
 
@@ -18,6 +18,7 @@ import { categorySetFormFieldError } from '../../utils/backend-error-response-va
 import {
   SuccessNotification,
   ErrorNotification,
+  LoadingNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import { destroyWidgets } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-helpers';
 import CardEditCoverImage from '../../components/CardEditCoverImage/CardEditCoverImage';
@@ -110,6 +111,9 @@ const NewBlogCategory = () => {
   });
 
   const createCloudinaryMediaLibraryWidget = useCallback(() => {
+    const loadingMediaLibraryPopup = notifications.show(
+      LoadingNotification({ bodyText: 'Opening Media Library Widget' })
+    );
     destroyWidgets();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     window.cloudinary.openMediaLibrary(
@@ -123,13 +127,16 @@ const NewBlogCategory = () => {
         default_transformations: [[]],
       },
       {
-        insertHandler: function (data: InsertReturnData) {
+        insertHandler: (data: InsertReturnData) => {
           data.assets.forEach((asset: ReturnDataAsset) => {
             categoryForm.setFieldValue(
               'coverImage.urlSlug',
               `/${asset.public_id}.${asset.format}`
             );
           });
+        },
+        showHandler: () => {
+          notifications.hide(loadingMediaLibraryPopup);
         },
       }
     );
@@ -140,6 +147,23 @@ const NewBlogCategory = () => {
     const parseResult = categorySchema.safeParse(values);
     if (parseResult.success) {
       categoryPostMutation.mutate(parseResult.data);
+    }
+  };
+
+  // Specifically only creates popup for urlSlug error, as other errors will be
+  // displayed in the input field
+  // Could be adapted for more error handling if neccessary
+  const handleImageError = (validationErrors: FormErrors) => {
+    const errorKey = Object.keys(validationErrors)[0];
+    if (errorKey && errorKey === 'coverImage.urlSlug') {
+      const errorMessage = validationErrors[errorKey];
+      if (typeof errorMessage === 'string') {
+        notifications.show(ErrorNotification({ bodyText: errorMessage }));
+      } else {
+        notifications.show(
+          ErrorNotification({ bodyText: 'A form error has occured' })
+        );
+      }
     }
   };
 
@@ -194,7 +218,10 @@ const NewBlogCategory = () => {
             <form
               className={localClasses['card_body_inner']}
               id='new-category-form'
-              onSubmit={categoryForm.onSubmit((values) => handleSubmit(values))}
+              onSubmit={categoryForm.onSubmit(
+                (values) => handleSubmit(values),
+                (validationErrors) => handleImageError(validationErrors)
+              )}
             >
               <div className={localClasses['card_body_inner_left']}>
                 <TextInput
@@ -231,13 +258,7 @@ const NewBlogCategory = () => {
                   label='Category Image'
                   description='Set a cover image for this category'
                   withAsterisk
-                >
-                  <input
-                    id='category-image'
-                    type='hidden'
-                    {...categoryForm.getInputProps('coverImage.urlSlug')}
-                  />
-                </InputWrapper>
+                ></InputWrapper>
                 <CardEditCoverImage
                   openMediaLibrary={createCloudinaryMediaLibraryWidget}
                   coverImage={categoryForm.getValues().coverImage}
