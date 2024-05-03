@@ -163,6 +163,7 @@ const BlogPostTabs = ({
                 >
                   <CardTablePosts
                     headerTopStyle={headerTopStyle}
+                    tab={tab.value}
                     blogTableData={tab.blogTableData!}
                   />
                 </Tabs.Panel>,

@@ -2,8 +2,27 @@ import cx from 'clsx';
 import { useState } from 'react';
 import { Checkbox, Button } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { Post } from '../../requests/postRequests';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Post, deletePost, updatePost } from '../../requests/postRequests';
 import { formatShortDate } from '../../utils/format-date';
+import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
+import {
+  IconTrash,
+  IconEdit,
+  IconRefresh,
+  IconSend,
+} from '@tabler/icons-react';
+import {
+  ConfirmDeleteModal,
+  ConfirmTrashModal,
+  GeneralConfirmModal,
+} from '../FeedbackModals/FeedbackModals';
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from '../FeedbackPopups/FeedbackPopups';
+import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 import {
   CLOUDINARY_BASE_URL,
   POST_LIST_THUMB_TRANSFORM,
@@ -13,12 +32,47 @@ import classes from './CardTablePosts.module.css';
 
 type TableProps = {
   headerTopStyle: string;
+  tab: string;
   blogTableData: Post[];
 };
 
-const CardTablePosts = ({ headerTopStyle, blogTableData }: TableProps) => {
+const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
+
+  const queryClient = useQueryClient();
+
+  const postDeleteMutation = useMutation({
+    mutationFn: (urlSlug: string) => deletePost(urlSlug),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ['posts'] });
+      notifications.show(SuccessNotification({ bodyText: data?.message }));
+    },
+    onError: (err) => {
+      notifications.show(ErrorNotification({ bodyText: err.message }));
+    },
+  });
+
+  const postUpdateMutation = useMutation({
+    mutationFn: ({ urlSlug, values }: { urlSlug: string; values: unknown }) =>
+      updatePost(urlSlug, values),
+    onSuccess: async (data) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['posts'] }),
+      ]);
+
+      if (data) {
+        notifications.show(
+          SuccessNotification({
+            bodyText: `Post updated: ${data.title}`,
+          })
+        );
+      }
+    },
+    onError: (err) => {
+      notifications.show(ErrorNotification({ bodyText: err.message }));
+    },
+  });
 
   const toggleRow = (id: number) =>
     setSelection((current) =>
@@ -36,6 +90,172 @@ const CardTablePosts = ({ headerTopStyle, blogTableData }: TableProps) => {
 
   const blogRows = blogTableData.map((item) => {
     const selected = selection.includes(item.id);
+
+    const switchfurtherEditDropDownItemsOnTab = () => {
+      switch (tab) {
+        case 'published': {
+          return [
+            {
+              text: 'Edit Post',
+              icon: IconEdit,
+              onClick: () => navigate(`${item.postSlug}/edit`),
+            },
+            {
+              text: 'Revert to Draft',
+              icon: IconRefresh,
+              onClick: () =>
+                modals.openConfirmModal(
+                  GeneralConfirmModal({
+                    titleText: `Revert post back to draft?`,
+                    bodyText: `Are you sure you want to revert the post "${item.title}" back to draft? This will make it no longer publically viewable`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'draft' },
+                      }),
+                  })
+                ),
+            },
+            {
+              text: 'Move to Trash',
+              icon: IconTrash,
+              onClick: () =>
+                modals.openConfirmModal(
+                  ConfirmTrashModal({
+                    titleText: `Trash post "${item.title}?`,
+                    bodyText: `Are you sure you want to move post "${item.title}" to trash?`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'trash' },
+                      }),
+                  })
+                ),
+            },
+          ];
+        }
+        case 'draft': {
+          return [
+            {
+              text: 'Edit Post',
+              icon: IconEdit,
+              onClick: () => navigate(`${item.postSlug}/edit`),
+            },
+            {
+              text: 'Publish Post',
+              icon: IconSend,
+              onClick: () =>
+                modals.openConfirmModal(
+                  GeneralConfirmModal({
+                    titleText: `Publish post "${item.title}?`,
+                    bodyText: `You are about to publish post "${item.title}" to the website. Proceed?`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'published' },
+                      }),
+                  })
+                ),
+            },
+            {
+              text: 'Move to Trash',
+              icon: IconTrash,
+              onClick: () =>
+                modals.openConfirmModal(
+                  ConfirmTrashModal({
+                    titleText: `Trash post "${item.title}?`,
+                    bodyText: `Are you sure you want to move post "${item.title}" to trash?`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'trash' },
+                      }),
+                  })
+                ),
+            },
+          ];
+        }
+        case 'pending': {
+          return [
+            {
+              text: 'Edit Post',
+              icon: IconEdit,
+              onClick: () => navigate(`${item.postSlug}/edit`),
+            },
+            {
+              text: 'Publish Post',
+              icon: IconSend,
+              onClick: () =>
+                modals.openConfirmModal(
+                  GeneralConfirmModal({
+                    titleText: `Publish post "${item.title}?`,
+                    bodyText: `You are about to publish post "${item.title}" to the website. Proceed?`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'published' },
+                      }),
+                  })
+                ),
+            },
+            {
+              text: 'Move to Trash',
+              icon: IconTrash,
+              onClick: () =>
+                modals.openConfirmModal(
+                  ConfirmTrashModal({
+                    titleText: `Trash post "${item.title}?`,
+                    bodyText: `Are you sure you want to move post "${item.title}" to trash?`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'trash' },
+                      }),
+                  })
+                ),
+            },
+          ];
+        }
+        default: {
+          return [
+            {
+              text: 'Edit Post',
+              icon: IconEdit,
+              onClick: () => navigate(`${item.postSlug}/edit`),
+            },
+            {
+              text: 'Revert to Draft',
+              icon: IconRefresh,
+              onClick: () =>
+                modals.openConfirmModal(
+                  GeneralConfirmModal({
+                    titleText: `Revert post back to draft?`,
+                    bodyText: `Are you sure you want to revert the post "${item.title}" back to draft?`,
+                    onConfirm: () =>
+                      postUpdateMutation.mutate({
+                        urlSlug: item.postSlug,
+                        values: { status: 'draft' },
+                      }),
+                  })
+                ),
+            },
+            {
+              text: 'Delete Post',
+              icon: IconTrash,
+              onClick: () =>
+                modals.openConfirmModal(
+                  ConfirmDeleteModal({
+                    titleText: `Delete post "${item.title}?`,
+                    bodyText: `Are you sure you want to delete post "${item.title}"? This action cannot be undone.`,
+                    onConfirm: () => postDeleteMutation.mutate(item.postSlug),
+                  })
+                ),
+            },
+          ];
+        }
+      }
+    };
+
     return (
       <tr
         key={item.id}
@@ -63,9 +283,9 @@ const CardTablePosts = ({ headerTopStyle, blogTableData }: TableProps) => {
             <div>
               {item.categories
                 .map((category) => category.categoryName)
-                .join(' · ')}
+                .join(' \u{00B7} ')}
             </div>
-            <div>{`${formatShortDate(item.updatedAt)} · ${
+            <div>{`${formatShortDate(item.updatedAt)} \u{00B7} ${
               item.user.displayName
             }`}</div>
           </div>
@@ -75,9 +295,9 @@ const CardTablePosts = ({ headerTopStyle, blogTableData }: TableProps) => {
             <Button radius={'xl'} onClick={() => navigate('/composer')}>
               Edit
             </Button>
-            <button>
-              <span>...</span>
-            </button>
+            <FurtherEditDropdown
+              items={switchfurtherEditDropDownItemsOnTab()}
+            />
           </div>
         </td>
       </tr>

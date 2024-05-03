@@ -166,7 +166,7 @@ export const updatePost = async (urlSlug: string, postData: unknown) => {
 export const deletePost = async (postSlug: string) => {
   try {
     const response = await axios.delete(
-      `${BACKEND_BASE_URL}/posts/${postSlug}`
+      `${BACKEND_BASE_URL}/posts/${postSlug}?force=true`
     );
     return deletePostSchema.parse(response.data);
   } catch (err) {
