@@ -53,6 +53,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
     },
   });
 
+  // Simple update mutation to change status
   const postUpdateMutation = useMutation({
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: unknown }) =>
       updatePost(urlSlug, values),
@@ -91,6 +92,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
   const blogRows = blogTableData.map((item) => {
     const selected = selection.includes(item.id);
 
+    // Tab-dependent context actions for selected post
     const switchfurtherEditDropDownItemsOnTab = () => {
       switch (tab) {
         case 'published': {
@@ -292,7 +294,10 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
         </td>
         <td>
           <div className={classes['card_body_table_row_button_group']}>
-            <Button radius={'xl'} onClick={() => navigate('/composer')}>
+            <Button
+              radius={'xl'}
+              onClick={() => navigate(`/composer/${item.postSlug}`)}
+            >
               Edit
             </Button>
             <FurtherEditDropdown

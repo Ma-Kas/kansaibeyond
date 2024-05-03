@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
+  CLEAR_HISTORY_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
@@ -21,7 +22,113 @@ import { useNavigate } from 'react-router-dom';
 
 import classes from './ComposerHeader.module.css';
 
-const DEBUG_IMPORT_DATA = '';
+const DEBUG_IMPORT_JSONB = {
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: 'normal',
+            style: '',
+            text: 'Henlo tank',
+            type: 'text',
+            version: 1,
+          },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+      },
+      {
+        children: [
+          {
+            altText: 'Yellow flower in tilt shift lens',
+            width: null,
+            maxWidth: null,
+            captionText: '',
+            src: '/src/pages/Editor/images/yellow-flower.jpg',
+            type: 'image',
+            version: 1,
+          },
+        ],
+        direction: null,
+        format: '',
+        indent: 0,
+        type: 'image-block',
+        version: 1,
+        alignment: 'center',
+      },
+      {
+        children: [
+          {
+            imageList: [
+              {
+                id: 1,
+                altText: 'Yellow flower in tilt shift lens',
+                src: '/src/pages/Editor/images/yellow-flower.jpg',
+                aspectRatio: '3 / 4',
+              },
+              {
+                id: 2,
+                altText:
+                  'Daylight fir trees forest glacier green high ice landscape',
+                src: '/src/pages/Editor/images/landscape.jpg',
+                aspectRatio: '3 / 4',
+              },
+              {
+                id: 3,
+                altText: 'Yellow flower in tilt shift lens',
+                src: '/src/pages/Editor/images/yellow-flower.jpg',
+                aspectRatio: '3 / 4',
+              },
+              {
+                id: 4,
+                altText:
+                  'Daylight fir trees forest glacier green high ice landscape',
+                src: '/src/pages/Editor/images/landscape.jpg',
+                aspectRatio: '3 / 4',
+              },
+            ],
+            gridType: 'dynamic-type',
+            width: null,
+            maxWidth: null,
+            captionText: '',
+            gridGap: null,
+            columnMinWidth: null,
+            type: 'gallery-container',
+            version: 1,
+          },
+        ],
+        direction: null,
+        format: '',
+        indent: 0,
+        type: 'gallery-block',
+        version: 1,
+        alignment: 'center',
+      },
+      {
+        children: [],
+        direction: null,
+        format: '',
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+      },
+    ],
+    direction: 'ltr',
+    format: '',
+    indent: 0,
+    type: 'root',
+    version: 1,
+  },
+};
+
+const DEBUG_IMPORT_TEXT =
+  '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Henlo tank","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"altText":"Yellow flower in tilt shift lens","width":null,"maxWidth":null,"captionText":"","src":"/src/pages/Editor/images/yellow-flower.jpg","type":"image","version":1}],"direction":null,"format":"","indent":0,"type":"image-block","version":1,"alignment":"center"},{"children":[{"imageList":[{"id":1,"altText":"Yellow flower in tilt shift lens","src":"/src/pages/Editor/images/yellow-flower.jpg","aspectRatio":"3 / 4"},{"id":2,"altText":"Daylight fir trees forest glacier green high ice landscape","src":"/src/pages/Editor/images/landscape.jpg","aspectRatio":"3 / 4"},{"id":3,"altText":"Yellow flower in tilt shift lens","src":"/src/pages/Editor/images/yellow-flower.jpg","aspectRatio":"3 / 4"},{"id":4,"altText":"Daylight fir trees forest glacier green high ice landscape","src":"/src/pages/Editor/images/landscape.jpg","aspectRatio":"3 / 4"}],"gridType":"dynamic-type","width":null,"maxWidth":null,"captionText":"","gridGap":null,"columnMinWidth":null,"type":"gallery-container","version":1}],"direction":null,"format":"","indent":0,"type":"gallery-block","version":1,"alignment":"center"},{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}';
 
 const ComposerHeader = () => {
   const [editor] = useLexicalComposerContext();
@@ -71,17 +178,26 @@ const ComposerHeader = () => {
 
   const handleExportTest = useCallback(() => {
     editor.update(() => {
+      // string version to save in db as TEXT
+      const editorState = editor.getEditorState();
+      const jsonString = JSON.stringify(editorState);
+      console.log(jsonString);
+      // json if saving in db as JSONB
       const json = editor.getEditorState().toJSON();
       console.log(json);
-      //console.log(JSON.stringify(json));
     });
   }, [editor]);
 
   const handleImportTest = useCallback(
     (data: string) => {
       editor.update(() => {
+        // Re-import from TEXT
         const editorState = editor.parseEditorState(data);
         editor.setEditorState(editorState);
+        // Re-import JSONB
+        // const editorState = editor.parseEditorState(JSON.stringify(data));
+        // editor.setEditorState(editorState);
+        editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
       });
     },
     [editor]
@@ -136,7 +252,7 @@ const ComposerHeader = () => {
           <Button
             className={classes['color-button']}
             variant='transparent'
-            onClick={() => handleImportTest(DEBUG_IMPORT_DATA)}
+            onClick={() => handleImportTest(DEBUG_IMPORT_TEXT)}
           >
             Preview
           </Button>

@@ -13,6 +13,7 @@ import {
   SuccessNotification,
   ErrorNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { tagSchema, Tag } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -126,7 +127,7 @@ const UpdateBlogTag = () => {
   if (tagQuery.error) {
     return (
       <div className={classes['page_main_loading_error_container']}>
-        {tagQuery.error.message}
+        <DynamicErrorPage error={tagQuery.error} />
       </div>
     );
   }

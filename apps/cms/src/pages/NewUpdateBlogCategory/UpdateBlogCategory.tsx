@@ -34,6 +34,7 @@ import {
   ReturnDataAsset,
   InsertReturnData,
 } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-types';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { categorySchema, Category } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -196,7 +197,7 @@ const UpdateBlogCategory = () => {
   if (categoryQuery.error) {
     return (
       <div className={classes['page_main_loading_error_container']}>
-        {categoryQuery.error.message}
+        <DynamicErrorPage error={categoryQuery.error} />
       </div>
     );
   }
