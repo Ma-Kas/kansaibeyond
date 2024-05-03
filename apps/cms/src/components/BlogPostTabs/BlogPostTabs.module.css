@@ -22,4 +22,13 @@
 .page_main_content_card_tabs_panel {
   font-size: var(--font-size-regular);
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page_main_content_body_card_error_loading {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -19,20 +19,12 @@ export const get_all_posts = async (
   try {
     const allPosts = await Post.findAll({
       attributes: {
-        exclude: ['createdAt', 'userId', 'categoryId'],
+        exclude: ['createdAt', 'userId', 'categoryId', 'content'],
       },
       include: [
         {
           model: User,
           attributes: ['username', 'displayName', 'userIcon', 'status'],
-        },
-        {
-          model: Post,
-          as: 'relatedPosts',
-          attributes: ['id', 'title'],
-          through: {
-            attributes: [],
-          },
         },
         {
           model: Category,
@@ -79,12 +71,20 @@ export const get_one_post = async (
   try {
     const post = await Post.findOne({
       attributes: {
-        exclude: ['createdAt', 'userId', 'categoryId', 'postSlug'],
+        exclude: ['createdAt', 'userId', 'categoryId'],
       },
       include: [
         {
           model: User,
           attributes: ['username', 'displayName', 'userIcon', 'status'],
+        },
+        {
+          model: Post,
+          as: 'relatedPosts',
+          attributes: ['id', 'title'],
+          through: {
+            attributes: [],
+          },
         },
         {
           model: Category,
