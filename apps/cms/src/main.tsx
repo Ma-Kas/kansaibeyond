@@ -12,7 +12,13 @@ import './styles/variables.css';
 import './styles/editor.css';
 import { theme } from './theme';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
 
 // Handle runtime errors
 const showErrorOverlay = (err: Event) => {

@@ -68,25 +68,27 @@ const ComposerShell = () => {
 
   if (postQuery.data && postQuery.data.content) {
     initialConfig.editorState = postQuery.data.content;
+
+    return (
+      <>
+        <main className={classes['shell_composer']}>
+          <LexicalComposer initialConfig={initialConfig}>
+            <ComposerHeader />
+            <div className={classes['page_composer']}>
+              <ComposerSidebar />
+              <TableContext>
+                <div className='editor-shell'>
+                  <Editor postData={postQuery.data} />
+                </div>
+              </TableContext>
+            </div>
+          </LexicalComposer>
+        </main>
+      </>
+    );
   }
 
-  return (
-    <>
-      <main className={classes['shell_composer']}>
-        <LexicalComposer initialConfig={initialConfig}>
-          <ComposerHeader />
-          <div className={classes['page_composer']}>
-            <ComposerSidebar />
-            <TableContext>
-              <div className='editor-shell'>
-                <Editor />
-              </div>
-            </TableContext>
-          </div>
-        </LexicalComposer>
-      </main>
-    </>
-  );
+  return <></>;
 };
 
 export default ComposerShell;

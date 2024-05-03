@@ -9,7 +9,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import useLexicalEditable from '@lexical/react/useLexicalEditable';
-import { createContext, useState } from 'react';
+import { createContext, memo, useState } from 'react';
 import { useSettings } from './context/SettingsContext';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import CodeActionMenuPlugin from './plugins/CodeActionMenuPlugin';
@@ -36,6 +36,8 @@ import PostEditorTitle from './components/PostEditorTitle/PostEditorTitle';
 import { useDisclosure } from '@mantine/hooks';
 import ContentSettingsModal from './components/ContentSettingsModal/ContentSettingsModal';
 
+import { Post } from '../../requests/postRequests';
+
 type SettingsModalContext = {
   settingsModalOpen: boolean;
   open: () => void;
@@ -54,7 +56,7 @@ export const SettingsModalContext = createContext<SettingsModalContext>({
   },
 });
 
-export default function Editor(): JSX.Element {
+const Editor = memo(({ postData }: { postData: Post }): JSX.Element => {
   const {
     settings: { tableCellMerge, tableCellBackgroundColor },
   } = useSettings();
@@ -86,7 +88,10 @@ export default function Editor(): JSX.Element {
         setIsLinkEditMode={setIsLinkEditMode}
       />
       <div className='editor-container'>
-        <PostEditorTitle setToolbarEnabled={setToolbarEnabled} />
+        <PostEditorTitle
+          setToolbarEnabled={setToolbarEnabled}
+          loadedTitle={postData.title}
+        />
         <div className='editor-container-inner'>
           <DragDropPaste />
           <AutoFocusPlugin />
@@ -157,4 +162,6 @@ export default function Editor(): JSX.Element {
       </div>
     </>
   );
-}
+});
+
+export default Editor;
