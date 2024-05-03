@@ -11,4 +11,5 @@ export const CLOUDINARY_API_KEY = import.meta.env.VITE_CLOUDINARY_API_KEY;
 // Cloudinary Image Transformation Constants
 export const CLOUDINARY_BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL;
 export const CATEGORY_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
+export const POST_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
 export const COVER_IMAGE_EDIT_TRANSFORM = '/c_fill,w_450,q_50,f_auto';

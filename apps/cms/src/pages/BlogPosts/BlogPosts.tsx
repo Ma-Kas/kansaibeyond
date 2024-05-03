@@ -7,9 +7,6 @@ import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import BlogPostTabs, {
   TabData,
 } from '../../components/BlogPostTabs/BlogPostTabs';
-import { PostTableData } from '../../components/CardTablePosts/CardTablePosts';
-
-import { MOCK_BLOG_POSTS } from '../../utils/mockdata';
 import { getAllPosts } from '../../requests/postRequests';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -75,30 +72,30 @@ const BlogPosts = () => {
         {
           value: 'published',
           label: 'Published',
-          blogTableData: MOCK_BLOG_POSTS.filter(
+          blogTableData: postsQuery.data.filter(
             (post) => post.status === 'published'
-          ) as PostTableData[],
+          ),
         },
         {
-          value: 'drafts',
+          value: 'draft',
           label: 'Drafts',
-          blogTableData: MOCK_BLOG_POSTS.filter(
-            (post) => post.status === 'drafts'
-          ) as PostTableData[],
+          blogTableData: postsQuery.data.filter(
+            (post) => post.status === 'draft'
+          ),
         },
         {
           value: 'pending',
           label: 'Pending Review',
-          blogTableData: MOCK_BLOG_POSTS.filter(
+          blogTableData: postsQuery.data.filter(
             (post) => post.status === 'pending'
-          ) as PostTableData[],
+          ),
         },
         {
           value: 'trash',
           label: 'Trash',
-          blogTableData: MOCK_BLOG_POSTS.filter(
+          blogTableData: postsQuery.data.filter(
             (post) => post.status === 'trash'
-          ) as PostTableData[],
+          ),
         },
       ];
       return (

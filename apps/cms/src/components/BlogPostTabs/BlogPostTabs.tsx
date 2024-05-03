@@ -2,16 +2,16 @@ import { Loader, Tabs } from '@mantine/core';
 import { Fragment, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import CardTablePosts, {
-  PostTableData,
-} from '../CardTablePosts/CardTablePosts';
+import CardTablePosts from '../CardTablePosts/CardTablePosts';
+import { Post } from '../../requests/postRequests';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
+
 import classes from './BlogPostTabs.module.css';
 
 export type TabData = {
   value: string;
   label: string;
-  blogTableData?: PostTableData[];
+  blogTableData?: Post[];
 };
 
 type TabDataProps = {

@@ -91,6 +91,8 @@ const getPostSchema = z.object(
   }
 ).strict();
 
+export type Post = z.infer<typeof getPostSchema>;
+
 const getAllPostsSchema = z.array(getPostSchema);
 
 // prettier-ignore

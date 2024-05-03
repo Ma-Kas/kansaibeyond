@@ -1,23 +1,19 @@
 import cx from 'clsx';
 import { useState } from 'react';
 import { Checkbox, Button } from '@mantine/core';
-
 import { useNavigate } from 'react-router-dom';
-import classes from './CardTablePosts.module.css';
+import { Post } from '../../requests/postRequests';
+import { formatShortDate } from '../../utils/format-date';
+import {
+  CLOUDINARY_BASE_URL,
+  POST_LIST_THUMB_TRANSFORM,
+} from '../../config/constants';
 
-export type PostTableData = {
-  id: number;
-  image: string;
-  title: string;
-  categories: string[];
-  posted: string;
-  author: string;
-  status: 'published' | 'drafts' | 'pending' | 'trash';
-};
+import classes from './CardTablePosts.module.css';
 
 type TableProps = {
   headerTopStyle: string;
-  blogTableData: PostTableData[];
+  blogTableData: Post[];
 };
 
 const CardTablePosts = ({ headerTopStyle, blogTableData }: TableProps) => {
@@ -55,14 +51,23 @@ const CardTablePosts = ({ headerTopStyle, blogTableData }: TableProps) => {
         </td>
         <td>
           <div className={classes['card_body_table_row_image_container']}>
-            <img src={item.image} />
+            <img
+              src={`${CLOUDINARY_BASE_URL}${POST_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}`}
+              alt={item.coverImage?.altText}
+            />
           </div>
         </td>
         <td>
           <div className={classes['card_body_table_row_post_container']}>
             <div>{item.title}</div>
-            <div>{item.categories.join(' · ')}</div>
-            <div>{`${item.posted} · ${item.author}`}</div>
+            <div>
+              {item.categories
+                .map((category) => category.categoryName)
+                .join(' · ')}
+            </div>
+            <div>{`${formatShortDate(item.updatedAt)} · ${
+              item.user.displayName
+            }`}</div>
           </div>
         </td>
         <td>
