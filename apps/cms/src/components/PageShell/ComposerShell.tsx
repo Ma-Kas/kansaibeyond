@@ -1,11 +1,21 @@
 // General Imports
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Loader } from '@mantine/core';
-import { getOnePost } from '../../requests/postRequests';
+import { notifications } from '@mantine/notifications';
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { getOnePost, postPost, updatePost } from '../../requests/postRequests';
+import { PostFormProvider, usePostForm } from './post-form-context';
+import { postSetFormFieldError } from '../../utils/backend-error-response-validation';
+import { newPostSchema } from './types';
 import ComposerHeader from '../ComposerHeader/ComposerHeader';
 import ComposerSidebar from '../ComposerSidebar/ComposerSidebar';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
+import {
+  SuccessNotification,
+  ErrorNotification,
+} from '../../components/FeedbackPopups/FeedbackPopups';
 
 // Editor Imports
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
@@ -16,6 +26,7 @@ import { EditorThemeClasses, KlassConstructor, LexicalNode } from 'lexical';
 import EditorTheme from '../../pages/Editor/themes/EditorTheme';
 
 import classes from './Shell.module.css';
+import { useEffect } from 'react';
 
 type InitialConfigType = {
   editorState: string | undefined;
@@ -37,14 +48,148 @@ const initialConfig: InitialConfigType = {
 };
 
 const ComposerShell = () => {
+  const navigate = useNavigate();
+
   const { postSlug } = useParams();
   const currentUrlSlug = postSlug!;
+
+  const queryClient = useQueryClient();
+
+  // use useQueries here for parallel post, tags, categories queries
+  // will return a results array to do conditional rendering
+  // e.g. if (queryResults.some(query => query.isLoading)) => show loader etc
+  // to show loading untill ALL queries are finished
+  // not sure how this behaves if e.g. categories is invalidated in sidebar, if all will refetch?
+
+  // Though, do I need to fetch categories, tags here, or can i fetch in sidebar?
+
+  // Definitely will need a form here for the post data as submission is in composerHeader, so pass submit function there
+  // then pass the form down to sidebar and editor to set the values there
+  // Or wrap the entire main in a form, then just have the individual inputs split up into all the component within?
 
   const postQuery = useQuery({
     queryKey: [currentUrlSlug],
     queryFn: () => getOnePost(currentUrlSlug),
     retry: 1,
   });
+
+  const postForm = usePostForm({
+    mode: 'controlled',
+    initialValues: {
+      title: '',
+      postSlug: '',
+      content: '',
+      coverImage: {
+        urlSlug: '',
+        altText: '',
+      },
+      categories: [],
+      tags: [],
+      relatedPosts: [],
+    },
+    validate: zodResolver(newPostSchema),
+  });
+
+  useEffect(() => {
+    if (postQuery.isSuccess && postQuery.data) {
+      postForm.setValues({
+        title: postQuery.data.title,
+        postSlug: postQuery.data.postSlug,
+        content: postQuery.data.content ? postQuery.data.content : '',
+        coverImage: postQuery.data.coverImage
+          ? postQuery.data.coverImage
+          : { urlSlug: '', altText: '' },
+        categories: postQuery.data.categories.map((cat) => cat.id),
+        tags: postQuery.data.tags.map((tag) => tag.id),
+        relatedPosts: postQuery.data.relatedPosts
+          ? postQuery.data.relatedPosts.map((related) => related.id)
+          : null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postQuery.isSuccess, postQuery.data]);
+
+  const postPostMutation = useMutation({
+    mutationFn: postPost,
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ['posts'] });
+      navigate('..', { relative: 'path' });
+      notifications.show(
+        SuccessNotification({
+          bodyText: `Created new post: ${data?.title}`,
+        })
+      );
+    },
+    onError: (err) => {
+      const formFieldErrors = postSetFormFieldError(err.message);
+      if (formFieldErrors && formFieldErrors.field) {
+        postForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
+      } else {
+        notifications.show(
+          ErrorNotification({ bodyText: formFieldErrors.error })
+        );
+      }
+    },
+  });
+
+  const postUpdateMutation = useMutation({
+    mutationFn: ({ urlSlug, values }: { urlSlug: string; values: unknown }) =>
+      updatePost(urlSlug, values),
+    onSuccess: async (data) => {
+      // Avoid background refetch if urlSlug changed, as it can't be reached on
+      // that url anymore. Delete cache entry instead
+      if (currentUrlSlug === postForm.getValues().postSlug) {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['posts'] }),
+          queryClient.invalidateQueries({ queryKey: [currentUrlSlug] }),
+        ]);
+      } else {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['posts'] }),
+          queryClient.removeQueries({
+            queryKey: [currentUrlSlug],
+            exact: true,
+          }),
+        ]);
+      }
+
+      if (data) {
+        notifications.show(
+          SuccessNotification({
+            bodyText: `Post updated: ${data.title}`,
+          })
+        );
+      }
+    },
+    onError: (err) => {
+      const formFieldErrors = postSetFormFieldError(err.message);
+      if (formFieldErrors && formFieldErrors.field) {
+        postForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
+      } else {
+        notifications.show(
+          ErrorNotification({ bodyText: formFieldErrors.error })
+        );
+      }
+    },
+  });
+
+  const handleSubmit = (values: unknown) => {
+    // TODO: PLACEHOLDER IF CHECK TO DIFFERENTIATE NEW POST OR EDIT
+    if (postForm) {
+      const parseResult = newPostSchema.safeParse(values);
+      if (parseResult.success) {
+        postUpdateMutation.mutate({
+          urlSlug: currentUrlSlug,
+          values: parseResult.data,
+        });
+      }
+    } else {
+      const parseResult = newPostSchema.safeParse(values);
+      if (parseResult.success) {
+        postPostMutation.mutate(parseResult.data);
+      }
+    }
+  };
 
   if (postQuery.isPending || postQuery.isRefetching) {
     return (
@@ -72,17 +217,24 @@ const ComposerShell = () => {
     return (
       <>
         <main className={classes['shell_composer']}>
-          <LexicalComposer initialConfig={initialConfig}>
-            <ComposerHeader />
-            <div className={classes['page_composer']}>
-              <ComposerSidebar />
-              <TableContext>
-                <div className='editor-shell'>
-                  <Editor postData={postQuery.data} />
+          <PostFormProvider form={postForm}>
+            <form
+              id='edit-post-form'
+              onSubmit={postForm.onSubmit((values) => handleSubmit(values))}
+            >
+              <LexicalComposer initialConfig={initialConfig}>
+                <ComposerHeader />
+                <div className={classes['page_composer']}>
+                  <ComposerSidebar />
+                  <TableContext>
+                    <div className='editor-shell'>
+                      <Editor postData={postQuery.data} />
+                    </div>
+                  </TableContext>
                 </div>
-              </TableContext>
-            </div>
-          </LexicalComposer>
+              </LexicalComposer>
+            </form>
+          </PostFormProvider>
         </main>
       </>
     );

@@ -128,7 +128,7 @@ const BlogPosts = () => {
         <Button
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('/composer/new')}
+          onClick={() => navigate('/composer/create-new')}
         >
           Create New Post
         </Button>

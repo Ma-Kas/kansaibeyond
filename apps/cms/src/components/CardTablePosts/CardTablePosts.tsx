@@ -296,7 +296,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
           <div className={classes['card_body_table_row_button_group']}>
             <Button
               radius={'xl'}
-              onClick={() => navigate(`/composer/${item.postSlug}`)}
+              onClick={() => navigate(`/composer/${item.postSlug}/edit`)}
             >
               Edit
             </Button>

@@ -244,7 +244,9 @@ const ComposerHeader = () => {
           <Button
             className={classes['color-button']}
             variant='transparent'
-            onClick={handleExportTest}
+            // onClick={handleExportTest}
+            form='edit-post-form'
+            type='submit'
           >
             Save
           </Button>
