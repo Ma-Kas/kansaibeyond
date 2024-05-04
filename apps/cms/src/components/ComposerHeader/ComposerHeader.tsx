@@ -1,5 +1,4 @@
 import { Button, Divider, ActionIcon, Group } from '@mantine/core';
-
 import {
   IconArrowLeft,
   IconArrowBackUp,

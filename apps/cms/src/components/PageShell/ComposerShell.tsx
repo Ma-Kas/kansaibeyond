@@ -141,7 +141,9 @@ const ComposerShell = () => {
       if (currentUrlSlug === postForm.getValues().postSlug) {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ['posts'] }),
-          queryClient.invalidateQueries({ queryKey: [currentUrlSlug] }),
+          // TODO: Potentiall not invalidate immediately to avoid refetch during
+          // editing post in editor, only invalidate on leaving editor?
+          // queryClient.invalidateQueries({ queryKey: [currentUrlSlug] }),
         ]);
       } else {
         await Promise.all([
@@ -216,26 +218,25 @@ const ComposerShell = () => {
 
     return (
       <>
-        <main className={classes['shell_composer']}>
-          <PostFormProvider form={postForm}>
-            <form
-              id='edit-post-form'
-              onSubmit={postForm.onSubmit((values) => handleSubmit(values))}
-            >
-              <LexicalComposer initialConfig={initialConfig}>
-                <ComposerHeader />
-                <div className={classes['page_composer']}>
-                  <ComposerSidebar />
-                  <TableContext>
-                    <div className='editor-shell'>
-                      <Editor postData={postQuery.data} />
-                    </div>
-                  </TableContext>
-                </div>
-              </LexicalComposer>
-            </form>
-          </PostFormProvider>
-        </main>
+        <PostFormProvider form={postForm}>
+          <form
+            className={classes['shell_composer']}
+            id='edit-post-form'
+            onSubmit={postForm.onSubmit((values) => handleSubmit(values))}
+          >
+            <LexicalComposer initialConfig={initialConfig}>
+              <ComposerHeader />
+              <div className={classes['page_composer']}>
+                <ComposerSidebar />
+                <TableContext>
+                  <div className='editor-shell'>
+                    <Editor postData={postQuery.data} />
+                  </div>
+                </TableContext>
+              </div>
+            </LexicalComposer>
+          </form>
+        </PostFormProvider>
       </>
     );
   }
