@@ -9,7 +9,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import useLexicalEditable from '@lexical/react/useLexicalEditable';
-import { createContext, memo, useState } from 'react';
+import { createContext, memo, useEffect, useRef, useState } from 'react';
 import { useSettings } from './context/SettingsContext';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
 import CodeActionMenuPlugin from './plugins/CodeActionMenuPlugin';
@@ -60,6 +60,7 @@ const Editor = memo(({ postData }: { postData: Post }): JSX.Element => {
   const {
     settings: { tableCellMerge, tableCellBackgroundColor },
   } = useSettings();
+  const editorContainerRef = useRef<HTMLDivElement | null>(null);
   const isEditable = useLexicalEditable();
   const [toolbarEnabled, setToolbarEnabled] = useState(true);
   const [settingsModalOpen, { open, close }] = useDisclosure(false);
@@ -81,13 +82,23 @@ const Editor = memo(({ postData }: { postData: Post }): JSX.Element => {
     open();
   };
 
+  useEffect(() => {
+    // Do not like this hack, but lexical lazy loads a lot of things, so
+    // need to use a delay before scrolling to top is working properly
+    setTimeout(() => {
+      if (editorContainerRef.current) {
+        editorContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 200);
+  }, [editorContainerRef]);
+
   return (
     <>
       <ToolbarPlugin
         toolbarEnabled={toolbarEnabled}
         setIsLinkEditMode={setIsLinkEditMode}
       />
-      <div className='editor-container'>
+      <div className='editor-container' ref={editorContainerRef}>
         <PostEditorTitle
           setToolbarEnabled={setToolbarEnabled}
           loadedTitle={postData.title}
