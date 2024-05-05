@@ -8,129 +8,26 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
-  CLEAR_HISTORY_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { usePostFormContext } from '../PageShell/post-form-context';
 import { mergeRegister } from '@lexical/utils';
 
 import { useNavigate } from 'react-router-dom';
 
 import classes from './ComposerHeader.module.css';
 
-const DEBUG_IMPORT_JSONB = {
-  root: {
-    children: [
-      {
-        children: [
-          {
-            detail: 0,
-            format: 0,
-            mode: 'normal',
-            style: '',
-            text: 'Henlo tank',
-            type: 'text',
-            version: 1,
-          },
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'paragraph',
-        version: 1,
-      },
-      {
-        children: [
-          {
-            altText: 'Yellow flower in tilt shift lens',
-            width: null,
-            maxWidth: null,
-            captionText: '',
-            src: '/src/pages/Editor/images/yellow-flower.jpg',
-            type: 'image',
-            version: 1,
-          },
-        ],
-        direction: null,
-        format: '',
-        indent: 0,
-        type: 'image-block',
-        version: 1,
-        alignment: 'center',
-      },
-      {
-        children: [
-          {
-            imageList: [
-              {
-                id: 1,
-                altText: 'Yellow flower in tilt shift lens',
-                src: '/src/pages/Editor/images/yellow-flower.jpg',
-                aspectRatio: '3 / 4',
-              },
-              {
-                id: 2,
-                altText:
-                  'Daylight fir trees forest glacier green high ice landscape',
-                src: '/src/pages/Editor/images/landscape.jpg',
-                aspectRatio: '3 / 4',
-              },
-              {
-                id: 3,
-                altText: 'Yellow flower in tilt shift lens',
-                src: '/src/pages/Editor/images/yellow-flower.jpg',
-                aspectRatio: '3 / 4',
-              },
-              {
-                id: 4,
-                altText:
-                  'Daylight fir trees forest glacier green high ice landscape',
-                src: '/src/pages/Editor/images/landscape.jpg',
-                aspectRatio: '3 / 4',
-              },
-            ],
-            gridType: 'dynamic-type',
-            width: null,
-            maxWidth: null,
-            captionText: '',
-            gridGap: null,
-            columnMinWidth: null,
-            type: 'gallery-container',
-            version: 1,
-          },
-        ],
-        direction: null,
-        format: '',
-        indent: 0,
-        type: 'gallery-block',
-        version: 1,
-        alignment: 'center',
-      },
-      {
-        children: [],
-        direction: null,
-        format: '',
-        indent: 0,
-        type: 'paragraph',
-        version: 1,
-      },
-    ],
-    direction: 'ltr',
-    format: '',
-    indent: 0,
-    type: 'root',
-    version: 1,
-  },
-};
-
-const DEBUG_IMPORT_TEXT =
-  '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Henlo tank","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"altText":"Yellow flower in tilt shift lens","width":null,"maxWidth":null,"captionText":"","src":"/src/pages/Editor/images/yellow-flower.jpg","type":"image","version":1}],"direction":null,"format":"","indent":0,"type":"image-block","version":1,"alignment":"center"},{"children":[{"imageList":[{"id":1,"altText":"Yellow flower in tilt shift lens","src":"/src/pages/Editor/images/yellow-flower.jpg","aspectRatio":"3 / 4"},{"id":2,"altText":"Daylight fir trees forest glacier green high ice landscape","src":"/src/pages/Editor/images/landscape.jpg","aspectRatio":"3 / 4"},{"id":3,"altText":"Yellow flower in tilt shift lens","src":"/src/pages/Editor/images/yellow-flower.jpg","aspectRatio":"3 / 4"},{"id":4,"altText":"Daylight fir trees forest glacier green high ice landscape","src":"/src/pages/Editor/images/landscape.jpg","aspectRatio":"3 / 4"}],"gridType":"dynamic-type","width":null,"maxWidth":null,"captionText":"","gridGap":null,"columnMinWidth":null,"type":"gallery-container","version":1}],"direction":null,"format":"","indent":0,"type":"gallery-block","version":1,"alignment":"center"},{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}';
-
-const ComposerHeader = () => {
+const ComposerHeader = ({
+  formRef,
+}: {
+  formRef: React.MutableRefObject<HTMLFormElement | null>;
+}) => {
   const [editor] = useLexicalComposerContext();
+  const postForm = usePostFormContext();
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
   const [canUndo, setCanUndo] = useState(false);
@@ -175,32 +72,21 @@ const ComposerHeader = () => {
     );
   }, [activeEditor, editor]);
 
-  const handleExportTest = useCallback(() => {
-    editor.update(() => {
-      // string version to save in db as TEXT
-      const editorState = editor.getEditorState();
-      const jsonString = JSON.stringify(editorState);
-      console.log(jsonString);
-      // json if saving in db as JSONB
-      const json = editor.getEditorState().toJSON();
-      console.log(json);
-    });
-  }, [editor]);
+  const handleSave = useCallback(() => {
+    const editorState = editor.getEditorState();
+    const jsonString = JSON.stringify(editorState);
+    postForm.setFieldValue('content', jsonString);
+    if (formRef.current) {
+      formRef.current.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true })
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formRef]);
 
-  const handleImportTest = useCallback(
-    (data: string) => {
-      editor.update(() => {
-        // Re-import from TEXT
-        const editorState = editor.parseEditorState(data);
-        editor.setEditorState(editorState);
-        // Re-import JSONB
-        // const editorState = editor.parseEditorState(JSON.stringify(data));
-        // editor.setEditorState(editorState);
-        editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
-      });
-    },
-    [editor]
-  );
+  const handlePreview = useCallback(() => {
+    console.log('implement preview here');
+  }, []);
 
   return (
     <header className={classes.composerheader}>
@@ -243,9 +129,7 @@ const ComposerHeader = () => {
           <Button
             className={classes['color-button']}
             variant='transparent'
-            // onClick={handleExportTest}
-            form='edit-post-form'
-            type='submit'
+            onClick={handleSave}
           >
             Save
           </Button>
@@ -253,7 +137,7 @@ const ComposerHeader = () => {
           <Button
             className={classes['color-button']}
             variant='transparent'
-            onClick={() => handleImportTest(DEBUG_IMPORT_TEXT)}
+            onClick={() => handlePreview()}
           >
             Preview
           </Button>

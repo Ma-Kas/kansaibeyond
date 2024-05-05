@@ -9,7 +9,6 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
 import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import useLexicalEditable from '@lexical/react/useLexicalEditable';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { createContext, memo, useState } from 'react';
 import { useSettings } from './context/SettingsContext';
 import AutoLinkPlugin from './plugins/AutoLinkPlugin';
@@ -36,7 +35,6 @@ import Placeholder from './ui/Placeholder';
 import PostEditorTitle from './components/PostEditorTitle/PostEditorTitle';
 import { useDisclosure } from '@mantine/hooks';
 import ContentSettingsModal from './components/ContentSettingsModal/ContentSettingsModal';
-import { usePostFormContext } from '../../components/PageShell/post-form-context';
 
 import { Post } from '../../requests/postRequests';
 
@@ -59,8 +57,6 @@ export const SettingsModalContext = createContext<SettingsModalContext>({
 });
 
 const Editor = memo(({ postData }: { postData: Post }): JSX.Element => {
-  const [editor] = useLexicalComposerContext();
-  const postForm = usePostFormContext();
   const {
     settings: { tableCellMerge, tableCellBackgroundColor },
   } = useSettings();
@@ -79,12 +75,6 @@ const Editor = memo(({ postData }: { postData: Post }): JSX.Element => {
       setFloatingAnchorElem(_floatingAnchorElem);
     }
   };
-
-  // Keep postForm in sync with current editor state
-  editor.registerUpdateListener(({ editorState }) => {
-    const jsonString = JSON.stringify(editorState);
-    postForm.setFieldValue('content', jsonString);
-  });
 
   const handleSettingsModuleOpen = ({ content }: { content: JSX.Element }) => {
     setSettingsModalContent(content);

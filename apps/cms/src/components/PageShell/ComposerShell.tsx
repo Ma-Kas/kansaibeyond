@@ -26,7 +26,7 @@ import { EditorThemeClasses, KlassConstructor, LexicalNode } from 'lexical';
 import EditorTheme from '../../pages/Editor/themes/EditorTheme';
 
 import classes from './Shell.module.css';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 type InitialConfigType = {
   editorState: string | undefined;
@@ -49,23 +49,12 @@ const initialConfig: InitialConfigType = {
 
 const ComposerShell = () => {
   const navigate = useNavigate();
+  const postFormRef = useRef<HTMLFormElement | null>(null);
 
   const { postSlug } = useParams();
   const currentUrlSlug = postSlug!;
 
   const queryClient = useQueryClient();
-
-  // use useQueries here for parallel post, tags, categories queries
-  // will return a results array to do conditional rendering
-  // e.g. if (queryResults.some(query => query.isLoading)) => show loader etc
-  // to show loading untill ALL queries are finished
-  // not sure how this behaves if e.g. categories is invalidated in sidebar, if all will refetch?
-
-  // Though, do I need to fetch categories, tags here, or can i fetch in sidebar?
-
-  // Definitely will need a form here for the post data as submission is in composerHeader, so pass submit function there
-  // then pass the form down to sidebar and editor to set the values there
-  // Or wrap the entire main in a form, then just have the individual inputs split up into all the component within?
 
   const postQuery = useQuery({
     queryKey: [currentUrlSlug],
@@ -220,12 +209,13 @@ const ComposerShell = () => {
       <>
         <PostFormProvider form={postForm}>
           <form
+            ref={postFormRef}
             className={classes['shell_composer']}
             id='edit-post-form'
             onSubmit={postForm.onSubmit((values) => handleSubmit(values))}
           >
             <LexicalComposer initialConfig={initialConfig}>
-              <ComposerHeader />
+              <ComposerHeader formRef={postFormRef} />
               <div className={classes['page_composer']}>
                 <ComposerSidebar />
                 <TableContext>
