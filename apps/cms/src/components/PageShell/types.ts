@@ -35,7 +35,7 @@ export const newPostSchema = z
     categories: z
       .array(z.number())
       .min(MIN_CATEGORIES_PER_POST, {
-        message: 'At least on category must be selected.',
+        message: 'At least one category must be selected.',
       })
       .max(MAX_CATEGORIES_PER_POST, {
         message: `A maxiumum of ${MAX_CATEGORIES_PER_POST} can be selected`,
@@ -43,7 +43,7 @@ export const newPostSchema = z
     tags: z
       .array(z.number())
       .min(MIN_TAGS_PER_POST, {
-        message: 'At least on category must be selected.',
+        message: 'At least one tag must be selected.',
       })
       .max(MAX_TAGS_PER_POST, {
         message: `A maxiumum of ${MAX_TAGS_PER_POST} can be selected`,

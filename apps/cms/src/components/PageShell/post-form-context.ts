@@ -8,8 +8,8 @@ type PostFormValues = {
     urlSlug: string;
     altText: string;
   };
-  categories: null | number[];
-  tags: null | number[];
+  categories: number[];
+  tags: number[];
   relatedPosts: null | number[];
 };
 

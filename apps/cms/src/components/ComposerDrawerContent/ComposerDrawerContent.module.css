@@ -1,0 +1,26 @@
+.sidebar_drawer_data {
+  flex: 1;
+}
+
+.sidebar_drawer_data_error_loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar_drawer_data_list_group {
+  margin-top: var(--mantine-spacing-md);
+}
+
+.sidebar_drawer_data_list_label {
+  font-size: var(--font-size-composer-sidebar-regular);
+  font-weight: var(--font-weight-regular);
+}
+
+.sidebar_drawer_data_list_description {
+  color: var(--mantine-color-dimmed);
+}
+
+.sidebar_drawer_data_checkbox {
+  border-color: var(--mantine-primary-color-filled);
+}

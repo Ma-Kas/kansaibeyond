@@ -21,6 +21,8 @@ import {
 // Page Component Imports
 import ComposerSidebarButton from '../ComposerSidebarButton/ComposerSidebarButton';
 import ComposerDrawer from '../ComposerDrawer/ComposerDrawer';
+import ComposerDrawerContentCategories from '../ComposerDrawerContent/ComposerDrawerContentCategories';
+import ComposerDrawerContentTags from '../ComposerDrawerContent/ComposerDrawerContentTags';
 
 // Lexical Editor Imports
 import {
@@ -232,13 +234,7 @@ const ComposerSidebar = () => {
             opened={drawerOpen}
             close={close}
           >
-            <div className={classes['sidebar_drawer_category_description']}>
-              Create categories to organize topics and help readers find posts
-              that interest them.
-            </div>
-            <div className={classes['sidebar_drawer_category_list_container']}>
-              Assign a category
-            </div>
+            <ComposerDrawerContentCategories />
           </ComposerDrawer>
         );
       }
@@ -249,10 +245,7 @@ const ComposerSidebar = () => {
             opened={drawerOpen}
             close={close}
           >
-            <div className={classes['sidebar_drawer_tags_description']}>
-              Create and assign tags to help readers find the blog posts they're
-              looking for.
-            </div>
+            <ComposerDrawerContentTags />
           </ComposerDrawer>
         );
       }

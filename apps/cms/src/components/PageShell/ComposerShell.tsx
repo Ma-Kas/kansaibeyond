@@ -1,8 +1,10 @@
 // General Imports
+import { useEffect, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '@mantine/core';
+import { FormErrors } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { getOnePost, postPost, updatePost } from '../../requests/postRequests';
@@ -26,7 +28,6 @@ import { EditorThemeClasses, KlassConstructor, LexicalNode } from 'lexical';
 import EditorTheme from '../../pages/Editor/themes/EditorTheme';
 
 import classes from './Shell.module.css';
-import { useEffect, useRef } from 'react';
 
 type InitialConfigType = {
   editorState: string | undefined;
@@ -182,6 +183,22 @@ const ComposerShell = () => {
     }
   };
 
+  const handleSubmitErrors = (validationErrors: FormErrors) => {
+    const errorKeys = Object.keys(validationErrors);
+    if (errorKeys) {
+      errorKeys.forEach((errorKey) => {
+        const errorMessage = validationErrors[errorKey];
+        if (typeof errorMessage === 'string') {
+          notifications.show(ErrorNotification({ bodyText: errorMessage }));
+        } else {
+          notifications.show(
+            ErrorNotification({ bodyText: 'A form error has occured' })
+          );
+        }
+      });
+    }
+  };
+
   if (postQuery.isPending || postQuery.isRefetching) {
     return (
       <main className={classes['shell_composer']}>
@@ -212,7 +229,10 @@ const ComposerShell = () => {
             ref={postFormRef}
             className={classes['shell_composer']}
             id='edit-post-form'
-            onSubmit={postForm.onSubmit((values) => handleSubmit(values))}
+            onSubmit={postForm.onSubmit(
+              (values) => handleSubmit(values),
+              (validationErrors) => handleSubmitErrors(validationErrors)
+            )}
           >
             <LexicalComposer initialConfig={initialConfig}>
               <ComposerHeader formRef={postFormRef} />
