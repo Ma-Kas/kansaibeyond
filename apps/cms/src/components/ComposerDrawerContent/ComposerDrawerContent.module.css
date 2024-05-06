@@ -21,6 +21,32 @@
   color: var(--mantine-color-dimmed);
 }
 
+.sidebar_drawer_data_list_tags_input {
+  margin-top: var(--mantine-spacing-md);
+  padding-top: rem(12px);
+  padding-bottom: rem(12px);
+}
+
+.sidebar_drawer_data_list_tags_section {
+  padding-top: rem(12px);
+  align-items: flex-start;
+}
+
+.sidebar_drawer_data_list_tags_pill {
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-regular);
+  background-color: var(--transparent-blue-hover-bg);
+}
+
+.sidebar_drawer_data_list_tags_dropdown_option {
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-regular);
+
+  @mixin hover {
+    background-color: var(--transparent-blue-hover-bg);
+  }
+}
+
 .sidebar_drawer_data_checkbox {
   border-color: var(--mantine-primary-color-filled);
 }

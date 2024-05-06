@@ -35,23 +35,23 @@ export const newPostSchema = z
     categories: z
       .array(z.number())
       .min(MIN_CATEGORIES_PER_POST, {
-        message: 'At least one category must be selected.',
+        message: 'Please assign at least one category to the post.',
       })
       .max(MAX_CATEGORIES_PER_POST, {
-        message: `A maxiumum of ${MAX_CATEGORIES_PER_POST} can be selected`,
+        message: `A maxiumum of ${MAX_CATEGORIES_PER_POST} categories can be selected`,
       }),
     tags: z
       .array(z.number())
       .min(MIN_TAGS_PER_POST, {
-        message: 'At least one tag must be selected.',
+        message: 'Please assign at least one tag to the post.',
       })
       .max(MAX_TAGS_PER_POST, {
-        message: `A maxiumum of ${MAX_TAGS_PER_POST} can be selected`,
+        message: `A maxiumum of ${MAX_TAGS_PER_POST} tags can be selected`,
       }),
     relatedPosts: z
       .array(z.number())
       .max(MAX_RELATED_POSTS, {
-        message: `A maxiumum of ${MAX_RELATED_POSTS} can be selected`,
+        message: `A maxiumum of ${MAX_RELATED_POSTS} posts can be set as related posts.`,
       })
       .optional(),
   })
