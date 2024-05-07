@@ -23,6 +23,7 @@ import ComposerSidebarButton from '../ComposerSidebarButton/ComposerSidebarButto
 import ComposerDrawer from '../ComposerDrawer/ComposerDrawer';
 import ComposerDrawerContentCategories from '../ComposerDrawerContent/ComposerDrawerContentCategories';
 import ComposerDrawerContentTags from '../ComposerDrawerContent/ComposerDrawerContentTags';
+import ComposerDrawerContentSettings from '../ComposerDrawerContent/ComposerDrawerContentSettings';
 
 // Lexical Editor Imports
 import {
@@ -267,7 +268,7 @@ const ComposerSidebar = () => {
             opened={drawerOpen}
             close={close}
           >
-            <div></div>
+            <ComposerDrawerContentSettings />
           </ComposerDrawer>
         );
       }

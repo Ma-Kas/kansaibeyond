@@ -125,26 +125,7 @@ const ComposerShell = () => {
   const postUpdateMutation = useMutation({
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: unknown }) =>
       updatePost(urlSlug, values),
-    onSuccess: async (data) => {
-      // Avoid background refetch if urlSlug changed, as it can't be reached on
-      // that url anymore. Delete cache entry instead
-      if (currentUrlSlug === postForm.getValues().postSlug) {
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['posts'] }),
-          // TODO: Potentiall not invalidate immediately to avoid refetch during
-          // editing post in editor, only invalidate on leaving editor?
-          // queryClient.invalidateQueries({ queryKey: [currentUrlSlug] }),
-        ]);
-      } else {
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['posts'] }),
-          queryClient.removeQueries({
-            queryKey: [currentUrlSlug],
-            exact: true,
-          }),
-        ]);
-      }
-
+    onSuccess: (data) => {
       if (data) {
         notifications.show(
           SuccessNotification({
@@ -157,11 +138,10 @@ const ComposerShell = () => {
       const formFieldErrors = postSetFormFieldError(err.message);
       if (formFieldErrors && formFieldErrors.field) {
         postForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
-      } else {
-        notifications.show(
-          ErrorNotification({ bodyText: formFieldErrors.error })
-        );
       }
+      notifications.show(
+        ErrorNotification({ bodyText: formFieldErrors.error })
+      );
     },
   });
 
@@ -196,6 +176,26 @@ const ComposerShell = () => {
           );
         }
       });
+    }
+  };
+
+  // Break out query invalidation of post(s) when leaving editor, to call it on back button
+  const handleInvalidateOnBack = async () => {
+    // Avoid background refetch if urlSlug changed, as it can't be reached on
+    // that url anymore. Delete cache entry instead
+    if (currentUrlSlug === postForm.getValues().postSlug) {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['posts'] }),
+        queryClient.invalidateQueries({ queryKey: [currentUrlSlug] }),
+      ]);
+    } else {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['posts'] }),
+        queryClient.removeQueries({
+          queryKey: [currentUrlSlug],
+          exact: true,
+        }),
+      ]);
     }
   };
 
@@ -235,7 +235,10 @@ const ComposerShell = () => {
             )}
           >
             <LexicalComposer initialConfig={initialConfig}>
-              <ComposerHeader formRef={postFormRef} />
+              <ComposerHeader
+                invalidateQueries={handleInvalidateOnBack}
+                formRef={postFormRef}
+              />
               <div className={classes['page_composer']}>
                 <ComposerSidebar />
                 <TableContext>

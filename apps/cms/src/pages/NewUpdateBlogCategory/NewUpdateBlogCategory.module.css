@@ -57,6 +57,12 @@
   margin-top: 12px;
 }
 
+.text_input_section {
+  padding-left: 12px;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+}
+
 .hidden {
   display: none;
 }

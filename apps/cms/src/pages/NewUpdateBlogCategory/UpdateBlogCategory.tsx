@@ -292,10 +292,9 @@ const UpdateBlogCategory = () => {
                   autoFocus
                 />
                 <TextInput
-                  leftSection={
-                    <div style={{ paddingLeft: '12px' }}>/blog/categories/</div>
-                  }
-                  leftSectionWidth={'14ch'}
+                  classNames={{ section: localClasses['text_input_section'] }}
+                  leftSection={<div>/blog/categories/</div>}
+                  leftSectionWidth={'14.5ch'}
                   label='URL Slug'
                   placeholder='your-category-here'
                   description='URL slug displayed for this category'
@@ -317,14 +316,16 @@ const UpdateBlogCategory = () => {
                   label='Category Image'
                   description='Set a cover image for this category'
                   withAsterisk
-                ></InputWrapper>
-                <CardEditCoverImage
-                  openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                  coverImage={categoryForm.getValues().coverImage}
-                />
+                >
+                  <CardEditCoverImage
+                    id='category-image'
+                    openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                    coverImage={categoryForm.getValues().coverImage}
+                  />
+                </InputWrapper>
 
                 <TextInput
-                  label='Image Alternative Text'
+                  label='Category Image Alternative Text'
                   placeholder='e.g. Mount Fuji and cherry blossoms'
                   description='Help screen readers announce image'
                   {...categoryForm.getInputProps('coverImage.altText')}

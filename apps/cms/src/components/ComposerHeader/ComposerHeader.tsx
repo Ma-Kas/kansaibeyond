@@ -21,11 +21,12 @@ import { useNavigate } from 'react-router-dom';
 
 import classes from './ComposerHeader.module.css';
 
-const ComposerHeader = ({
-  formRef,
-}: {
+type Props = {
+  invalidateQueries: () => Promise<void>;
   formRef: React.MutableRefObject<HTMLFormElement | null>;
-}) => {
+};
+
+const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
   const [editor] = useLexicalComposerContext();
   const postForm = usePostFormContext();
   const [activeEditor, setActiveEditor] = useState(editor);
@@ -72,6 +73,11 @@ const ComposerHeader = ({
     );
   }, [activeEditor, editor]);
 
+  const handleBackButton = async () => {
+    navigate(-1);
+    await invalidateQueries();
+  };
+
   const handleSave = useCallback(() => {
     const editorState = editor.getEditorState();
     const jsonString = JSON.stringify(editorState);
@@ -96,7 +102,12 @@ const ComposerHeader = ({
           leftSection={<IconArrowLeft size={14} />}
           className={classes['plain-button']}
           variant='transparent'
-          onClick={() => navigate('/dashboard/blog/posts')}
+          // IIFE to silence es-lint void/Promise<void> warning
+          onClick={() => {
+            void (async () => {
+              await handleBackButton();
+            })();
+          }}
         >
           Back
         </Button>

@@ -151,9 +151,8 @@ const NewBlogTag = () => {
                 autoFocus
               />
               <TextInput
-                leftSection={
-                  <div style={{ paddingLeft: '12px' }}>/blog/tags/</div>
-                }
+                classNames={{ section: localClasses['text_input_section'] }}
+                leftSection={<div>/blog/tags/</div>}
                 leftSectionWidth={'10ch'}
                 label='URL Slug'
                 placeholder='your-tag-here'

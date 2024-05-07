@@ -41,6 +41,7 @@ const PostEditorTitle = ({ setToolbarEnabled, loadedTitle }: Props) => {
         placeholder='Add a Catchy Title'
         // For intial render, needs to set value from prop instead of form, to avoid race condition
         // with async form state and scrollHeight
+        // TODO: BUG: WON'T ALLOW COMPLETE DELETION Of TITLE, AS IT WOULD REVERT TO loadedTitle
         value={
           postForm.getValues().title
             ? postForm.getValues().title
