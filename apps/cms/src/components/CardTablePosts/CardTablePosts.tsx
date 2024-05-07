@@ -100,7 +100,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
             },
             {
               text: 'Revert to Draft',
@@ -141,7 +141,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
             },
             {
               text: 'Publish Post',
@@ -182,7 +182,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
             },
             {
               text: 'Publish Post',
@@ -223,7 +223,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
             },
             {
               text: 'Revert to Draft',

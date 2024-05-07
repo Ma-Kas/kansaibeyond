@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { usePostFormContext } from '../../../../components/PageShell/post-form-context';
 import classes from './PostEditorTitle.module.css';
 
@@ -10,17 +10,19 @@ type Props = {
 const PostEditorTitle = ({ setToolbarEnabled, loadedTitle }: Props) => {
   const titleRef = useRef<HTMLTextAreaElement | null>(null);
   const postForm = usePostFormContext();
+  const [titleValue, setTitleValue] = useState(loadedTitle ? loadedTitle : '');
 
   // In case title is loaded from backend, autoResize needs to be called to set
   // initial size
   useEffect(() => {
-    if (titleRef.current) {
+    if (loadedTitle && titleRef.current) {
       autoResize(titleRef.current);
     }
-  }, []);
+  }, [loadedTitle]);
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     postForm.setFieldValue('title', e.target.value);
+    setTitleValue(e.target.value);
     autoResize(e.target);
   };
 
@@ -39,16 +41,7 @@ const PostEditorTitle = ({ setToolbarEnabled, loadedTitle }: Props) => {
         className={classes['editor-post-title-inner']}
         data-editor-component='post-title-textarea'
         placeholder='Add a Catchy Title'
-        // For intial render, needs to set value from prop instead of form, to avoid race condition
-        // with async form state and scrollHeight
-        // TODO: BUG: WON'T ALLOW COMPLETE DELETION Of TITLE, AS IT WOULD REVERT TO loadedTitle
-        value={
-          postForm.getValues().title
-            ? postForm.getValues().title
-            : loadedTitle
-            ? loadedTitle
-            : ''
-        }
+        value={titleValue}
         rows={1}
         maxLength={200}
         onChange={(e) => handleInput(e)}
