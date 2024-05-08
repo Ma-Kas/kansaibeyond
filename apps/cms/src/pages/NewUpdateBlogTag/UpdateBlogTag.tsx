@@ -149,6 +149,7 @@ const UpdateBlogTag = () => {
         </h1>
         <Group className={classes['page_main_header_button_group']}>
           <Button
+            type='button'
             className={classes['page_main_header_cancel_button']}
             onClick={() => navigate('../..', { relative: 'path' })}
           >

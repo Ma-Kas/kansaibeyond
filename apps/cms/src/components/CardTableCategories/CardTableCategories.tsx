@@ -117,6 +117,7 @@ const CardTableCategories = ({
         <td>
           <div className={classes['card_body_table_row_button_group']}>
             <Button
+              type='button'
               radius={'xl'}
               onClick={() => navigate(`${item.categorySlug}/edit`)}
             >

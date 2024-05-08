@@ -245,6 +245,7 @@ export default function GalleryResizer({
   return (
     <div ref={controlWrapperRef}>
       <button
+        type='button'
         className='gallery-edit-button'
         ref={buttonRef}
         onClick={() =>

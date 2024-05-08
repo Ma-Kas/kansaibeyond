@@ -295,6 +295,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
         <td>
           <div className={classes['card_body_table_row_button_group']}>
             <Button
+              type='button'
               radius={'xl'}
               onClick={() => navigate(`/composer/${item.postSlug}/edit`)}
             >

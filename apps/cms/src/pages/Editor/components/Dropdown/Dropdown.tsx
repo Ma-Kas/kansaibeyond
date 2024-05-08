@@ -30,6 +30,7 @@ const Dropdown = ({
     <Menu shadow='md' position='bottom-start' offset={5}>
       <Menu.Target>
         <Button
+          type='button'
           disabled={disabled}
           aria-label={ariaLabel}
           className={classes['editor_dropdown_plain_button']}

@@ -215,6 +215,7 @@ export default function ImageResizer({
   return (
     <div ref={controlWrapperRef}>
       <Button
+        type='button'
         className='image-edit-button'
         title='Edit image'
         ref={buttonRef}

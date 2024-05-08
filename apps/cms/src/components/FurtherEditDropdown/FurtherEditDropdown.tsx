@@ -16,7 +16,10 @@ const FurtherEditDropdown = ({ items }: Props) => {
   return (
     <Menu shadow='md' position='left' offset={5} withArrow>
       <Menu.Target>
-        <Button className={classes['further_edit_dropdown_button']}>
+        <Button
+          type='button'
+          className={classes['further_edit_dropdown_button']}
+        >
           &middot;&middot;&middot;
         </Button>
       </Menu.Target>

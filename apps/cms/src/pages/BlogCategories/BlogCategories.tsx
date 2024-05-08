@@ -60,6 +60,7 @@ const BlogCategories = () => {
           Categories
         </h1>
         <Button
+          type='button'
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
           onClick={() => navigate('create-category')}

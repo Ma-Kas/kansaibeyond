@@ -99,6 +99,7 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
     <header className={classes.composerheader}>
       <div className={classes['composerheader-inner']}>
         <Button
+          type='button'
           leftSection={<IconArrowLeft size={14} />}
           className={classes['plain-button']}
           variant='transparent'
@@ -139,6 +140,7 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
           </ActionIcon>
           <Divider orientation='vertical' />
           <Button
+            type='button'
             className={classes['color-button']}
             variant='transparent'
             onClick={handleSave}
@@ -147,6 +149,7 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
           </Button>
           <Divider orientation='vertical' />
           <Button
+            type='button'
             className={classes['color-button']}
             variant='transparent'
             onClick={() => handlePreview()}
@@ -154,6 +157,7 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
             Preview
           </Button>
           <Button
+            type='button'
             radius={'xl'}
             style={{ paddingLeft: '2rem', paddingRight: '2rem' }}
           >

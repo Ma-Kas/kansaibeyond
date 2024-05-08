@@ -25,6 +25,7 @@ const ColorPickerDropdown = ({
           <Menu shadow='md' position='bottom-start' offset={5}>
             <Menu.Target>
               <Button
+                type='button'
                 disabled={disabled}
                 aria-label={ariaLabel}
                 className={classes['editor_toolbar_plain_button']}
@@ -43,6 +44,7 @@ const ColorPickerDropdown = ({
           <Menu shadow='md' position='bottom-start' offset={5}>
             <Menu.Target>
               <Button
+                type='button'
                 disabled={disabled}
                 aria-label={ariaLabel}
                 className={classes['editor_toolbar_plain_button']}

@@ -369,6 +369,7 @@ export function UpdateCarouselDialog({
                   const Icon = type.icon;
                   return (
                     <button
+                      type='button'
                       key={type.label}
                       onClick={() => handleCarouselTypeChange(type.value)}
                       className={
@@ -406,6 +407,7 @@ export function UpdateCarouselDialog({
                 {ASPECT_RATIO_DATA.map((item) => {
                   return (
                     <button
+                      type='button'
                       key={item.label}
                       onClick={() => handleAspectRatioChange(item.value)}
                       className={
@@ -568,6 +570,7 @@ export function UpdateCarouselDialog({
                         {ASPECT_RATIO_DATA.map((item) => {
                           return (
                             <button
+                              type='button'
                               key={item.label}
                               onClick={() =>
                                 handleImageChange(

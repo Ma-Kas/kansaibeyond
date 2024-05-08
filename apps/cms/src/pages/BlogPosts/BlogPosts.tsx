@@ -126,6 +126,7 @@ const BlogPosts = () => {
       <div className={classes['page_main_content_header_main']}>
         <h1 className={classes['page_main_content_header_title']}>Posts</h1>
         <Button
+          type='button'
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
           onClick={() => navigate('/composer/create-new')}

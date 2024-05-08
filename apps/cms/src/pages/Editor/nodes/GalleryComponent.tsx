@@ -418,6 +418,7 @@ export function UpdateGalleryDialog({
                   const Icon = type.icon;
                   return (
                     <button
+                      type='button'
                       key={type.label}
                       onClick={() => handleGridTypeChange(type.value)}
                       className={
@@ -455,6 +456,7 @@ export function UpdateGalleryDialog({
                 {ASPECT_RATIO_DATA.map((item) => {
                   return (
                     <button
+                      type='button'
                       key={item.label}
                       onClick={() => handleAspectRatioChange(item.value)}
                       className={
@@ -643,6 +645,7 @@ export function UpdateGalleryDialog({
                       {ASPECT_RATIO_DATA.map((item) => {
                         return (
                           <button
+                            type='button'
                             key={item.label}
                             onClick={() =>
                               handleImageChange(

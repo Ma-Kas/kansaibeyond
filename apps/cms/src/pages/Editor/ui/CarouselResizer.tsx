@@ -208,6 +208,7 @@ export default function CarouselResizer({
   return (
     <div ref={controlWrapperRef}>
       <button
+        type='button'
         className='carousel-edit-button'
         ref={buttonRef}
         onClick={() =>

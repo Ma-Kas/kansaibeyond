@@ -212,6 +212,7 @@ const ComposerSidebar = () => {
                         // TODO: Temporarily disabled nodes that are still a bit buggy, but low fix priority
                         return (
                           <button
+                            type='button'
                             key={item.text}
                             onClick={item.onClick}
                             className={classes['sidebar_drawer_add_button']}
