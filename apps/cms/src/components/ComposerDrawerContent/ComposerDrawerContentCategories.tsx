@@ -93,16 +93,7 @@ const ComposerDrawerContentCategories = () => {
     return <div></div>;
   };
 
-  return (
-    <>
-      <div className={classes['sidebar_drawer_description']}>
-        Create categories to organize topics and help readers find posts that
-        interest them.
-      </div>
-
-      <>{switchRenderOnFetchResult()}</>
-    </>
-  );
+  return <>{switchRenderOnFetchResult()}</>;
 };
 
 export default ComposerDrawerContentCategories;

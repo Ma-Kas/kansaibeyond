@@ -46,6 +46,7 @@ const ComposerDrawerContentTags = () => {
             classNames={{
               label: classes['sidebar_drawer_data_list_label'],
               description: classes['sidebar_drawer_data_list_description'],
+              wrapper: classes['sidebar_drawer_list_multiselect_wrapper'],
               input: classes['sidebar_drawer_data_list_tags_input'],
               section: classes['sidebar_drawer_data_list_tags_section'],
               option: classes['sidebar_drawer_data_list_tags_dropdown_option'],
@@ -86,16 +87,7 @@ const ComposerDrawerContentTags = () => {
     return <div></div>;
   };
 
-  return (
-    <>
-      <div className={classes['sidebar_drawer_description']}>
-        Create and assign tags to help readers find the blog posts they're
-        looking for.
-      </div>
-
-      <>{switchRenderOnFetchResult()}</>
-    </>
-  );
+  return <>{switchRenderOnFetchResult()}</>;
 };
 
 export default ComposerDrawerContentTags;

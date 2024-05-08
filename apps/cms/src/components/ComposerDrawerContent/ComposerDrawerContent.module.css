@@ -21,6 +21,12 @@
   color: var(--mantine-color-dimmed);
 }
 
+.sidebar_drawer_list_multiselect_wrapper {
+  max-width: calc(
+    var(--composer-sidebar-drawer-width) - rem(24px) - rem(32px) - rem(1px)
+  );
+}
+
 .sidebar_drawer_data_list_tags_input,
 .sidebar_drawer_data_list_relatedPosts_input {
   padding-top: rem(12px);
@@ -48,6 +54,7 @@
 .sidebar_drawer_data_list_relatedPosts_dropdown_option {
   font-size: var(--font-size-regular);
   font-weight: var(--font-weight-regular);
+  text-overflow: ellipsis;
 
   @mixin hover {
     background-color: var(--transparent-blue-hover-bg);

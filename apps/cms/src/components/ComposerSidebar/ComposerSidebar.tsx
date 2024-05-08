@@ -209,11 +209,17 @@ const ComposerSidebar = () => {
                     {addDrawerItems[key as keyof typeof addDrawerItems].map(
                       (item) => {
                         const Icon = item.icon;
+                        // TODO: Temporarily disabled nodes that are still a bit buggy, but low fix priority
                         return (
                           <button
                             key={item.text}
                             onClick={item.onClick}
                             className={classes['sidebar_drawer_add_button']}
+                            disabled={[
+                              'Table',
+                              'Columns Layout',
+                              'Expandable List',
+                            ].includes(item.text)}
                           >
                             <Icon />
                             <span>{item.text}</span>
@@ -232,6 +238,8 @@ const ComposerSidebar = () => {
         return (
           <ComposerDrawer
             type={currentDrawer}
+            description='Create categories to organize topics and help readers find posts that
+            interest them.'
             opened={drawerOpen}
             close={close}
           >
@@ -243,6 +251,8 @@ const ComposerSidebar = () => {
         return (
           <ComposerDrawer
             type={currentDrawer}
+            description='Create and assign tags to help readers find the blog posts they&#39;re
+            looking for.'
             opened={drawerOpen}
             close={close}
           >
@@ -254,6 +264,7 @@ const ComposerSidebar = () => {
         return (
           <ComposerDrawer
             type={currentDrawer}
+            description='Edit settings to optimise this post for search engines and visitors.'
             opened={drawerOpen}
             close={close}
           >
@@ -265,6 +276,7 @@ const ComposerSidebar = () => {
         return (
           <ComposerDrawer
             type={currentDrawer}
+            description='Edit various settings to categorise content, and help readers discover your post.'
             opened={drawerOpen}
             close={close}
           >

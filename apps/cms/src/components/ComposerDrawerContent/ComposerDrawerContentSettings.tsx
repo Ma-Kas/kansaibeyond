@@ -96,67 +96,67 @@ const ComposerDrawerContentSettings = () => {
     }
     if (postsQuery.data) {
       return (
-        <div className={classes['sidebar_drawer_data']}>
-          <div className={classes['sidebar_drawer_data_settings_container']}>
-            <TextInput
-              classNames={{ section: classes['text_input_section'] }}
-              leftSection={<div>/blog/posts/</div>}
-              leftSectionWidth={'11ch'}
-              label='URL Slug'
-              placeholder='awesome-post-here'
-              description='URL slug displayed for your post'
-              {...postForm.getInputProps('postSlug')}
-              required
-            />
-            <InputWrapper
+        <div
+          className={`${classes['sidebar_drawer_data']} ${classes['sidebar_drawer_data_settings_container']}`}
+        >
+          <TextInput
+            classNames={{ section: classes['text_input_section'] }}
+            leftSection={<div>/blog/posts/</div>}
+            leftSectionWidth={'11ch'}
+            label='URL Slug'
+            placeholder='awesome-post-here'
+            description='URL slug displayed for your post'
+            {...postForm.getInputProps('postSlug')}
+            required
+          />
+          <InputWrapper
+            id='post-cover-image'
+            label='Featured Image'
+            description='Set a featured image for your post'
+            withAsterisk
+          >
+            <PostSettingsCoverImage
               id='post-cover-image'
-              label='Featured Image'
-              description='Set a featured image for your post'
-              withAsterisk
-            >
-              <PostSettingsCoverImage
-                id='post-cover-image'
-                openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                coverImage={postForm.getValues().coverImage}
-              />
-            </InputWrapper>
-            <TextInput
-              label='Featured Image Alternative Text'
-              placeholder='e.g. Mount Fuji and cherry blossoms'
-              description='Help screen readers announce image'
-              {...postForm.getInputProps('coverImage.altText')}
-              required
+              openMediaLibrary={createCloudinaryMediaLibraryWidget}
+              coverImage={postForm.getValues().coverImage}
             />
-            <MultiSelect
-              classNames={{
-                input: classes['sidebar_drawer_data_list_relatedPosts_input'],
-                section:
-                  classes['sidebar_drawer_data_list_relatedPosts_section'],
-                option:
-                  classes[
-                    'sidebar_drawer_data_list_relatedPosts_dropdown_option'
-                  ],
-                pill: classes['sidebar_drawer_data_list_relatedPosts_pill'],
-              }}
-              label='Related posts'
-              description={`Selected ${relatedPosts.length}/${MAX_RELATED_POSTS}`}
-              placeholder='Search Posts'
-              data={postsQuery.data.map((post) => {
-                return { value: post.id.toString(), label: post.title };
-              })}
-              value={relatedPosts}
-              onChange={setRelatedPosts}
-              maxValues={MAX_RELATED_POSTS}
-              maxDropdownHeight={300}
-              comboboxProps={{ shadow: 'md' }}
-              // Hack to hide right section when empty, but allow clear button when not
-              // by conditionally giving valid, but empty input (fragment), and invalid (null)
-              rightSection={relatedPosts.length === 0 ? <></> : null}
-              hidePickedOptions
-              searchable
-              clearable
-            />
-          </div>
+          </InputWrapper>
+          <TextInput
+            label='Featured Image Alternative Text'
+            placeholder='e.g. Mount Fuji and cherry blossoms'
+            description='Help screen readers announce image'
+            {...postForm.getInputProps('coverImage.altText')}
+            required
+          />
+          <MultiSelect
+            classNames={{
+              wrapper: classes['sidebar_drawer_list_multiselect_wrapper'],
+              input: classes['sidebar_drawer_data_list_relatedPosts_input'],
+              section: classes['sidebar_drawer_data_list_relatedPosts_section'],
+              option:
+                classes[
+                  'sidebar_drawer_data_list_relatedPosts_dropdown_option'
+                ],
+              pill: classes['sidebar_drawer_data_list_relatedPosts_pill'],
+            }}
+            label='Related posts'
+            description={`Selected ${relatedPosts.length}/${MAX_RELATED_POSTS}`}
+            placeholder='Search Posts'
+            data={postsQuery.data.map((post) => {
+              return { value: post.id.toString(), label: post.title };
+            })}
+            value={relatedPosts}
+            onChange={setRelatedPosts}
+            maxValues={MAX_RELATED_POSTS}
+            maxDropdownHeight={300}
+            comboboxProps={{ shadow: 'md' }}
+            // Hack to hide right section when empty, but allow clear button when not
+            // by conditionally giving valid, but empty input (fragment), and invalid (null)
+            rightSection={relatedPosts.length === 0 ? <></> : null}
+            hidePickedOptions
+            searchable
+            clearable
+          />
         </div>
       );
     }
@@ -173,14 +173,7 @@ const ComposerDrawerContentSettings = () => {
     return <div></div>;
   };
 
-  return (
-    <>
-      <div className={classes['sidebar_drawer_description']}>
-        Edit various settings to categorise content.
-      </div>
-      <>{switchRenderOnFetchResult()}</>
-    </>
-  );
+  return <>{switchRenderOnFetchResult()}</>;
 };
 
 export default ComposerDrawerContentSettings;

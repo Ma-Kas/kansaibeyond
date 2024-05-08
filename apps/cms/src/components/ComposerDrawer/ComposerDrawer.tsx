@@ -1,9 +1,17 @@
-import { Paper, CloseButton, Group, Text, Stack } from '@mantine/core';
+import {
+  Paper,
+  CloseButton,
+  Group,
+  Text,
+  Stack,
+  ScrollArea,
+} from '@mantine/core';
 import cx from 'clsx';
 import classes from './ComposerDrawer.module.css';
 
 interface ComposerDrawerProps {
   type: string;
+  description?: string;
   opened: boolean;
   close: () => void;
   children: React.ReactNode;
@@ -11,6 +19,7 @@ interface ComposerDrawerProps {
 
 const ComposerDrawer = ({
   type,
+  description,
   opened,
   close,
   children,
@@ -35,10 +44,25 @@ const ComposerDrawer = ({
           onClick={close}
         />
       </Group>
+      {description && (
+        <div className={classes['sidebar_drawer_description']}>
+          {description}
+        </div>
+      )}
 
-      <Stack className={classes['composer_sidebar_drawer_content']}>
-        {children}
-      </Stack>
+      <ScrollArea
+        classNames={{
+          root: classes['scrollarea_root'],
+          thumb: classes['scrollbar_thumb'],
+          viewport: classes['scrollarea_viewport'],
+        }}
+        scrollbars='y'
+        scrollbarSize={'0.5rem'}
+      >
+        <Stack className={classes['composer_sidebar_drawer_content']}>
+          {children}
+        </Stack>
+      </ScrollArea>
     </Paper>
   );
 };
