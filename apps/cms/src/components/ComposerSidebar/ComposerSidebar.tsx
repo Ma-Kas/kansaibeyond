@@ -24,6 +24,7 @@ import ComposerDrawer from '../ComposerDrawer/ComposerDrawer';
 import ComposerDrawerContentCategories from '../ComposerDrawerContent/ComposerDrawerContentCategories';
 import ComposerDrawerContentTags from '../ComposerDrawerContent/ComposerDrawerContentTags';
 import ComposerDrawerContentSettings from '../ComposerDrawerContent/ComposerDrawerContentSettings';
+import { Post } from '../../requests/postRequests';
 
 // Lexical Editor Imports
 import {
@@ -54,7 +55,7 @@ const COMPOSER_SIDEBAR_ITEMS = [
   { text: 'Settings', icon: IconSettings },
 ];
 
-const ComposerSidebar = () => {
+const ComposerSidebar = ({ postData }: { postData: Post }) => {
   const [drawerOpen, { open, close }] = useDisclosure(false);
   const [currentDrawer, setCurrentDrawer] = useState<string | null>(null);
   const [editor] = useLexicalComposerContext();
@@ -281,7 +282,7 @@ const ComposerSidebar = () => {
             opened={drawerOpen}
             close={close}
           >
-            <ComposerDrawerContentSettings />
+            <ComposerDrawerContentSettings postData={postData} />
           </ComposerDrawer>
         );
       }

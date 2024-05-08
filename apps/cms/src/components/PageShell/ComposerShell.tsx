@@ -240,7 +240,7 @@ const ComposerShell = () => {
                 formRef={postFormRef}
               />
               <div className={classes['page_composer']}>
-                <ComposerSidebar />
+                <ComposerSidebar postData={postQuery.data} />
                 <TableContext>
                   <div className='editor-shell'>
                     <Editor postData={postQuery.data} />

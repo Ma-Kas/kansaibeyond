@@ -17,10 +17,11 @@ import {
   InsertReturnData,
   ReturnDataAsset,
 } from '../CloudinaryMediaLibraryWidget/cloudinary-types';
+import { Post } from '../../requests/postRequests';
 
 import classes from './ComposerDrawerContent.module.css';
 
-const ComposerDrawerContentSettings = () => {
+const ComposerDrawerContentSettings = ({ postData }: { postData: Post }) => {
   const postForm = usePostFormContext();
 
   const relatedPostsNullCheck = (): string[] => {
@@ -142,9 +143,12 @@ const ComposerDrawerContentSettings = () => {
             label='Related posts'
             description={`Selected ${relatedPosts.length}/${MAX_RELATED_POSTS}`}
             placeholder='Search Posts'
-            data={postsQuery.data.map((post) => {
-              return { value: post.id.toString(), label: post.title };
-            })}
+            // Filter out self, to disallow setting self to relatedPost (if anyone actually would try)
+            data={postsQuery.data
+              .filter((post) => post.id !== postData.id)
+              .map((post) => {
+                return { value: post.id.toString(), label: post.title };
+              })}
             value={relatedPosts}
             onChange={setRelatedPosts}
             maxValues={MAX_RELATED_POSTS}
