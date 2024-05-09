@@ -20,15 +20,23 @@
 }
 
 .page_main_content_header_main {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr max-content;
   align-items: center;
+  gap: var(--dashboard-content-header-padding);
+
+  @media (max-width: rem(768px)) {
+    grid-template-columns: 1fr min-content;
+  }
 }
 
 .page_main_content_header_title {
+  max-width: 100%;
   color: var(--color-text-black);
   font-size: var(--font-size-page-main-content-title);
   margin: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .page_main_content_header_sub {
@@ -43,6 +51,7 @@
 }
 
 .page_main_header_button_group {
+  width: max-content;
   margin-left: auto;
 }
 
