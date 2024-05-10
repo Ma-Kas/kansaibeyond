@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Stack } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconSettings,
@@ -30,22 +31,32 @@ import { Post } from '../../requests/postRequests';
 import {
   $getRoot,
   COMMAND_PRIORITY_CRITICAL,
+  LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import useModal from '../../pages/Editor/hooks/useModal';
-import { InsertCarouselContainerDialog } from '../../pages/Editor/plugins/ImageCarouselPlugin';
 import { InsertEmbedDialog } from '../../pages/Editor/plugins/EmbedPlugin';
 import { InsertTableDialog } from '../../pages/Editor/plugins/TablePlugin';
 import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode';
 import InsertLayoutDialog from '../../pages/Editor/plugins/LayoutPlugin/InsertLayoutDialog';
 import { $createStickyNode } from '../../pages/Editor/nodes/StickyNode';
 import { INSERT_COLLAPSIBLE_COMMAND } from '../../pages/Editor/plugins/CollapsiblePlugin';
-import { InsertImageDialog } from '../../pages/Editor/plugins/ImagesPlugin';
-import { InsertGalleryContainerDialog } from '../../pages/Editor/plugins/ImageGalleryPlugin';
+import {
+  handleInsertCarouselImages,
+  handleInsertGalleryImages,
+  handleInsertSingleImage,
+} from '../../utils/editor-image-insert-helper';
 
 // Style Imports
 import classes from './ComposerSidebar.module.css';
+import { destroyWidgets } from '../CloudinaryMediaLibraryWidget/cloudinary-helpers';
+import { LoadingNotification } from '../FeedbackPopups/FeedbackPopups';
+import {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_CLOUD_NAME,
+} from '../../config/constants';
+import { InsertReturnData } from '../CloudinaryMediaLibraryWidget/cloudinary-types';
 
 const COMPOSER_SIDEBAR_ITEMS = [
   { text: 'Add', icon: IconPlus },
@@ -74,40 +85,57 @@ const ComposerSidebar = ({ postData }: { postData: Post }) => {
     );
   }, [editor]);
 
+  const createCloudinaryMediaLibraryWidget = useCallback(
+    (
+      multiple: boolean,
+      handler: (data: InsertReturnData, activeEditor: LexicalEditor) => void
+    ) => {
+      const loadingMediaLibraryPopup = notifications.show(
+        LoadingNotification({ bodyText: 'Opening Media Library Widget' })
+      );
+      destroyWidgets();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      window.cloudinary.openMediaLibrary(
+        {
+          cloud_name: CLOUDINARY_CLOUD_NAME,
+          api_key: CLOUDINARY_API_KEY,
+          remove_header: false,
+          multiple: { multiple },
+          insert_caption: 'Insert',
+          default_transformations: [[]],
+        },
+        {
+          insertHandler: (data: InsertReturnData) => {
+            handler(data, activeEditor);
+          },
+          showHandler: () => {
+            notifications.hide(loadingMediaLibraryPopup);
+          },
+        }
+      );
+    },
+    [activeEditor]
+  );
+
   // Items in 'Add' Sidebar Category
   const addDrawerItems = {
     Media: [
       {
         text: 'Image',
-        onClick: () => {
-          showModal('Insert Image', (onClose) => (
-            <InsertImageDialog activeEditor={activeEditor} onClose={onClose} />
-          ));
-        },
+        onClick: () =>
+          createCloudinaryMediaLibraryWidget(false, handleInsertSingleImage),
         icon: IconPhoto,
       },
       {
         text: 'Gallery',
-        onClick: () => {
-          showModal('Insert Image Gallery', (onClose) => (
-            <InsertGalleryContainerDialog
-              activeEditor={activeEditor}
-              onClose={onClose}
-            />
-          ));
-        },
+        onClick: () =>
+          createCloudinaryMediaLibraryWidget(true, handleInsertGalleryImages),
         icon: IconLayoutGrid,
       },
       {
         text: 'Carousel',
-        onClick: () => {
-          showModal('Insert Image Carousel', (onClose) => (
-            <InsertCarouselContainerDialog
-              activeEditor={activeEditor}
-              onClose={onClose}
-            />
-          ));
-        },
+        onClick: () =>
+          createCloudinaryMediaLibraryWidget(true, handleInsertCarouselImages),
         icon: IconCarouselHorizontal,
       },
     ],

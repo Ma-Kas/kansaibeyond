@@ -74,7 +74,7 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
   }, [activeEditor, editor]);
 
   const handleBackButton = async () => {
-    navigate(-1);
+    navigate('/dashboard/blog/posts');
     await invalidateQueries();
   };
 

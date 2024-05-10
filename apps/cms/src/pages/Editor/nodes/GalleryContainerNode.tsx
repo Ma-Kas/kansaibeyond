@@ -16,6 +16,8 @@ import { isHTMLElement, $applyNodeReplacement, DecoratorNode } from 'lexical';
 import { Suspense } from 'react';
 import { GalleryComponent } from '../utils/lazyImportComponents';
 import { getMinColumnWidth } from '../utils/getMinColumnWidth';
+import { stripImageUrl, createImageUrl } from '../utils/convertImageUrlJSON';
+import { EDITOR_GALLERY_IMAGE_TRANSFORM } from '../../../config/constants';
 
 export type GalleryImageObjectPosition =
   | 'center'
@@ -61,9 +63,9 @@ export interface UpdateGalleryContainerPayload {
 function convertGalleryContainerElement(
   element: HTMLElement
 ): DOMConversionOutput {
-  const images = Array.from(
+  const images: HTMLImageElement[] = Array.from(
     element.querySelectorAll('img.gallery-image')
-  ) as HTMLImageElement[];
+  );
   let newImageList: GalleryImage[] | undefined;
 
   for (let i = 0; i < images.length; i++) {
@@ -183,7 +185,7 @@ export class GalleryContainerNode extends DecoratorNode<JSX.Element> {
   // View
   createDOM(config: EditorConfig): HTMLElement {
     const div = document.createElement('div');
-    const className = config.theme.galleryContainer;
+    const className = config.theme.galleryContainer as string;
     if (className !== undefined) {
       div.className = className;
     }
@@ -250,11 +252,17 @@ export class GalleryContainerNode extends DecoratorNode<JSX.Element> {
   static importJSON(
     serializedNode: SerializedGalleryContainerNode
   ): GalleryContainerNode {
+    const transformedImageList = serializedNode.imageList.map((image) => {
+      return {
+        ...image,
+        src: createImageUrl(image.src, EDITOR_GALLERY_IMAGE_TRANSFORM),
+      };
+    });
     const node = $createGalleryContainerNode({
-      imageList: serializedNode.imageList,
+      imageList: transformedImageList,
       gridType: serializedNode.gridType,
     });
-    node.setImageList(serializedNode.imageList);
+    node.setImageList(transformedImageList);
     node.setGridType(serializedNode.gridType);
     node.setColumns(serializedNode.columns);
     node.setWidth(serializedNode.width);
@@ -266,8 +274,14 @@ export class GalleryContainerNode extends DecoratorNode<JSX.Element> {
   }
 
   exportJSON(): SerializedGalleryContainerNode {
+    const transformedImageList = this.__imageList.map((image) => {
+      return {
+        ...image,
+        src: stripImageUrl(image.src, EDITOR_GALLERY_IMAGE_TRANSFORM),
+      };
+    });
     return {
-      imageList: this.__imageList,
+      imageList: transformedImageList,
       gridType: this.__gridType,
       columns: this.__columns,
       width: this.__width,

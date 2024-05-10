@@ -468,7 +468,7 @@ export function UpdateGalleryDialog({
                           {
                             [classes.active]: imageList[0].aspectRatio
                               ? imageList[0].aspectRatio === item.value
-                              : '4 / 3' === item.value,
+                              : '1 / 1' === item.value,
                           }
                         )
                       }

@@ -15,6 +15,8 @@ import { isHTMLElement, $applyNodeReplacement, DecoratorNode } from 'lexical';
 
 import { Suspense } from 'react';
 import { CarouselComponent } from '../utils/lazyImportComponents';
+import { stripImageUrl, createImageUrl } from '../utils/convertImageUrlJSON';
+import { EDITOR_CAROUSEL_IMAGE_TRANSFORM } from '../../../config/constants';
 
 export type CarouselImageObjectPosition =
   | 'center'
@@ -56,9 +58,9 @@ export interface UpdateCarouselContainerPayload {
 function convertCarouselContainerElement(
   element: HTMLElement
 ): DOMConversionOutput {
-  const images = Array.from(
+  const images: HTMLImageElement[] = Array.from(
     element.querySelectorAll('img.carousel-image')
-  ) as HTMLImageElement[];
+  );
   let newImageList: CarouselImage[] | undefined;
 
   for (let i = 0; i < images.length; i++) {
@@ -149,7 +151,7 @@ export class CarouselContainerNode extends DecoratorNode<JSX.Element> {
   // View
   createDOM(config: EditorConfig): HTMLElement {
     const div = document.createElement('div');
-    const className = config.theme.carouselContainer;
+    const className = config.theme.carouselContainer as string;
     if (className !== undefined) {
       div.className = className;
     }
@@ -216,11 +218,17 @@ export class CarouselContainerNode extends DecoratorNode<JSX.Element> {
   static importJSON(
     serializedNode: SerializedCarouselContainerNode
   ): CarouselContainerNode {
+    const transformedImageList = serializedNode.imageList.map((image) => {
+      return {
+        ...image,
+        src: createImageUrl(image.src, EDITOR_CAROUSEL_IMAGE_TRANSFORM),
+      };
+    });
     const node = $createCarouselContainerNode({
-      imageList: serializedNode.imageList,
+      imageList: transformedImageList,
       carouselType: serializedNode.carouselType,
     });
-    node.setImageList(serializedNode.imageList);
+    node.setImageList(transformedImageList);
     node.setCarouselType(serializedNode.carouselType);
     node.setImagesInView(serializedNode.imagesInView);
     node.setWidth(serializedNode.width);
@@ -231,8 +239,14 @@ export class CarouselContainerNode extends DecoratorNode<JSX.Element> {
   }
 
   exportJSON(): SerializedCarouselContainerNode {
+    const transformedImageList = this.__imageList.map((image) => {
+      return {
+        ...image,
+        src: stripImageUrl(image.src, EDITOR_CAROUSEL_IMAGE_TRANSFORM),
+      };
+    });
     return {
-      imageList: this.__imageList,
+      imageList: transformedImageList,
       carouselType: this.__carouselType,
       imagesInView: this.__imagesInView,
       width: this.__width,

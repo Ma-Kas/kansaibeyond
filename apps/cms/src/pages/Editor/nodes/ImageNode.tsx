@@ -13,6 +13,8 @@ import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 
 import { Suspense } from 'react';
 import { ImageComponent } from '../utils/lazyImportComponents';
+import { stripImageUrl, createImageUrl } from '../utils/convertImageUrlJSON';
+import { EDITOR_SINGLE_IMAGE_TRANSFORM } from '../../../config/constants';
 
 export interface ImagePayload {
   altText: string;
@@ -73,10 +75,11 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
     const { altText, src, captionText, width, maxWidth } = serializedNode;
+    const fullUrl = createImageUrl(src, EDITOR_SINGLE_IMAGE_TRANSFORM);
     const node = $createImageNode({
       altText,
       captionText,
-      src,
+      src: fullUrl,
       width,
       maxWidth,
     });
@@ -116,12 +119,17 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   exportJSON(): SerializedImageNode {
+    const originalSrc = this.getSrc();
+    const strippedSrc = stripImageUrl(
+      originalSrc,
+      EDITOR_SINGLE_IMAGE_TRANSFORM
+    );
     return {
       altText: this.getAltText(),
       width: this.__width,
       maxWidth: this.__maxWidth,
       captionText: this.__captionText,
-      src: this.getSrc(),
+      src: strippedSrc,
       type: 'image',
       version: 1,
     };

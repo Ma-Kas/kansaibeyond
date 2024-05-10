@@ -20,3 +20,7 @@ export const CATEGORY_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
 export const POST_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
 export const COVER_IMAGE_EDIT_TRANSFORM = '/c_fill,w_450,q_50,f_auto';
 export const FEATURED_IMAGE_EDIT_TRANSFORM = '/c_fill,w_350,q_50,f_auto';
+
+export const EDITOR_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
+export const EDITOR_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_500,q_auto,f_auto';
+export const EDITOR_CAROUSEL_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
