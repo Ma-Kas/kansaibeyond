@@ -3,15 +3,22 @@ import { useState } from 'react';
 import { Checkbox, Button } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Post, deletePost, updatePost } from '../../requests/postRequests';
+import {
+  Post,
+  deletePost,
+  trashPost,
+  updatePost,
+} from '../../requests/postRequests';
 import { formatShortDate } from '../../utils/format-date';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
   IconTrash,
+  IconTrashX,
   IconEdit,
   IconRefresh,
   IconSend,
+  IconPhoto,
 } from '@tabler/icons-react';
 import {
   ConfirmDeleteModal,
@@ -75,6 +82,20 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
     },
   });
 
+  const postTrashMutation = useMutation({
+    mutationFn: (urlSlug: string) => trashPost(urlSlug),
+    onSuccess: async (data) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['posts'] }),
+      ]);
+
+      notifications.show(SuccessNotification({ bodyText: data?.message }));
+    },
+    onError: (err) => {
+      notifications.show(ErrorNotification({ bodyText: err.message }));
+    },
+  });
+
   const toggleRow = (id: number) =>
     setSelection((current) =>
       current.includes(id)
@@ -100,7 +121,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/edit/${item.postSlug}`),
             },
             {
               text: 'Revert to Draft',
@@ -126,11 +147,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
                   ConfirmTrashModal({
                     titleText: `Trash post "${item.title}?`,
                     bodyText: `Are you sure you want to move post "${item.title}" to trash?`,
-                    onConfirm: () =>
-                      postUpdateMutation.mutate({
-                        urlSlug: item.postSlug,
-                        values: { status: 'trash' },
-                      }),
+                    onConfirm: () => postTrashMutation.mutate(item.postSlug),
                   })
                 ),
             },
@@ -141,7 +158,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/edit/${item.postSlug}`),
             },
             {
               text: 'Publish Post',
@@ -167,11 +184,19 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
                   ConfirmTrashModal({
                     titleText: `Trash post "${item.title}?`,
                     bodyText: `Are you sure you want to move post "${item.title}" to trash?`,
-                    onConfirm: () =>
-                      postUpdateMutation.mutate({
-                        urlSlug: item.postSlug,
-                        values: { status: 'trash' },
-                      }),
+                    onConfirm: () => postTrashMutation.mutate(item.postSlug),
+                  })
+                ),
+            },
+            {
+              text: 'Delete Post',
+              icon: IconTrashX,
+              onClick: () =>
+                modals.openConfirmModal(
+                  ConfirmDeleteModal({
+                    titleText: `Delete post "${item.title}?`,
+                    bodyText: `Are you sure you want to delete post "${item.title}"? This action cannot be undone.`,
+                    onConfirm: () => postDeleteMutation.mutate(item.postSlug),
                   })
                 ),
             },
@@ -182,7 +207,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/edit/${item.postSlug}`),
             },
             {
               text: 'Publish Post',
@@ -208,11 +233,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
                   ConfirmTrashModal({
                     titleText: `Trash post "${item.title}?`,
                     bodyText: `Are you sure you want to move post "${item.title}" to trash?`,
-                    onConfirm: () =>
-                      postUpdateMutation.mutate({
-                        urlSlug: item.postSlug,
-                        values: { status: 'trash' },
-                      }),
+                    onConfirm: () => postTrashMutation.mutate(item.postSlug),
                   })
                 ),
             },
@@ -223,7 +244,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             {
               text: 'Edit Post',
               icon: IconEdit,
-              onClick: () => navigate(`/composer/${item.postSlug}/edit`),
+              onClick: () => navigate(`/composer/edit/${item.postSlug}`),
             },
             {
               text: 'Revert to Draft',
@@ -243,7 +264,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             },
             {
               text: 'Delete Post',
-              icon: IconTrash,
+              icon: IconTrashX,
               onClick: () =>
                 modals.openConfirmModal(
                   ConfirmDeleteModal({
@@ -272,12 +293,25 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
           />
         </td>
         <td>
-          <div className={classes['card_body_table_row_image_container']}>
-            <img
-              src={`${CLOUDINARY_BASE_URL}${POST_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}`}
-              alt={item.coverImage?.altText}
-            />
-          </div>
+          {item.coverImage && (
+            <div className={classes['card_body_table_row_image_container']}>
+              <img
+                src={`${CLOUDINARY_BASE_URL}${POST_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}`}
+                alt={item.coverImage?.altText}
+              />
+            </div>
+          )}
+          {item.coverImage === null && (
+            <div
+              className={
+                classes['card_body_table_row_image_placeholder_container']
+              }
+            >
+              <div className={classes['card_body_table_row_image_placeholder']}>
+                <IconPhoto style={{ width: '50%', height: '50%' }} />
+              </div>
+            </div>
+          )}
         </td>
         <td>
           <div className={classes['card_body_table_row_post_container']}>
@@ -297,7 +331,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             <Button
               type='button'
               radius={'xl'}
-              onClick={() => navigate(`/composer/${item.postSlug}/edit`)}
+              onClick={() => navigate(`/composer/edit/${item.postSlug}`)}
             >
               Edit
             </Button>

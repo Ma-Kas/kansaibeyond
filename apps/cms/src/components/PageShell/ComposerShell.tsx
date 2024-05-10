@@ -2,15 +2,14 @@
 import { useEffect, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { Loader } from '@mantine/core';
 import { FormErrors } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
-import { getOnePost, postPost, updatePost } from '../../requests/postRequests';
+import { getOnePost, updatePost } from '../../requests/postRequests';
 import { PostFormProvider, usePostForm } from './post-form-context';
 import { postSetFormFieldError } from '../../utils/backend-error-response-validation';
-import { newPostSchema } from './types';
+import { updatePostSchema } from './types';
 import ComposerHeader from '../ComposerHeader/ComposerHeader';
 import ComposerSidebar from '../ComposerSidebar/ComposerSidebar';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
@@ -49,7 +48,6 @@ const initialConfig: InitialConfigType = {
 };
 
 const ComposerShell = () => {
-  const navigate = useNavigate();
   const postFormRef = useRef<HTMLFormElement | null>(null);
 
   const { postSlug } = useParams();
@@ -77,7 +75,7 @@ const ComposerShell = () => {
       tags: [],
       relatedPosts: [],
     },
-    validate: zodResolver(newPostSchema),
+    validate: zodResolver(updatePostSchema),
   });
 
   useEffect(() => {
@@ -98,29 +96,6 @@ const ComposerShell = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postQuery.isSuccess, postQuery.data]);
-
-  const postPostMutation = useMutation({
-    mutationFn: postPost,
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['posts'] });
-      navigate('..', { relative: 'path' });
-      notifications.show(
-        SuccessNotification({
-          bodyText: `Created new post: ${data?.title}`,
-        })
-      );
-    },
-    onError: (err) => {
-      const formFieldErrors = postSetFormFieldError(err.message);
-      if (formFieldErrors && formFieldErrors.field) {
-        postForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
-      } else {
-        notifications.show(
-          ErrorNotification({ bodyText: formFieldErrors.error })
-        );
-      }
-    },
-  });
 
   const postUpdateMutation = useMutation({
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: unknown }) =>
@@ -148,17 +123,12 @@ const ComposerShell = () => {
   const handleSubmit = (values: unknown) => {
     // TODO: PLACEHOLDER IF CHECK TO DIFFERENTIATE NEW POST OR EDIT
     if (postForm) {
-      const parseResult = newPostSchema.safeParse(values);
+      const parseResult = updatePostSchema.safeParse(values);
       if (parseResult.success) {
         postUpdateMutation.mutate({
           urlSlug: currentUrlSlug,
           values: parseResult.data,
         });
-      }
-    } else {
-      const parseResult = newPostSchema.safeParse(values);
-      if (parseResult.success) {
-        postPostMutation.mutate(parseResult.data);
       }
     }
   };
