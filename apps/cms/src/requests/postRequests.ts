@@ -163,6 +163,18 @@ export const updatePost = async (urlSlug: string, postData: unknown) => {
   }
 };
 
+export const trashPost = async (postSlug: string) => {
+  try {
+    const response = await axios.put(
+      `${BACKEND_BASE_URL}/posts/${postSlug}/trash`
+    );
+    return deletePostSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
 export const deletePost = async (postSlug: string) => {
   try {
     const response = await axios.delete(

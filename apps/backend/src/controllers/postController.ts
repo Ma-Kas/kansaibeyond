@@ -257,21 +257,21 @@ export const trash_one_post = async (
   next: NextFunction
 ) => {
   try {
-    const postToDelete = await Post.findOne({
+    const postToTrash = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
-    if (!postToDelete) {
-      throw new NotFoundError({ message: 'Post to delete was not found.' });
+    if (!postToTrash) {
+      throw new NotFoundError({ message: 'Post to trash was not found.' });
     }
 
-    if (postToDelete.status === 'trash') {
+    if (postToTrash.status === 'trash') {
       res.status(204).end();
     }
 
     const updatedPost = await Post.update(
       { status: 'trash' },
       {
-        where: { postSlug: postToDelete.postSlug },
+        where: { postSlug: postToTrash.postSlug },
         returning: true,
       }
     );
@@ -297,42 +297,26 @@ export const delete_one_post = async (
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
 
-    // If post is not trashed yet, just trash instead of deleting outright
-    if (postToDelete.status !== 'trash') {
-      const updatedPost = await Post.update(
-        { status: 'trash' },
-        {
-          where: { postSlug: postToDelete.postSlug },
-          transaction: transaction,
-          returning: true,
-        }
-      );
-      await transaction.commit();
-      res
-        .status(200)
-        .json({ message: `Trashed post "${updatedPost[1][0].title}"` });
-    } else {
-      // Remove all associated categories, tags, relatedPosts by setting to empty array
-      await postToDelete.setCategories([], {
-        transaction: transaction,
-      });
-      await postToDelete.setTags([], {
-        transaction: transaction,
-      });
-      await postToDelete.setRelatedPosts([], {
-        transaction: transaction,
-      });
+    // Remove all associated categories, tags, relatedPosts by setting to empty array
+    await postToDelete.setCategories([], {
+      transaction: transaction,
+    });
+    await postToDelete.setTags([], {
+      transaction: transaction,
+    });
+    await postToDelete.setRelatedPosts([], {
+      transaction: transaction,
+    });
 
-      if (req.query.force && req.query.force === 'true') {
-        await postToDelete.destroy({ force: true, transaction: transaction });
-      } else {
-        await postToDelete.destroy({
-          transaction: transaction,
-        });
-      }
-      await transaction.commit();
-      res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
+    if (req.query.force && req.query.force === 'true') {
+      await postToDelete.destroy({ force: true, transaction: transaction });
+    } else {
+      await postToDelete.destroy({
+        transaction: transaction,
+      });
     }
+    await transaction.commit();
+    res.status(200).json({ message: `Deleted post "${postToDelete.title}"` });
   } catch (err: unknown) {
     await transaction.rollback();
     next(err);
