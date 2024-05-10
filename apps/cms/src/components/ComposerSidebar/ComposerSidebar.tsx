@@ -26,6 +26,13 @@ import ComposerDrawerContentCategories from '../ComposerDrawerContent/ComposerDr
 import ComposerDrawerContentTags from '../ComposerDrawerContent/ComposerDrawerContentTags';
 import ComposerDrawerContentSettings from '../ComposerDrawerContent/ComposerDrawerContentSettings';
 import { Post } from '../../requests/postRequests';
+import { destroyWidgets } from '../CloudinaryMediaLibraryWidget/cloudinary-helpers';
+import { LoadingNotification } from '../FeedbackPopups/FeedbackPopups';
+import {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_CLOUD_NAME,
+} from '../../config/constants';
+import { InsertReturnData } from '../CloudinaryMediaLibraryWidget/cloudinary-types';
 
 // Lexical Editor Imports
 import {
@@ -50,13 +57,6 @@ import {
 
 // Style Imports
 import classes from './ComposerSidebar.module.css';
-import { destroyWidgets } from '../CloudinaryMediaLibraryWidget/cloudinary-helpers';
-import { LoadingNotification } from '../FeedbackPopups/FeedbackPopups';
-import {
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_CLOUD_NAME,
-} from '../../config/constants';
-import { InsertReturnData } from '../CloudinaryMediaLibraryWidget/cloudinary-types';
 
 const COMPOSER_SIDEBAR_ITEMS = [
   { text: 'Add', icon: IconPlus },
