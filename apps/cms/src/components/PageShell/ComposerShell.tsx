@@ -71,6 +71,7 @@ const ComposerShell = () => {
         urlSlug: '',
         altText: '',
       },
+      status: 'draft',
       categories: [],
       tags: [],
       relatedPosts: [],
@@ -87,6 +88,7 @@ const ComposerShell = () => {
         coverImage: postQuery.data.coverImage
           ? postQuery.data.coverImage
           : { urlSlug: '', altText: '' },
+        status: postQuery.data.status ? postQuery.data.status : 'draft',
         categories: postQuery.data.categories.map((cat) => cat.id),
         tags: postQuery.data.tags.map((tag) => tag.id),
         relatedPosts: postQuery.data.relatedPosts
@@ -108,6 +110,14 @@ const ComposerShell = () => {
           })
         );
       }
+      if (postFormRef.current) {
+        postFormRef.current.dispatchEvent(
+          new CustomEvent('postFormSuccess', {
+            bubbles: true,
+            detail: { data: () => data },
+          })
+        );
+      }
     },
     onError: (err) => {
       const formFieldErrors = postSetFormFieldError(err.message);
@@ -121,7 +131,6 @@ const ComposerShell = () => {
   });
 
   const handleSubmit = (values: unknown) => {
-    // TODO: PLACEHOLDER IF CHECK TO DIFFERENTIATE NEW POST OR EDIT
     if (postForm) {
       const parseResult = updatePostSchema.safeParse(values);
       if (parseResult.success) {

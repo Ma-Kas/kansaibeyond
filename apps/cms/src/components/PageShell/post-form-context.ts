@@ -8,6 +8,7 @@ type PostFormValues = {
     urlSlug: string;
     altText: string;
   };
+  status: 'published' | 'draft' | 'pending' | 'trash';
   categories: number[];
   tags: number[];
   relatedPosts: null | number[];

@@ -68,6 +68,17 @@ export const updatePostSchema = z
         }),
       })
       .strict(),
+    status: z
+      .union(
+        [
+          z.literal('published'),
+          z.literal('draft'),
+          z.literal('pending'),
+          z.literal('trash'),
+        ],
+        { errorMap: () => ({ message: 'Invalid status option.' }) }
+      )
+      .optional(),
     categories: z
       .array(z.number())
       .min(MIN_CATEGORIES_PER_POST, {
