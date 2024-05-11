@@ -34,6 +34,7 @@ import {
   ReturnDataAsset,
   InsertReturnData,
 } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-types';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { categorySchema, Category } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -196,7 +197,7 @@ const UpdateBlogCategory = () => {
   if (categoryQuery.error) {
     return (
       <div className={classes['page_main_loading_error_container']}>
-        {categoryQuery.error.message}
+        <DynamicErrorPage error={categoryQuery.error} />
       </div>
     );
   }
@@ -235,6 +236,7 @@ const UpdateBlogCategory = () => {
         </h1>
         <Group className={classes['page_main_header_button_group']}>
           <Button
+            type='button'
             className={classes['page_main_header_cancel_button']}
             onClick={() => navigate('../..', { relative: 'path' })}
           >
@@ -291,10 +293,9 @@ const UpdateBlogCategory = () => {
                   autoFocus
                 />
                 <TextInput
-                  leftSection={
-                    <div style={{ paddingLeft: '12px' }}>/blog/categories/</div>
-                  }
-                  leftSectionWidth={'14ch'}
+                  classNames={{ section: localClasses['text_input_section'] }}
+                  leftSection={<div>/blog/categories/</div>}
+                  leftSectionWidth={'14.5ch'}
                   label='URL Slug'
                   placeholder='your-category-here'
                   description='URL slug displayed for this category'
@@ -316,14 +317,16 @@ const UpdateBlogCategory = () => {
                   label='Category Image'
                   description='Set a cover image for this category'
                   withAsterisk
-                ></InputWrapper>
-                <CardEditCoverImage
-                  openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                  coverImage={categoryForm.getValues().coverImage}
-                />
+                >
+                  <CardEditCoverImage
+                    id='category-image'
+                    openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                    coverImage={categoryForm.getValues().coverImage}
+                  />
+                </InputWrapper>
 
                 <TextInput
-                  label='Image Alternative Text'
+                  label='Category Image Alternative Text'
                   placeholder='e.g. Mount Fuji and cherry blossoms'
                   description='Help screen readers announce image'
                   {...categoryForm.getInputProps('coverImage.altText')}

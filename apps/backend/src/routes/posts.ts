@@ -17,6 +17,9 @@ router.post('/', postController.post_new_post);
 // PUT route for updating one specific post based on postSlug query
 router.put('/:postSlug', postController.update_one_post);
 
+// PUT route for trashing one specific post based on postSlug query
+router.put('/:postSlug/trash', postController.trash_one_post);
+
 // DELETE route for deleting one specific post based on postSlug query
 router.delete('/:postSlug', postController.delete_one_post);
 

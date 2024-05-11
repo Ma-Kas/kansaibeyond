@@ -13,6 +13,7 @@ import {
   SuccessNotification,
   ErrorNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { tagSchema, Tag } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -126,7 +127,7 @@ const UpdateBlogTag = () => {
   if (tagQuery.error) {
     return (
       <div className={classes['page_main_loading_error_container']}>
-        {tagQuery.error.message}
+        <DynamicErrorPage error={tagQuery.error} />
       </div>
     );
   }
@@ -148,6 +149,7 @@ const UpdateBlogTag = () => {
         </h1>
         <Group className={classes['page_main_header_button_group']}>
           <Button
+            type='button'
             className={classes['page_main_header_cancel_button']}
             onClick={() => navigate('../..', { relative: 'path' })}
           >
@@ -199,9 +201,8 @@ const UpdateBlogTag = () => {
                 autoFocus
               />
               <TextInput
-                leftSection={
-                  <div style={{ paddingLeft: '12px' }}>/blog/tags/</div>
-                }
+                classNames={{ section: localClasses['text_input_section'] }}
+                leftSection={<div>/blog/tags/</div>}
                 leftSectionWidth={'10ch'}
                 label='URL Slug'
                 placeholder='your-tag-here'

@@ -1,5 +1,7 @@
 .composer_sidebar_drawer {
   --gap: rem(24px);
+  --padding-right: rem(32px);
+  --scrollbar-padding-right: rem(6px);
 
   font-size: var(--font-size-composer-sidebar-regular);
   color: var(--color-menu-text-light);
@@ -7,7 +9,7 @@
   height: 100%;
   width: var(--composer-sidebar-drawer-width);
   margin-left: calc(var(--composer-sidebar-drawer-width) * -1);
-  padding: var(--gap);
+  padding: var(--gap) 0 var(--gap) var(--gap);
   border-right: var(--editor-menu-border);
   transition: margin-left 0.5s;
   display: flex;
@@ -17,6 +19,11 @@
 
 .composer_sidebar_drawer.open {
   margin-left: 0;
+}
+
+.composer_sidebar_drawer_header,
+.sidebar_drawer_description {
+  padding-right: var(--padding-right);
 }
 
 .composer_sidebar_drawer_header p {
@@ -33,7 +40,16 @@
   font-size: var(--font-size-composer-sidebar-regular);
   flex-grow: 1;
   gap: rem(36px);
+  /* Offset to avoid checkbox outline overlap */
+  padding-bottom: 2px;
   height: 100%;
   position: relative;
-  overflow: auto;
+}
+
+.scrollarea_root {
+  padding-right: var(--padding-right);
+}
+
+.scrollbar_thumb {
+  background-color: var(--mantine-primary-color-filled);
 }

@@ -1,16 +1,19 @@
 import { Button } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import BlogPostTabs, {
   TabData,
 } from '../../components/BlogPostTabs/BlogPostTabs';
+import { getAllPosts, postPost } from '../../requests/postRequests';
+import { postSetFormFieldError } from '../../utils/backend-error-response-validation';
+import { ErrorNotification } from '../../components/FeedbackPopups/FeedbackPopups';
 
-import { MOCK_BLOG_POSTS } from '../../utils/mockdata';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-import { PostTableData } from '../../components/CardTablePosts/CardTablePosts';
-// import localClasses from './BlogPosts.module.css';
+import { newPostSchema } from '../../components/PageShell/types';
 
 const BlogPosts = () => {
   const navigate = useNavigate();
@@ -23,6 +26,50 @@ const BlogPosts = () => {
   const [mainContentBodyElement, setMainContentBodyElement] =
     useState<HTMLDivElement | null>(null);
 
+  const queryClient = useQueryClient();
+
+  const postsQuery = useQuery({
+    queryKey: ['posts'],
+    queryFn: getAllPosts,
+    retry: 1,
+  });
+
+  const postPostMutation = useMutation({
+    mutationFn: postPost,
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ['posts'] });
+      navigate(`/composer/edit/${data?.postSlug}`);
+    },
+    onError: (err) => {
+      const formFieldErrors = postSetFormFieldError(err.message);
+      if (formFieldErrors) {
+        notifications.show(
+          ErrorNotification({ bodyText: formFieldErrors.error })
+        );
+      }
+    },
+  });
+
+  const handleNewPostCreation = () => {
+    const uuid = crypto.randomUUID();
+    const blankPost = {
+      title: `New post ${uuid}`,
+      postSlug: `${uuid}`,
+      content:
+        '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}',
+
+      categories: [1],
+      tags: [1],
+    };
+
+    const parseResult = newPostSchema.safeParse(blankPost);
+    if (parseResult.success) {
+      postPostMutation.mutate(parseResult.data);
+    } else {
+      console.log(parseResult.error);
+    }
+  };
+
   // Set ref of cardElement when rendered,
   // so tabs in header can get that ref and createPortal to it
   // Otherwise header gets rendered first, and card to portal to doesn't exist yet
@@ -32,45 +79,99 @@ const BlogPosts = () => {
     setMainContentBodyElement(mainContentBodyRef.current);
   }, []);
 
-  const tabData: TabData[] = [
-    {
-      value: 'published',
-      label: 'Published',
-      blogTableData: MOCK_BLOG_POSTS.filter(
-        (post) => post.status === 'published'
-      ) as PostTableData[],
-    },
-    {
-      value: 'drafts',
-      label: 'Drafts',
-      blogTableData: MOCK_BLOG_POSTS.filter(
-        (post) => post.status === 'drafts'
-      ) as PostTableData[],
-    },
-    {
-      value: 'pending',
-      label: 'Pending Review',
-      blogTableData: MOCK_BLOG_POSTS.filter(
-        (post) => post.status === 'pending'
-      ) as PostTableData[],
-    },
-    {
-      value: 'trash',
-      label: 'Trash',
-      blogTableData: MOCK_BLOG_POSTS.filter(
-        (post) => post.status === 'trash'
-      ) as PostTableData[],
-    },
-  ];
+  const switchTabDataOnFetchResult = () => {
+    const tabDataLoadingError: TabData[] = [
+      {
+        value: 'published',
+        label: 'Published',
+      },
+      {
+        value: 'drafts',
+        label: 'Drafts',
+      },
+      {
+        value: 'pending',
+        label: 'Pending Review',
+      },
+      {
+        value: 'trash',
+        label: 'Trash',
+      },
+    ];
+    if (postsQuery.isPending || postsQuery.isRefetching) {
+      return (
+        <BlogPostTabs
+          mainContentHeaderElement={mainContentHeaderElement}
+          mainContentBodyElement={mainContentBodyElement}
+          loading
+          tabData={tabDataLoadingError}
+          cardElement={cardElement}
+        />
+      );
+    }
+    if (postsQuery.data) {
+      const tabData: TabData[] = [
+        {
+          value: 'published',
+          label: 'Published',
+          blogTableData: postsQuery.data.filter(
+            (post) => post.status === 'published'
+          ),
+        },
+        {
+          value: 'draft',
+          label: 'Drafts',
+          blogTableData: postsQuery.data.filter(
+            (post) => post.status === 'draft'
+          ),
+        },
+        {
+          value: 'pending',
+          label: 'Pending Review',
+          blogTableData: postsQuery.data.filter(
+            (post) => post.status === 'pending'
+          ),
+        },
+        {
+          value: 'trash',
+          label: 'Trash',
+          blogTableData: postsQuery.data.filter(
+            (post) => post.status === 'trash'
+          ),
+        },
+      ];
+      return (
+        <BlogPostTabs
+          mainContentHeaderElement={mainContentHeaderElement}
+          mainContentBodyElement={mainContentBodyElement}
+          tabData={tabData}
+          cardElement={cardElement}
+        />
+      );
+    }
+    if (postsQuery.error) {
+      return (
+        <BlogPostTabs
+          mainContentHeaderElement={mainContentHeaderElement}
+          mainContentBodyElement={mainContentBodyElement}
+          error={postsQuery.error}
+          tabData={tabDataLoadingError}
+          cardElement={cardElement}
+        />
+      );
+    }
+    return <div></div>;
+  };
 
   const blogPostHeader = (
     <>
       <div className={classes['page_main_content_header_main']}>
         <h1 className={classes['page_main_content_header_title']}>Posts</h1>
         <Button
+          type='button'
           radius={'xl'}
           leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('/composer')}
+          onClick={handleNewPostCreation}
         >
           Create New Post
         </Button>
@@ -78,12 +179,7 @@ const BlogPosts = () => {
       <div className={classes['page_main_content_header_sub']}>
         Manage your blog posts.
       </div>
-      <BlogPostTabs
-        mainContentHeaderElement={mainContentHeaderElement}
-        mainContentBodyElement={mainContentBodyElement}
-        tabData={tabData}
-        cardElement={cardElement}
-      />
+      <>{switchTabDataOnFetchResult()}</>
     </>
   );
 

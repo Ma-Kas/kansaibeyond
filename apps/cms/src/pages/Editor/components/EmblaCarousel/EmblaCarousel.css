@@ -11,13 +11,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 0 0 100%;
+  flex: 0 0 101%;
   min-width: 0;
 }
 
 @media (max-width: 768px) {
   .editor_embla_slide {
-    flex: 0 0 50% !important;
+    flex: 0 0 51% !important;
     padding-left: 0.5rem !important;
   }
   .editor_embla_container {
@@ -27,7 +27,7 @@
 
 @media (max-width: 480px) {
   .editor_embla_slide {
-    flex: 0 0 100% !important;
+    flex: 0 0 101% !important;
     padding-left: 0 !important;
   }
   .editor_embla_container {

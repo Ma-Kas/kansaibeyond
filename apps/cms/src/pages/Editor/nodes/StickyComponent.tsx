@@ -206,6 +206,7 @@ export default function StickyComponent({
         }}
       >
         <button
+          type='button'
           onClick={handleDelete}
           className='delete'
           aria-label='Delete sticky note'
@@ -214,6 +215,7 @@ export default function StickyComponent({
           X
         </button>
         <button
+          type='button'
           onClick={handleColorChange}
           className='color'
           aria-label='Change sticky note color'

@@ -64,7 +64,8 @@ const Router = () => {
             },
           ],
         },
-        { path: 'composer', element: <ComposerShell /> },
+        { path: 'composer/new-post', element: <ComposerShell /> },
+        { path: 'composer/edit/:postSlug', element: <ComposerShell /> },
       ],
     },
   ]);

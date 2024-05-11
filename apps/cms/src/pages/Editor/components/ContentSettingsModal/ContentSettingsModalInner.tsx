@@ -63,12 +63,14 @@ const ContentSettingsModalInner = ({
             {children}
             <Group className={classes['content_settings_modal_footer']}>
               <Button
+                type='button'
                 className={classes['content_settings_modal_cancel_button']}
                 onClick={cancel}
               >
                 Cancel
               </Button>
               <Button
+                type='button'
                 className={classes['content_settings_modal_confirm_button']}
                 onClick={confirm}
               >
@@ -94,12 +96,14 @@ const ContentSettingsModalInner = ({
             {children}
             <Group className={classes['content_settings_modal_footer']}>
               <Button
+                type='button'
                 className={classes['content_settings_modal_cancel_button']}
                 onClick={cancel}
               >
                 Cancel
               </Button>
               <Button
+                type='button'
                 className={classes['content_settings_modal_confirm_button']}
                 onClick={confirm}
               >
@@ -131,12 +135,14 @@ const ContentSettingsModalInner = ({
             </div>
             <Group className={classes['content_settings_modal_footer']}>
               <Button
+                type='button'
                 className={classes['content_settings_modal_cancel_button']}
                 onClick={cancel}
               >
                 Cancel
               </Button>
               <Button
+                type='button'
                 className={classes['content_settings_modal_confirm_button']}
                 onClick={confirm}
               >

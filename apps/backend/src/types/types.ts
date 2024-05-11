@@ -78,7 +78,7 @@ type Post = {
   userId: number;
 };
 
-type NewPostRequestData = Omit<Post, 'id' | 'views' | 'readTime'> & {
+type NewPostRequestData = Omit<Post, 'id' | 'views' | 'readTime' | 'userId'> & {
   categories: number[];
   tags: number[];
   relatedPosts?: number[];

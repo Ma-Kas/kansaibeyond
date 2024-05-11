@@ -65,7 +65,6 @@ const MantineColorPicker = ({ color, onChange }: ColorPickerProps) => {
         aria-label='Hex color code input'
         value={input}
         onChange={handleTextInput}
-        autoFocus
       />
       <ColorPicker
         format='hexa'

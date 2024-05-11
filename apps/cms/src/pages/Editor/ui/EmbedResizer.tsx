@@ -231,6 +231,7 @@ export default function EmbedResizer({
   return (
     <div ref={controlWrapperRef}>
       <button
+        type='button'
         className='embed-edit-button'
         ref={buttonRef}
         onClick={() =>

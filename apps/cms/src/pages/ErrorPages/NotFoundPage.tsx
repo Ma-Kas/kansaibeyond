@@ -16,7 +16,12 @@ const NotFoundPage = () => {
         this is an error, contact support.
       </p>
       <Group justify='center'>
-        <Button variant='subtle' size='md' onClick={() => navigate('/')}>
+        <Button
+          type='button'
+          variant='subtle'
+          size='md'
+          onClick={() => navigate('/')}
+        >
           Take me back to the home page
         </Button>
       </Group>

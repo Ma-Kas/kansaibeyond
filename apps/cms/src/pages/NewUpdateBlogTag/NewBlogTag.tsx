@@ -100,6 +100,7 @@ const NewBlogTag = () => {
         </h1>
         <Group className={classes['page_main_header_button_group']}>
           <Button
+            type='button'
             className={classes['page_main_header_cancel_button']}
             onClick={() => navigate('..', { relative: 'path' })}
           >
@@ -151,9 +152,8 @@ const NewBlogTag = () => {
                 autoFocus
               />
               <TextInput
-                leftSection={
-                  <div style={{ paddingLeft: '12px' }}>/blog/tags/</div>
-                }
+                classNames={{ section: localClasses['text_input_section'] }}
+                leftSection={<div>/blog/tags/</div>}
                 leftSectionWidth={'10ch'}
                 label='URL Slug'
                 placeholder='your-tag-here'

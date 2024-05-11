@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { usePostFormContext } from '../../../../components/PageShell/post-form-context';
 import classes from './PostEditorTitle.module.css';
 
-const PostEditorTitle = ({
-  setToolbarEnabled,
-}: {
+type Props = {
   setToolbarEnabled: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  const [value, setValue] = useState('');
+  loadedTitle?: string;
+};
+
+const PostEditorTitle = ({ setToolbarEnabled, loadedTitle }: Props) => {
+  const titleRef = useRef<HTMLTextAreaElement | null>(null);
+  const postForm = usePostFormContext();
+  const [titleValue, setTitleValue] = useState(loadedTitle ? loadedTitle : '');
+
+  // In case title is loaded from backend, autoResize needs to be called to set
+  // initial size
+  useEffect(() => {
+    if (loadedTitle && titleRef.current) {
+      autoResize(titleRef.current);
+    }
+  }, [loadedTitle]);
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
+    postForm.setFieldValue('title', e.target.value);
+    setTitleValue(e.target.value);
     autoResize(e.target);
   };
 
@@ -21,13 +34,14 @@ const PostEditorTitle = ({
   return (
     <div className={classes['editor-post-title-container']}>
       <textarea
+        ref={titleRef}
         onFocus={() => setToolbarEnabled(false)}
         onBlur={() => setToolbarEnabled(true)}
         name='post-title'
         className={classes['editor-post-title-inner']}
         data-editor-component='post-title-textarea'
         placeholder='Add a Catchy Title'
-        value={value}
+        value={titleValue}
         rows={1}
         maxLength={200}
         onChange={(e) => handleInput(e)}

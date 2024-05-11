@@ -1,10 +1,10 @@
 import { IconRefresh, IconPlus } from '@tabler/icons-react';
 import {
-  COVER_IMAGE_EDIT_TRANSFORM,
+  FEATURED_IMAGE_EDIT_TRANSFORM,
   CLOUDINARY_BASE_URL,
 } from '../../config/constants';
 
-import classes from './CardEditCoverImage.module.css';
+import classes from './PostSettingsCoverImage.module.css';
 
 type Props = {
   id: string;
@@ -15,18 +15,22 @@ type Props = {
   };
 };
 
-const CardEditCoverImage = ({ id, openMediaLibrary, coverImage }: Props) => {
+const PostSettingsCoverImage = ({
+  id,
+  openMediaLibrary,
+  coverImage,
+}: Props) => {
   if (coverImage && coverImage.urlSlug) {
     return (
-      <div className={classes['cover_image_container_edit']}>
-        <div className={classes['cover_image_inner_edit']}>
+      <div className={classes['featured_image_container_edit']}>
+        <div className={classes['featured_image_inner_edit']}>
           <img
             id={id}
-            src={`${CLOUDINARY_BASE_URL}${COVER_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}`}
+            src={`${CLOUDINARY_BASE_URL}${FEATURED_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}`}
             alt={coverImage.altText}
           />
         </div>
-        <div className={classes['cover_image_button_container']}>
+        <div className={classes['featured_image_button_container']}>
           <button type='button' onClick={openMediaLibrary}>
             <IconRefresh />
           </button>
@@ -35,10 +39,10 @@ const CardEditCoverImage = ({ id, openMediaLibrary, coverImage }: Props) => {
     );
   } else {
     return (
-      <div className={classes['cover_image_container_new']}>
-        <div id={id} className={classes['cover_image_inner_new']}></div>
+      <div className={classes['featured_image_container_new']}>
+        <div className={classes['featured_image_inner_new']}></div>
 
-        <div className={classes['cover_image_button_container']}>
+        <div className={classes['featured_image_button_container']}>
           <button type='button' onClick={openMediaLibrary}>
             <IconPlus />
           </button>
@@ -48,4 +52,4 @@ const CardEditCoverImage = ({ id, openMediaLibrary, coverImage }: Props) => {
   }
 };
 
-export default CardEditCoverImage;
+export default PostSettingsCoverImage;

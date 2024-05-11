@@ -1,0 +1,97 @@
+.featured_image_container_new,
+.featured_image_container_edit {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 5px !important;
+  border: 1px solid transparent;
+  border-radius: var(--dashboard-content-input-radius);
+  overflow: hidden;
+}
+
+.featured_image_container_new {
+  background-color: var(--transparent-blue-hover-bg);
+  padding: var(--content-card-table-row-gap);
+}
+
+.featured_image_container_new:has(button:hover) {
+  .featured_image_inner_new {
+    border: 1px dashed var(--mantine-primary-color-filled);
+  }
+
+  svg {
+    stroke: var(--mantine-primary-color-filled);
+  }
+}
+
+.featured_image_container_edit:hover {
+  .featured_image_button_container {
+    position: absolute;
+    inset: 0;
+    background-color: var(--content-card-cover-image-edit-hover);
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  svg {
+    stroke: var(--mantine-color-white);
+  }
+}
+
+.featured_image_inner_new,
+.featured_image_inner_edit {
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured_image_inner_new {
+  border: 1px dashed var(--dashboard-content-input-border-color);
+}
+
+.featured_image_inner_edit > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured_image_button_container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured_image_button_container > button {
+  width: 100%;
+  min-width: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  outline: none;
+  border: none;
+
+  @mixin hover {
+    cursor: pointer;
+  }
+}
+
+.featured_image_container_edit .featured_image_button_container {
+  display: none;
+}
+
+.featured_image_button_container svg {
+  max-width: 50px;
+  max-height: 50px;
+  height: 90%;
+  width: 90%;
+  stroke-width: 1px;
+  stroke: var(--dashboard-content-input-border-color);
+}

@@ -9,7 +9,6 @@ import type {
 } from 'lexical';
 
 import { $setSelection, createEditor, DecoratorNode } from 'lexical';
-import { Suspense } from 'react';
 import { createPortal } from 'react-dom';
 
 import { StickyComponent } from '../utils/lazyImportComponents';
@@ -109,15 +108,13 @@ export class StickyNode extends DecoratorNode<JSX.Element> {
 
   decorate(_editor: LexicalEditor, _config: EditorConfig): JSX.Element {
     return createPortal(
-      <Suspense fallback={null}>
-        <StickyComponent
-          color={this.__color}
-          x={this.__x}
-          y={this.__y}
-          nodeKey={this.getKey()}
-          caption={this.__caption}
-        />
-      </Suspense>,
+      <StickyComponent
+        color={this.__color}
+        x={this.__x}
+        y={this.__y}
+        nodeKey={this.getKey()}
+        caption={this.__caption}
+      />,
       document.body
     );
   }

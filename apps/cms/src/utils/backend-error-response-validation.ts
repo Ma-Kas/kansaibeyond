@@ -77,3 +77,23 @@ export const categorySetFormFieldError = (errMessage: string) => {
     }
   }
 };
+
+export const postSetFormFieldError = (errMessage: string) => {
+  if (!errMessage.includes('SequelizeUniqueConstraintError')) {
+    // Not an error that should be displayed in form fields
+    return { field: null, error: errMessage };
+  } else {
+    const postTitleArr = ['title', 'Title'];
+    const postSlugArr = ['post_slug', 'Post Slug', 'postSlug'];
+    if (stringsInString(postTitleArr, errMessage)) {
+      return {
+        field: null,
+        error: 'This post title already exists.',
+      };
+    } else if (stringsInString(postSlugArr, errMessage)) {
+      return { field: 'postSlug', error: 'This post url slug already exists.' };
+    } else {
+      return { field: null, error: errMessage };
+    }
+  }
+};
