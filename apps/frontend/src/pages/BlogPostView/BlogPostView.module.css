@@ -1,0 +1,30 @@
+.blog_post_main {
+  font-family: var(--font-family-light);
+  font-size: var(--font-size-post-regular);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-post-regular);
+  color: var(--color-font-black);
+  max-width: var(--post-content-max-width);
+  margin: auto;
+}
+
+.blog_post_main h1 {
+  font-family: var(--font-family-book);
+  font-size: var(--font-size-post-h1);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-font-post-h1);
+}
+
+.blog_post_main h2 {
+  font-family: var(--font-family-book);
+  font-size: var(--font-size-post-h2);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-font-post-h2);
+}
+
+.blog_post_main h3 {
+  font-family: var(--font-family-book);
+  font-size: var(--font-size-post-h3);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-font-post-h3);
+}
