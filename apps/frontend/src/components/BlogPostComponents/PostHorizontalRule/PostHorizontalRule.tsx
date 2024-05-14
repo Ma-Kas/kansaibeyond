@@ -8,10 +8,10 @@ type Props = {
 
 const PostHorizontalRule = ({ style }: Props) => {
   return (
-    <div
+    <hr
       className={classes['post_horizontal_rule']}
       {...(style && { style: parseInlineStyle(style) })}
-    ></div>
+    ></hr>
   );
 };
 

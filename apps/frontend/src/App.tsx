@@ -1,7 +1,7 @@
 import BlogPostView from './pages/BlogPostView/BlogPostView';
 function App() {
   return (
-    <div>
+    <div style={{ padding: '40px 0' }}>
       <BlogPostView />
     </div>
   );

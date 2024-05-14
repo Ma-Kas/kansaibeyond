@@ -12,7 +12,7 @@ export type ElementFormatType =
   | 'justify'
   | '';
 
-type ImageAlignmentType = 'left' | 'right' | 'center' | undefined;
+export type ImageAlignmentType = 'left' | 'right' | 'center' | undefined;
 
 export type ImageNode = {
   altText: string;

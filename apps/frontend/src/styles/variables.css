@@ -7,6 +7,7 @@
   --font-size-post-h2: 28px;
   --font-size-post-h3: 22px;
   --font-size-post-h4: 20px;
+  --font-size-post-figcaption: 12px;
   --font-weight-regular: 400;
   --font-weight-bold: 600;
   --line-height-post-regular: 1.5;
@@ -22,4 +23,5 @@
   --color-font-post-h4: #568ebf;
   --color-font-post-link: #646464;
   --color-bg-code: #f0f2f5;
+  --color-horizontal-rule: #ccc;
 }

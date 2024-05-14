@@ -31,6 +31,7 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
         key: crypto.randomUUID(),
         format: parsedNode.format,
         indent: parsedNode.indent,
+        paragraphNode: parsedNode,
       },
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
@@ -69,6 +70,8 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       keysToComponentMap[parsedNode.type],
       {
         key: crypto.randomUUID(),
+        imageBlockNode: parsedNode,
+        alignment: parsedNode.alignment,
       },
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))

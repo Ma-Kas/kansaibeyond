@@ -1,0 +1,13 @@
+.post_horizontal_rule {
+  padding: 2px;
+  border: none;
+  margin: 1em 0;
+}
+
+.post_horizontal_rule:after {
+  content: '';
+  display: block;
+  height: 2px;
+  background-color: var(--color-horizontal-rule);
+  line-height: 2px;
+}
