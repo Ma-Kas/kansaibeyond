@@ -1,4 +1,6 @@
 const parseInlineStyle = (style: string) => {
+  // Takes an inline style string, parses it into key/value pair
+  // Usable with react's style property
   const template = document.createElement('template');
   template.setAttribute('style', style);
   return Object.entries(template.style)

@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 type DirectionType = 'ltr' | 'rtl' | null;
 
-type ElementFormatType =
+export type ElementFormatType =
   | 'left'
   | 'start'
   | 'center'

@@ -1,15 +1,16 @@
 import parseInlineStyle from '../../../utils/parse-inline-style-string';
 
+import classes from './PostRoot.module.css';
+
 type Props = {
-  className: string;
   style?: string;
   children?: React.ReactNode;
 };
 
-const PostRoot = ({ className, style, children }: Props) => {
+const PostRoot = ({ style, children }: Props) => {
   return (
     <section
-      className={className}
+      className={classes['post_root']}
       {...(style && { style: parseInlineStyle(style) })}
     >
       {children}

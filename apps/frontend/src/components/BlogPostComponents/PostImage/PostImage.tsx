@@ -4,16 +4,17 @@ import {
   POST_SINGLE_IMAGE_TRANSFORM,
 } from '../../../config/constants';
 
+import classes from './PostImage.module.css';
+
 type Props = {
-  className: string;
   style?: string;
   src: string;
 };
 
-const PostImage = ({ className, style, src }: Props) => {
+const PostImage = ({ style, src }: Props) => {
   return (
     <img
-      className={className}
+      className={classes['post_image']}
       src={`${CLOUDINARY_BASE_URL}${POST_SINGLE_IMAGE_TRANSFORM}${src}`}
       {...(style && { style: parseInlineStyle(style) })}
     />

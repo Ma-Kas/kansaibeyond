@@ -1,14 +1,28 @@
-import parseInlineStyle from '../../../utils/parse-inline-style-string';
+import type * as CSS from 'csstype';
+import { Property } from 'csstype';
+import { INDENTATION_FACTOR } from '../../../pages/BlogPostView/utils/post-content-constants';
+
+import classes from './PostParagraph.module.css';
 
 type Props = {
-  className: string;
-  style?: string;
+  format: string;
+  indent: number;
   children?: React.ReactNode;
 };
 
-const PostParagraph = ({ className, style, children }: Props) => {
+const PostParagraph = ({ format, indent, children }: Props) => {
+  const style: CSS.Properties = {};
+
+  if (format && format !== '') {
+    style.textAlign = format as Property.TextAlign;
+  }
+
+  if (indent) {
+    style.paddingInlineStart = `${indent * INDENTATION_FACTOR}px`;
+  }
+
   return (
-    <p className={className} {...(style && { style: parseInlineStyle(style) })}>
+    <p className={classes['post_paragraph']} {...(style && { style: style })}>
       {children}
     </p>
   );

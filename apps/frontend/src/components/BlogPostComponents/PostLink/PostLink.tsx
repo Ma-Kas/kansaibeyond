@@ -1,16 +1,17 @@
 import parseInlineStyle from '../../../utils/parse-inline-style-string';
 
+import classes from './PostLink.module.css';
+
 type Props = {
-  className: string;
   style?: string;
   url: string;
   children?: React.ReactNode;
 };
 
-const PostLink = ({ className, style, url, children }: Props) => {
+const PostLink = ({ style, url, children }: Props) => {
   return (
     <a
-      className={className}
+      className={classes['post_link']}
       href={url}
       {...(style && { style: parseInlineStyle(style) })}
     >

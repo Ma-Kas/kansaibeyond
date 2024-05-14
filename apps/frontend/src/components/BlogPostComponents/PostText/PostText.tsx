@@ -1,19 +1,27 @@
-import parseInlineStyle from '../../../utils/parse-inline-style-string';
+import {
+  getTextFormatStates,
+  constructTextComponentFromFormat,
+} from './postTextFormatHelpers';
+
+import classes from './PostText.module.css';
 
 type Props = {
-  className: string;
-  style?: string;
+  format: number;
+  style: string;
   text: string;
 };
 
-const PostText = ({ className, style, text }: Props) => {
+const PostText = ({ format, style, text }: Props) => {
+  const textFormats = getTextFormatStates(format);
   return (
-    <span
-      className={className}
-      {...(style && { style: parseInlineStyle(style) })}
-    >
-      {text}
-    </span>
+    <>
+      {constructTextComponentFromFormat(
+        classes['post_text'],
+        style,
+        text,
+        textFormats
+      )}
+    </>
   );
 };
 

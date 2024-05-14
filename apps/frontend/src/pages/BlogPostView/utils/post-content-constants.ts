@@ -7,6 +7,9 @@ import PostLink from '../../../components/BlogPostComponents/PostLink/PostLink';
 import PostImageBlock from '../../../components/BlogPostComponents/PostImageBlock/PostImageBlock';
 import PostImage from '../../../components/BlogPostComponents/PostImage/PostImage';
 
+// Indentation
+export const INDENTATION_FACTOR = 40; // Value in px to multiply the indent value with
+
 // Text node modes
 export const IS_NORMAL = 0;
 export const IS_TOKEN = 1;
@@ -14,14 +17,27 @@ export const IS_SEGMENTED = 2;
 // IS_INERT = 3
 
 // Text node formatting
-export const IS_BOLD = 1;
-export const IS_ITALIC = 1 << 1;
-export const IS_STRIKETHROUGH = 1 << 2;
-export const IS_UNDERLINE = 1 << 3;
-export const IS_CODE = 1 << 4;
-export const IS_SUBSCRIPT = 1 << 5;
-export const IS_SUPERSCRIPT = 1 << 6;
-export const IS_HIGHLIGHT = 1 << 7;
+export const TEXT_FORMAT_STATES = {
+  IS_BOLD: 1,
+  IS_ITALIC: 1 << 1,
+  IS_STRIKETHROUGH: 1 << 2,
+  IS_UNDERLINE: 1 << 3,
+  IS_CODE: 1 << 4,
+  IS_SUBSCRIPT: 1 << 5,
+  IS_SUPERSCRIPT: 1 << 6,
+  IS_HIGHLIGHT: 1 << 7,
+};
+
+export const TEXT_FORMAT_ENUM = {
+  IS_BOLD: 'IS_BOLD',
+  IS_ITALIC: 'IS_ITALIC',
+  IS_STRIKETHROUGH: 'IS_STRIKETHROUGH',
+  IS_UNDERLINE: 'IS_UNDERLINE',
+  IS_CODE: 'IS_CODE',
+  IS_SUBSCRIPT: 'IS_SUBSCRIPT',
+  IS_SUPERSCRIPT: 'IS_SUPERSCRIPT',
+  IS_HIGHTLIGHT: 'IS_HIGHLIGHT',
+};
 
 // Text node details
 export const IS_DIRECTIONLESS = 1;

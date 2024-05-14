@@ -1,15 +1,16 @@
 import parseInlineStyle from '../../../utils/parse-inline-style-string';
 
+import classes from './PostImageBlock.module.css';
+
 type Props = {
-  className: string;
   style?: string;
   children?: React.ReactNode;
 };
 
-const PostImageBlock = ({ className, style, children }: Props) => {
+const PostImageBlock = ({ style, children }: Props) => {
   return (
     <div
-      className={className}
+      className={classes['post_image_block']}
       {...(style && { style: parseInlineStyle(style) })}
     >
       {children}

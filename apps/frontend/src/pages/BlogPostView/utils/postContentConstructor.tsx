@@ -18,7 +18,6 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       keysToComponentMap[parsedNode.type],
       {
         key: crypto.randomUUID(),
-        className: parsedNode.type,
       },
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
@@ -30,7 +29,8 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       keysToComponentMap[parsedNode.type],
       {
         key: crypto.randomUUID(),
-        className: parsedNode.type,
+        format: parsedNode.format,
+        indent: parsedNode.indent,
       },
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
@@ -40,8 +40,8 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
     const parsedNode = input;
     return createElement(keysToComponentMap[parsedNode.type], {
       key: crypto.randomUUID(),
-      className: parsedNode.type,
-      style: 'style' in parsedNode ? parsedNode.style : undefined,
+      format: parsedNode.format,
+      style: 'style' in parsedNode ? parsedNode.style : '',
       text: parsedNode.text,
     });
   } else if (isLinkNode(input)) {
@@ -51,7 +51,6 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       keysToComponentMap[parsedNode.type],
       {
         key: crypto.randomUUID(),
-        className: parsedNode.type,
         url: parsedNode.url,
       },
       'children' in parsedNode &&
@@ -62,7 +61,6 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
     const parsedNode = input;
     return createElement(keysToComponentMap[parsedNode.type], {
       key: crypto.randomUUID(),
-      className: parsedNode.type,
     });
   } else if (isImageBlockNode(input)) {
     // Render Blog Post Single Image Container
@@ -71,7 +69,6 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       keysToComponentMap[parsedNode.type],
       {
         key: crypto.randomUUID(),
-        className: parsedNode.type,
       },
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
@@ -81,7 +78,6 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
     const parsedNode = input;
     return createElement(keysToComponentMap[parsedNode.type], {
       key: crypto.randomUUID(),
-      className: parsedNode.type,
       src: parsedNode.src,
     });
   } else {
