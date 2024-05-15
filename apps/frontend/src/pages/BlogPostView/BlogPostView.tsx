@@ -7,8 +7,7 @@ const BlogPostView = () => {
   return (
     <main className={classes['blog_post_main']}>
       <h1>
-        Love Pokemon? Love Photographing Unique Manholes? A Must-Do in Tokyo!
-        (Part 1)
+        Unwind and Relax: Essential Tips for Going to a Hot Springs in Japan
       </h1>
       {constructComponentTree(mockdataComplex)}
     </main>

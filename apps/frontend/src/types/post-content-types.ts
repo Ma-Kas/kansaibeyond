@@ -12,6 +12,8 @@ export type ElementFormatType =
   | 'justify'
   | '';
 
+export type HeadingTagType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
+
 export type ImageAlignmentType = 'left' | 'right' | 'center' | undefined;
 
 export type ImageNode = {
@@ -48,6 +50,16 @@ export type ParagraphNode = {
   version: number;
 };
 
+export type HeadingNode = {
+  children: object[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'heading';
+  version: number;
+  tag: HeadingTagType;
+};
+
 export type TextNode = {
   detail: number; // 0 = regular
   format: number; // 0 = regular, else number representation of bold, italic etc
@@ -64,7 +76,7 @@ export type LinkNode = {
   direction: DirectionType;
   format: ElementFormatType;
   indent: number;
-  type: 'link';
+  type: 'link' | 'autolink';
   version: number;
   rel: string;
   target: string | null;
@@ -77,6 +89,38 @@ export type HorizontalRuleNode = {
   version: number;
 };
 
+export type ImageBlockNode = {
+  children: ImageNode[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'image-block';
+  alignment: ImageAlignmentType;
+  version: number;
+};
+
+export type ListNode = {
+  children: ListItemNode[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'list';
+  version: number;
+  listType: 'bullet' | 'number';
+  start: number;
+  tag: 'ul' | 'ol';
+};
+
+export type ListItemNode = {
+  children: object[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'listitem';
+  version: number;
+  value: number;
+};
+
 // Not relevant to frontend, just to rule out this type
 export type StickyNode = {
   caption: {
@@ -87,14 +131,4 @@ export type StickyNode = {
   version: number;
   xOffset: number;
   yOffset: number;
-};
-
-export type ImageBlockNode = {
-  children: ImageNode[];
-  direction: DirectionType; // ltr or rtl
-  format: ElementFormatType; // center, end, justify etc
-  indent: number;
-  type: 'image-block';
-  alignment: ImageAlignmentType;
-  version: number;
 };

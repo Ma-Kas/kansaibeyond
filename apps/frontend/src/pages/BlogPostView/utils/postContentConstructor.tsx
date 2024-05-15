@@ -6,7 +6,10 @@ import {
   isImageNode,
   isLinkNode,
   isParagraphNode,
+  isHeadingNode,
   isTextNode,
+  isListNode,
+  isListItemNode,
 } from '../../../types/post-content-type-guards';
 import { keysToComponentMap } from './post-content-constants';
 
@@ -32,6 +35,20 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
         format: parsedNode.format,
         indent: parsedNode.indent,
         paragraphNode: parsedNode,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
+  } else if (isHeadingNode(input)) {
+    // Render Blog Post Heading
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        format: parsedNode.format,
+        indent: parsedNode.indent,
+        headingNode: parsedNode,
       },
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
@@ -83,6 +100,34 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       key: crypto.randomUUID(),
       src: parsedNode.src,
     });
+  } else if (isListNode(input)) {
+    // Render Blog Post List
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        format: parsedNode.format,
+        indent: parsedNode.indent,
+        listNode: parsedNode,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
+  } else if (isListItemNode(input)) {
+    // Render Blog Post List Item
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        format: parsedNode.format,
+        indent: parsedNode.indent,
+        listItemNode: parsedNode,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
   } else {
     // Other nodes not relevant to frontend render fragment (=nothing)
     return <Fragment key={crypto.randomUUID()} />;
