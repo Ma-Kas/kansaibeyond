@@ -20,6 +20,6 @@
 
 .post_text_code {
   font-size: 94%;
-  background-color: var(--color-bg-code);
+  background-color: var(--color-post-bg-code);
   padding: 1px 0.25rem;
 }

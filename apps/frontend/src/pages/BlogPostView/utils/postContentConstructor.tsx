@@ -10,6 +10,10 @@ import {
   isTextNode,
   isListNode,
   isListItemNode,
+  isCodeBlockNode,
+  isCodeHighlightNode,
+  isLineBreakNode,
+  isQuoteNode,
 } from '../../../types/post-content-type-guards';
 import { keysToComponentMap } from './post-content-constants';
 
@@ -100,6 +104,20 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       key: crypto.randomUUID(),
       src: parsedNode.src,
     });
+  } else if (isQuoteNode(input)) {
+    // Render Blog Post List
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        format: parsedNode.format,
+        indent: parsedNode.indent,
+        quoteNode: parsedNode,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
   } else if (isListNode(input)) {
     // Render Blog Post List
     const parsedNode = input;
@@ -128,6 +146,33 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
     );
+  } else if (isCodeBlockNode(input)) {
+    // Render Blog Code Block
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        format: parsedNode.format,
+        indent: parsedNode.indent,
+        codeBlockNode: parsedNode,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
+  } else if (isCodeHighlightNode(input)) {
+    // Render Content of Code Block
+    const parsedNode = input;
+    return createElement(keysToComponentMap[parsedNode.type], {
+      key: crypto.randomUUID(),
+      format: parsedNode.format,
+      style: 'style' in parsedNode ? parsedNode.style : '',
+      text: parsedNode.text,
+    });
+  } else if (isLineBreakNode(input)) {
+    // Render Line Break
+
+    return <br key={crypto.randomUUID()} />;
   } else {
     // Other nodes not relevant to frontend render fragment (=nothing)
     return <Fragment key={crypto.randomUUID()} />;

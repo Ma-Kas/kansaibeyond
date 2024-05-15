@@ -121,6 +121,41 @@ export type ListItemNode = {
   value: number;
 };
 
+export type QuoteNode = {
+  children: object[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'quote';
+  version: number;
+};
+
+export type CodeBlockNode = {
+  children: object[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'code';
+  version: number;
+  language: string;
+};
+
+export type CodeHighlightNode = {
+  detail: number; // 0 = regular
+  format: number; // 0 = regular, else number representation of bold, italic etc
+  mode: 'normal' | 'token' | 'segmented';
+  style: string; // inline css style
+  text: string; // actual content to insert into tag
+  type: 'code-highlight';
+  version: number;
+  highlightType?: string;
+};
+
+export type LineBreakNode = {
+  type: 'linebreak';
+  version: number;
+};
+
 // Not relevant to frontend, just to rule out this type
 export type StickyNode = {
   caption: {

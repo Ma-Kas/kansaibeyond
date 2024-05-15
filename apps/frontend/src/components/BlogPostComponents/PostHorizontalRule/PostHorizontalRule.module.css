@@ -8,6 +8,6 @@
   content: '';
   display: block;
   height: 2px;
-  background-color: var(--color-horizontal-rule);
+  background-color: var(--color-post-horizontal-rule);
   line-height: 2px;
 }

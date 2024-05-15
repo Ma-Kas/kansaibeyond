@@ -9,6 +9,9 @@ import PostImage from '../../../components/BlogPostComponents/PostImage/PostImag
 import PostHeading from '../../../components/BlogPostComponents/PostHeading/PostHeading';
 import PostList from '../../../components/BlogPostComponents/PostList/PostList';
 import PostListItem from '../../../components/BlogPostComponents/PostListItem/PostListItem';
+import PostCodeBlock from '../../../components/BlogPostComponents/PostCodeBlock/PostCodeBlock';
+import PostCodeHighlight from '../../../components/BlogPostComponents/PostCodeHighlight/PostCodeHighlight';
+import PostQuote from '../../../components/BlogPostComponents/PostQuote/PostQuote';
 
 // Indentation
 export const INDENTATION_FACTOR = 40; // Value in px to multiply the indent value with
@@ -64,7 +67,10 @@ export const keysToComponentMap = {
   horizontalrule: PostHorizontalRule,
   'image-block': PostImageBlock,
   image: PostImage,
+  quote: PostQuote,
   list: PostList,
   listitem: PostListItem,
+  code: PostCodeBlock,
+  'code-highlight': PostCodeHighlight,
   sticky: Fragment,
 };

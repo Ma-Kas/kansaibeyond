@@ -10,6 +10,10 @@ import {
   TextNode,
   ListNode,
   ListItemNode,
+  CodeBlockNode,
+  CodeHighlightNode,
+  LineBreakNode,
+  QuoteNode,
 } from './post-content-types';
 
 export const isRootNode = (node: unknown): node is RootNode => {
@@ -60,6 +64,24 @@ export const isListNode = (node: unknown): node is ListNode => {
 
 export const isListItemNode = (node: unknown): node is ListItemNode => {
   return (node as ListItemNode).type === 'listitem';
+};
+
+export const isQuoteNode = (node: unknown): node is QuoteNode => {
+  return (node as QuoteNode).type === 'quote';
+};
+
+export const isCodeBlockNode = (node: unknown): node is CodeBlockNode => {
+  return (node as CodeBlockNode).type === 'code';
+};
+
+export const isCodeHighlightNode = (
+  node: unknown
+): node is CodeHighlightNode => {
+  return (node as CodeHighlightNode).type === 'code-highlight';
+};
+
+export const isLineBreakNode = (node: unknown): node is LineBreakNode => {
+  return (node as LineBreakNode).type === 'linebreak';
 };
 
 export const isStickyNode = (node: unknown): node is StickyNode => {
