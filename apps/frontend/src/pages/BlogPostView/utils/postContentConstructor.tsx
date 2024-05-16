@@ -14,6 +14,8 @@ import {
   isCodeHighlightNode,
   isLineBreakNode,
   isQuoteNode,
+  isImageGalleryBlockNode,
+  isImageGalleryContainerNode,
 } from '../../../types/post-content-type-guards';
 import { keysToComponentMap } from './post-content-constants';
 
@@ -103,6 +105,25 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
     return createElement(keysToComponentMap[parsedNode.type], {
       key: crypto.randomUUID(),
       src: parsedNode.src,
+    });
+  } else if (isImageGalleryBlockNode(input)) {
+    // Render Blog Post Single Image Container
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        alignment: parsedNode.alignment,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
+  } else if (isImageGalleryContainerNode(input)) {
+    // Render Blog Post Single Image Container
+    const parsedNode = input;
+    return createElement(keysToComponentMap[parsedNode.type], {
+      key: crypto.randomUUID(),
+      containerNode: parsedNode,
     });
   } else if (isQuoteNode(input)) {
     // Render Blog Post List

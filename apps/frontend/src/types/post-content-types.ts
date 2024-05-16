@@ -16,6 +16,15 @@ export type HeadingTagType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
 
 export type ImageAlignmentType = 'left' | 'right' | 'center' | undefined;
 
+export type GalleryImageObjectPosition =
+  | 'center'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom';
+
+export type GalleryGridType = 'dynamic-type' | 'static-type' | 'flex-type';
+
 export type ImageNode = {
   altText: string;
   width: string | null | undefined;
@@ -24,6 +33,15 @@ export type ImageNode = {
   src: string;
   type: 'image';
   version: number;
+};
+
+export type GalleryImage = {
+  id: number;
+  altText: string;
+  src: string;
+  objectPosition?: GalleryImageObjectPosition | null;
+  imageWidth?: string | null;
+  aspectRatio?: string | null;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,6 +114,29 @@ export type ImageBlockNode = {
   indent: number;
   type: 'image-block';
   alignment: ImageAlignmentType;
+  version: number;
+};
+
+export type ImageGalleryBlockNode = {
+  children: ImageGalleryContainerNode[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'gallery-block';
+  alignment: ImageAlignmentType;
+  version: number;
+};
+
+export type ImageGalleryContainerNode = {
+  imageList: GalleryImage[];
+  gridType: GalleryGridType;
+  columns?: number | null;
+  captionText?: string;
+  width?: string | null;
+  maxWidth?: string | null;
+  gridGap?: string | null;
+  columnMinWidth?: number | null;
+  type: 'gallery-container';
   version: number;
 };
 

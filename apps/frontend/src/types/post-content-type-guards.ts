@@ -14,6 +14,8 @@ import {
   CodeHighlightNode,
   LineBreakNode,
   QuoteNode,
+  ImageGalleryBlockNode,
+  ImageGalleryContainerNode,
 } from './post-content-types';
 
 export const isRootNode = (node: unknown): node is RootNode => {
@@ -56,6 +58,18 @@ export const isImageBlockNode = (node: unknown): node is ImageBlockNode => {
 
 export const isImageNode = (node: unknown): node is ImageNode => {
   return (node as ImageNode).type === 'image';
+};
+
+export const isImageGalleryBlockNode = (
+  node: unknown
+): node is ImageGalleryBlockNode => {
+  return (node as ImageGalleryBlockNode).type === 'gallery-block';
+};
+
+export const isImageGalleryContainerNode = (
+  node: unknown
+): node is ImageGalleryContainerNode => {
+  return (node as ImageGalleryContainerNode).type === 'gallery-container';
 };
 
 export const isListNode = (node: unknown): node is ListNode => {
