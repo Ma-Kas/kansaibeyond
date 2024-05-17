@@ -40,7 +40,7 @@ const BlogPostView = () => {
   if (postQuery.data && postQuery.data.content) {
     return (
       <main className={classes['blog_post_main']}>
-        <h1>{postQuery.data.title}</h1>
+        <h1 className={classes['blog_post_title']}>{postQuery.data.title}</h1>
         {constructComponentTree(JSON.parse(postQuery.data.content))}
       </main>
     );
