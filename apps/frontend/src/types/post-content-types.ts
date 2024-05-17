@@ -25,6 +25,8 @@ export type GalleryImageObjectPosition =
 
 export type GalleryGridType = 'dynamic-type' | 'static-type' | 'flex-type';
 
+export type CarouselType = 'slideshow' | 'slider';
+
 export type ImageNode = {
   altText: string;
   width: string | null | undefined;
@@ -43,6 +45,14 @@ export type GalleryImage = {
   imageWidth?: string | null;
   aspectRatio?: string | null;
 };
+
+export interface CarouselImage {
+  id: number;
+  altText: string;
+  src: string;
+  objectPosition?: GalleryImageObjectPosition | null;
+  aspectRatio?: string | null;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ///                               NODE TYPES                                 ///
@@ -137,6 +147,28 @@ export type ImageGalleryContainerNode = {
   gridGap?: string | null;
   columnMinWidth?: number | null;
   type: 'gallery-container';
+  version: number;
+};
+
+export type ImageCarouselBlockNode = {
+  children: ImageCarouselContainerNode[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'carousel-block';
+  alignment: ImageAlignmentType;
+  version: number;
+};
+
+export type ImageCarouselContainerNode = {
+  imageList: CarouselImage[];
+  carouselType: CarouselType;
+  imagesInView?: number | null;
+  captionText?: string;
+  width?: string | null;
+  maxWidth?: string | null;
+  imageGap?: string | null;
+  type: 'carousel-container';
   version: number;
 };
 

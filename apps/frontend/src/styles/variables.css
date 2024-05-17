@@ -1,5 +1,6 @@
 :root {
   --post-content-max-width: 740px;
+  --post-content-horizontal-padding: 20px;
   --post-quote-margin: 0 0 10px 20px;
   --post-quote-border: 4px solid #ced0d4;
   --post-quote-padding-left: 16px;

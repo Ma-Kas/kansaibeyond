@@ -16,6 +16,8 @@ import {
   isQuoteNode,
   isImageGalleryBlockNode,
   isImageGalleryContainerNode,
+  isImageCarouselBlockNode,
+  isImageCarouselContainerNode,
 } from '../../../types/post-content-type-guards';
 import { keysToComponentMap } from './post-content-constants';
 
@@ -107,7 +109,7 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       src: parsedNode.src,
     });
   } else if (isImageGalleryBlockNode(input)) {
-    // Render Blog Post Single Image Container
+    // Render Blog Post Image Gallery Block
     const parsedNode = input;
     return createElement(
       keysToComponentMap[parsedNode.type],
@@ -119,7 +121,26 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
         parsedNode.children.map((child) => constructComponentTree(child))
     );
   } else if (isImageGalleryContainerNode(input)) {
-    // Render Blog Post Single Image Container
+    // Render Blog Post Image Gallery Container
+    const parsedNode = input;
+    return createElement(keysToComponentMap[parsedNode.type], {
+      key: crypto.randomUUID(),
+      containerNode: parsedNode,
+    });
+  } else if (isImageCarouselBlockNode(input)) {
+    // Render Blog Post Image Carousel Block
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        alignment: parsedNode.alignment,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
+  } else if (isImageCarouselContainerNode(input)) {
+    // Render Blog Post Image Carousel Container
     const parsedNode = input;
     return createElement(keysToComponentMap[parsedNode.type], {
       key: crypto.randomUUID(),
