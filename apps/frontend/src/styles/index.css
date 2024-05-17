@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Madefor';
+  font-style: normal;
+  src: url('../assets/fonts/Madefor.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Madefor';
+  font-style: italic;
+  src: url('../assets/fonts/Madefor_Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'FuturaLT-Light';
+  font-style: normal;
+  src: url('../assets/fonts/FuturaLT-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'FuturaLT-Book';
+  font-style: normal;
+  src: url('../assets/fonts/FuturaLT-Book.ttf') format('truetype');
+}
+
+body {
+  margin: 0;
+}
+
+.react-tweet-theme {
+  margin: 0;
+}

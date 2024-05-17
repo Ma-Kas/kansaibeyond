@@ -1,0 +1,45 @@
+:root {
+  --post-content-max-width: 740px;
+  --post-content-horizontal-padding: 20px;
+  --post-quote-margin: 0 0 10px 20px;
+  --post-quote-border: 4px solid #ced0d4;
+  --post-quote-padding-left: 16px;
+  --post-code-block-margin: 8px 0;
+  --post-code-block-padding: 8px 8px 8px 52px;
+  --post-code-block-highlight-border: 1px solid
+    var(--color-post-horizontal-rule);
+
+  /* Font variables */
+  --font-family-light: FuturaLT-Light, sans-serif;
+  --font-family-book: FuturaLT-Book, sans-serif;
+
+  --font-size-post-regular: 18px;
+  --font-size-post-h1: 40px;
+  --font-size-post-h2: 28px;
+  --font-size-post-h3: 22px;
+  --font-size-post-h4: 20px;
+  --font-size-post-h5: 18px;
+  --font-size-post-figcaption: 12px;
+  --font-size-post-code-block: 13px;
+
+  --font-weight-regular: 400;
+  --font-weight-bold: 600;
+  --line-height-post-regular: 1.5;
+
+  /* Color variables */
+  --color-font-black: #000000;
+  --color-font-post-h1: #2e2e2e;
+  --color-font-post-h2: #395f80;
+  --color-font-post-h3: #568ebf;
+  --color-font-post-h4: #568ebf;
+  --color-font-post-h5: #568ebf;
+  --color-font-post-link: #646464;
+  --color-font-post-quote: #65676b;
+  --color-post-bg-code: #f0f2f5;
+  --color-post-bg-code-highlight: #eee;
+  --color-post-horizontal-rule: #ccc;
+
+  --color-status-blue: #228be6;
+  --color-status-greyed: #868aa5;
+  --color-status-disabled: #ced4da;
+}

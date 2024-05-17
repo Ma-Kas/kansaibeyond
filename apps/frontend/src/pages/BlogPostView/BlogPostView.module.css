@@ -1,0 +1,17 @@
+.blog_post_main {
+  font-family: var(--font-family-light);
+  font-size: var(--font-size-post-regular);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-post-regular);
+  color: var(--color-font-black);
+  max-width: var(--post-content-max-width);
+  margin: auto;
+  padding: 0 var(--post-content-horizontal-padding);
+}
+
+.blog_post_loading_error_container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
