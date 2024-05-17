@@ -18,6 +18,8 @@ import {
   ImageGalleryContainerNode,
   ImageCarouselBlockNode,
   ImageCarouselContainerNode,
+  EmbedBlockNode,
+  EmbedNode,
 } from './post-content-types';
 
 export const isRootNode = (node: unknown): node is RootNode => {
@@ -84,6 +86,14 @@ export const isImageCarouselContainerNode = (
   node: unknown
 ): node is ImageCarouselContainerNode => {
   return (node as ImageCarouselContainerNode).type === 'carousel-container';
+};
+
+export const isEmbedBlockNode = (node: unknown): node is EmbedBlockNode => {
+  return (node as EmbedBlockNode).type === 'embed-block';
+};
+
+export const isEmbedNode = (node: unknown): node is EmbedNode => {
+  return (node as EmbedNode).type === 'embed';
 };
 
 export const isListNode = (node: unknown): node is ListNode => {

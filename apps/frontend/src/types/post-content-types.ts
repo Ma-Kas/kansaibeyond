@@ -27,6 +27,14 @@ export type GalleryGridType = 'dynamic-type' | 'static-type' | 'flex-type';
 
 export type CarouselType = 'slideshow' | 'slider';
 
+export type EmbedTypes =
+  | 'youtube'
+  | 'youtube-shorts'
+  | 'instagram'
+  | 'twitter'
+  | 'google-maps'
+  | 'general';
+
 export type ImageNode = {
   altText: string;
   width: string | null | undefined;
@@ -169,6 +177,26 @@ export type ImageCarouselContainerNode = {
   maxWidth?: string | null;
   imageGap?: string | null;
   type: 'carousel-container';
+  version: number;
+};
+
+export type EmbedBlockNode = {
+  children: EmbedNode[];
+  direction: DirectionType; // ltr or rtl
+  format: ElementFormatType; // center, end, justify etc
+  indent: number;
+  type: 'embed-block';
+  alignment: ImageAlignmentType;
+  version: number;
+};
+
+export type EmbedNode = {
+  embedType: EmbedTypes;
+  source: string;
+  width?: string | null;
+  maxWidth?: string | null;
+  aspectRatio?: string | null;
+  type: 'embed';
   version: number;
 };
 

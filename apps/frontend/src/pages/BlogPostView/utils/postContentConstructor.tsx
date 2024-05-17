@@ -18,6 +18,8 @@ import {
   isImageGalleryContainerNode,
   isImageCarouselBlockNode,
   isImageCarouselContainerNode,
+  isEmbedBlockNode,
+  isEmbedNode,
 } from '../../../types/post-content-type-guards';
 import { keysToComponentMap } from './post-content-constants';
 
@@ -146,6 +148,25 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       key: crypto.randomUUID(),
       containerNode: parsedNode,
     });
+  } else if (isEmbedBlockNode(input)) {
+    // Render Blog Post Embed Block
+    const parsedNode = input;
+    return createElement(
+      keysToComponentMap[parsedNode.type],
+      {
+        key: crypto.randomUUID(),
+        alignment: parsedNode.alignment,
+      },
+      'children' in parsedNode &&
+        parsedNode.children.map((child) => constructComponentTree(child))
+    );
+  } else if (isEmbedNode(input)) {
+    // Render Blog Post Embed Content
+    const parsedNode = input;
+    return createElement(keysToComponentMap[parsedNode.type], {
+      key: crypto.randomUUID(),
+      embedNode: parsedNode,
+    });
   } else if (isQuoteNode(input)) {
     // Render Blog Post List
     const parsedNode = input;
@@ -213,7 +234,6 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
     });
   } else if (isLineBreakNode(input)) {
     // Render Line Break
-
     return <br key={crypto.randomUUID()} />;
   } else {
     // Other nodes not relevant to frontend render fragment (=nothing)

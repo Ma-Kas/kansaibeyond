@@ -16,6 +16,8 @@ import PostGalleryBlock from '../../../components/BlogPostComponents/PostGallery
 import PostGalleryContainer from '../../../components/BlogPostComponents/PostGalleryContainer/PostGalleryContainer';
 import PostCarouselBlock from '../../../components/BlogPostComponents/PostCarouselBlock/PostCarouselBlock';
 import PostCarouselContainer from '../../../components/BlogPostComponents/PostCarouselContainer/PostCarouselContainer';
+import PostEmbedBlock from '../../../components/BlogPostComponents/PostEmbedBlock/PostEmbedBlock';
+import PostEmbed from '../../../components/BlogPostComponents/PostEmbed/PostEmbed';
 
 // Indentation
 export const INDENTATION_FACTOR = 40; // Value in px to multiply the indent value with
@@ -75,6 +77,8 @@ export const keysToComponentMap = {
   'gallery-container': PostGalleryContainer,
   'carousel-block': PostCarouselBlock,
   'carousel-container': PostCarouselContainer,
+  'embed-block': PostEmbedBlock,
+  embed: PostEmbed,
   quote: PostQuote,
   list: PostList,
   listitem: PostListItem,
