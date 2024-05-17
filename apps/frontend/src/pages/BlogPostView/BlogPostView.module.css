@@ -8,3 +8,10 @@
   margin: auto;
   padding: 0 var(--post-content-horizontal-padding);
 }
+
+.blog_post_loading_error_container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

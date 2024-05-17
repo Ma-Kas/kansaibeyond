@@ -38,4 +38,8 @@
   --color-post-bg-code: #f0f2f5;
   --color-post-bg-code-highlight: #eee;
   --color-post-horizontal-rule: #ccc;
+
+  --color-status-blue: #228be6;
+  --color-status-greyed: #868aa5;
+  --color-status-disabled: #ced4da;
 }
