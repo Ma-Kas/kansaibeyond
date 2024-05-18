@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { Tag, Post } from '../models';
-import { validateNewTag, validateTagUpdate } from '../utils/validate-tag-data';
+import { Tag, Post } from '../../models';
+import {
+  validateNewTag,
+  validateTagUpdate,
+} from '../../utils/validate-tag-data';
 
-import { MIN_TAGS_PER_POST } from '../utils/constants';
-import NotFoundError from '../errors/NotFoundError';
-import BadRequestError from '../errors/BadRequestError';
-import { sequelize } from '../utils/db';
+import { MIN_TAGS_PER_POST } from '../../utils/constants';
+import NotFoundError from '../../errors/NotFoundError';
+import BadRequestError from '../../errors/BadRequestError';
+import { sequelize } from '../../utils/db';
 
 export const get_all_tags = async (
   _req: Request,
@@ -24,6 +27,7 @@ export const get_all_tags = async (
           },
         },
       ],
+      order: [['tagName', 'ASC']],
     });
 
     res.status(200).json(tags);

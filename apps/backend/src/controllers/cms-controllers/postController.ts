@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { Post, Category, User, Comment, Tag } from '../models';
+import { Post, Category, User, Comment, Tag } from '../../models';
 import {
   validateNewPostData,
   validatePostUpdateData,
-} from '../utils/validate-post-data';
-import { NewPost } from '../types/types';
+} from '../../utils/validate-post-data';
+import { NewPost } from '../../types/types';
 
-import BadRequestError from '../errors/BadRequestError';
-import NotFoundError from '../errors/NotFoundError';
-import { sequelize } from '../utils/db';
+import BadRequestError from '../../errors/BadRequestError';
+import NotFoundError from '../../errors/NotFoundError';
+import { sequelize } from '../../utils/db';
 
 export const get_all_posts = async (
   _req: Request,
@@ -51,6 +51,7 @@ export const get_all_posts = async (
           ],
         },
       ],
+      order: [['createdAt', 'DESC']],
     });
 
     if (!allPosts) {

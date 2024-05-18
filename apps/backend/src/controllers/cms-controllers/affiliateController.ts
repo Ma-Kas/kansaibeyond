@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { Affiliate, User } from '../models';
+import { Affiliate, User } from '../../models';
 import {
   validateNewAffiliate,
   validateAffiliateUpdate,
-} from '../utils/validate-affiliate-data';
-import NotFoundError from '../errors/NotFoundError';
-import BadRequestError from '../errors/BadRequestError';
+} from '../../utils/validate-affiliate-data';
+import NotFoundError from '../../errors/NotFoundError';
+import BadRequestError from '../../errors/BadRequestError';
 
 export const get_all_affiliates = async (
   _req: Request,
@@ -24,6 +24,7 @@ export const get_all_affiliates = async (
           attributes: ['username', 'userIcon', 'status'],
         },
       ],
+      order: [['blogName', 'ASC']],
     });
 
     res.status(200).json(affiliates);

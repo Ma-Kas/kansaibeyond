@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 
 import express from 'express';
-import * as affiliateController from '../controllers/affiliateController';
+import * as affiliateController from '../../controllers/cms-controllers/affiliateController';
 
 const router = express.Router();
 

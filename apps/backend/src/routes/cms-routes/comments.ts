@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 
 import express from 'express';
-import * as commentController from '../controllers/commentController';
+import * as commentController from '../../controllers/cms-controllers/commentController';
 
 const router = express.Router();
 

@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { Comment, User, Post } from '../models';
-import NotFoundError from '../errors/NotFoundError';
+import { Comment, User, Post } from '../../models';
+import NotFoundError from '../../errors/NotFoundError';
 import {
   validateNewComment,
   validateNewRegisteredComment,
-} from '../utils/validate-comment-data';
-import { NewComment, NewRegisteredComment } from '../types/types';
-import BadRequestError from '../errors/BadRequestError';
+} from '../../utils/validate-comment-data';
+import { NewComment, NewRegisteredComment } from '../../types/types';
+import BadRequestError from '../../errors/BadRequestError';
 
 export const get_all_comments = async (
   _req: Request,
@@ -28,6 +28,7 @@ export const get_all_comments = async (
           attributes: ['id', 'postSlug'],
         },
       ],
+      order: [['createdAt', 'DESC']],
     });
     res.status(200).json(allComments);
   } catch (err: unknown) {

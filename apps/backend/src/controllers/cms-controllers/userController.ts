@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { Comment, Contact, Post, User } from '../models';
+import { Comment, Contact, Post, User } from '../../models';
 import {
   validateNewUser,
   validateUserUpdate,
-} from '../utils/validate-user-data';
+} from '../../utils/validate-user-data';
 
-import BadRequestError from '../errors/BadRequestError';
-import NotFoundError from '../errors/NotFoundError';
-import { sequelize } from '../utils/db';
+import BadRequestError from '../../errors/BadRequestError';
+import NotFoundError from '../../errors/NotFoundError';
+import { sequelize } from '../../utils/db';
 
 export const get_all_users = async (
   _req: Request,
@@ -20,6 +20,7 @@ export const get_all_users = async (
     const allUsers = await User.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [{ model: Post }, { model: Comment }, { model: Contact }],
+      order: [['displayName', 'ASC']],
     });
 
     res.status(200).json(allUsers);

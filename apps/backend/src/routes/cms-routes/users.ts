@@ -4,7 +4,7 @@
 // or update to Express 5 (currently beta), or typecast as RequestHandler
 
 import express from 'express';
-import * as userController from '../controllers/userController';
+import * as userController from '../../controllers/cms-controllers/userController';
 
 const router = express.Router();
 
