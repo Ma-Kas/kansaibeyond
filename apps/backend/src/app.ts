@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 
 // Project Dependencies
+import cmsLoginRouter from './routes/cms-routes/login';
 import cmsUserRouter from './routes/cms-routes/users';
 import cmsCategoryRouter from './routes/cms-routes/categories';
 import cmsPostRouter from './routes/cms-routes/posts';
@@ -37,6 +38,8 @@ app.use('/api/cms', cmsRouter);
 app.use('/api/frontend', frontendRouter);
 
 // CMS Routes
+cmsRouter.use('/v1/login', cmsLoginRouter);
+
 cmsRouter.use('/v1/users', cmsUserRouter);
 cmsRouter.use('/v1/categories', cmsCategoryRouter);
 cmsRouter.use('/v1/posts', cmsPostRouter);
