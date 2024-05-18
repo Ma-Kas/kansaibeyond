@@ -1,8 +1,9 @@
 import { Loader, Tabs } from '@mantine/core';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import CardTablePosts from '../CardTablePosts/CardTablePosts';
+import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
 import { Post } from '../../requests/postRequests';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
 
@@ -34,24 +35,26 @@ const BlogPostTabs = ({
   const [activeTab, setActiveTab] = useState<string | null>(tabData[0].value);
   const [headerTopStyle, setHeaderTopStyle] = useState('');
 
-  // Calculate the top of the sticky card header based on content_header height
-  // and margin-top of body passed as ref (useEffect, to force re-render when they change)
-  useEffect(() => {
+  // Manage card header position on rerender
+  useLayoutEffect(() => {
     if (mainContentHeaderElement && mainContentBodyElement) {
-      const contentHeaderHeight = window.getComputedStyle(
-        mainContentHeaderElement
-      ).height;
-      const contentBodyMarginTop = window.getComputedStyle(
-        mainContentBodyElement
-      ).marginTop;
-
-      const top = `${
-        Number(contentHeaderHeight.slice(0, -2)) +
-        Number(contentBodyMarginTop.slice(0, -2))
-      }px`;
-      setHeaderTopStyle(top);
+      handleCardHeaderPosition(
+        mainContentHeaderElement,
+        mainContentBodyElement,
+        setHeaderTopStyle
+      );
     }
   }, [mainContentBodyElement, mainContentHeaderElement]);
+
+  window.addEventListener('resize', () => {
+    if (mainContentHeaderElement && mainContentBodyElement) {
+      handleCardHeaderPosition(
+        mainContentHeaderElement,
+        mainContentBodyElement,
+        setHeaderTopStyle
+      );
+    }
+  });
 
   if (!cardElement || !mainContentHeaderElement || !mainContentBodyElement) {
     return null;

@@ -1,11 +1,12 @@
 import { Button, Loader } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 
 import CardTableCategories from '../../components/CardTableCategories/CardTableCategories';
+import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
 import { getAllCategories } from '../../requests/categoryRequests';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
@@ -34,24 +35,26 @@ const BlogCategories = () => {
     setMainContentBodyElement(mainContentBodyRef.current);
   }, []);
 
-  // Calculate the top of the sticky card header based on content_header height
-  // and margin-top of body passed as ref (useEffect, to force re-render when they change)
-  useEffect(() => {
+  // Manage card header position on rerender
+  useLayoutEffect(() => {
     if (mainContentHeaderElement && mainContentBodyElement) {
-      const contentHeaderHeight = window.getComputedStyle(
-        mainContentHeaderElement
-      ).height;
-      const contentBodyMarginTop = window.getComputedStyle(
-        mainContentBodyElement
-      ).marginTop;
-
-      const top = `${
-        Number(contentHeaderHeight.slice(0, -2)) +
-        Number(contentBodyMarginTop.slice(0, -2))
-      }px`;
-      setHeaderTopStyle(top);
+      handleCardHeaderPosition(
+        mainContentHeaderElement,
+        mainContentBodyElement,
+        setHeaderTopStyle
+      );
     }
   }, [mainContentBodyElement, mainContentHeaderElement]);
+
+  window.addEventListener('resize', () => {
+    if (mainContentHeaderElement && mainContentBodyElement) {
+      handleCardHeaderPosition(
+        mainContentHeaderElement,
+        mainContentBodyElement,
+        setHeaderTopStyle
+      );
+    }
+  });
 
   const blogPostHeader = (
     <>
