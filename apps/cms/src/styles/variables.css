@@ -29,6 +29,12 @@
   --font-size-composer-sidebar-small: 12px;
   --font-weight-menu: 500;
   --font-size-editor: 14px;
+  --font-size-editor-h1: 40px;
+  --font-size-editor-h2: 28px;
+  --font-size-editor-h3: 22px;
+  --font-size-editor-h4: 20px;
+  --font-size-editor-h5: 18px;
+  --font-size-editor-code-block: 13px;
   --font-weight-editor: 400;
   --line-height-editor: 1.5;
 
@@ -39,6 +45,16 @@
   --color-menu-text-greyed: #868aa5;
   --color-menu-text-disabled: var(--mantine-color-gray-4);
   --color-editor-text: #000000;
+  --color-editor-h1: #2e2e2e;
+  --color-editor-h2: #395f80;
+  --color-editor-h3: #568ebf;
+  --color-editor-h4: #568ebf;
+  --color-editor-h5: #568ebf;
+  --color-editor-link: #646464;
+  --color-editor-quote: #65676b;
+  --color-editor-bg-code: #f0f2f5;
+  --color-editor-bg-code-highlight: #eee;
+  --color-editor-horizontal-rule: #ccc;
   --color-menu-border-light: var(--mantine-color-gray-3);
   --color-menu-border-dark: var(--mantine-color-dark-4);
   --transparent-blue-hover-bg: rgba(34, 139, 230, 0.1);
@@ -88,6 +104,10 @@
   --editor-toolbar-icon-stroke: 1.5px;
   --editor-content-editable-max-width: rem(740px);
   --editor-content-editable-min-width: rem(686px);
+  --editor-code-block-margin: 8px 0;
+  --editor-code-block-padding: 8px 8px 8px 52px;
+  --editor-code-block-highlight-border: 1px solid
+    var(--color-editor-horizontal-rule);
 
   /* Editor Embedded Content Variables */
   --editor-embed-content-caption-font-size: rem(12px);

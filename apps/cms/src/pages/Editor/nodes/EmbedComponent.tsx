@@ -331,6 +331,7 @@ export default function EmbedComponent({
     // @ts-expect-error Instagram is attached to the window.
     if (window.instgrm) {
       // @ts-expect-error Instagram is attached to the window.
+      // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
       window.instgrm.Embeds.process();
     }
   }, [embedType]);

@@ -51,22 +51,29 @@
   padding-left: 16px;
 }
 .EditorTheme__h1 {
-  font-size: 40px;
-  color: rgb(5, 5, 5);
-  font-weight: 400;
+  font-size: var(--font-size-editor-h1);
+  color: var(--color-editor-h1);
   margin: 0;
 }
 .EditorTheme__h2 {
-  font-size: 28px;
-  color: rgb(101, 103, 107);
-  font-weight: 700;
+  font-size: var(--font-size-editor-h2);
+  color: var(--color-editor-h2);
   margin: 0;
-  text-transform: uppercase;
 }
 .EditorTheme__h3 {
-  font-size: 22px;
+  font-size: var(--font-size-editor-h3);
+  color: var(--color-editor-h3);
   margin: 0;
-  text-transform: uppercase;
+}
+.EditorTheme__h4 {
+  font-size: var(--font-size-editor-h4);
+  color: var(--color-editor-h4);
+  margin: 0;
+}
+.EditorTheme__h5 {
+  font-size: var(--font-size-editor-h5);
+  color: var(--color-editor-h5);
+  margin: 0;
 }
 .EditorTheme__indent {
   --lexical-indent-base-value: 40px;
@@ -95,7 +102,7 @@
   vertical-align: super;
 }
 .EditorTheme__textCode {
-  background-color: rgb(240, 242, 245);
+  background-color: var(--color-editor-bg-code);
   padding: 1px 0.25rem;
   font-family: Menlo, Consolas, Monaco, monospace;
   font-size: 94%;
@@ -105,23 +112,19 @@
   border-bottom: 1px solid rgba(88, 144, 255, 0.3);
 }
 .EditorTheme__link {
-  color: rgb(33, 111, 219) !important;
-  text-decoration: none;
+  color: var(--color-editor-link) !important;
 }
 .EditorTheme__link:hover {
-  text-decoration: underline;
   cursor: pointer;
 }
 .EditorTheme__code {
-  background-color: rgb(240, 242, 245);
+  background-color: var(--color-editor-bg-code);
   font-family: Menlo, Consolas, Monaco, monospace;
   display: block;
-  padding: 8px 8px 8px 52px;
+  padding: var(--editor-code-block-padding);
   line-height: 1.53;
-  font-size: 13px;
-  margin: 0;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  font-size: var(--font-size-editor-code-block);
+  margin: var(--editor-code-block-margin);
   overflow-x: auto;
   position: relative;
   tab-size: 2;
@@ -129,10 +132,10 @@
 .EditorTheme__code:before {
   content: attr(data-gutter);
   position: absolute;
-  background-color: #eee;
+  background-color: var(--color-editor-bg-code-highlight);
   left: 0;
   top: 0;
-  border-right: 1px solid #ccc;
+  border-right: var(--editor-code-block-highlight-border);
   padding: 8px;
   color: #777;
   white-space: pre-wrap;

@@ -357,7 +357,7 @@ export function InsertGoogleMapsDialog({
     }
     setMaxWidth(width);
     setAspectRatio(`${Number(width) / Number(height)} / 1`);
-    const newIframe = `<iframe width='100%' height='100%' src='${src}' credentialless allowFullScreen loading='lazy' title='Google Maps' referrerpolicy='strict-origin-when-cross-origin'/>`;
+    const newIframe = `<iframe width='100%' height='100%' frameborder='0' style='border: 0' src='${src}' credentialless allowFullScreen title='Google Maps' referrerpolicy='strict-origin-when-cross-origin'/>`;
 
     setInput(value);
     setSource(newIframe);
