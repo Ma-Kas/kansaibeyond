@@ -103,6 +103,12 @@ export function UpdateImageDialog({
     parentBlockNode.getAlignment()
   );
 
+  useEffect(() => {
+    setAltText(node.getAltText());
+    setCaptionText(node.getCaptionText());
+    setBlockAlignment(parentBlockNode.getAlignment());
+  }, [node, parentBlockNode]);
+
   const handlePositionChange = (select: string | null) => {
     if (select) {
       setBlockAlignment(select as Alignment);

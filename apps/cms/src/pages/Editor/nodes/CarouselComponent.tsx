@@ -225,6 +225,16 @@ export function UpdateCarouselDialog({
     parentBlockNode.getAlignment()
   );
 
+  useEffect(() => {
+    setImageList(node.getImageList());
+    setCarouselType(node.getCarouselType());
+    setImagesInView(node.getImagesInView());
+    setImageGap(node.getImageGap());
+    setCaptionText(node.getCaptionText());
+    setBlockAlignment(parentBlockNode.getAlignment());
+    setActiveTab('layout');
+  }, [node, parentBlockNode]);
+
   // Edits of whole carousel
   const handleCarouselTypeChange = (select: string | null) => {
     if (select) {

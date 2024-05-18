@@ -253,6 +253,17 @@ export function UpdateGalleryDialog({
     parentBlockNode.getAlignment()
   );
 
+  useEffect(() => {
+    setImageList(node.getImageList());
+    setGridType(node.getGridType());
+    setColumns(node.getColumns());
+    setGridGap(node.getGridGap());
+    setColumnMinWidth(node.getColumnMinWidth());
+    setCaptionText(node.getCaptionText());
+    setBlockAlignment(parentBlockNode.getAlignment());
+    setActiveTab('layout');
+  }, [node, parentBlockNode]);
+
   // Edits of whole gallery
   const handleGridTypeChange = (select: string | null) => {
     if (select) {

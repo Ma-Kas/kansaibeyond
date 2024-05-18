@@ -68,6 +68,11 @@ export function UpdateEmbedDialog({
     parentBlockNode.getAlignment()
   );
 
+  useEffect(() => {
+    setSource(node.getSource());
+    setBlockAlignment(parentBlockNode.getAlignment());
+  }, [node, parentBlockNode]);
+
   const handlePositionChange = (select: string | null) => {
     if (select) {
       setBlockAlignment(select as Alignment);
