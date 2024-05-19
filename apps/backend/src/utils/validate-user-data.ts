@@ -17,6 +17,13 @@ const newUserSchema = z.object(
   }
 ).strict();
 
+const userStatusSchema = z.union([
+  z.literal('Admin'),
+  z.literal('Tech'),
+  z.literal('Writer'),
+  z.literal('Guest'),
+]);
+
 // prettier-ignore
 const updateUserSchema = z.object(
   {
@@ -36,6 +43,8 @@ const updateUserSchema = z.object(
         youtube: z.string().url().optional().nullable(),
         linkedin: z.string().url().optional().nullable(),
     }).optional(),
+    disabled: z.boolean().optional(),
+    status: userStatusSchema.optional()
   }
 ).strict();
 
@@ -86,7 +95,8 @@ const validateUserUpdate = (input: unknown): UpdateUser | null => {
     !('firstName' in input) &&
     !('lastName' in input) &&
     !('introduction' in input) &&
-    !('contact' in input)
+    !('contact' in input) &&
+    !('status' in input)
   ) {
     return null;
   }

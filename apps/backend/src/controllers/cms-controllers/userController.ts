@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { Comment, Contact, Post, User } from '../../models';
+import { Comment, Contact, Post, Session, User } from '../../models';
 import {
   validateNewUser,
   validateUserUpdate,
@@ -153,6 +153,9 @@ export const disable_one_user = async (
         returning: true,
       }
     );
+
+    await Session.destroy({ where: { userId: Number(userToDisable.id) } });
+
     res
       .status(200)
       .json({ message: `Disabled user "${disabledUser[1][0].username}"` });
@@ -195,6 +198,8 @@ export const delete_one_user = async (
         transaction: transaction,
       });
     }
+
+    await Session.destroy({ where: { userId: Number(userToDelete.id) } });
 
     await transaction.commit();
     res

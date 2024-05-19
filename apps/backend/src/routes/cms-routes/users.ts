@@ -5,25 +5,30 @@
 
 import express from 'express';
 import * as userController from '../../controllers/cms-controllers/userController';
+import { tokenExtractor } from '../../middleware/tokenAuth';
 
 const router = express.Router();
 
 // GET route for retrieving all users
-router.get('/', userController.get_all_users);
+router.get('/', tokenExtractor, userController.get_all_users);
 
 // GET route for retrieving one specific user based on username query
-router.get('/:username', userController.get_one_user);
+router.get('/:username', tokenExtractor, userController.get_one_user);
 
 // POST route for creating new user
 router.post('/', userController.post_new_user);
 
 // PUT route for updating one specific user based on username query
-router.put('/:username', userController.update_one_user);
+router.put('/:username', tokenExtractor, userController.update_one_user);
 
 // PUT route for disabling one specific user based on username query
-router.put('/disable/:username', userController.disable_one_user);
+router.put(
+  '/disable/:username',
+  tokenExtractor,
+  userController.disable_one_user
+);
 
 // DELETE route for deleting one specific user based on username query
-router.delete('/:username', userController.delete_one_user);
+router.delete('/:username', tokenExtractor, userController.delete_one_user);
 
 export default router;

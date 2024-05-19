@@ -65,9 +65,10 @@ type NewUser = Pick<
 >;
 
 // Omit original userIcon, re-add in intersection to disallow null when updating
-type UpdateUser = Partial<
-  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled'>
-> & { userIcon?: string; contact?: Omit<Contact, 'id'> };
+type UpdateUser = Partial<Omit<User, 'id' | 'userIcon' | 'disabled'>> & {
+  userIcon?: string;
+  contact?: Omit<Contact, 'id'>;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Post Model Types                                                           //

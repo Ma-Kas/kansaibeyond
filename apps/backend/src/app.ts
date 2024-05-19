@@ -45,7 +45,7 @@ app.use('/api/frontend', frontendRouter);
 cmsRouter.use('/v1/login', cmsLoginRouter);
 cmsRouter.use('/v1/logout', tokenExtractor, cmsLogoutRouter);
 
-cmsRouter.use('/v1/users', tokenExtractor, cmsUserRouter);
+cmsRouter.use('/v1/users', cmsUserRouter);
 cmsRouter.use('/v1/categories', tokenExtractor, cmsCategoryRouter);
 cmsRouter.use('/v1/posts', tokenExtractor, cmsPostRouter);
 cmsRouter.use('/v1/tags', tokenExtractor, cmsTagRouter);
