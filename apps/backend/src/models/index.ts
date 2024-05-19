@@ -5,6 +5,7 @@ import Category from './category';
 import Tag from './tag';
 import Comment from './comment';
 import Affiliate from './affiliate';
+import Session from './session';
 
 // Import join tables
 import PostCategory from './postCategory';
@@ -35,9 +36,12 @@ void (function createAssociations() {
 
     User.hasOne(Affiliate);
     Affiliate.belongsTo(User);
+
+    User.hasMany(Session);
+    Session.belongsTo(User);
   } catch (err: unknown) {
     console.log('Error', err);
   }
 })();
 
-export { User, Contact, Post, Category, Comment, Tag, Affiliate };
+export { User, Contact, Post, Category, Comment, Tag, Affiliate, Session };

@@ -2,6 +2,8 @@
 // Utility Types                                                              //
 ////////////////////////////////////////////////////////////////////////////////
 
+type UserStatus = 'Admin' | 'Writer' | 'Tech' | 'Guest';
+
 type CoverImage = {
   urlSlug: string;
   altText: string;
@@ -16,6 +18,13 @@ type Subset<K> = {
     : K[attr] extends object | null | undefined
     ? Subset<K[attr]> | null | undefined
     : K[attr];
+};
+
+type TokenType = {
+  id: number;
+  username: string;
+  displayName: string;
+  status: UserStatus;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +55,7 @@ type User = {
   firstName: string;
   lastName: string;
   introduction?: string;
-  status: 'Admin' | 'Writer' | 'Tech' | 'Guest';
+  status: UserStatus;
   disabled: boolean;
 };
 
@@ -170,6 +179,8 @@ type UpdateAffiliate = Partial<NewAffiliate>;
 
 export {
   Subset,
+  UserStatus,
+  TokenType,
   User,
   NewUser,
   UpdateUser,
