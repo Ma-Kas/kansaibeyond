@@ -5,7 +5,7 @@ import * as loginController from '../../controllers/cms-controllers/loginControl
 
 const router = express.Router();
 
-// POST route for creating new post
+// POST route for loggin in user
 router.post('/', loginController.post_login);
 
 export default router;

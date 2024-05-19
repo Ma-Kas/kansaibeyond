@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { User } from '../../models';
+import { User, Session } from '../../models';
 import { JWT_TOKEN_SECRET } from '../../utils/config';
 import { validateLoginData } from '../../utils/validate-login-data';
 import NotFoundError from '../../errors/NotFoundError';
@@ -43,6 +43,8 @@ export const post_login = async (
     // Create the token for the session
     const userForToken = {
       id: user.id,
+      username: user.username,
+      displayName: user.displayName,
       status: user.status,
     };
 
@@ -51,7 +53,7 @@ export const post_login = async (
     });
 
     // Create entry for current token in sessions table
-    // await Session.create({ token: token, userId: user.id });
+    await Session.create({ token: token, userId: user.id });
 
     res.status(200).send({ token, username: user.username });
   } catch (err: unknown) {

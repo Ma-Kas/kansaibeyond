@@ -1,9 +1,13 @@
+/* eslint @typescript-eslint/no-misused-promises: 0 */
+
 // Global Dependencies
 import express from 'express';
 import cors from 'cors';
 
 // Project Dependencies
+import { tokenExtractor } from './middleware/tokenAuth';
 import cmsLoginRouter from './routes/cms-routes/login';
+import cmsLogoutRouter from './routes/cms-routes/logout';
 import cmsUserRouter from './routes/cms-routes/users';
 import cmsCategoryRouter from './routes/cms-routes/categories';
 import cmsPostRouter from './routes/cms-routes/posts';
@@ -39,13 +43,14 @@ app.use('/api/frontend', frontendRouter);
 
 // CMS Routes
 cmsRouter.use('/v1/login', cmsLoginRouter);
+cmsRouter.use('/v1/logout', tokenExtractor, cmsLogoutRouter);
 
-cmsRouter.use('/v1/users', cmsUserRouter);
-cmsRouter.use('/v1/categories', cmsCategoryRouter);
-cmsRouter.use('/v1/posts', cmsPostRouter);
-cmsRouter.use('/v1/tags', cmsTagRouter);
-cmsRouter.use('/v1/comments', cmsCommentRouter);
-cmsRouter.use('/v1/affiliates', cmsAffiliateRouter);
+cmsRouter.use('/v1/users', tokenExtractor, cmsUserRouter);
+cmsRouter.use('/v1/categories', tokenExtractor, cmsCategoryRouter);
+cmsRouter.use('/v1/posts', tokenExtractor, cmsPostRouter);
+cmsRouter.use('/v1/tags', tokenExtractor, cmsTagRouter);
+cmsRouter.use('/v1/comments', tokenExtractor, cmsCommentRouter);
+cmsRouter.use('/v1/affiliates', tokenExtractor, cmsAffiliateRouter);
 
 // Frontend Routes
 frontendRouter.use('/v1/posts', frontendPostRouter);
