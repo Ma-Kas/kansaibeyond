@@ -1,0 +1,8 @@
+// POST valid login
+POST http://localhost:3001/api/cms/v1/login
+content-type: application/json
+
+{
+  "username": "kansaibeyond",
+  "password": ""
+}

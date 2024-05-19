@@ -8,8 +8,10 @@ import {
 import NotFoundError from '../../errors/NotFoundError';
 import BadRequestError from '../../errors/BadRequestError';
 
+import { createUserWhere } from '../../utils/limit-query-to-own-creation';
+
 export const get_all_affiliates = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -22,6 +24,7 @@ export const get_all_affiliates = async (
         {
           model: User,
           attributes: ['username', 'userIcon', 'status'],
+          where: createUserWhere(req),
         },
       ],
       order: [['blogName', 'ASC']],
@@ -49,6 +52,7 @@ export const get_one_affiliate = async (
         {
           model: User,
           attributes: ['username', 'userIcon', 'status'],
+          where: createUserWhere(req),
         },
       ],
     });

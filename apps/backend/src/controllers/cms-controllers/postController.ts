@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-
 import { Post, Category, User, Comment, Tag } from '../../models';
 import {
   validateNewPostData,
@@ -10,9 +9,12 @@ import { NewPost } from '../../types/types';
 import BadRequestError from '../../errors/BadRequestError';
 import NotFoundError from '../../errors/NotFoundError';
 import { sequelize } from '../../utils/db';
+import { getTokenOrThrow } from '../../utils/get-token-or-throw';
+import { createUserWhere } from '../../utils/limit-query-to-own-creation';
+import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_posts = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -25,6 +27,7 @@ export const get_all_posts = async (
         {
           model: User,
           attributes: ['username', 'displayName', 'userIcon', 'status'],
+          where: createUserWhere(req),
         },
         {
           model: Category,
@@ -78,6 +81,7 @@ export const get_one_post = async (
         {
           model: User,
           attributes: ['username', 'displayName', 'userIcon', 'status'],
+          where: createUserWhere(req),
         },
         {
           model: Post,
@@ -130,7 +134,9 @@ export const post_new_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const user = await User.findOne();
+    const token = getTokenOrThrow(req);
+
+    const user = await User.findOne({ where: { username: token.username } });
 
     if (!user) {
       throw new NotFoundError({ message: 'User not found' });
@@ -178,12 +184,16 @@ export const update_one_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
+    const token = getTokenOrThrow(req);
     const postToUpdate = await Post.findOne({
       where: { postSlug: req.params.postSlug },
       transaction: transaction,
     });
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
+    }
+    if (token.status !== 'Admin' && postToUpdate.userId !== token.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
 
@@ -258,6 +268,7 @@ export const trash_one_post = async (
   next: NextFunction
 ) => {
   try {
+    const token = getTokenOrThrow(req);
     const postToTrash = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
@@ -267,6 +278,9 @@ export const trash_one_post = async (
 
     if (postToTrash.status === 'trash') {
       res.status(204).end();
+    }
+    if (token.status !== 'Admin' && postToTrash.userId !== token.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     const updatedPost = await Post.update(
@@ -291,11 +305,15 @@ export const delete_one_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
+    const token = getTokenOrThrow(req);
     const postToDelete = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
+    }
+    if (token.status !== 'Admin' && postToDelete.userId !== token.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     // Remove all associated categories, tags, relatedPosts by setting to empty array
