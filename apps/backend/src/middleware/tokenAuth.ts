@@ -9,11 +9,7 @@ interface AuthorizationRequest extends Request {
   token: string | jwt.JwtPayload;
 }
 
-const tokenExtractor = async (
-  req: Request,
-  _res: Response,
-  next: NextFunction
-) => {
+const tokenAuth = async (req: Request, _res: Response, next: NextFunction) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -42,4 +38,4 @@ const tokenExtractor = async (
   }
 };
 
-export { tokenExtractor };
+export { tokenAuth };

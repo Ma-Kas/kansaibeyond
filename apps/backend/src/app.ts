@@ -5,7 +5,7 @@ import express from 'express';
 import cors from 'cors';
 
 // Project Dependencies
-import { tokenExtractor } from './middleware/tokenAuth';
+import { tokenAuth } from './middleware/tokenAuth';
 import cmsLoginRouter from './routes/cms-routes/login';
 import cmsLogoutRouter from './routes/cms-routes/logout';
 import cmsUserRouter from './routes/cms-routes/users';
@@ -43,14 +43,14 @@ app.use('/api/frontend', frontendRouter);
 
 // CMS Routes
 cmsRouter.use('/v1/login', cmsLoginRouter);
-cmsRouter.use('/v1/logout', tokenExtractor, cmsLogoutRouter);
+cmsRouter.use('/v1/logout', tokenAuth, cmsLogoutRouter);
 
 cmsRouter.use('/v1/users', cmsUserRouter);
-cmsRouter.use('/v1/categories', tokenExtractor, cmsCategoryRouter);
-cmsRouter.use('/v1/posts', tokenExtractor, cmsPostRouter);
-cmsRouter.use('/v1/tags', tokenExtractor, cmsTagRouter);
-cmsRouter.use('/v1/comments', tokenExtractor, cmsCommentRouter);
-cmsRouter.use('/v1/affiliates', tokenExtractor, cmsAffiliateRouter);
+cmsRouter.use('/v1/categories', tokenAuth, cmsCategoryRouter);
+cmsRouter.use('/v1/posts', tokenAuth, cmsPostRouter);
+cmsRouter.use('/v1/tags', tokenAuth, cmsTagRouter);
+cmsRouter.use('/v1/comments', tokenAuth, cmsCommentRouter);
+cmsRouter.use('/v1/affiliates', tokenAuth, cmsAffiliateRouter);
 
 // Frontend Routes
 frontendRouter.use('/v1/posts', frontendPostRouter);
