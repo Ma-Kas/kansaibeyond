@@ -101,6 +101,12 @@ export const update_one_user = async (
       await transaction.rollback();
       res.status(204).send();
     } else {
+      // Disallow disabling users or changing user status if not admin
+      if ('disabled' in userUpdateData && token.status !== 'Admin') {
+        throw new UnauthorizedError({
+          message: 'Admin permission required',
+        });
+      }
       // Only re-crypt password if password has changed
       if (userUpdateData.password) {
         userUpdateData.password = await bcrypt.hash(
@@ -120,46 +126,18 @@ export const update_one_user = async (
           transaction: transaction,
         });
       }
+      // Revoke session
+      if (updatedUser[1][0].disabled) {
+        await Session.destroy({
+          where: { userId: Number(userToUpdate.id) },
+          transaction: transaction,
+        });
+      }
       await transaction.commit();
       res.status(200).json(updatedUser[1][0]);
     }
   } catch (err: unknown) {
     await transaction.rollback();
-    next(err);
-  }
-};
-
-export const disable_one_user = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const token = getTokenOrThrow(req);
-    if (token.status !== 'Admin') {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
-    }
-    const userToDisable = await User.findOne({
-      where: { username: req.params.username },
-    });
-    if (!userToDisable) {
-      throw new NotFoundError({ message: 'User to disable was not found.' });
-    }
-
-    const disabledUser = await User.update(
-      { disabled: true },
-      {
-        where: { username: userToDisable.username },
-        returning: true,
-      }
-    );
-
-    await Session.destroy({ where: { userId: Number(userToDisable.id) } });
-
-    res
-      .status(200)
-      .json({ message: `Disabled user "${disabledUser[1][0].username}"` });
-  } catch (err: unknown) {
     next(err);
   }
 };
@@ -191,6 +169,12 @@ export const delete_one_user = async (
       transaction: transaction,
     });
 
+    // Revoke session
+    await Session.destroy({
+      where: { userId: Number(userToDelete.id) },
+      transaction: transaction,
+    });
+
     if (req.query.force && req.query.force === 'true') {
       await userToDelete.destroy({ force: true, transaction: transaction });
     } else {
@@ -198,8 +182,6 @@ export const delete_one_user = async (
         transaction: transaction,
       });
     }
-
-    await Session.destroy({ where: { userId: Number(userToDelete.id) } });
 
     await transaction.commit();
     res

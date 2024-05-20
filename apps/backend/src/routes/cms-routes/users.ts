@@ -21,13 +21,6 @@ router.post('/', userController.post_new_user);
 // PUT route for updating one specific user based on username query
 router.put('/:username', tokenExtractor, userController.update_one_user);
 
-// PUT route for disabling one specific user based on username query
-router.put(
-  '/disable/:username',
-  tokenExtractor,
-  userController.disable_one_user
-);
-
 // DELETE route for deleting one specific user based on username query
 router.delete('/:username', tokenExtractor, userController.delete_one_user);
 

@@ -290,12 +290,13 @@ describe('disabling user', () => {
 
   test('fails with 404 on non-existing user', async () => {
     const response = await request(app)
-      .put('/api/cms/v1/users/disable/nonexisting')
+      .put('/api/cms/v1/users/nonexisting')
       .set('Authorization', `Bearer ${token}`)
+      .send({ disabled: true })
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
-      errors: [{ message: 'User to disable was not found.' }],
+      errors: [{ message: 'User to update was not found.' }],
     });
   });
 
@@ -308,24 +309,28 @@ describe('disabling user', () => {
     badToken = loginResponse.body.token as string;
 
     const response = await request(app)
-      .put('/api/cms/v1/users/disable/testuser')
+      .put('/api/cms/v1/users/testuser')
+      .send({ disabled: true })
       .set('Authorization', `Bearer ${badToken}`)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(401);
     expect(response.body).toMatchObject({
       errors: [{ message: 'Unauthorized to access.' }],
     });
+
+    // prettier-ignore
+    await request(app)
+      .delete('/api/cms/v1/logout');
   });
 
   test('succeeds with valid user', async () => {
     const response = await request(app)
-      .put('/api/cms/v1/users/disable/testupdateuser')
+      .put('/api/cms/v1/users/testupdateuser')
       .set('Authorization', `Bearer ${token}`)
+      .send({ disabled: true })
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
-    expect(response.body).toEqual({
-      message: 'Disabled user "testupdateuser"',
-    });
+    expect(response.body.disabled).toEqual(true);
   });
 });
 
