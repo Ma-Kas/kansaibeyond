@@ -73,15 +73,16 @@ export const get_one_post = async (
   next: NextFunction
 ) => {
   try {
+    const token = getTokenOrThrow(req);
+
     const post = await Post.findOne({
       attributes: {
-        exclude: ['createdAt', 'userId', 'categoryId'],
+        exclude: ['createdAt', 'categoryId'],
       },
       include: [
         {
           model: User,
           attributes: ['username', 'displayName', 'userIcon', 'status'],
-          where: createUserWhere(req),
         },
         {
           model: Post,
@@ -120,6 +121,10 @@ export const get_one_post = async (
     });
     if (!post) {
       throw new NotFoundError({ message: 'Post not found.' });
+    }
+
+    if (token.status !== 'Admin' && token.id !== post.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(post);
   } catch (err: unknown) {
