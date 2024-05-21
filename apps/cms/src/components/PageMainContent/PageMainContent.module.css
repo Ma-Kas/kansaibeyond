@@ -90,9 +90,7 @@
 }
 
 .page_main_content_body_card {
-  min-height: rem(500px);
   width: 100%;
-  margin-top: -1px;
   border: var(--editor-menu-border);
   border-radius: var(--dashboard-content-card-radius);
   flex-grow: 1;

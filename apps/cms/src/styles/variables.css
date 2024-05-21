@@ -60,6 +60,9 @@
   --transparent-blue-hover-bg: rgba(34, 139, 230, 0.1);
   --content-card-cover-image-edit-hover: rgba(13, 27, 95, 0.415);
 
+  /* Login Page Variables */
+  --login-card-max-width: rem(420px);
+
   /* Main Dashboard Variables */
   --dashboard-content-max-width: rem(1250px);
   --dashboard-content-padding-horizontal: rem(48px);
