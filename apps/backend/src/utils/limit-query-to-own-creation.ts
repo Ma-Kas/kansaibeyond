@@ -7,7 +7,7 @@ import { User } from '../models';
 export const createUserWhere = (req: Request) => {
   const session = getSessionOrThrow(req);
   let where: WhereOptions<InferAttributes<User, { omit: never }>> = {};
-  if (session.status !== 'Admin') {
+  if (session.role !== 'ADMIN') {
     where = {
       id: session.userId,
     };

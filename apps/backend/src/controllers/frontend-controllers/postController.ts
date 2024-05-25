@@ -43,7 +43,7 @@ export const get_all_posts = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
         },
         {
           model: Category,
@@ -93,7 +93,7 @@ export const get_one_post = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
         },
         {
           model: Post,

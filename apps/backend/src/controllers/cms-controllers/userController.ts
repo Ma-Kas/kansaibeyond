@@ -48,7 +48,7 @@ export const get_one_user = async (
     if (!user) {
       throw new NotFoundError({ message: 'User not found.' });
     }
-    if (session.status !== 'Admin' && session.userId !== user.id) {
+    if (session.role !== 'ADMIN' && session.userId !== user.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(user);
@@ -92,7 +92,7 @@ export const update_one_user = async (
     if (!userToUpdate) {
       throw new NotFoundError({ message: 'User to update was not found.' });
     }
-    if (session.status !== 'Admin' && session.userId !== userToUpdate.id) {
+    if (session.role !== 'ADMIN' && session.userId !== userToUpdate.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const userUpdateData = validateUserUpdate(req.body);
@@ -101,10 +101,10 @@ export const update_one_user = async (
       await transaction.rollback();
       res.status(204).send();
     } else {
-      // Disallow disabling users or changing user status if not admin
-      if ('disabled' in userUpdateData && session.status !== 'Admin') {
+      // Disallow disabling users or changing user role if not admin
+      if ('disabled' in userUpdateData && session.role !== 'ADMIN') {
         throw new UnauthorizedError({
-          message: 'Admin permission required',
+          message: 'ADMIN permission required',
         });
       }
       // Only re-crypt password if password has changed
@@ -156,7 +156,7 @@ export const delete_one_user = async (
     if (!userToDelete) {
       throw new NotFoundError({ message: 'User to delete was not found.' });
     }
-    if (session.status !== 'Admin' && session.userId !== userToDelete.id) {
+    if (session.role !== 'ADMIN' && session.userId !== userToDelete.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

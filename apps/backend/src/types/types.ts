@@ -2,7 +2,7 @@
 // Utility Types                                                              //
 ////////////////////////////////////////////////////////////////////////////////
 
-type UserStatus = 'Admin' | 'Writer' | 'Tech' | 'Guest';
+type UserRole = 'ADMIN' | 'TECH' | 'WRITER' | 'GUEST';
 
 type CoverImage = {
   urlSlug: string;
@@ -48,7 +48,7 @@ type User = {
   firstName: string;
   lastName: string;
   introduction?: string;
-  status: UserStatus;
+  role: UserRole;
   disabled: boolean;
 };
 
@@ -173,7 +173,7 @@ type UpdateAffiliate = Partial<NewAffiliate>;
 
 export {
   Subset,
-  UserStatus,
+  UserRole,
   User,
   NewUser,
   UpdateUser,

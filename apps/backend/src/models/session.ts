@@ -9,7 +9,7 @@ import {
 
 import { sequelize } from '../utils/db';
 import User from './user';
-import { UserStatus } from '../types/types';
+import { UserRole } from '../types/types';
 
 class Session extends Model<
   InferAttributes<Session>,
@@ -17,7 +17,7 @@ class Session extends Model<
 > {
   declare id: CreationOptional<number>;
   declare sessionId: string;
-  declare status: CreationOptional<UserStatus>;
+  declare role: CreationOptional<UserRole>;
   declare userId: ForeignKey<User['id']>;
   declare expiresAt: Date;
 }
@@ -33,9 +33,10 @@ Session.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    status: {
+    role: {
       type: DataTypes.TEXT,
-      defaultValue: 'Guest',
+      defaultValue: 'GUEST',
+      allowNull: false,
     },
     userId: {
       type: DataTypes.INTEGER,

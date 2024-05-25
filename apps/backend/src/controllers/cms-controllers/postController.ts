@@ -26,7 +26,7 @@ export const get_all_posts = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
           where: createUserWhere(req),
         },
         {
@@ -82,7 +82,7 @@ export const get_one_post = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
         },
         {
           model: Post,
@@ -123,7 +123,7 @@ export const get_one_post = async (
       throw new NotFoundError({ message: 'Post not found.' });
     }
 
-    if (session.status !== 'Admin' && session.userId !== post.userId) {
+    if (session.role !== 'ADMIN' && session.userId !== post.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(post);
@@ -197,7 +197,7 @@ export const update_one_post = async (
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
-    if (session.status !== 'Admin' && postToUpdate.userId !== session.userId) {
+    if (session.role !== 'ADMIN' && postToUpdate.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
@@ -284,7 +284,7 @@ export const trash_one_post = async (
     if (postToTrash.status === 'trash') {
       res.status(204).end();
     }
-    if (session.status !== 'Admin' && postToTrash.userId !== session.userId) {
+    if (session.role !== 'ADMIN' && postToTrash.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
@@ -317,7 +317,7 @@ export const delete_one_post = async (
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
-    if (session.status !== 'Admin' && postToDelete.userId !== session.userId) {
+    if (session.role !== 'ADMIN' && postToDelete.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

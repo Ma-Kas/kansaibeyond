@@ -17,11 +17,11 @@ const newUserSchema = z.object(
   }
 ).strict();
 
-const userStatusSchema = z.union([
-  z.literal('Admin'),
-  z.literal('Tech'),
-  z.literal('Writer'),
-  z.literal('Guest'),
+const userRoleSchema = z.union([
+  z.literal('ADMIN'),
+  z.literal('TECH'),
+  z.literal('WRITER'),
+  z.literal('GUEST'),
 ]);
 
 // prettier-ignore
@@ -44,7 +44,7 @@ const updateUserSchema = z.object(
         linkedin: z.string().url().optional().nullable(),
     }).optional(),
     disabled: z.boolean().optional(),
-    status: userStatusSchema.optional()
+    role: userRoleSchema.optional()
   }
 ).strict();
 

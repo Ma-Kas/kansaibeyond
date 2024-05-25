@@ -41,7 +41,7 @@ beforeAll(async () => {
   await request(app)
     .put('/api/cms/v1/users/affiliateTestUser')
     .set('Authorization', `Bearer ${token}`)
-    .send({ status: 'Admin' });
+    .send({ role: 'ADMIN' });
 
   // prettier-ignore
   await request(app)

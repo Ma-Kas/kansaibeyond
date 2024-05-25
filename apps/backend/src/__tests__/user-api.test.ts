@@ -162,7 +162,7 @@ describe('updating user data', () => {
   });
 
   test('succeeds with valid update data on existing user', async () => {
-    const updateData = { displayName: 'changedTestUser', status: 'Admin' };
+    const updateData = { displayName: 'changedTestUser', role: 'ADMIN' };
 
     const response = await request(app)
       .put('/api/cms/v1/users/testuser')

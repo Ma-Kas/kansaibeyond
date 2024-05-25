@@ -23,7 +23,7 @@ export const get_all_comments = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
         },
         {
           model: Post,
@@ -51,7 +51,7 @@ export const get_one_comment = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
         },
         {
           model: Post,
@@ -117,10 +117,7 @@ export const delete_one_comment = async (
       throw new NotFoundError({ message: 'Comment to delete was not found.' });
     }
 
-    if (
-      session.status !== 'Admin' &&
-      commentToDelete.userId !== session.userId
-    ) {
+    if (session.role !== 'ADMIN' && commentToDelete.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

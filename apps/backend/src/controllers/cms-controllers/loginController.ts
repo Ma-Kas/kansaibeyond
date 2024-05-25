@@ -42,7 +42,7 @@ export const post_login = async (
     await Session.create({
       sessionId: sessionId,
       userId: user.id,
-      status: user.status,
+      role: user.role,
       expiresAt: addHours(new Date(), SESSION_DURATION_HOURS),
     });
 
@@ -54,7 +54,7 @@ export const post_login = async (
       sameSite: 'lax',
     });
 
-    res.status(200).send({ username: user.username });
+    res.status(200).end();
   } catch (err: unknown) {
     next(err);
   }

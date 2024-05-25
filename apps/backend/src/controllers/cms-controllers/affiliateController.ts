@@ -25,7 +25,7 @@ export const get_all_affiliates = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
           where: createUserWhere(req),
         },
       ],
@@ -54,7 +54,7 @@ export const get_one_affiliate = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
         },
       ],
     });
@@ -62,7 +62,7 @@ export const get_one_affiliate = async (
       throw new NotFoundError({ message: 'Affiliate not found.' });
     }
 
-    if (session.status !== 'Admin' && affiliate.userId !== session.userId) {
+    if (session.role !== 'ADMIN' && affiliate.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
@@ -80,7 +80,7 @@ export const post_new_affiliate = async (
   try {
     const session = getSessionOrThrow(req);
 
-    if (session.status !== 'Admin') {
+    if (session.role !== 'ADMIN') {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const newAffiliate = validateNewAffiliate(req.body);
@@ -113,7 +113,7 @@ export const update_one_affiliate = async (
     }
 
     if (
-      session.status !== 'Admin' &&
+      session.role !== 'ADMIN' &&
       affiliateToUpdate.userId !== session.userId
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
@@ -144,7 +144,7 @@ export const delete_one_affiliate = async (
   try {
     const session = getSessionOrThrow(req);
 
-    if (session.status !== 'Admin') {
+    if (session.role !== 'ADMIN') {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

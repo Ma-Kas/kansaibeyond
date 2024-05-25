@@ -12,7 +12,7 @@ import {
 import { sequelize } from '../utils/db';
 import Contact from './contact';
 import Affiliate from './affiliate';
-import { UserStatus } from '../types/types';
+import { UserRole } from '../types/types';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
@@ -24,7 +24,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare firstName: string;
   declare lastName: string;
   declare introduction: CreationOptional<string>;
-  declare status: CreationOptional<UserStatus>;
+  declare role: CreationOptional<UserRole>;
   declare disabled: CreationOptional<boolean>;
   declare affiliateId: ForeignKey<Affiliate['id']>;
 
@@ -77,9 +77,10 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    status: {
+    role: {
       type: DataTypes.TEXT,
-      defaultValue: 'Guest',
+      defaultValue: 'GUEST',
+      allowNull: false,
     },
     disabled: {
       type: DataTypes.BOOLEAN,

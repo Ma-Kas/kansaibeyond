@@ -26,7 +26,7 @@ const postUserSchema = z.object(
     username: z.string(),
     displayName: z.string(),
     userIcon: z.string().nullable(),
-    status: z.string(),
+    role: z.string(),
   }
 ).strict();
 
