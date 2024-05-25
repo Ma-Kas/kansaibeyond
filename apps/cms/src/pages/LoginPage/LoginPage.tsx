@@ -28,10 +28,10 @@ const LoginPage = () => {
   const postLoginMutation = useMutation({
     mutationFn: postLogin,
     onSuccess: (data) => {
-      navigate(`/dashboard`);
       notifications.show(
         SuccessNotification({ bodyText: `Welcome back ${data?.username}` })
       );
+      navigate(`/dashboard`);
     },
     onError: (err) => {
       notifications.show(ErrorNotification({ bodyText: err.message }));

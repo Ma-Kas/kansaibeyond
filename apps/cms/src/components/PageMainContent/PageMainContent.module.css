@@ -90,6 +90,7 @@
 }
 
 .page_main_content_body_card {
+  min-height: var(--dashboard-content-card-min-height);
   width: 100%;
   border: var(--editor-menu-border);
   border-radius: var(--dashboard-content-card-radius);

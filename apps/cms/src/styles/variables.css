@@ -70,6 +70,7 @@
   --dashboard-content-header-padding: rem(24px);
   --dashboard-content-tabs-margin-top: rem(32px);
   --dashboard-content-tabs-gap: rem(16px);
+  --dashboard-content-card-min-height: rem(500px);
   --dashboard-content-card-radius: rem(8px);
   --dashboard-content-input-radius: rem(4px);
   --dashboard-content-input-border-color: rgb(206, 212, 218);

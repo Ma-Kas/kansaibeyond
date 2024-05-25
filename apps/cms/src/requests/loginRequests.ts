@@ -6,14 +6,15 @@ import { handleRequestErrors } from '../utils/backend-error-response-validation'
 // prettier-ignore
 const loginReturnSchema = z.object(
   {
-    token: z.string(),
     username: z.string(),
   }
 ).strict();
 
 export const postLogin = async (loginData: unknown) => {
   try {
-    const response = await axios.post(`${BACKEND_BASE_URL}/login`, loginData);
+    const response = await axios.post(`${BACKEND_BASE_URL}/login`, loginData, {
+      withCredentials: true,
+    });
     return loginReturnSchema.parse(response.data);
   } catch (err) {
     handleRequestErrors(err);
