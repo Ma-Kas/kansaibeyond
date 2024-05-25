@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import { addHours, hoursToMilliseconds } from 'date-fns';
 import bcrypt from 'bcryptjs';
 import { User, Session } from '../../models';
-import { JWT_TOKEN_SECRET } from '../../utils/config';
 import { validateLoginData } from '../../utils/validate-login-data';
 import NotFoundError from '../../errors/NotFoundError';
 import UnauthorizedError from '../../errors/UnauthorizedError';
+import { SESSION_DURATION_HOURS } from '../../utils/config';
 
 export const post_login = async (
   req: Request,
@@ -13,10 +13,6 @@ export const post_login = async (
   next: NextFunction
 ) => {
   try {
-    if (!JWT_TOKEN_SECRET) {
-      throw new Error('JWT_TOKEN_SECRET not found in env');
-    }
-
     const loginData = validateLoginData(req.body);
     const user = await User.findOne({
       where: { username: loginData.username },
@@ -40,22 +36,25 @@ export const post_login = async (
       throw new UnauthorizedError({ message: 'Wrong password.' });
     }
 
-    // Create the token for the session
-    const userForToken = {
-      id: user.id,
-      username: user.username,
-      displayName: user.displayName,
-      status: user.status,
-    };
+    const sessionId = crypto.randomUUID();
 
-    const token = jwt.sign(userForToken, JWT_TOKEN_SECRET, {
-      expiresIn: '7 days',
+    // Create entry for current session in sessions table
+    await Session.create({
+      sessionId: sessionId,
+      userId: user.id,
+      status: user.status,
+      expiresAt: addHours(new Date(), SESSION_DURATION_HOURS),
     });
 
-    // Create entry for current token in sessions table
-    await Session.create({ token: token, userId: user.id });
+    // Send cookie for session
+    res.cookie('sessionId', sessionId, {
+      maxAge: hoursToMilliseconds(SESSION_DURATION_HOURS),
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    });
 
-    res.status(200).send({ token, username: user.username });
+    res.status(200).send({ username: user.username });
   } catch (err: unknown) {
     next(err);
   }

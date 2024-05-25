@@ -11,7 +11,7 @@ import BadRequestError from '../../errors/BadRequestError';
 import NotFoundError from '../../errors/NotFoundError';
 import { sequelize } from '../../utils/db';
 import { createUserWhere } from '../../utils/limit-query-to-own-creation';
-import { getTokenOrThrow } from '../../utils/get-token-or-throw';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_users = async (
@@ -39,7 +39,7 @@ export const get_one_user = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
     const user = await User.findOne({
       where: { username: req.params.username },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -48,7 +48,7 @@ export const get_one_user = async (
     if (!user) {
       throw new NotFoundError({ message: 'User not found.' });
     }
-    if (token.status !== 'Admin' && token.id !== user.id) {
+    if (session.status !== 'Admin' && session.userId !== user.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(user);
@@ -84,7 +84,7 @@ export const update_one_user = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
     const userToUpdate = await User.findOne({
       where: { username: req.params.username },
       transaction: transaction,
@@ -92,7 +92,7 @@ export const update_one_user = async (
     if (!userToUpdate) {
       throw new NotFoundError({ message: 'User to update was not found.' });
     }
-    if (token.status !== 'Admin' && token.id !== userToUpdate.id) {
+    if (session.status !== 'Admin' && session.userId !== userToUpdate.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const userUpdateData = validateUserUpdate(req.body);
@@ -102,7 +102,7 @@ export const update_one_user = async (
       res.status(204).send();
     } else {
       // Disallow disabling users or changing user status if not admin
-      if ('disabled' in userUpdateData && token.status !== 'Admin') {
+      if ('disabled' in userUpdateData && session.status !== 'Admin') {
         throw new UnauthorizedError({
           message: 'Admin permission required',
         });
@@ -149,14 +149,14 @@ export const delete_one_user = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
     const userToDelete = await User.findOne({
       where: { username: req.params.username },
     });
     if (!userToDelete) {
       throw new NotFoundError({ message: 'User to delete was not found.' });
     }
-    if (token.status !== 'Admin' && token.id !== userToDelete.id) {
+    if (session.status !== 'Admin' && session.userId !== userToDelete.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

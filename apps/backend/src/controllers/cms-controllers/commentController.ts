@@ -7,7 +7,7 @@ import {
 } from '../../utils/validate-comment-data';
 import { NewComment, NewRegisteredComment } from '../../types/types';
 import BadRequestError from '../../errors/BadRequestError';
-import { getTokenOrThrow } from '../../utils/get-token-or-throw';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_comments = async (
@@ -76,12 +76,12 @@ export const post_new_comment = async (
   try {
     let validatedCommentData: NewComment | NewRegisteredComment;
 
-    // Get userId from token
-    const token = getTokenOrThrow(req);
+    // Get userId from session
+    const session = getSessionOrThrow(req);
 
     // Split validation whether user is found (=logged in) or not
     // Different mandatory fields
-    if (token) {
+    if (session) {
       const validatedCommentDataExUser = validateNewRegisteredComment(req.body);
 
       if (!validatedCommentDataExUser) {
@@ -89,7 +89,7 @@ export const post_new_comment = async (
       }
       // Add userId
       validatedCommentData = validatedCommentDataExUser as NewRegisteredComment;
-      validatedCommentData.userId = token.id;
+      validatedCommentData.userId = session.userId;
     } else {
       validatedCommentData = validateNewComment(req.body);
       if (!validatedCommentData) {
@@ -110,14 +110,17 @@ export const delete_one_comment = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
     const commentToDelete = await Comment.findByPk(req.params.id);
     if (!commentToDelete) {
       throw new NotFoundError({ message: 'Comment to delete was not found.' });
     }
 
-    if (token.status !== 'Admin' && commentToDelete.userId !== token.id) {
+    if (
+      session.status !== 'Admin' &&
+      commentToDelete.userId !== session.userId
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

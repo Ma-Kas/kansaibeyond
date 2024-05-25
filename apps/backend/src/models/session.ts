@@ -9,14 +9,17 @@ import {
 
 import { sequelize } from '../utils/db';
 import User from './user';
+import { UserStatus } from '../types/types';
 
 class Session extends Model<
   InferAttributes<Session>,
   InferCreationAttributes<Session>
 > {
   declare id: CreationOptional<number>;
-  declare token: string;
+  declare sessionId: string;
+  declare status: CreationOptional<UserStatus>;
   declare userId: ForeignKey<User['id']>;
+  declare expiresAt: Date;
 }
 
 Session.init(
@@ -26,8 +29,21 @@ Session.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    token: {
+    sessionId: {
       type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.TEXT,
+      defaultValue: 'Guest',
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    expiresAt: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },

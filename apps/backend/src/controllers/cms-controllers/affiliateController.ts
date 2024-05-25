@@ -9,7 +9,7 @@ import NotFoundError from '../../errors/NotFoundError';
 import BadRequestError from '../../errors/BadRequestError';
 
 import { createUserWhere } from '../../utils/limit-query-to-own-creation';
-import { getTokenOrThrow } from '../../utils/get-token-or-throw';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_affiliates = async (
@@ -44,7 +44,7 @@ export const get_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
     const affiliate = await Affiliate.findOne({
       where: { id: req.params.id },
@@ -62,7 +62,7 @@ export const get_one_affiliate = async (
       throw new NotFoundError({ message: 'Affiliate not found.' });
     }
 
-    if (token.status !== 'Admin' && affiliate.userId !== token.id) {
+    if (session.status !== 'Admin' && affiliate.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
@@ -78,9 +78,9 @@ export const post_new_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
-    if (token.status !== 'Admin') {
+    if (session.status !== 'Admin') {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const newAffiliate = validateNewAffiliate(req.body);
@@ -101,7 +101,7 @@ export const update_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
     const affiliateToUpdate = await Affiliate.findOne({
       where: { id: req.params.id },
@@ -112,7 +112,10 @@ export const update_one_affiliate = async (
       });
     }
 
-    if (token.status !== 'Admin' && affiliateToUpdate.userId !== token.id) {
+    if (
+      session.status !== 'Admin' &&
+      affiliateToUpdate.userId !== session.userId
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
@@ -139,9 +142,9 @@ export const delete_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
-    if (token.status !== 'Admin') {
+    if (session.status !== 'Admin') {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

@@ -20,13 +20,6 @@ type Subset<K> = {
     : K[attr];
 };
 
-type TokenType = {
-  id: number;
-  username: string;
-  displayName: string;
-  status: UserStatus;
-};
-
 ////////////////////////////////////////////////////////////////////////////////
 // Contact Model Types                                                        //
 ////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +174,6 @@ type UpdateAffiliate = Partial<NewAffiliate>;
 export {
   Subset,
   UserStatus,
-  TokenType,
   User,
   NewUser,
   UpdateUser,

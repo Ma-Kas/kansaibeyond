@@ -8,14 +8,22 @@ const up: Migration = async ({ context: queryInterface }) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    token: {
+    session_id: {
       type: DataTypes.TEXT,
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.TEXT,
+      defaultValue: 'Guest',
     },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'users', key: 'id' },
+    },
+    expires_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,

@@ -9,7 +9,7 @@ import { NewPost } from '../../types/types';
 import BadRequestError from '../../errors/BadRequestError';
 import NotFoundError from '../../errors/NotFoundError';
 import { sequelize } from '../../utils/db';
-import { getTokenOrThrow } from '../../utils/get-token-or-throw';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import { createUserWhere } from '../../utils/limit-query-to-own-creation';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
@@ -73,7 +73,7 @@ export const get_one_post = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
     const post = await Post.findOne({
       attributes: {
@@ -123,7 +123,7 @@ export const get_one_post = async (
       throw new NotFoundError({ message: 'Post not found.' });
     }
 
-    if (token.status !== 'Admin' && token.id !== post.userId) {
+    if (session.status !== 'Admin' && session.userId !== post.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(post);
@@ -139,9 +139,9 @@ export const post_new_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
-    const user = await User.findOne({ where: { username: token.username } });
+    const user = await User.findOne({ where: { id: session.userId } });
 
     if (!user) {
       throw new NotFoundError({ message: 'User not found' });
@@ -189,7 +189,7 @@ export const update_one_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
     const postToUpdate = await Post.findOne({
       where: { postSlug: req.params.postSlug },
       transaction: transaction,
@@ -197,7 +197,7 @@ export const update_one_post = async (
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
-    if (token.status !== 'Admin' && postToUpdate.userId !== token.id) {
+    if (session.status !== 'Admin' && postToUpdate.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
@@ -273,7 +273,7 @@ export const trash_one_post = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
     const postToTrash = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
@@ -284,7 +284,7 @@ export const trash_one_post = async (
     if (postToTrash.status === 'trash') {
       res.status(204).end();
     }
-    if (token.status !== 'Admin' && postToTrash.userId !== token.id) {
+    if (session.status !== 'Admin' && postToTrash.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
@@ -310,14 +310,14 @@ export const delete_one_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
     const postToDelete = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
-    if (token.status !== 'Admin' && postToDelete.userId !== token.id) {
+    if (session.status !== 'Admin' && postToDelete.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

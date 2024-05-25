@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { getTokenOrThrow } from '../../utils/get-token-or-throw';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 
 import { Session } from '../../models';
 
@@ -9,9 +9,9 @@ export const logout = async (
   next: NextFunction
 ) => {
   try {
-    const token = getTokenOrThrow(req);
+    const session = getSessionOrThrow(req);
 
-    await Session.destroy({ where: { userId: Number(token.id) } });
+    await Session.destroy({ where: { userId: Number(session.userId) } });
 
     res.status(204).json({ message: 'Session removed' });
   } catch (err: unknown) {
