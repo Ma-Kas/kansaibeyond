@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
 const baseAffiliate = {
   blogName: 'test affiliate blog',
@@ -14,7 +15,7 @@ const baseAffiliateWithUser = {
   userId: 1,
 };
 
-let token = '';
+let cookie = '';
 // Create user for affiliate tests with associated user, log in, promote to admin
 beforeAll(async () => {
   const affiliateTestUser = {
@@ -35,12 +36,12 @@ beforeAll(async () => {
   const response = await request(app)
     .post('/api/cms/v1/login')
     .send({ username: affiliateTestUser.username, password: affiliateTestUser.password });
-  token = response.body.token as string;
+  cookie = extractCookieFromResponse(response);
 
   // prettier-ignore
   await request(app)
     .put('/api/cms/v1/users/affiliateTestUser')
-    .set('Authorization', `Bearer ${token}`)
+    .set('Cookie', cookie)
     .send({ role: 'ADMIN' });
 
   // prettier-ignore
@@ -51,14 +52,14 @@ beforeAll(async () => {
   const adminResponse = await request(app)
     .post('/api/cms/v1/login')
     .send({ username: affiliateTestUser.username, password: affiliateTestUser.password });
-  token = adminResponse.body.token as string;
+  cookie = extractCookieFromResponse(adminResponse);
 });
 
 describe('creating a new affiliate', () => {
   test('succeeds with valid affiliate data', async () => {
     const response = await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(baseAffiliate)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
@@ -69,7 +70,7 @@ describe('creating a new affiliate', () => {
   test('succeeds with valid affiliate data associated with user', async () => {
     const response = await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(baseAffiliateWithUser)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
@@ -86,7 +87,7 @@ describe('creating a new affiliate', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newAffiliate)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -111,7 +112,7 @@ describe('creating a new affiliate', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newAffiliate)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -127,7 +128,7 @@ describe('creating a new affiliate', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newAffiliate)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -152,7 +153,7 @@ describe('creating a new affiliate', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newAffiliate)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -170,7 +171,7 @@ describe('getting affiliates', () => {
   test('without params returns all affiliates as json', async () => {
     const response = await request(app)
       .get('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
   });
@@ -178,7 +179,7 @@ describe('getting affiliates', () => {
   test('with valid id as param returns specific affiliate', async () => {
     const response = await request(app)
       .get('/api/cms/v1/affiliates/1')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.blogName).toEqual('test affiliate blog');
@@ -187,7 +188,7 @@ describe('getting affiliates', () => {
   test('with non-existing id as param returns 404', async () => {
     const response = await request(app)
       .get('/api/cms/v1/affiliates/99')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -202,11 +203,11 @@ describe('updating affiliate', () => {
     // prettier-ignore
     await request(app)
       .delete('/api/cms/v1/affiliates/test-affiliate')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Cookie', cookie);
     // prettier-ignore
     await request(app)
       .post('/api/cms/v1/affiliates')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(baseAffiliate);
   });
 
@@ -215,7 +216,7 @@ describe('updating affiliate', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/affiliates/2')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
@@ -227,7 +228,7 @@ describe('updating affiliate', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/affiliates/2')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData);
     expect(response.status).toEqual(204);
   });
@@ -237,7 +238,7 @@ describe('updating affiliate', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/affiliates/2')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData);
     // .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -256,7 +257,7 @@ describe('updating affiliate', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/affiliates/99')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
@@ -270,7 +271,7 @@ describe('deleting affiliate', () => {
   test('succeeds with existing affiliate', async () => {
     const response = await request(app)
       .delete('/api/cms/v1/affiliates/2')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
@@ -282,7 +283,7 @@ describe('deleting affiliate', () => {
     // prettier-ignore
     const response = await request(app)
       .delete('/api/cms/v1/affiliates/99')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({

@@ -97,7 +97,7 @@ const validateUserUpdate = (input: unknown): UpdateUser | null => {
     !('introduction' in input) &&
     !('contact' in input) &&
     !('disabled' in input) &&
-    !('status' in input)
+    !('role' in input)
   ) {
     return null;
   }

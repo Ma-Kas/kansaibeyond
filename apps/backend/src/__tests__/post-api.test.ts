@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
 const basePost = {
   postSlug: 'test-post',
@@ -29,7 +30,7 @@ const postUnauthorizedTestUser = {
   password: 'testPassword',
 };
 
-let token = '';
+let cookie = '';
 // Need to create user, login, create category, tag first to satisfy foreign key requirements
 beforeAll(async () => {
   const postTestCategory = {
@@ -51,18 +52,18 @@ beforeAll(async () => {
   const response = await request(app)
     .post('/api/cms/v1/login')
     .send({ username: postTestUser.username, password: postTestUser.password });
-  token = response.body.token as string;
+  cookie = extractCookieFromResponse(response);
 
   // prettier-ignore
   await request(app)
     .post('/api/cms/v1/categories')
-    .set('Authorization', `Bearer ${token}`)
+    .set('Cookie', cookie)
     .send(postTestCategory);
 
   // prettier-ignore
   await request(app)
     .post('/api/cms/v1/tags')
-    .set('Authorization', `Bearer ${token}`)
+    .set('Cookie', cookie)
     .send(postTestTag);
 });
 
@@ -71,7 +72,7 @@ describe('creating a new post', () => {
     // prettier-ignore
     const response = await request(app).post('/api/cms/v1/posts')
       .send(basePost)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
     expect(response.body.title).toEqual(basePost.title);
@@ -91,7 +92,7 @@ describe('creating a new post', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/posts')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newPost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -119,7 +120,7 @@ describe('creating a new post', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/posts')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newPost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -137,7 +138,7 @@ describe('getting post data', () => {
   test('without params returns all posts as json', async () => {
     const response = await request(app)
       .get('/api/cms/v1/posts')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body[0].user.username).toEqual('testPostUser');
@@ -149,7 +150,7 @@ describe('getting post data', () => {
   test('with valid postSlug as param returns specific post', async () => {
     const response = await request(app)
       .get('/api/cms/v1/posts/test-post')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.title).toEqual('test post title');
@@ -174,13 +175,13 @@ describe('getting post data', () => {
       const response = await request(app)
         .post('/api/cms/v1/login')
         .send({ username: postUnauthorizedTestUser.username, password: postUnauthorizedTestUser.password });
-      token = response.body.token as string;
+      cookie = extractCookieFromResponse(response);
     });
 
     test('fails with 401', async () => {
       const response = await request(app)
         .get('/api/cms/v1/posts/test-post')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(401);
       expect(response.body).toMatchObject({
@@ -202,14 +203,14 @@ describe('getting post data', () => {
       const response = await request(app)
         .post('/api/cms/v1/login')
         .send({ username: postTestUser.username, password: postTestUser.password });
-      token = response.body.token as string;
+      cookie = extractCookieFromResponse(response);
     });
   });
 
   test('with non-existing postSlug as param returns 404', async () => {
     const response = await request(app)
       .get('/api/cms/v1/posts/nonexisting')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -224,11 +225,11 @@ describe('updating post', () => {
     // prettier-ignore
     await request(app)
       .delete('/api/cms/v1/posts/test-post?force=true')
-      .set('Authorization', `Bearer ${token}`);
+      .set('Cookie', cookie);
     // prettier-ignore
     await request(app)
       .post('/api/cms/v1/posts')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(basePost);
   });
 
@@ -237,7 +238,7 @@ describe('updating post', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/posts/test-post')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
@@ -249,7 +250,7 @@ describe('updating post', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/posts/test-post')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData);
     expect(response.status).toEqual(204);
   });
@@ -259,7 +260,7 @@ describe('updating post', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/posts/test-post')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -278,7 +279,7 @@ describe('updating post', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/posts/nonexisting')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
@@ -302,7 +303,7 @@ describe('updating post', () => {
       const response = await request(app)
         .post('/api/cms/v1/login')
         .send({ username: postUnauthorizedTestUser.username, password: postUnauthorizedTestUser.password });
-      token = response.body.token as string;
+      cookie = extractCookieFromResponse(response);
     });
 
     test('fails with 401', async () => {
@@ -310,7 +311,7 @@ describe('updating post', () => {
 
       const response = await request(app)
         .put('/api/cms/v1/posts/test-post')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .send(updateData)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(401);
@@ -333,7 +334,7 @@ describe('updating post', () => {
       const response = await request(app)
         .post('/api/cms/v1/login')
         .send({ username: postTestUser.username, password: postTestUser.password });
-      token = response.body.token as string;
+      cookie = extractCookieFromResponse(response);
     });
   });
 });
@@ -354,13 +355,13 @@ describe('deleting post', () => {
       const response = await request(app)
         .post('/api/cms/v1/login')
         .send({ username: postUnauthorizedTestUser.username, password: postUnauthorizedTestUser.password });
-      token = response.body.token as string;
+      cookie = extractCookieFromResponse(response);
     });
 
     test('fails with 401', async () => {
       const response = await request(app)
         .delete('/api/cms/v1/posts/test-post?force=true')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(401);
       expect(response.body).toMatchObject({
@@ -382,14 +383,14 @@ describe('deleting post', () => {
       const response = await request(app)
         .post('/api/cms/v1/login')
         .send({ username: postTestUser.username, password: postTestUser.password });
-      token = response.body.token as string;
+      cookie = extractCookieFromResponse(response);
     });
   });
 
   test('succeeds on existing post', async () => {
     const response = await request(app)
       .delete('/api/cms/v1/posts/test-post?force=true')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
@@ -401,7 +402,7 @@ describe('deleting post', () => {
     // prettier-ignore
     const response = await request(app)
       .delete('/api/cms/v1/posts/nonexisting')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({

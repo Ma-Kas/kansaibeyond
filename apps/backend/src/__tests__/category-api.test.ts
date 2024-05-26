@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
 const baseCategory = {
   categoryName: 'test category',
@@ -17,7 +18,7 @@ const categoryTestUser = {
   password: 'testPassword',
 };
 
-let token = '';
+let cookie = '';
 // Need to create user, and log in
 beforeAll(async () => {
   // prettier-ignore
@@ -29,14 +30,14 @@ beforeAll(async () => {
   const response = await request(app)
     .post('/api/cms/v1/login')
     .send({ username: categoryTestUser.username, password: categoryTestUser.password });
-  token = response.body.token as string;
+  cookie = extractCookieFromResponse(response);
 });
 
 describe('creating a new category', () => {
   test('succeeds with valid category data', async () => {
     const response = await request(app)
       .post('/api/cms/v1/categories')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(baseCategory)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
@@ -51,7 +52,7 @@ describe('creating a new category', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/categories')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newCategory)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -74,7 +75,7 @@ describe('creating a new category', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/categories')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newCategory)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -98,7 +99,7 @@ describe('creating a new category', () => {
     // prettier-ignore
     const response = await request(app)
       .post('/api/cms/v1/categories')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(newCategory)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -117,7 +118,7 @@ describe('getting categories', () => {
   test('without params returns all categories as json', async () => {
     const response = await request(app)
       .get('/api/cms/v1/categories')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
   });
@@ -125,7 +126,7 @@ describe('getting categories', () => {
   test('with valid categorySlug as param returns specific category', async () => {
     const response = await request(app)
       .get('/api/cms/v1/categories/test-category')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.categorySlug).toEqual('test-category');
@@ -134,7 +135,7 @@ describe('getting categories', () => {
   test('with non-existing categorySlug as param returns 404', async () => {
     const response = await request(app)
       .get('/api/cms/v1/categories/nonexisting')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -148,10 +149,12 @@ describe('updating category', () => {
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/cms/v1/categories/test-category');
+      .delete('/api/cms/v1/categories/test-category')
+      .set('Cookie', cookie);
     // prettier-ignore
     await request(app)
       .post('/api/cms/v1/categories')
+      .set('Cookie', cookie)
       .send(baseCategory);
   });
 
@@ -160,7 +163,7 @@ describe('updating category', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/categories/test-category')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
@@ -172,7 +175,7 @@ describe('updating category', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/categories/test-category')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData);
     expect(response.status).toEqual(204);
   });
@@ -182,7 +185,7 @@ describe('updating category', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/categories/test-category')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData);
     // .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -201,7 +204,7 @@ describe('updating category', () => {
 
     const response = await request(app)
       .put('/api/cms/v1/categories/nonexisting')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
@@ -215,11 +218,11 @@ describe('deleting category', () => {
   test('succeeds with existing category', async () => {
     const response = await request(app)
       .delete('/api/cms/v1/categories/test-category')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
-      message: 'Deleted category "changedTestCategory"',
+      message: 'Deleted category "test category"',
     });
   });
 
@@ -231,7 +234,7 @@ describe('deleting category', () => {
     expect(response.body).toMatchObject({
       errors: [
         {
-          message: 'Invalid authorization header.',
+          message: 'Session cookie not found.',
         },
       ],
     });
@@ -241,7 +244,7 @@ describe('deleting category', () => {
     // prettier-ignore
     const response = await request(app)
       .delete('/api/cms/v1/categories/nonexisting')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -257,16 +260,6 @@ describe('deleting category', () => {
   describe('that is associated with a blog post', () => {
     // Create tag, post, user, as well as second category,
     beforeAll(async () => {
-      const categoryTestPost = {
-        postSlug: 'test-post',
-        title: 'test post title',
-        content: 'test HTML code',
-        coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
-        status: 'trash',
-        tags: [1],
-        categories: [3, 4],
-      };
-
       const categoryTestCategory = {
         categoryName: 'Category Test Category',
         categorySlug: 'category-test-category',
@@ -283,36 +276,47 @@ describe('deleting category', () => {
       };
 
       // prettier-ignore
-      const testCategoryResponse = await request(app)
+      const testCategory1Response = await request(app)
         .post('/api/cms/v1/categories')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .send(categoryTestCategory);
-      expect(testCategoryResponse.body.id).toEqual(3);
 
       // prettier-ignore
       const testCategory2Response = await request(app)
         .post('/api/cms/v1/categories')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .send(categoryTestCategory2);
-      expect(testCategory2Response.body.id).toEqual(4);
 
       // prettier-ignore
-      await request(app)
+      const testTagResponse = await request(app)
         .post('/api/cms/v1/tags')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .send(categoryTestTag);
+
+      const categoryTestPost = {
+        postSlug: 'test-post',
+        title: 'test post title',
+        content: 'test HTML code',
+        coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
+        status: 'trash',
+        tags: [testTagResponse.body.id],
+        categories: [
+          testCategory1Response.body.id,
+          testCategory2Response.body.id,
+        ],
+      };
 
       // prettier-ignore
       await request(app)
         .post('/api/cms/v1/posts')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .send(categoryTestPost);
     });
 
     test('succeeds if post has other categories', async () => {
       const response = await request(app)
         .delete('/api/cms/v1/categories/category-test-category')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(200);
       expect(response.body).toMatchObject({
@@ -323,7 +327,7 @@ describe('deleting category', () => {
     test('fails with 400 if post has no other categories', async () => {
       const response = await request(app)
         .delete('/api/cms/v1/categories/category-test-category-2')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(400);
       expect(response.body).toMatchObject({

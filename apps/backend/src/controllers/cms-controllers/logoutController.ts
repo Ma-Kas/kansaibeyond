@@ -13,7 +13,7 @@ export const logout = async (
 
     await Session.destroy({ where: { userId: Number(session.userId) } });
 
-    res.status(204).json({ message: 'Session removed' });
+    res.status(204).end();
   } catch (err: unknown) {
     next(err);
   }

@@ -28,7 +28,7 @@ const auth = async (req: Request, _res: Response, next: NextFunction) => {
     });
 
     if (!validSession) {
-      throw new UnauthorizedError({ message: 'Session not found' });
+      throw new UnauthorizedError({ message: 'Session not found.' });
     }
 
     if (!isFuture(new Date(validSession.expiresAt))) {
