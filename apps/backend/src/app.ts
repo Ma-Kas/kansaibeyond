@@ -20,7 +20,10 @@ import frontendPostRouter from './routes/frontend-routes/posts';
 import frontendCategoryRouter from './routes/frontend-routes/categories';
 
 import errorHandler from './middleware/errorHandler';
-import setCorsOptions from './utils/set-cors-options';
+import {
+  setCMSCorsOptions,
+  setFrontendCorsOptions,
+} from './utils/set-cors-options';
 
 // Express initialization
 const app = express();
@@ -29,15 +32,15 @@ const frontendRouter = express.Router();
 
 // Middleware
 // Pass to cors below
-const corsOptions = setCorsOptions();
+const corsCMSOptions = setCMSCorsOptions();
+const corsFrontendOptions = setFrontendCorsOptions();
 
 app.use(cookieParser());
-app.use(cors(corsOptions));
 app.use(express.json());
 
 // Main Routes
-app.use('/api/cms', cmsRouter);
-app.use('/api/frontend', frontendRouter);
+app.use('/api/cms', cors(corsCMSOptions), cmsRouter);
+app.use('/api/frontend', cors(corsFrontendOptions), frontendRouter);
 
 // CMS Routes
 cmsRouter.use('/v1/login', cmsLoginRouter);
