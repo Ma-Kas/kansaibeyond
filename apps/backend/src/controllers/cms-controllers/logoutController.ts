@@ -13,6 +13,13 @@ export const logout = async (
 
     await Session.destroy({ where: { userId: Number(session.userId) } });
 
+    // Clear session cookie
+    res.clearCookie('sessionId', {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    });
+
     res.status(204).end();
   } catch (err: unknown) {
     next(err);

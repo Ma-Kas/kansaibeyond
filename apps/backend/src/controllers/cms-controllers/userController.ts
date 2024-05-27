@@ -126,7 +126,19 @@ export const update_one_user = async (
           transaction: transaction,
         });
       }
-      // Revoke session
+
+      // Update Session table to reflect new role if user role changed
+      if (userUpdateData.role) {
+        await Session.update(
+          { role: userUpdateData.role },
+          {
+            where: { userId: userToUpdate.id },
+            transaction: transaction,
+          }
+        );
+      }
+
+      // Revoke session and cookie
       if (updatedUser[1][0].disabled) {
         await Session.destroy({
           where: { userId: Number(userToUpdate.id) },
