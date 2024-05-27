@@ -75,27 +75,23 @@ beforeAll(async () => {
 });
 
 describe('trying to authenticate user', () => {
-  test('returns false if no session cookie is present', async () => {
+  test('returns null if no session cookie is present', async () => {
     // prettier-ignore
     const response = await request(app)
       .get('/api/cms/v1/auth');
     expect(response.status).toEqual(200);
-    expect(response.body).toMatchObject({
-      auth: false,
-    });
+    expect(response.body).toBeNull();
   });
 
-  test('returns false if session cookie is invalid', async () => {
+  test('returns null if session cookie is invalid', async () => {
     const response = await request(app)
       .get('/api/cms/v1/auth')
       .set('Cookie', 'sessionId=invalid');
     expect(response.status).toEqual(200);
-    expect(response.body).toMatchObject({
-      auth: false,
-    });
+    expect(response.body).toBeNull();
   });
 
-  test('returns true on valid user credentials and session', async () => {
+  test('returns user on valid user credentials and session', async () => {
     // prettier-ignore
     const response = await request(app)
     .get('/api/cms/v1/auth')
@@ -103,14 +99,17 @@ describe('trying to authenticate user', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
-      auth: true,
+      id: 1,
+      displayName: baseUser.displayName,
+      userIcon: null,
+      role: 'GUEST',
     });
     expect(extractCookieFromResponse(response)).not.toBeNull();
     cookie = extractCookieFromResponse(response);
     cookieExpiration = extractCookieExpirationFromResponse(response);
   });
 
-  test('returns true and isAdmin on valid admin user credentials and session', async () => {
+  test('returns user on valid admin user credentials and session', async () => {
     // prettier-ignore
     const response = await request(app)
     .get('/api/cms/v1/auth')
@@ -118,8 +117,10 @@ describe('trying to authenticate user', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
-      auth: true,
-      isAdmin: true,
+      id: 2,
+      displayName: adminUser.displayName,
+      userIcon: null,
+      role: 'ADMIN',
     });
   });
 
@@ -134,7 +135,10 @@ describe('trying to authenticate user', () => {
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
-      auth: true,
+      id: 1,
+      displayName: baseUser.displayName,
+      userIcon: null,
+      role: 'GUEST',
     });
     expect(extractCookieFromResponse(response)).not.toBeNull();
 

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { addHours, hoursToMilliseconds, isFuture } from 'date-fns';
-import { Session } from '../../models';
+import { Session, User } from '../../models';
 import { SESSION_DURATION_HOURS } from '../../utils/config';
+import NotFoundError from '../../errors/NotFoundError';
 
 export const get_authentication = async (
   req: Request,
@@ -19,7 +20,7 @@ export const get_authentication = async (
     }
 
     if (!cookie) {
-      return res.status(200).json({ auth: false });
+      return res.status(200).json(null);
     }
 
     const validSession = await Session.findOne({
@@ -27,11 +28,11 @@ export const get_authentication = async (
     });
 
     if (!validSession) {
-      return res.status(200).json({ auth: false });
+      return res.status(200).json(null);
     }
 
     if (!isFuture(new Date(validSession.expiresAt))) {
-      return res.status(200).json({ auth: false });
+      return res.status(200).json(null);
     }
 
     const renewedSessionId = crypto.randomUUID();
@@ -55,10 +56,16 @@ export const get_authentication = async (
       sameSite: 'lax',
     });
 
-    if (validSession.role === 'ADMIN') {
-      return res.status(200).json({ auth: true, isAdmin: true });
+    const user = await User.findOne({
+      where: { id: validSession.userId },
+      attributes: ['id', 'displayName', 'userIcon', 'role'],
+    });
+
+    if (!user) {
+      throw new NotFoundError({ message: 'User not found.' });
     }
-    return res.status(200).json({ auth: true });
+
+    return res.status(200).json(user);
   } catch (err: unknown) {
     return next(err);
   }
