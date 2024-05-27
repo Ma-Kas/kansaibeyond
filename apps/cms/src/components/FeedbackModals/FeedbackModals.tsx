@@ -74,3 +74,19 @@ export const ErrorNotificationModal = ({
     ),
   };
 };
+
+export const ConfirmLogoutModal = ({
+  titleText,
+  bodyText,
+  onConfirm,
+}: ConfirmDeleteProps) => {
+  return {
+    title: <Text className={classes['title']}>{titleText}</Text>,
+    centered: true,
+    children: <Text className={classes['body']}>{bodyText}</Text>,
+    labels: { confirm: 'Logout', cancel: 'Cancel' },
+    cancelProps: { className: classes['cancelBtn'] },
+    confirmProps: { className: classes['deleteBtn'] },
+    onConfirm: onConfirm,
+  };
+};

@@ -1,17 +1,16 @@
+import { useNavigate } from 'react-router-dom';
+import { useForm, zodResolver } from '@mantine/form';
 import { TextInput, PasswordInput, Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-
 import { useMutation } from '@tanstack/react-query';
 import {
   ErrorNotification,
   SuccessNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
-
-import classes from './LoginPage.module.css';
-import { useForm, zodResolver } from '@mantine/form';
 import { loginSchema } from './types';
 import { postLogin } from '../../requests/loginRequests';
-import { useNavigate } from 'react-router-dom';
+
+import classes from './LoginPage.module.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,11 +26,11 @@ const LoginPage = () => {
 
   const postLoginMutation = useMutation({
     mutationFn: postLogin,
-    onSuccess: (data) => {
+    onSuccess: () => {
       notifications.show(
-        SuccessNotification({ bodyText: `Welcome back ${data?.username}` })
+        SuccessNotification({ bodyText: `Successfully logged in.` })
       );
-      navigate(`/dashboard`);
+      navigate(`/`);
     },
     onError: (err) => {
       notifications.show(ErrorNotification({ bodyText: err.message }));
