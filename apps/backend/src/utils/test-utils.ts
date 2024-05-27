@@ -5,4 +5,15 @@ const extractCookieFromResponse = (response: Response): string => {
   return setCookie.substring(0, setCookie.indexOf(';'));
 };
 
-export { extractCookieFromResponse };
+const extractCookieExpirationFromResponse = (response: Response): Date => {
+  const setCookie = response.headers['set-cookie'][0];
+  const expiresIndex = setCookie.search('Expires=');
+  return new Date(
+    setCookie.substring(
+      setCookie.indexOf('=', expiresIndex) + 1,
+      setCookie.indexOf(';', expiresIndex)
+    )
+  );
+};
+
+export { extractCookieFromResponse, extractCookieExpirationFromResponse };

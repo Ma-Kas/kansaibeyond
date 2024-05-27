@@ -7,6 +7,7 @@ import cors from 'cors';
 
 // Project Dependencies
 import { auth } from './middleware/auth';
+import cmsAuthRouter from './routes/cms-routes/authentication';
 import cmsLoginRouter from './routes/cms-routes/login';
 import cmsLogoutRouter from './routes/cms-routes/logout';
 import cmsUserRouter from './routes/cms-routes/users';
@@ -43,6 +44,7 @@ app.use('/api/cms', cors(corsCMSOptions), cmsRouter);
 app.use('/api/frontend', cors(corsFrontendOptions), frontendRouter);
 
 // CMS Routes
+cmsRouter.use('/v1/auth', cmsAuthRouter);
 cmsRouter.use('/v1/login', cmsLoginRouter);
 cmsRouter.use('/v1/logout', auth, cmsLogoutRouter);
 
