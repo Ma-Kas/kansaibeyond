@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 
 import express from 'express';
-import * as postController from '../controllers/postController';
+import * as postController from '../../controllers/cms-controllers/postController';
 
 const router = express.Router();
 

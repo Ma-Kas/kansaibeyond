@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 
 import express from 'express';
-import * as categoryController from '../controllers/categoryController';
+import * as categoryController from '../../controllers/cms-controllers/categoryController';
 
 const router = express.Router();
 

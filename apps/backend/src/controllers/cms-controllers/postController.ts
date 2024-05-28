@@ -1,18 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
-
-import { Post, Category, User, Comment, Tag } from '../models';
+import { Post, Category, User, Comment, Tag } from '../../models';
 import {
   validateNewPostData,
   validatePostUpdateData,
-} from '../utils/validate-post-data';
-import { NewPost } from '../types/types';
+} from '../../utils/validate-post-data';
+import { NewPost } from '../../types/types';
 
-import BadRequestError from '../errors/BadRequestError';
-import NotFoundError from '../errors/NotFoundError';
-import { sequelize } from '../utils/db';
+import BadRequestError from '../../errors/BadRequestError';
+import NotFoundError from '../../errors/NotFoundError';
+import { sequelize } from '../../utils/db';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
+import { createUserWhere } from '../../utils/limit-query-to-own-creation';
+import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_posts = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -24,7 +26,8 @@ export const get_all_posts = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
+          where: createUserWhere(req),
         },
         {
           model: Category,
@@ -51,6 +54,7 @@ export const get_all_posts = async (
           ],
         },
       ],
+      order: [['createdAt', 'DESC']],
     });
 
     if (!allPosts) {
@@ -69,14 +73,16 @@ export const get_one_post = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
     const post = await Post.findOne({
       attributes: {
-        exclude: ['createdAt', 'userId', 'categoryId'],
+        exclude: ['createdAt', 'categoryId'],
       },
       include: [
         {
           model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'status'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
         },
         {
           model: Post,
@@ -116,6 +122,10 @@ export const get_one_post = async (
     if (!post) {
       throw new NotFoundError({ message: 'Post not found.' });
     }
+
+    if (session.role !== 'ADMIN' && session.userId !== post.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
     res.status(200).json(post);
   } catch (err: unknown) {
     next(err);
@@ -129,10 +139,16 @@ export const post_new_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
-    const user = await User.findOne();
+    const session = getSessionOrThrow(req);
+
+    const user = await User.findOne({ where: { id: session.userId } });
 
     if (!user) {
       throw new NotFoundError({ message: 'User not found' });
+    }
+
+    if (!['ADMIN', 'WRITER'].includes(user.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to create post.' });
     }
 
     // Validated raw data
@@ -177,12 +193,16 @@ export const update_one_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
+    const session = getSessionOrThrow(req);
     const postToUpdate = await Post.findOne({
       where: { postSlug: req.params.postSlug },
       transaction: transaction,
     });
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
+    }
+    if (session.role !== 'ADMIN' && postToUpdate.userId !== session.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const validatedUpdateData = validatePostUpdateData(req.body);
 
@@ -257,6 +277,7 @@ export const trash_one_post = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
     const postToTrash = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
@@ -266,6 +287,9 @@ export const trash_one_post = async (
 
     if (postToTrash.status === 'trash') {
       res.status(204).end();
+    }
+    if (session.role !== 'ADMIN' && postToTrash.userId !== session.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     const updatedPost = await Post.update(
@@ -290,11 +314,15 @@ export const delete_one_post = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
+    const session = getSessionOrThrow(req);
     const postToDelete = await Post.findOne({
       where: { postSlug: req.params.postSlug },
     });
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
+    }
+    if (session.role !== 'ADMIN' && postToDelete.userId !== session.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     // Remove all associated categories, tags, relatedPosts by setting to empty array

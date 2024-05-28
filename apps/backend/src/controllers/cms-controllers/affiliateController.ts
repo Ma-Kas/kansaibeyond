@@ -1,15 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { Affiliate, User } from '../models';
+import { Affiliate, User } from '../../models';
 import {
   validateNewAffiliate,
   validateAffiliateUpdate,
-} from '../utils/validate-affiliate-data';
-import NotFoundError from '../errors/NotFoundError';
-import BadRequestError from '../errors/BadRequestError';
+} from '../../utils/validate-affiliate-data';
+import NotFoundError from '../../errors/NotFoundError';
+import BadRequestError from '../../errors/BadRequestError';
+
+import { createUserWhere } from '../../utils/limit-query-to-own-creation';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
+import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_affiliates = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -21,9 +25,11 @@ export const get_all_affiliates = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
+          where: createUserWhere(req),
         },
       ],
+      order: [['blogName', 'ASC']],
     });
 
     res.status(200).json(affiliates);
@@ -38,22 +44,28 @@ export const get_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
     const affiliate = await Affiliate.findOne({
       where: { id: req.params.id },
-
       attributes: {
         exclude: ['userId'],
       },
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
         },
       ],
     });
     if (!affiliate) {
       throw new NotFoundError({ message: 'Affiliate not found.' });
     }
+
+    if (session.role !== 'ADMIN' && affiliate.userId !== session.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     res.status(200).json(affiliate);
   } catch (err: unknown) {
     next(err);
@@ -66,6 +78,11 @@ export const post_new_affiliate = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
+    if (session.role !== 'ADMIN') {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
     const newAffiliate = validateNewAffiliate(req.body);
     if (newAffiliate) {
       const addedAffiliate = await Affiliate.create(newAffiliate);
@@ -84,6 +101,8 @@ export const update_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
     const affiliateToUpdate = await Affiliate.findOne({
       where: { id: req.params.id },
     });
@@ -92,6 +111,14 @@ export const update_one_affiliate = async (
         message: 'Affiliate to update was not found.',
       });
     }
+
+    if (
+      session.role !== 'ADMIN' &&
+      affiliateToUpdate.userId !== session.userId
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     const affiliateUpdateData = validateAffiliateUpdate(req.body);
 
     if (!affiliateUpdateData) {
@@ -115,6 +142,12 @@ export const delete_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
+    if (session.role !== 'ADMIN') {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     const affiliateToDelete = await Affiliate.findOne({
       where: { id: req.params.id },
     });

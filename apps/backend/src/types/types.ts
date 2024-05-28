@@ -2,6 +2,8 @@
 // Utility Types                                                              //
 ////////////////////////////////////////////////////////////////////////////////
 
+type UserRole = 'ADMIN' | 'TECH' | 'WRITER' | 'GUEST';
+
 type CoverImage = {
   urlSlug: string;
   altText: string;
@@ -46,7 +48,7 @@ type User = {
   firstName: string;
   lastName: string;
   introduction?: string;
-  status: 'Admin' | 'Writer' | 'Tech' | 'Guest';
+  role: UserRole;
   disabled: boolean;
 };
 
@@ -56,9 +58,10 @@ type NewUser = Pick<
 >;
 
 // Omit original userIcon, re-add in intersection to disallow null when updating
-type UpdateUser = Partial<
-  Omit<User, 'id' | 'userIcon' | 'status' | 'disabled'>
-> & { userIcon?: string; contact?: Omit<Contact, 'id'> };
+type UpdateUser = Partial<Omit<User, 'id' | 'userIcon'>> & {
+  userIcon?: string;
+  contact?: Omit<Contact, 'id'>;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Post Model Types                                                           //
@@ -170,6 +173,7 @@ type UpdateAffiliate = Partial<NewAffiliate>;
 
 export {
   Subset,
+  UserRole,
   User,
   NewUser,
   UpdateUser,

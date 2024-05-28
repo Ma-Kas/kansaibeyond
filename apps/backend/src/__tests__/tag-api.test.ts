@@ -1,15 +1,41 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
 const baseTag = {
   tagName: 'test tag',
   tagSlug: 'test-tag',
 };
 
+const tagTestUser = {
+  username: 'testPostUser',
+  firstName: 'testy',
+  lastName: 'McTester',
+  email: 'testy@test.com',
+  displayName: 'the tester',
+  password: 'testPassword',
+};
+
+let cookie = '';
+// Need to create user, and log in
+beforeAll(async () => {
+  // prettier-ignore
+  await request(app)
+      .post('/api/cms/v1/users')
+      .send(tagTestUser);
+
+  // prettier-ignore
+  const response = await request(app)
+    .post('/api/cms/v1/login')
+    .send({ username: tagTestUser.username, password: tagTestUser.password });
+  cookie = extractCookieFromResponse(response);
+});
+
 describe('creating a new tag', () => {
   test('succeeds with valid tag data', async () => {
     const response = await request(app)
-      .post('/api/tags')
+      .post('/api/cms/v1/tags')
+      .set('Cookie', cookie)
       .send(baseTag)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
@@ -23,7 +49,8 @@ describe('creating a new tag', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/tags')
+      .post('/api/cms/v1/tags')
+      .set('Cookie', cookie)
       .send(newTag)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -45,7 +72,8 @@ describe('creating a new tag', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/tags')
+      .post('/api/cms/v1/tags')
+      .set('Cookie', cookie)
       .send(newTag)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -68,7 +96,8 @@ describe('creating a new tag', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/tags')
+      .post('/api/cms/v1/tags')
+      .set('Cookie', cookie)
       .send(newTag)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -85,14 +114,16 @@ describe('creating a new tag', () => {
 describe('getting tags', () => {
   test('without params returns all tags as json', async () => {
     const response = await request(app)
-      .get('/api/tags')
+      .get('/api/cms/v1/tags')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
   });
 
   test('with valid tagSlug as param returns specific tag', async () => {
     const response = await request(app)
-      .get('/api/tags/test-tag')
+      .get('/api/cms/v1/tags/test-tag')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.tagSlug).toEqual('test-tag');
@@ -100,7 +131,8 @@ describe('getting tags', () => {
 
   test('with non-existing tagSlug as param returns 404', async () => {
     const response = await request(app)
-      .get('/api/tags/nonexisting')
+      .get('/api/cms/v1/tags/nonexisting')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -114,10 +146,12 @@ describe('updating tag', () => {
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/tags/test-tag');
+      .delete('/api/cms/v1/tags/test-tag')
+      .set('Cookie', cookie);
     // prettier-ignore
     await request(app)
-      .post('/api/tags')
+      .post('/api/cms/v1/tags')
+      .set('Cookie', cookie)
       .send(baseTag);
   });
 
@@ -125,7 +159,8 @@ describe('updating tag', () => {
     const updateData = { tagName: 'changedTestTag' };
 
     const response = await request(app)
-      .put('/api/tags/test-tag')
+      .put('/api/cms/v1/tags/test-tag')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
@@ -136,7 +171,8 @@ describe('updating tag', () => {
     const updateData = {};
 
     const response = await request(app)
-      .put('/api/tags/test-tag')
+      .put('/api/cms/v1/tags/test-tag')
+      .set('Cookie', cookie)
       .send(updateData);
     expect(response.status).toEqual(204);
   });
@@ -145,7 +181,8 @@ describe('updating tag', () => {
     const updateData = { tagName: 400 };
 
     const response = await request(app)
-      .put('/api/tags/test-tag')
+      .put('/api/cms/v1/tags/test-tag')
+      .set('Cookie', cookie)
       .send(updateData);
     // .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -159,11 +196,29 @@ describe('updating tag', () => {
     });
   });
 
+  test('fails with 401 if not logged in', async () => {
+    const updateData = { tagName: 'a new tag name' };
+
+    const response = await request(app)
+      .put('/api/cms/v1/tags/test-tag')
+      .send(updateData);
+    // .expect('Content-Type', /application\/json/);
+    expect(response.status).toEqual(401);
+    expect(response.body).toMatchObject({
+      errors: [
+        {
+          message: 'Session cookie not found.',
+        },
+      ],
+    });
+  });
+
   test('fails with 404 with valid update data on non-existing tag', async () => {
     const updateData = { tagName: 'changedTestTag' };
 
     const response = await request(app)
-      .put('/api/tags/nonexisting')
+      .put('/api/cms/v1/tags/nonexisting')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
@@ -176,7 +231,8 @@ describe('updating tag', () => {
 describe('deleting tag', () => {
   test('succeeds with existing tag', async () => {
     const response = await request(app)
-      .delete('/api/tags/test-tag')
+      .delete('/api/cms/v1/tags/test-tag')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
@@ -187,7 +243,8 @@ describe('deleting tag', () => {
   test('fails with 404 on non-existing tag', async () => {
     // prettier-ignore
     const response = await request(app)
-      .delete('/api/tags/nonexisting')
+      .delete('/api/cms/v1/tags/nonexisting')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -199,19 +256,10 @@ describe('deleting tag', () => {
       ],
     });
   });
+
   describe('that is associated with a blog post', () => {
     // Create category, post, user, as well as second tag,
     beforeAll(async () => {
-      const tagTestPost = {
-        postSlug: 'test-post',
-        title: 'test post title',
-        content: 'test HTML code',
-        coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
-        status: 'trash',
-        tags: [7, 8],
-        categories: [1],
-      };
-
       const tagTestCategory = {
         categoryName: 'Tag Test Category',
         categorySlug: 'tag-test-category',
@@ -227,46 +275,44 @@ describe('deleting tag', () => {
         tagSlug: 'tag-test-tag-2',
       };
 
-      const tagTestUser = {
-        username: 'testUser',
-        firstName: 'testy',
-        lastName: 'McTester',
-        email: 'testy@test.com',
-        displayName: 'the tester',
-        password: 'testPassword',
+      // prettier-ignore
+      const categoryResponse = await request(app)
+        .post('/api/cms/v1/categories')
+        .set('Cookie', cookie)
+        .send(tagTestCategory);
+
+      // prettier-ignore
+      const tag1Response = await request(app)
+        .post('/api/cms/v1/tags')
+        .set('Cookie', cookie)
+        .send(tagTestTag);
+
+      // prettier-ignore
+      const tag2Response = await request(app)
+        .post('/api/cms/v1/tags')
+        .set('Cookie', cookie)
+        .send(tagTestTag2);
+
+      const tagTestPost = {
+        postSlug: 'test-post',
+        title: 'test post title',
+        content: 'test HTML code',
+        coverImage: { urlSlug: 'testImage.png', altText: 'test alt' },
+        status: 'trash',
+        tags: [tag1Response.body.id, tag2Response.body.id],
+        categories: [categoryResponse.body.id],
       };
 
       // prettier-ignore
-      const response2 = await request(app)
-        .post('/api/categories')
-        .send(tagTestCategory);
-      expect(response2.body.id).toEqual(1);
-
-      // prettier-ignore
-      const response3 = await request(app)
-        .post('/api/tags')
-        .send(tagTestTag);
-      expect(response3.body.id).toEqual(7);
-
-      // prettier-ignore
-      const response4 = await request(app)
-        .post('/api/tags')
-        .send(tagTestTag2);
-      expect(response4.body.id).toEqual(8);
-
-      // prettier-ignore
       await request(app)
-        .post('/api/users')
-        .send(tagTestUser);
-
-      // prettier-ignore
-      await request(app)
-        .post('/api/posts')
+        .post('/api/cms/v1/posts')
+        .set('Cookie', cookie)
         .send(tagTestPost);
     });
     test('succeeds if post has other tag', async () => {
       const response = await request(app)
-        .delete('/api/tags/tag-test-tag')
+        .delete('/api/cms/v1/tags/tag-test-tag')
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(200);
       expect(response.body).toMatchObject({
@@ -275,7 +321,8 @@ describe('deleting tag', () => {
     });
     test('fails with 400 if post has no other tags', async () => {
       const response = await request(app)
-        .delete('/api/tags/tag-test-tag-2')
+        .delete('/api/cms/v1/tags/tag-test-tag-2')
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(400);
       expect(response.body).toMatchObject({

@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
 const basePost = {
   postSlug: 'test-post',
@@ -11,7 +12,26 @@ const basePost = {
   categories: [1],
 };
 
-// Need to create user, category and tag first to satisfy foreign key requirements
+const postTestUser = {
+  username: 'testPostUser',
+  firstName: 'testy',
+  lastName: 'McTester',
+  email: 'testy@test.com',
+  displayName: 'the tester',
+  password: 'testPassword',
+};
+
+const postUnauthorizedTestUser = {
+  username: 'unauthorizedUser',
+  firstName: 'testy',
+  lastName: 'McTester',
+  email: 'testy2@test.com',
+  displayName: 'the tester 2',
+  password: 'testPassword',
+};
+
+let cookie = '';
+// Need to create user, login, create category, tag first to satisfy foreign key requirements
 beforeAll(async () => {
   const postTestCategory = {
     categoryName: 'Test Post Category',
@@ -23,36 +43,36 @@ beforeAll(async () => {
     tagSlug: 'test-post-tag',
   };
 
-  const postTestUser = {
-    username: 'testPostUser',
-    firstName: 'testy',
-    lastName: 'McTester',
-    email: 'testy@test.com',
-    displayName: 'the tester',
-    password: 'testPassword',
-  };
+  // prettier-ignore
+  await request(app)
+    .post('/api/cms/v1/users')
+    .send(postTestUser);
+
+  // prettier-ignore
+  const response = await request(app)
+    .post('/api/cms/v1/login')
+    .send({ username: postTestUser.username, password: postTestUser.password });
+  cookie = extractCookieFromResponse(response);
 
   // prettier-ignore
   await request(app)
-      .post('/api/categories')
-      .send(postTestCategory);
+    .post('/api/cms/v1/categories')
+    .set('Cookie', cookie)
+    .send(postTestCategory);
 
   // prettier-ignore
   await request(app)
-    .post('/api/tags')
+    .post('/api/cms/v1/tags')
+    .set('Cookie', cookie)
     .send(postTestTag);
-
-  // prettier-ignore
-  await request(app)
-      .post('/api/users')
-      .send(postTestUser);
 });
 
 describe('creating a new post', () => {
   test('succeeds with valid post data', async () => {
     // prettier-ignore
-    const response = await request(app).post('/api/posts')
+    const response = await request(app).post('/api/cms/v1/posts')
       .send(basePost)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
     expect(response.body.title).toEqual(basePost.title);
@@ -71,7 +91,8 @@ describe('creating a new post', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/posts')
+      .post('/api/cms/v1/posts')
+      .set('Cookie', cookie)
       .send(newPost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -98,7 +119,8 @@ describe('creating a new post', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/posts')
+      .post('/api/cms/v1/posts')
+      .set('Cookie', cookie)
       .send(newPost)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -115,7 +137,8 @@ describe('creating a new post', () => {
 describe('getting post data', () => {
   test('without params returns all posts as json', async () => {
     const response = await request(app)
-      .get('/api/posts')
+      .get('/api/cms/v1/posts')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body[0].user.username).toEqual('testPostUser');
@@ -126,7 +149,8 @@ describe('getting post data', () => {
 
   test('with valid postSlug as param returns specific post', async () => {
     const response = await request(app)
-      .get('/api/posts/test-post')
+      .get('/api/cms/v1/posts/test-post')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.title).toEqual('test post title');
@@ -136,9 +160,57 @@ describe('getting post data', () => {
     );
   });
 
+  describe('that belongs to other user', () => {
+    // log out, create other user, login
+    beforeAll(async () => {
+      // prettier-ignore
+      await request(app)
+        .delete('/api/cms/v1/logout');
+      // prettier-ignore
+      await request(app)
+        .post('/api/cms/v1/users')
+        .send(postUnauthorizedTestUser);
+
+      // prettier-ignore
+      const response = await request(app)
+        .post('/api/cms/v1/login')
+        .send({ username: postUnauthorizedTestUser.username, password: postUnauthorizedTestUser.password });
+      cookie = extractCookieFromResponse(response);
+    });
+
+    test('fails with 401', async () => {
+      const response = await request(app)
+        .get('/api/cms/v1/posts/test-post')
+        .set('Cookie', cookie)
+        .expect('Content-Type', /application\/json/);
+      expect(response.status).toEqual(401);
+      expect(response.body).toMatchObject({
+        errors: [
+          {
+            message: 'Unauthorized to access.',
+          },
+        ],
+      });
+    });
+
+    // log out, log original user back in
+    afterAll(async () => {
+      // prettier-ignore
+      await request(app)
+        .delete('/api/cms/v1/logout');
+
+      // prettier-ignore
+      const response = await request(app)
+        .post('/api/cms/v1/login')
+        .send({ username: postTestUser.username, password: postTestUser.password });
+      cookie = extractCookieFromResponse(response);
+    });
+  });
+
   test('with non-existing postSlug as param returns 404', async () => {
     const response = await request(app)
-      .get('/api/posts/nonexisting')
+      .get('/api/cms/v1/posts/nonexisting')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -152,10 +224,12 @@ describe('updating post', () => {
   beforeEach(async () => {
     // prettier-ignore
     await request(app)
-      .delete('/api/posts/test-post?force=true');
+      .delete('/api/cms/v1/posts/test-post?force=true')
+      .set('Cookie', cookie);
     // prettier-ignore
     await request(app)
-      .post('/api/posts')
+      .post('/api/cms/v1/posts')
+      .set('Cookie', cookie)
       .send(basePost);
   });
 
@@ -163,7 +237,8 @@ describe('updating post', () => {
     const updateData = { title: 'changed Test Post Title' };
 
     const response = await request(app)
-      .put('/api/posts/test-post')
+      .put('/api/cms/v1/posts/test-post')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
@@ -174,7 +249,8 @@ describe('updating post', () => {
     const updateData = {};
 
     const response = await request(app)
-      .put('/api/posts/test-post')
+      .put('/api/cms/v1/posts/test-post')
+      .set('Cookie', cookie)
       .send(updateData);
     expect(response.status).toEqual(204);
   });
@@ -183,7 +259,8 @@ describe('updating post', () => {
     const updateData = { title: 400 };
 
     const response = await request(app)
-      .put('/api/posts/test-post')
+      .put('/api/cms/v1/posts/test-post')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -201,7 +278,8 @@ describe('updating post', () => {
     const updateData = { title: 'changed Test Post Title' };
 
     const response = await request(app)
-      .put('/api/posts/nonexisting')
+      .put('/api/cms/v1/posts/nonexisting')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
@@ -209,12 +287,110 @@ describe('updating post', () => {
       errors: [{ message: 'Post to update was not found.' }],
     });
   });
+
+  describe('that belongs to other user', () => {
+    // log out, create other user, login
+    beforeAll(async () => {
+      // prettier-ignore
+      await request(app)
+        .delete('/api/cms/v1/logout');
+      // prettier-ignore
+      await request(app)
+        .post('/api/cms/v1/users')
+        .send(postUnauthorizedTestUser);
+
+      // prettier-ignore
+      const response = await request(app)
+        .post('/api/cms/v1/login')
+        .send({ username: postUnauthorizedTestUser.username, password: postUnauthorizedTestUser.password });
+      cookie = extractCookieFromResponse(response);
+    });
+
+    test('fails with 401', async () => {
+      const updateData = { title: 'changed Test Post Title' };
+
+      const response = await request(app)
+        .put('/api/cms/v1/posts/test-post')
+        .set('Cookie', cookie)
+        .send(updateData)
+        .expect('Content-Type', /application\/json/);
+      expect(response.status).toEqual(401);
+      expect(response.body).toMatchObject({
+        errors: [
+          {
+            message: 'Unauthorized to access.',
+          },
+        ],
+      });
+    });
+
+    // log out, log original user back in
+    afterAll(async () => {
+      // prettier-ignore
+      await request(app)
+        .delete('/api/cms/v1/logout');
+
+      // prettier-ignore
+      const response = await request(app)
+        .post('/api/cms/v1/login')
+        .send({ username: postTestUser.username, password: postTestUser.password });
+      cookie = extractCookieFromResponse(response);
+    });
+  });
 });
 
 describe('deleting post', () => {
+  describe('that belongs to other user', () => {
+    // log out, create other user, login
+    beforeAll(async () => {
+      // prettier-ignore
+      await request(app)
+        .delete('/api/cms/v1/logout');
+      // prettier-ignore
+      await request(app)
+        .post('/api/cms/v1/users')
+        .send(postUnauthorizedTestUser);
+
+      // prettier-ignore
+      const response = await request(app)
+        .post('/api/cms/v1/login')
+        .send({ username: postUnauthorizedTestUser.username, password: postUnauthorizedTestUser.password });
+      cookie = extractCookieFromResponse(response);
+    });
+
+    test('fails with 401', async () => {
+      const response = await request(app)
+        .delete('/api/cms/v1/posts/test-post?force=true')
+        .set('Cookie', cookie)
+        .expect('Content-Type', /application\/json/);
+      expect(response.status).toEqual(401);
+      expect(response.body).toMatchObject({
+        errors: [
+          {
+            message: 'Unauthorized to access.',
+          },
+        ],
+      });
+    });
+
+    // log out, log original user back in
+    afterAll(async () => {
+      // prettier-ignore
+      await request(app)
+        .delete('/api/cms/v1/logout');
+
+      // prettier-ignore
+      const response = await request(app)
+        .post('/api/cms/v1/login')
+        .send({ username: postTestUser.username, password: postTestUser.password });
+      cookie = extractCookieFromResponse(response);
+    });
+  });
+
   test('succeeds on existing post', async () => {
     const response = await request(app)
-      .delete('/api/posts/test-post?force=true')
+      .delete('/api/cms/v1/posts/test-post?force=true')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({
@@ -225,7 +401,8 @@ describe('deleting post', () => {
   test('fails with 404 on non-existing post', async () => {
     // prettier-ignore
     const response = await request(app)
-      .delete('/api/posts/nonexisting')
+      .delete('/api/cms/v1/posts/nonexisting')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({

@@ -1,39 +1,63 @@
+/* eslint @typescript-eslint/no-misused-promises: 0 */
+
 // Global Dependencies
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 // Project Dependencies
-import userRouter from './routes/users';
-import categoryRouter from './routes/categories';
-import postRouter from './routes/posts';
-import tagRouter from './routes/tags';
-import commentRouter from './routes/comments';
-import affiliateRouter from './routes/affiliates';
+import { auth } from './middleware/auth';
+import cmsAuthRouter from './routes/cms-routes/authentication';
+import cmsLoginRouter from './routes/cms-routes/login';
+import cmsLogoutRouter from './routes/cms-routes/logout';
+import cmsUserRouter from './routes/cms-routes/users';
+import cmsCategoryRouter from './routes/cms-routes/categories';
+import cmsPostRouter from './routes/cms-routes/posts';
+import cmsTagRouter from './routes/cms-routes/tags';
+import cmsCommentRouter from './routes/cms-routes/comments';
+import cmsAffiliateRouter from './routes/cms-routes/affiliates';
+
+import frontendPostRouter from './routes/frontend-routes/posts';
+import frontendCategoryRouter from './routes/frontend-routes/categories';
 
 import errorHandler from './middleware/errorHandler';
+import {
+  setCMSCorsOptions,
+  setFrontendCorsOptions,
+} from './utils/set-cors-options';
 
 // Express initialization
 const app = express();
+const cmsRouter = express.Router();
+const frontendRouter = express.Router();
 
 // Middleware
-// Setting allowed addresses to communicate with backend
-// const allowedOrigins = [''];
-
 // Pass to cors below
-// const options: cors.CorsOptions = {
-//   origin: allowedOrigins,
-// };
+const corsCMSOptions = setCMSCorsOptions();
+const corsFrontendOptions = setFrontendCorsOptions();
 
-app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 
-// Routes
-app.use('/api/users', userRouter);
-app.use('/api/categories', categoryRouter);
-app.use('/api/posts', postRouter);
-app.use('/api/tags', tagRouter);
-app.use('/api/comments', commentRouter);
-app.use('/api/affiliates', affiliateRouter);
+// Main Routes
+app.use('/api/cms', cors(corsCMSOptions), cmsRouter);
+app.use('/api/frontend', cors(corsFrontendOptions), frontendRouter);
+
+// CMS Routes
+cmsRouter.use('/v1/auth', cmsAuthRouter);
+cmsRouter.use('/v1/login', cmsLoginRouter);
+cmsRouter.use('/v1/logout', auth, cmsLogoutRouter);
+
+cmsRouter.use('/v1/users', cmsUserRouter);
+cmsRouter.use('/v1/categories', auth, cmsCategoryRouter);
+cmsRouter.use('/v1/posts', auth, cmsPostRouter);
+cmsRouter.use('/v1/tags', auth, cmsTagRouter);
+cmsRouter.use('/v1/comments', auth, cmsCommentRouter);
+cmsRouter.use('/v1/affiliates', auth, cmsAffiliateRouter);
+
+// Frontend Routes
+frontendRouter.use('/v1/posts', frontendPostRouter);
+frontendRouter.use('/v1/categories', frontendCategoryRouter);
 
 // Error Handling
 app.use(errorHandler);

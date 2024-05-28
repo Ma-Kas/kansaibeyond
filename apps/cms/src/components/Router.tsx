@@ -1,7 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+
+// General Imports
+import { authLoader } from '../utils/auth-loader';
+import AuthProvider from '../context/AuthContext';
+import HeaderMain from './HeaderMain/HeaderMain';
 
 // Route Imports
 import App from '../pages/App/App';
+import LoginPage from '../pages/LoginPage/LoginPage';
+import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import MainShell from './PageShell/MainShell';
 import ComposerShell from './PageShell/ComposerShell';
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage';
@@ -14,12 +22,19 @@ import UpdateBlogCategory from '../pages/NewUpdateBlogCategory/UpdateBlogCategor
 import BlogTags from '../pages/BlogTags/BlogTags';
 import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
 import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
+import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
 
 const Router = () => {
+  const queryClient = useQueryClient();
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <App />,
+      element: (
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      ),
+      loader: authLoader(queryClient),
       children: [
         { index: true, element: <MainShell /> },
         {
@@ -67,6 +82,31 @@ const Router = () => {
         { path: 'composer/new-post', element: <ComposerShell /> },
         { path: 'composer/edit/:postSlug', element: <ComposerShell /> },
       ],
+    },
+    {
+      path: '/login',
+      element: (
+        <AuthProvider>
+          <LoginPage /> <HeaderMain authorized={false} />
+        </AuthProvider>
+      ),
+    },
+    {
+      path: '/signup',
+      element: (
+        <>
+          <SignUpPage /> <HeaderMain authorized={false} />
+        </>
+      ),
+    },
+    {
+      path: '/disabled',
+      element: (
+        <AuthProvider>
+          <DisabledErrorPage />
+          <HeaderMain authorized={false} />
+        </AuthProvider>
+      ),
     },
   ]);
 

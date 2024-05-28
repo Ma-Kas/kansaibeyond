@@ -60,6 +60,12 @@
   --transparent-blue-hover-bg: rgba(34, 139, 230, 0.1);
   --content-card-cover-image-edit-hover: rgba(13, 27, 95, 0.415);
 
+  /* Login Page Variables */
+  --signup-login-container-padding-horizontal: rem(16px);
+  --signup-login-card-max-width: rem(420px);
+  --signup-login-card-button-margin: rem(32px);
+  --signup-login-card-button-gap: rem(32px);
+
   /* Main Dashboard Variables */
   --dashboard-content-max-width: rem(1250px);
   --dashboard-content-padding-horizontal: rem(48px);
@@ -67,6 +73,7 @@
   --dashboard-content-header-padding: rem(24px);
   --dashboard-content-tabs-margin-top: rem(32px);
   --dashboard-content-tabs-gap: rem(16px);
+  --dashboard-content-card-min-height: rem(500px);
   --dashboard-content-card-radius: rem(8px);
   --dashboard-content-input-radius: rem(4px);
   --dashboard-content-input-border-color: rgb(206, 212, 218);

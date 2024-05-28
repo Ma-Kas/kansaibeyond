@@ -1,18 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 
-import { Comment, Contact, Post, User } from '../models';
+import { Comment, Contact, Post, Session, User } from '../../models';
 import {
   validateNewUser,
   validateUserUpdate,
-} from '../utils/validate-user-data';
+} from '../../utils/validate-user-data';
 
-import BadRequestError from '../errors/BadRequestError';
-import NotFoundError from '../errors/NotFoundError';
-import { sequelize } from '../utils/db';
+import BadRequestError from '../../errors/BadRequestError';
+import NotFoundError from '../../errors/NotFoundError';
+import { sequelize } from '../../utils/db';
+import { createUserWhere } from '../../utils/limit-query-to-own-creation';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
+import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_users = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -20,6 +23,8 @@ export const get_all_users = async (
     const allUsers = await User.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [{ model: Post }, { model: Comment }, { model: Contact }],
+      where: createUserWhere(req),
+      order: [['displayName', 'ASC']],
     });
 
     res.status(200).json(allUsers);
@@ -34,6 +39,7 @@ export const get_one_user = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
     const user = await User.findOne({
       where: { username: req.params.username },
       attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -41,6 +47,9 @@ export const get_one_user = async (
     });
     if (!user) {
       throw new NotFoundError({ message: 'User not found.' });
+    }
+    if (session.role !== 'ADMIN' && session.userId !== user.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(user);
   } catch (err: unknown) {
@@ -75,6 +84,7 @@ export const update_one_user = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
+    const session = getSessionOrThrow(req);
     const userToUpdate = await User.findOne({
       where: { username: req.params.username },
       transaction: transaction,
@@ -82,12 +92,21 @@ export const update_one_user = async (
     if (!userToUpdate) {
       throw new NotFoundError({ message: 'User to update was not found.' });
     }
+    if (session.role !== 'ADMIN' && session.userId !== userToUpdate.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
     const userUpdateData = validateUserUpdate(req.body);
     // No update data => return original user
     if (!userUpdateData) {
       await transaction.rollback();
       res.status(204).send();
     } else {
+      // Disallow disabling users or changing user role if not admin
+      if ('disabled' in userUpdateData && session.role !== 'ADMIN') {
+        throw new UnauthorizedError({
+          message: 'ADMIN permission required',
+        });
+      }
       // Only re-crypt password if password has changed
       if (userUpdateData.password) {
         userUpdateData.password = await bcrypt.hash(
@@ -107,39 +126,30 @@ export const update_one_user = async (
           transaction: transaction,
         });
       }
+
+      // Update Session table to reflect new role if user role changed
+      if (userUpdateData.role) {
+        await Session.update(
+          { role: userUpdateData.role },
+          {
+            where: { userId: userToUpdate.id },
+            transaction: transaction,
+          }
+        );
+      }
+
+      // Revoke sessions
+      if (updatedUser[1][0].disabled) {
+        await Session.destroy({
+          where: { userId: Number(userToUpdate.id) },
+          transaction: transaction,
+        });
+      }
       await transaction.commit();
       res.status(200).json(updatedUser[1][0]);
     }
   } catch (err: unknown) {
     await transaction.rollback();
-    next(err);
-  }
-};
-
-export const disable_one_user = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const userToDisable = await User.findOne({
-      where: { username: req.params.username },
-    });
-    if (!userToDisable) {
-      throw new NotFoundError({ message: 'User to disable was not found.' });
-    }
-
-    const disabledUser = await User.update(
-      { disabled: true },
-      {
-        where: { username: userToDisable.username },
-        returning: true,
-      }
-    );
-    res
-      .status(200)
-      .json({ message: `Disabled user "${disabledUser[1][0].username}"` });
-  } catch (err: unknown) {
     next(err);
   }
 };
@@ -151,11 +161,15 @@ export const delete_one_user = async (
 ) => {
   const transaction = await sequelize.transaction();
   try {
+    const session = getSessionOrThrow(req);
     const userToDelete = await User.findOne({
       where: { username: req.params.username },
     });
     if (!userToDelete) {
       throw new NotFoundError({ message: 'User to delete was not found.' });
+    }
+    if (session.role !== 'ADMIN' && session.userId !== userToDelete.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     // Get associated contact row in contact table to delete along with user
@@ -164,6 +178,12 @@ export const delete_one_user = async (
       transaction: transaction,
     });
     await contactToDelete?.destroy({
+      transaction: transaction,
+    });
+
+    // Revoke session
+    await Session.destroy({
+      where: { userId: Number(userToDelete.id) },
       transaction: transaction,
     });
 

@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { Category, Post } from '../models';
+import { Category, Post } from '../../models';
 import {
   validateNewCategory,
   validateCategoryUpdate,
-} from '../utils/validate-category-data';
+} from '../../utils/validate-category-data';
 
-import { MIN_CATEGORIES_PER_POST } from '../utils/constants';
-import NotFoundError from '../errors/NotFoundError';
-import BadRequestError from '../errors/BadRequestError';
-import { sequelize } from '../utils/db';
+import { MIN_CATEGORIES_PER_POST } from '../../utils/constants';
+import NotFoundError from '../../errors/NotFoundError';
+import BadRequestError from '../../errors/BadRequestError';
+import { sequelize } from '../../utils/db';
 
 export const get_all_categories = async (
   _req: Request,
@@ -27,6 +27,7 @@ export const get_all_categories = async (
           },
         },
       ],
+      order: [['categoryName', 'ASC']],
     });
 
     res.status(200).json(categories);

@@ -1,14 +1,9 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
-const baseComment = {
-  content: 'test comment',
-  name: 'test comment author',
-  email: 'testauthor@test.com',
-  postId: 1,
-};
-
-// Need to create user, category, tag and post first to satisfy foreign key requirements
+let cookie = '';
+// Need to create user, login, create category, tag and post first to satisfy foreign key requirements
 beforeAll(async () => {
   const commentTestCategory = {
     categoryName: 'Comment Test Category',
@@ -41,67 +36,44 @@ beforeAll(async () => {
 
   // prettier-ignore
   await request(app)
-    .post('/api/categories')
+    .post('/api/cms/v1/users')
+    .send(commentTestUser);
+
+  // prettier-ignore
+  const response = await request(app)
+    .post('/api/cms/v1/login')
+    .send({ username: commentTestUser.username, password: commentTestUser.password });
+  cookie = extractCookieFromResponse(response);
+
+  // prettier-ignore
+  await request(app)
+    .post('/api/cms/v1/categories')
+    .set('Cookie', cookie)
     .send(commentTestCategory);
 
   // prettier-ignore
   await request(app)
-    .post('/api/tags')
+    .post('/api/cms/v1/tags')
+    .set('Cookie', cookie)
     .send(commentTestTag);
 
   // prettier-ignore
   await request(app)
-    .post('/api/users')
-    .send(commentTestUser);
-
-  // prettier-ignore
-  await request(app)
-    .post('/api/posts')
+    .post('/api/cms/v1/posts')
+    .set('Cookie', cookie)
     .send(commentTestPost);
 });
 
 describe('creating a new comment', () => {
-  describe('if not logged in', () => {
-    beforeEach(async () => {
-      // Delete user to simulate not logged in
-      // prettier-ignore
-      await request(app)
-        .delete('/api/users/commentTestUser?force=true');
-    });
-
-    test('succeeds with valid comment data non-registered user', async () => {
-      // prettier-ignore
-      const response = await request(app).post('/api/comments')
-        .send(baseComment)
-        .expect('Content-Type', /application\/json/);
-      expect(response.status).toEqual(201);
-      expect(response.body.content).toEqual(baseComment.content);
-    });
-
-    afterEach(async () => {
-      const commentTestUser = {
-        username: 'commentTestUser',
-        firstName: 'testy',
-        lastName: 'McTester',
-        email: 'testy@test.com',
-        displayName: 'the tester',
-        password: 'testPassword',
-      };
-      // prettier-ignore
-      await request(app)
-        .post('/api/users')
-        .send(commentTestUser);
-    });
-  });
-
   test('succeeds with valid comment data registered user', async () => {
     const registeredComment = {
       content: 'test comment',
       postId: 1,
     };
     // prettier-ignore
-    const response = await request(app).post('/api/comments')
+    const response = await request(app).post('/api/cms/v1/comments')
       .send(registeredComment)
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
     expect(response.body.content).toEqual(registeredComment.content);
@@ -117,7 +89,8 @@ describe('creating a new comment', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/comments')
+      .post('/api/cms/v1/comments')
+      .set('Cookie', cookie)
       .send(newComment)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -136,7 +109,8 @@ describe('creating a new comment', () => {
 describe('getting comment data', () => {
   test('without params returns all comments as json', async () => {
     const response = await request(app)
-      .get('/api/comments')
+      .get('/api/cms/v1/comments')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body[0].content).toEqual('test comment');
@@ -145,7 +119,8 @@ describe('getting comment data', () => {
 
   test('with valid id as param returns specific comment', async () => {
     const response = await request(app)
-      .get('/api/comments/2')
+      .get('/api/cms/v1/comments/1')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.content).toEqual('test comment');
@@ -155,7 +130,8 @@ describe('getting comment data', () => {
 
   test('with non-existing id as param returns 404', async () => {
     const response = await request(app)
-      .get('/api/comments/3434')
+      .get('/api/cms/v1/comments/3434')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -167,7 +143,8 @@ describe('getting comment data', () => {
 describe('deleting comment', () => {
   test('succeeds on existing comment', async () => {
     const response = await request(app)
-      .delete('/api/comments/2')
+      .delete('/api/cms/v1/comments/1')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body).toMatchObject({ message: 'Comment deleted' });
@@ -176,7 +153,8 @@ describe('deleting comment', () => {
   test('fails with 404 on non-existing comment', async () => {
     // prettier-ignore
     const response = await request(app)
-      .delete('/api/comments/545454')
+      .delete('/api/cms/v1/comments/545454')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({

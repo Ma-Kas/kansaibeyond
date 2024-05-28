@@ -13,7 +13,7 @@ const titleLink = {
   label: 'Kansai & Beyond',
 };
 
-const HeaderMain = () => {
+const HeaderMain = ({ authorized }: { authorized: boolean }) => {
   const items = menuLinks.map((link) => {
     return (
       <a
@@ -44,7 +44,7 @@ const HeaderMain = () => {
             {items}
           </Group>
 
-          <HeaderUserMenu />
+          {authorized && <HeaderUserMenu />}
         </div>
       </Container>
     </header>

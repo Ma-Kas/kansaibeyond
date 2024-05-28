@@ -2,6 +2,7 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import axios from 'axios';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
@@ -11,6 +12,8 @@ import './styles/index.css';
 import './styles/variables.css';
 import './styles/editor.css';
 import { theme } from './theme';
+
+axios.defaults.withCredentials = true;
 
 const queryClient = new QueryClient({
   defaultOptions: {

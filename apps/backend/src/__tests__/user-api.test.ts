@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../app';
+import { extractCookieFromResponse } from '../utils/test-utils';
 
 const baseUser = {
   username: 'testuser',
@@ -10,10 +11,38 @@ const baseUser = {
   password: 'testPassword',
 };
 
+const userUpdateTest = {
+  username: 'testupdateuser',
+  firstName: 'testy',
+  lastName: 'McTester',
+  email: 'testyupdate@test.com',
+  displayName: 'the  tester',
+  password: 'testPassword',
+};
+
+const recreateBaseUserAndLogin = async () => {
+  let cookie = '';
+  // prettier-ignore
+  const response = await request(app)
+    .post('/api/cms/v1/login')
+    .send({ username: baseUser.username, password: baseUser.password });
+  cookie = extractCookieFromResponse(response);
+  // prettier-ignore
+  await request(app)
+    .delete('/api/cms/v1/users/testupdateuser?force=true')
+    .set('Cookie', cookie);
+  // prettier-ignore
+  await request(app)
+    .post('/api/cms/v1/users')
+    .send(userUpdateTest);
+
+  return cookie;
+};
+
 describe('creating a new user', () => {
   test('succeeds with valid user data', async () => {
     const response = await request(app)
-      .post('/api/users')
+      .post('/api/cms/v1/users')
       .send(baseUser)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(201);
@@ -33,7 +62,7 @@ describe('creating a new user', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/users')
+      .post('/api/cms/v1/users')
       .send(newUser)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -60,7 +89,7 @@ describe('creating a new user', () => {
 
     // prettier-ignore
     const response = await request(app)
-      .post('/api/users')
+      .post('/api/cms/v1/users')
       .send(newUser)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -75,16 +104,29 @@ describe('creating a new user', () => {
 });
 
 describe('getting user data', () => {
+  // Login user
+  let cookie = '';
+  beforeAll(async () => {
+    // prettier-ignore
+    const response = await request(app)
+      .post('/api/cms/v1/login')
+      .send({username: baseUser.username, password: baseUser.password});
+
+    cookie = extractCookieFromResponse(response);
+  });
+
   test('without params returns all users as json', async () => {
     const response = await request(app)
-      .get('/api/users')
+      .get('/api/cms/v1/users')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
   });
 
   test('with valid username as param returns specific user', async () => {
     const response = await request(app)
-      .get('/api/users/testuser')
+      .get('/api/cms/v1/users/testuser')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
     expect(response.body.username).toEqual('testuser');
@@ -93,32 +135,39 @@ describe('getting user data', () => {
 
   test('with non-existing username as param returns 404', async () => {
     const response = await request(app)
-      .get('/api/users/testuser17')
+      .get('/api/cms/v1/users/testuser17')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
       errors: [{ message: 'User not found.' }],
     });
   });
+
+  test('fails with 401 on missing authorization', async () => {
+    const response = await request(app)
+      .get('/api/cms/v1/users/testuser')
+      .expect('Content-Type', /application\/json/);
+    expect(response.status).toEqual(401);
+    expect(response.body).toMatchObject({
+      errors: [{ message: 'Session cookie not found.' }],
+    });
+  });
 });
 
 describe('updating user data', () => {
-  // Delete the changed baseUser and re-create it
+  // Delete the changed baseUser and re-create it, then log in
+  let cookie = '';
   beforeEach(async () => {
-    // prettier-ignore
-    await request(app)
-      .delete('/api/users/testuser?force=true');
-    // prettier-ignore
-    await request(app)
-      .post('/api/users')
-      .send(baseUser);
+    cookie = await recreateBaseUserAndLogin();
   });
 
   test('succeeds with valid update data on existing user', async () => {
-    const updateData = { displayName: 'changedTestUser' };
+    const updateData = { displayName: 'changedTestUser', role: 'ADMIN' };
 
     const response = await request(app)
-      .put('/api/users/testuser')
+      .put('/api/cms/v1/users/testuser')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(200);
@@ -129,7 +178,8 @@ describe('updating user data', () => {
     const updateData = {};
 
     const response = await request(app)
-      .put('/api/users/testuser')
+      .put('/api/cms/v1/users/testuser')
+      .set('Cookie', cookie)
       .send(updateData);
     expect(response.status).toEqual(204);
   });
@@ -138,7 +188,8 @@ describe('updating user data', () => {
     const updateData = { username: 400 };
 
     const response = await request(app)
-      .put('/api/users/testuser')
+      .put('/api/cms/v1/users/testuser')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(400);
@@ -156,7 +207,8 @@ describe('updating user data', () => {
     const updateData = { username: 'changedTestUser' };
 
     const response = await request(app)
-      .put('/api/users/nonexisting')
+      .put('/api/cms/v1/users/nonexisting')
+      .set('Cookie', cookie)
       .send(updateData)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
@@ -168,7 +220,8 @@ describe('updating user data', () => {
   describe('related to associated contact table', () => {
     test('succeeds with valid contact update data', async () => {
       const preUpdateResponse = await request(app)
-        .get('/api/users/testuser')
+        .get('/api/cms/v1/users/testupdateuser')
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(preUpdateResponse.status).toEqual(200);
       expect(preUpdateResponse.body).toHaveProperty('contact');
@@ -180,14 +233,16 @@ describe('updating user data', () => {
       };
 
       const response = await request(app)
-        .put('/api/users/testuser')
+        .put('/api/cms/v1/users/testuser')
+        .set('Cookie', cookie)
         .send(updateData)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(200);
       expect(response.body.displayName).toEqual(updateData.displayName);
 
       const postUpdateResponse = await request(app)
-        .get('/api/users/testuser')
+        .get('/api/cms/v1/users/testuser')
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(postUpdateResponse.status).toEqual(200);
       expect(postUpdateResponse.body).toHaveProperty('contact');
@@ -198,11 +253,11 @@ describe('updating user data', () => {
 
     test('fails with 400 with invalid contact update data', async () => {
       const preUpdateResponse = await request(app)
-        .get('/api/users/testuser')
+        .get('/api/cms/v1/users/testupdateuser')
+        .set('Cookie', cookie)
         .expect('Content-Type', /application\/json/);
       expect(preUpdateResponse.status).toEqual(200);
       expect(preUpdateResponse.body).toHaveProperty('contact');
-      expect(preUpdateResponse.body.contact.twitter).toBeNull();
 
       const updateData = {
         displayName: 'changedTestUser',
@@ -210,7 +265,8 @@ describe('updating user data', () => {
       };
 
       const response = await request(app)
-        .put('/api/users/testuser')
+        .put('/api/cms/v1/users/testupdateuser')
+        .set('Cookie', cookie)
         .send(updateData)
         .expect('Content-Type', /application\/json/);
       expect(response.status).toEqual(400);
@@ -227,49 +283,70 @@ describe('updating user data', () => {
 });
 
 describe('disabling user', () => {
-  // Delete the changed baseUser and re-create it
+  // Delete the changed baseUser and re-create it, then log in
+  let cookie = '';
   beforeEach(async () => {
-    // prettier-ignore
-    await request(app)
-      .delete('/api/users/testuser?force=true');
-    // prettier-ignore
-    await request(app)
-      .post('/api/users')
-      .send(baseUser);
-  });
-
-  test('succeeds with valid  user', async () => {
-    const response = await request(app)
-      .put('/api/users/disable/testuser')
-      .expect('Content-Type', /application\/json/);
-    expect(response.status).toEqual(200);
-    expect(response.body).toEqual({ message: 'Disabled user "testuser"' });
+    cookie = await recreateBaseUserAndLogin();
   });
 
   test('fails with 404 on non-existing user', async () => {
     const response = await request(app)
-      .put('/api/users/disable/nonexisting')
+      .put('/api/cms/v1/users/nonexisting')
+      .set('Cookie', cookie)
+      .send({ disabled: true })
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
-      errors: [{ message: 'User to disable was not found.' }],
+      errors: [{ message: 'User to update was not found.' }],
     });
+  });
+
+  test('fails with 401 when logged in user is not admin', async () => {
+    let badCookie = '';
+    // prettier-ignore
+    const loginResponse = await request(app)
+      .post('/api/cms/v1/login')
+      .send({ username: userUpdateTest.username, password: userUpdateTest.password });
+    badCookie = extractCookieFromResponse(loginResponse);
+
+    const response = await request(app)
+      .put('/api/cms/v1/users/testuser')
+      .send({ disabled: true })
+      .set('Cookie', badCookie)
+      .expect('Content-Type', /application\/json/);
+    expect(response.status).toEqual(401);
+    expect(response.body).toMatchObject({
+      errors: [{ message: 'Unauthorized to access.' }],
+    });
+
+    // prettier-ignore
+    await request(app)
+      .delete('/api/cms/v1/logout');
+  });
+
+  test('succeeds with valid user', async () => {
+    const response = await request(app)
+      .put('/api/cms/v1/users/testupdateuser')
+      .set('Cookie', cookie)
+      .send({ disabled: true })
+      .expect('Content-Type', /application\/json/);
+    expect(response.status).toEqual(200);
+    expect(response.body.disabled).toEqual(true);
   });
 });
 
 describe('deleting user data', () => {
-  test('succeeds with existing user', async () => {
-    const response = await request(app)
-      .delete('/api/users/testuser?force=true')
-      .expect('Content-Type', /application\/json/);
-    expect(response.status).toEqual(200);
-    expect(response.body).toMatchObject({ message: 'Deleted user "testuser"' });
+  // Delete the changed baseUser and re-create it, then log in
+  let cookie = '';
+  beforeEach(async () => {
+    cookie = await recreateBaseUserAndLogin();
   });
 
   test('fails with 404 on non-existing user', async () => {
     // prettier-ignore
     const response = await request(app)
-      .delete('/api/users/nonexisting')
+      .delete('/api/cms/v1/users/nonexisting22')
+      .set('Cookie', cookie)
       .expect('Content-Type', /application\/json/);
     expect(response.status).toEqual(404);
     expect(response.body).toMatchObject({
@@ -279,6 +356,17 @@ describe('deleting user data', () => {
           message: 'User to delete was not found.',
         },
       ],
+    });
+  });
+
+  test('succeeds with existing user', async () => {
+    const response = await request(app)
+      .delete('/api/cms/v1/users/testupdateuser?force=true')
+      .set('Cookie', cookie)
+      .expect('Content-Type', /application\/json/);
+    expect(response.status).toEqual(200);
+    expect(response.body).toMatchObject({
+      message: 'Deleted user "testupdateuser"',
     });
   });
 });

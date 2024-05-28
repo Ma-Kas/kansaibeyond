@@ -41,6 +41,49 @@ const stringsInString = (arr: string[], string: string) => {
   return arr.some((item) => string.toLowerCase().includes(item.toLowerCase()));
 };
 
+export const loginSetFormFieldError = (errMessage: string) => {
+  switch (errMessage) {
+    case 'User not found.': {
+      return { field: 'username', error: 'Username not found.' };
+    }
+    case 'Wrong password.': {
+      return {
+        field: 'password',
+        error: 'The password you entered is incorrect.',
+      };
+    }
+    case 'Account disabled.': {
+      return null;
+    }
+    default: {
+      return { field: null, error: errMessage };
+    }
+  }
+};
+
+export const signupSetFormFieldError = (errMessage: string) => {
+  if (!errMessage.includes('SequelizeUniqueConstraintError')) {
+    // Not an error that should be displayed in form fields
+    return { field: null, error: errMessage };
+  } else {
+    const usernameArr = ['username', 'Username'];
+    const emailArr = ['email', 'Email', 'tagSlug'];
+    const displayNameArr = ['display_name', 'displayName', ' Display Name'];
+    if (stringsInString(usernameArr, errMessage)) {
+      return { field: 'username', error: 'This username already exists.' };
+    } else if (stringsInString(emailArr, errMessage)) {
+      return { field: 'email', error: 'This email address is already in use.' };
+    } else if (stringsInString(displayNameArr, errMessage)) {
+      return {
+        field: 'displayName',
+        error: 'This display name is already in use.',
+      };
+    } else {
+      return { field: null, error: errMessage };
+    }
+  }
+};
+
 export const tagSetFormFieldError = (errMessage: string) => {
   if (!errMessage.includes('SequelizeUniqueConstraintError')) {
     // Not an error that should be displayed in form fields

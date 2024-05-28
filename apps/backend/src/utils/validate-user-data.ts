@@ -17,6 +17,13 @@ const newUserSchema = z.object(
   }
 ).strict();
 
+const userRoleSchema = z.union([
+  z.literal('ADMIN'),
+  z.literal('TECH'),
+  z.literal('WRITER'),
+  z.literal('GUEST'),
+]);
+
 // prettier-ignore
 const updateUserSchema = z.object(
   {
@@ -36,6 +43,8 @@ const updateUserSchema = z.object(
         youtube: z.string().url().optional().nullable(),
         linkedin: z.string().url().optional().nullable(),
     }).optional(),
+    disabled: z.boolean().optional(),
+    role: userRoleSchema.optional()
   }
 ).strict();
 
@@ -86,7 +95,9 @@ const validateUserUpdate = (input: unknown): UpdateUser | null => {
     !('firstName' in input) &&
     !('lastName' in input) &&
     !('introduction' in input) &&
-    !('contact' in input)
+    !('contact' in input) &&
+    !('disabled' in input) &&
+    !('role' in input)
   ) {
     return null;
   }

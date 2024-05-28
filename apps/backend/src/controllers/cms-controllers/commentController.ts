@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
-import { Comment, User, Post } from '../models';
-import NotFoundError from '../errors/NotFoundError';
+import { Comment, User, Post } from '../../models';
+import NotFoundError from '../../errors/NotFoundError';
 import {
   validateNewComment,
   validateNewRegisteredComment,
-} from '../utils/validate-comment-data';
-import { NewComment, NewRegisteredComment } from '../types/types';
-import BadRequestError from '../errors/BadRequestError';
+} from '../../utils/validate-comment-data';
+import { NewComment, NewRegisteredComment } from '../../types/types';
+import BadRequestError from '../../errors/BadRequestError';
+import { getSessionOrThrow } from '../../utils/get-session-or-throw';
+import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_comments = async (
   _req: Request,
@@ -21,13 +23,14 @@ export const get_all_comments = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['username', 'userIcon', 'role'],
         },
         {
           model: Post,
           attributes: ['id', 'postSlug'],
         },
       ],
+      order: [['createdAt', 'DESC']],
     });
     res.status(200).json(allComments);
   } catch (err: unknown) {
@@ -48,7 +51,7 @@ export const get_one_comment = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'status'],
+          attributes: ['displayName', 'userIcon', 'role'],
         },
         {
           model: Post,
@@ -73,12 +76,12 @@ export const post_new_comment = async (
   try {
     let validatedCommentData: NewComment | NewRegisteredComment;
 
-    // Get user from token
-    const user = await User.findOne();
+    // Get userId from session
+    const session = getSessionOrThrow(req);
 
     // Split validation whether user is found (=logged in) or not
     // Different mandatory fields
-    if (user) {
+    if (session) {
       const validatedCommentDataExUser = validateNewRegisteredComment(req.body);
 
       if (!validatedCommentDataExUser) {
@@ -86,7 +89,7 @@ export const post_new_comment = async (
       }
       // Add userId
       validatedCommentData = validatedCommentDataExUser as NewRegisteredComment;
-      validatedCommentData.userId = user.id;
+      validatedCommentData.userId = session.userId;
     } else {
       validatedCommentData = validateNewComment(req.body);
       if (!validatedCommentData) {
@@ -107,9 +110,15 @@ export const delete_one_comment = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
     const commentToDelete = await Comment.findByPk(req.params.id);
     if (!commentToDelete) {
       throw new NotFoundError({ message: 'Comment to delete was not found.' });
+    }
+
+    if (session.role !== 'ADMIN' && commentToDelete.userId !== session.userId) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     await commentToDelete.destroy();

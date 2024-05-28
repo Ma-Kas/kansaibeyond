@@ -1,12 +1,21 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
+import useAuth from '../../hooks/useAuth';
 
 const App = () => {
+  const { user } = useAuth();
+
   return (
     <>
-      <HeaderMain />
-      <Outlet />
+      {user ? (
+        <>
+          <HeaderMain authorized />
+          <Outlet />
+        </>
+      ) : (
+        <Navigate to='/login' />
+      )}
     </>
   );
 };

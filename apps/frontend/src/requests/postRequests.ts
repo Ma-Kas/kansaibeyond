@@ -26,7 +26,7 @@ const postUserSchema = z.object(
     username: z.string(),
     displayName: z.string(),
     userIcon: z.string().nullable(),
-    status: z.string(),
+    role: z.string(),
   }
 ).strict();
 
@@ -81,6 +81,7 @@ const getPostSchema = z.object(
     status: postStatusSchema,
     views: z.number(),
     readTime: z.number(),
+    createdAt: z.string(),
     updatedAt: z.string(),
     deletedAt: z.string().nullable(),
     user: postUserSchema,
