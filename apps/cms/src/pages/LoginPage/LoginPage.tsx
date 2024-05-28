@@ -42,7 +42,7 @@ const LoginPage = () => {
           ErrorNotification({ bodyText: formFieldErrors.error })
         );
       } else {
-        throw new Response('', { status: 401 });
+        navigate('/disabled');
       }
     },
   });

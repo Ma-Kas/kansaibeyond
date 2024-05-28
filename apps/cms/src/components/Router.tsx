@@ -21,6 +21,7 @@ import UpdateBlogCategory from '../pages/NewUpdateBlogCategory/UpdateBlogCategor
 import BlogTags from '../pages/BlogTags/BlogTags';
 import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
 import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
+import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
 
 const Router = () => {
   const queryClient = useQueryClient();
@@ -88,7 +89,15 @@ const Router = () => {
           <LoginPage /> <HeaderMain authorized={false} />
         </AuthProvider>
       ),
-      errorElement: <NotFoundPage />,
+    },
+    {
+      path: '/disabled',
+      element: (
+        <AuthProvider>
+          <DisabledErrorPage />
+          <HeaderMain authorized={false} />
+        </AuthProvider>
+      ),
     },
   ]);
 

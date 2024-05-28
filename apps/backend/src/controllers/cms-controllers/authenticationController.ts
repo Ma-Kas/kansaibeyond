@@ -3,6 +3,7 @@ import { addHours, hoursToMilliseconds, isFuture } from 'date-fns';
 import { Session, User } from '../../models';
 import { SESSION_DURATION_HOURS } from '../../utils/config';
 import NotFoundError from '../../errors/NotFoundError';
+import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_authentication = async (
   req: Request,
@@ -35,6 +36,19 @@ export const get_authentication = async (
       return res.status(200).json(null);
     }
 
+    const user = await User.findOne({
+      where: { id: validSession.userId },
+      attributes: ['id', 'displayName', 'userIcon', 'role'],
+    });
+
+    if (!user) {
+      throw new NotFoundError({ message: 'User not found.' });
+    }
+
+    if (user.disabled) {
+      throw new UnauthorizedError({ message: 'Account disabled.' });
+    }
+
     const renewedSessionId = crypto.randomUUID();
 
     // Update Session table renew session expiration
@@ -55,15 +69,6 @@ export const get_authentication = async (
       httpOnly: true,
       sameSite: 'lax',
     });
-
-    const user = await User.findOne({
-      where: { id: validSession.userId },
-      attributes: ['id', 'displayName', 'userIcon', 'role'],
-    });
-
-    if (!user) {
-      throw new NotFoundError({ message: 'User not found.' });
-    }
 
     return res.status(200).json(user);
   } catch (err: unknown) {

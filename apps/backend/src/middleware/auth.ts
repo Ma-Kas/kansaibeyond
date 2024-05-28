@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { isFuture } from 'date-fns';
 
-import { Session } from '../models';
+import { Session, User } from '../models';
 import UnauthorizedError from '../errors/UnauthorizedError';
 
 interface AuthorizationRequest extends Request {
@@ -25,6 +25,12 @@ const auth = async (req: Request, _res: Response, next: NextFunction) => {
 
     const validSession = await Session.findOne({
       where: { sessionId: cookie },
+      include: [
+        {
+          model: User,
+          attributes: ['disabled'],
+        },
+      ],
     });
 
     if (!validSession) {

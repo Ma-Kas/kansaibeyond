@@ -138,7 +138,7 @@ export const update_one_user = async (
         );
       }
 
-      // Revoke session and cookie
+      // Revoke sessions
       if (updatedUser[1][0].disabled) {
         await Session.destroy({
           where: { userId: Number(userToUpdate.id) },

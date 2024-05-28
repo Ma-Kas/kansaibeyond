@@ -11,14 +11,14 @@ export const logout = async (
   try {
     const session = getSessionOrThrow(req);
 
-    await Session.destroy({ where: { userId: Number(session.userId) } });
-
     // Clear session cookie
     res.clearCookie('sessionId', {
       secure: true,
       httpOnly: true,
       sameSite: 'lax',
     });
+
+    await Session.destroy({ where: { userId: Number(session.userId) } });
 
     res.status(204).end();
   } catch (err: unknown) {
