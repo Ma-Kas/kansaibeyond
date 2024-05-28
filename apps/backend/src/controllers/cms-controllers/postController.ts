@@ -147,6 +147,10 @@ export const post_new_post = async (
       throw new NotFoundError({ message: 'User not found' });
     }
 
+    if (!['ADMIN', 'WRITER'].includes(user.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to create post.' });
+    }
+
     // Validated raw data
     const validatedData = validateNewPostData(req.body);
 
