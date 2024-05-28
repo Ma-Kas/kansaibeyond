@@ -7,8 +7,8 @@ import {
   ErrorNotification,
   SuccessNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
-import { loginSchema } from './types';
 import { postLogin } from '../../requests/loginRequests';
+import { loginSchema } from './types';
 
 import classes from './LoginPage.module.css';
 

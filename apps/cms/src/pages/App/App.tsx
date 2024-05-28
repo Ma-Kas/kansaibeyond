@@ -1,29 +1,23 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 
 import HeaderMain from '../../components/HeaderMain/HeaderMain';
-import LoginPage from '../LoginPage/LoginPage';
-
-// Should check in if token is present on client
-// Should GET from a new authorization route to check token validity???
-// If both checks pass, render the actual page, otherwise go to Login page
+import useAuth from '../../hooks/useAuth';
 
 const App = () => {
-  const authorized = true;
-  if (!authorized) {
-    return (
-      <>
-        <HeaderMain authorized={authorized} />
-        <LoginPage />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <HeaderMain authorized={authorized} />
-        <Outlet />
-      </>
-    );
-  }
+  const { user } = useAuth();
+
+  return (
+    <>
+      {user ? (
+        <>
+          <HeaderMain authorized />
+          <Outlet />
+        </>
+      ) : (
+        <Navigate to='/login' />
+      )}
+    </>
+  );
 };
 
 export default App;
