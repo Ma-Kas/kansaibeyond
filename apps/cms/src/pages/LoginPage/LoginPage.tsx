@@ -3,6 +3,7 @@ import { useForm, zodResolver } from '@mantine/form';
 import { TextInput, PasswordInput, Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useMutation } from '@tanstack/react-query';
+import { loginSetFormFieldError } from '../../utils/backend-error-response-validation';
 import {
   ErrorNotification,
   SuccessNotification,
@@ -33,7 +34,16 @@ const LoginPage = () => {
       navigate(`/`);
     },
     onError: (err) => {
-      notifications.show(ErrorNotification({ bodyText: err.message }));
+      const formFieldErrors = loginSetFormFieldError(err.message);
+      if (formFieldErrors && formFieldErrors.field) {
+        loginForm.setFieldError(formFieldErrors.field, formFieldErrors.error);
+      } else if (formFieldErrors && !formFieldErrors.field) {
+        notifications.show(
+          ErrorNotification({ bodyText: formFieldErrors.error })
+        );
+      } else {
+        throw new Response('', { status: 401 });
+      }
     },
   });
 

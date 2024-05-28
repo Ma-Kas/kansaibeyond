@@ -41,6 +41,26 @@ const stringsInString = (arr: string[], string: string) => {
   return arr.some((item) => string.toLowerCase().includes(item.toLowerCase()));
 };
 
+export const loginSetFormFieldError = (errMessage: string) => {
+  switch (errMessage) {
+    case 'User not found.': {
+      return { field: 'username', error: 'Username not found.' };
+    }
+    case 'Wrong password.': {
+      return {
+        field: 'password',
+        error: 'The password you entered is incorrect.',
+      };
+    }
+    case 'Account disabled.': {
+      return null;
+    }
+    default: {
+      return { field: null, error: errMessage };
+    }
+  }
+};
+
 export const tagSetFormFieldError = (errMessage: string) => {
   if (!errMessage.includes('SequelizeUniqueConstraintError')) {
     // Not an error that should be displayed in form fields
