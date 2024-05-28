@@ -9,6 +9,7 @@ import HeaderMain from './HeaderMain/HeaderMain';
 // Route Imports
 import App from '../pages/App/App';
 import LoginPage from '../pages/LoginPage/LoginPage';
+import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import MainShell from './PageShell/MainShell';
 import ComposerShell from './PageShell/ComposerShell';
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage';
@@ -88,6 +89,14 @@ const Router = () => {
         <AuthProvider>
           <LoginPage /> <HeaderMain authorized={false} />
         </AuthProvider>
+      ),
+    },
+    {
+      path: '/signup',
+      element: (
+        <>
+          <SignUpPage /> <HeaderMain authorized={false} />
+        </>
       ),
     },
     {

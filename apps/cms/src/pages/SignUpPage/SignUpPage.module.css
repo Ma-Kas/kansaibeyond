@@ -1,10 +1,10 @@
-.login_page_main {
+.signup_page_main {
   height: 100vh;
   font-size: var(--font-size-regular);
   padding-top: var(--header-height);
 }
 
-.login_page_container {
+.signup_page_container {
   max-width: var(--signup-login-card-max-width);
   min-height: calc(100vh - var(--header-height));
   position: relative;
@@ -25,7 +25,7 @@
   }
 }
 
-.login_card {
+.signup_card {
   border: var(--editor-menu-border);
   border-radius: var(--dashboard-content-card-radius);
   box-shadow: var(--mantine-shadow-md);
@@ -35,17 +35,25 @@
   padding: var(--dashboard-content-card-padding-horizontal);
 }
 
-.login_title {
+.signup_title {
   text-align: center;
   margin: 0;
 }
 
-.login_subheader {
+.signup_subheader {
   color: var(--mantine-color-dimmed);
   text-align: center;
 }
 
-.login_signup_link {
-  text-decoration: none;
-  color: var(--mantine-primary-color-filled);
+.signup_card_button_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: var(--signup-login-card-button-gap);
+  margin-top: var(--signup-login-card-button-margin);
+
+  @media (max-width: rem(320px)) {
+    flex-direction: column-reverse;
+    gap: calc(var(--signup-login-card-button-gap) / 2);
+  }
 }

@@ -51,7 +51,7 @@ export const get_one_comment = async (
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'role'],
+          attributes: ['displayName', 'userIcon', 'role'],
         },
         {
           model: Post,

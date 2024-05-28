@@ -61,7 +61,10 @@
   --content-card-cover-image-edit-hover: rgba(13, 27, 95, 0.415);
 
   /* Login Page Variables */
-  --login-card-max-width: rem(420px);
+  --signup-login-container-padding-horizontal: rem(16px);
+  --signup-login-card-max-width: rem(420px);
+  --signup-login-card-button-margin: rem(32px);
+  --signup-login-card-button-gap: rem(32px);
 
   /* Main Dashboard Variables */
   --dashboard-content-max-width: rem(1250px);

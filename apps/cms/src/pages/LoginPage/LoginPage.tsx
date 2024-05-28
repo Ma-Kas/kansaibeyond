@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm, zodResolver } from '@mantine/form';
 import { TextInput, PasswordInput, Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -60,8 +60,10 @@ const LoginPage = () => {
         <header className={classes['login_page_header']}>
           <h1 className={classes['login_title']}>Welcome back!</h1>
           <p className={classes['login_subheader']}>
-            Do not have an account yet?
-            <span>Create account</span>
+            Do not have an account yet?&nbsp;
+            <Link className={classes['login_signup_link']} to={'/signup'}>
+              Create account
+            </Link>
           </p>
         </header>
         <div className={classes['login_card']}>
