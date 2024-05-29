@@ -5,7 +5,11 @@ import { User, Session } from '../../models';
 import { validateLoginData } from '../../utils/validate-login-data';
 import NotFoundError from '../../errors/NotFoundError';
 import UnauthorizedError from '../../errors/UnauthorizedError';
-import { SESSION_DURATION_HOURS } from '../../utils/config';
+import {
+  COOKIE_SAME_SITE_POLICY,
+  SESSION_DURATION_HOURS,
+  SameSiteType,
+} from '../../utils/config';
 
 export const post_login = async (
   req: Request,
@@ -51,7 +55,7 @@ export const post_login = async (
       maxAge: hoursToMilliseconds(SESSION_DURATION_HOURS),
       secure: true,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: COOKIE_SAME_SITE_POLICY as SameSiteType, // Workaround for dev and Chrome's new cookie fuckery
     });
 
     res.status(200).end();

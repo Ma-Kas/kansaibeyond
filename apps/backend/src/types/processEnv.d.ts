@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { sameSiteSchema } from '../utils/config';
 
 const envVariables = z.object({
   NODE_ENV: z.string(),
@@ -13,6 +14,7 @@ const envVariables = z.object({
   CMS_URL_PROD: z.string(),
   FRONTEND_URL_DEV: z.string(),
   FRONTEND_URL_PROD: z.string(),
+  COOKIE_SAME_SITE_POLICY: sameSiteSchema,
 });
 
 envVariables.parse(process.env);

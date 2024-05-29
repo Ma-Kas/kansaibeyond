@@ -1,5 +1,15 @@
 import dotenv from 'dotenv';
+import { z } from 'zod';
 dotenv.config();
+
+export const sameSiteSchema = z.union([
+  z.literal('none'),
+  z.literal('lax'),
+  z.literal('strict'),
+  z.boolean(),
+]);
+
+export type SameSiteType = z.infer<typeof sameSiteSchema>;
 
 const DB_CONNECTION_STRING =
   process.env.NODE_ENV === 'test'
@@ -20,6 +30,8 @@ const FRONTEND_URL =
 
 const SESSION_DURATION_HOURS = 168; // 7days
 
+const COOKIE_SAME_SITE_POLICY = process.env.COOKIE_SAME_SITE_POLICY;
+
 export {
   DB_CONNECTION_STRING,
   BACKEND_PORT,
@@ -27,4 +39,5 @@ export {
   CMS_URL,
   FRONTEND_URL,
   SESSION_DURATION_HOURS,
+  COOKIE_SAME_SITE_POLICY,
 };

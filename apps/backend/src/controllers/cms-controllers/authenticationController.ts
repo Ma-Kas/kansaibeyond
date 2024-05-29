@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { addHours, hoursToMilliseconds, isFuture } from 'date-fns';
 import { Session, User } from '../../models';
-import { SESSION_DURATION_HOURS } from '../../utils/config';
+import {
+  COOKIE_SAME_SITE_POLICY,
+  SESSION_DURATION_HOURS,
+  SameSiteType,
+} from '../../utils/config';
 import NotFoundError from '../../errors/NotFoundError';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
@@ -67,7 +71,7 @@ export const get_authentication = async (
       maxAge: hoursToMilliseconds(SESSION_DURATION_HOURS),
       secure: true,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: COOKIE_SAME_SITE_POLICY as SameSiteType, // Workaround for dev and Chrome's new cookie fuckery
     });
 
     return res.status(200).json(user);
