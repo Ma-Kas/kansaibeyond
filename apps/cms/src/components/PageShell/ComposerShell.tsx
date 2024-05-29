@@ -117,6 +117,12 @@ const ComposerShell = () => {
             detail: { data: () => data },
           })
         );
+        postFormRef.current.dispatchEvent(
+          new CustomEvent('postFormPreview', {
+            bubbles: true,
+            detail: { data: () => data },
+          })
+        );
       }
     },
     onError: (err) => {

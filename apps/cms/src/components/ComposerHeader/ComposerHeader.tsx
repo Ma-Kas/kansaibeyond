@@ -21,12 +21,24 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { usePostFormContext } from '../PageShell/post-form-context';
 import { GeneralConfirmModal } from '../FeedbackModals/FeedbackModals';
 import { SuccessNotification } from '../FeedbackPopups/FeedbackPopups';
+import { FRONTEND_BASE_URL } from '../../config/constants';
 
 import classes from './ComposerHeader.module.css';
 
 type Props = {
   invalidateQueries: () => Promise<void>;
   formRef: React.MutableRefObject<HTMLFormElement | null>;
+};
+
+const openPreviewInTab = (postSlug: string): void => {
+  const previewWindow = window.open(
+    `${FRONTEND_BASE_URL}/blog/posts/${postSlug}`,
+    '_blank',
+    'noopener,noreferrer'
+  );
+  if (previewWindow) {
+    previewWindow.opener = null;
+  }
 };
 
 const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
@@ -93,30 +105,48 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formRef]);
 
-  const handlePreview = useCallback(() => {
-    // TODO: Implement Preview on live website
-    console.log('implement preview here');
-  }, []);
+  const handlePreview = () => {
+    // Save current status
+    const editorState = editor.getEditorState();
+    const jsonString = JSON.stringify(editorState);
+    postForm.setFieldValue('content', jsonString);
+
+    if (formRef.current) {
+      formRef.current.addEventListener(
+        'postFormPreview',
+        () => openPreviewInTab(postForm.getValues().postSlug),
+        { once: true }
+      );
+
+      formRef.current.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true })
+      );
+    }
+  };
 
   const handlePublish = useCallback(() => {
     // Set status to published, submit postForm
     postForm.setFieldValue('status', 'published');
     if (formRef.current) {
+      // Await the success event of the postForm in ComposerShell
+      formRef.current.addEventListener(
+        'postFormSuccess',
+        () => {
+          notifications.show(
+            SuccessNotification({
+              bodyText: `Your post has been published.`,
+            })
+          );
+          void (async () => {
+            await handleBackButton();
+          })();
+        },
+        { once: true }
+      );
+
       formRef.current.dispatchEvent(
         new Event('submit', { cancelable: true, bubbles: true })
       );
-      // Await the success event of the postForm in ComposerShell
-      // No need to remove eventListener, as form will be destroyed upon success
-      formRef.current.addEventListener('postFormSuccess', () => {
-        notifications.show(
-          SuccessNotification({
-            bodyText: `Your post has been published.`,
-          })
-        );
-        void (async () => {
-          await handleBackButton();
-        })();
-      });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
