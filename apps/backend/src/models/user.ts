@@ -84,7 +84,7 @@ User.init(
     },
     disabled: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
   },
   {

@@ -1,3 +1,7 @@
 .post_link {
+  display: inline-block;
   color: var(--color-font-post-link);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -52,7 +52,7 @@ const up: Migration = async ({ context: queryInterface }) => {
     },
     disabled: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
     created_at: {
       type: DataTypes.DATE,

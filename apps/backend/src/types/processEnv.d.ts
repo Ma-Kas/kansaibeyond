@@ -9,7 +9,6 @@ const envVariables = z.object({
   DB_CONNECTION_STRING: z.string(),
   DB_TEST_PASSWORD: z.string(),
   DB_TEST_CONNECTION_STRING: z.string(),
-  JWT_TOKEN_SECRET: z.string(),
   CMS_URL_DEV: z.string(),
   CMS_URL_PROD: z.string(),
   FRONTEND_URL_DEV: z.string(),

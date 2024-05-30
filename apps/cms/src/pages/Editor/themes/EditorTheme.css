@@ -113,6 +113,9 @@
 }
 .EditorTheme__link {
   color: var(--color-editor-link) !important;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .EditorTheme__link:hover {
   cursor: pointer;
