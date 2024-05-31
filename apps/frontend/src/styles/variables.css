@@ -10,8 +10,8 @@
     var(--color-post-horizontal-rule);
 
   /* Font variables */
-  --font-family-light: FuturaLT-Light, sans-serif;
-  --font-family-book: FuturaLT-Book, sans-serif;
+  --font-family-light: 'Futura Lt Light', sans-serif;
+  --font-family-book: 'Futura Lt Book', sans-serif;
 
   --font-size-post-regular: 18px;
   --font-size-post-h1: 40px;

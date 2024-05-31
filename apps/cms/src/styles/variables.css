@@ -96,8 +96,8 @@
 
   /* Rich Text Editor Variales */
   --editor-font-family-menu: var(--mantine-font-family);
-  --editor-font-family-light: Futura Lt Light, sans-serif;
-  --editor-font-family-book: Futura Lt Book, sans-serif;
+  --editor-font-family-light: 'Futura Lt Light', sans-serif;
+  --editor-font-family-book: 'Futura Lt Book', sans-serif;
   --editor-toolbar-height: rem(56px);
   --editor-toolbar-min-width: rem(660px);
   --editor-menu-popup-padding: rem(4px);

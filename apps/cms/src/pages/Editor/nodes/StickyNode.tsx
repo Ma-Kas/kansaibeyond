@@ -44,6 +44,7 @@ export class StickyNode extends DecoratorNode<JSX.Element> {
       node.__key
     );
   }
+
   static importJSON(serializedNode: SerializedStickyNode): StickyNode {
     const stickyNode = new StickyNode(
       serializedNode.xOffset,
