@@ -1,7 +1,11 @@
 .post_link {
-  display: inline-block;
   color: var(--color-font-post-link);
+  text-decoration: none;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.post_link:hover {
+  text-decoration: underline;
 }

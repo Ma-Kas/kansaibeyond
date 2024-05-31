@@ -113,12 +113,14 @@
 }
 .EditorTheme__link {
   color: var(--color-editor-link) !important;
+  text-decoration: none;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .EditorTheme__link:hover {
   cursor: pointer;
+  text-decoration: underline;
 }
 .EditorTheme__code {
   background-color: var(--color-editor-bg-code);
