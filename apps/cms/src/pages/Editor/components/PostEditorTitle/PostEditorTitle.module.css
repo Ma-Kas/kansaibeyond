@@ -9,6 +9,7 @@
 .editor-post-title-inner {
   font-size: var(--font-size-editable-h1);
   font-family: var(--editor-font-family-book);
+  line-height: var(--line-height-editor-title);
   flex: 1;
   height: auto;
   outline: none;

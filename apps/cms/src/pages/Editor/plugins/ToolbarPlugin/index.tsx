@@ -226,16 +226,20 @@ function BlockFormatDropDown({
       onClick: () => formatParagraph(),
     },
     {
-      text: 'Heading 1',
-      onClick: () => formatHeading('h1'),
-    },
-    {
       text: 'Heading 2',
       onClick: () => formatHeading('h2'),
     },
     {
       text: 'Heading 3',
       onClick: () => formatHeading('h3'),
+    },
+    {
+      text: 'Heading 4',
+      onClick: () => formatHeading('h4'),
+    },
+    {
+      text: 'Heading 5',
+      onClick: () => formatHeading('h5'),
     },
     {
       text: 'Bulleted List',
@@ -483,7 +487,7 @@ function ToolbarPlugin({
   const [fontSize, setFontSize] = useState<string>('18px');
   const [fontColor, setFontColor] = useState<string>('#000');
   const [bgColor, setBgColor] = useState<string>('#fff');
-  const [fontFamily, setFontFamily] = useState<string>('Arial');
+  const [fontFamily, setFontFamily] = useState<string>('Futura Lt Light');
   const [elementFormat, setElementFormat] = useState<ElementFormatType>('left');
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -596,7 +600,11 @@ function ToolbarPlugin({
         )
       );
       setFontFamily(
-        $getSelectionStyleValueForProperty(selection, 'font-family', 'Arial')
+        $getSelectionStyleValueForProperty(
+          selection,
+          'font-family',
+          'Futura Lt Light'
+        )
       );
       let matchingParent;
       if ($isLinkNode(parent)) {

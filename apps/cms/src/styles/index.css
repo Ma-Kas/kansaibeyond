@@ -11,15 +11,81 @@
 }
 
 @font-face {
-  font-family: 'FuturaLT-Light';
+  font-family: 'Futura Lt Light';
   font-style: normal;
   src: url('../assets/fonts/FuturaLT-Light.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'FuturaLT-Book';
+  font-family: 'Futura Lt Book';
   font-style: normal;
   src: url('../assets/fonts/FuturaLT-Book.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  src: url('../assets/fonts/Geist-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist Light';
+  font-style: normal;
+  src: url('../assets/fonts/Geist-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  src: url('../assets/fonts/Lato-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: italic;
+  src: url('../assets/fonts/Lato-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato Light';
+  font-style: normal;
+  src: url('../assets/fonts/Lato-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato Light';
+  font-style: italic;
+  src: url('../assets/fonts/Lato-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  src: url('../assets/fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  src: url('../assets/fonts/Roboto-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Light';
+  font-style: normal;
+  src: url('../assets/fonts/Roboto-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Light';
+  font-style: italic;
+  src: url('../assets/fonts/Roboto-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Reenie Beanie';
+  font-style: normal;
+  src: url('../assets/fonts/ReenieBeanie-Regular.ttf') format('truetype');
 }
 
 body {

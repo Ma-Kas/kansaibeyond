@@ -25,6 +25,7 @@
   --font-weight-regular: 400;
   --font-weight-bold: 600;
   --line-height-post-regular: 1.5;
+  --line-height-post-title: normal;
 
   /* Color variables */
   --color-font-black: #000000;

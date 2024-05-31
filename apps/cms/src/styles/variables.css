@@ -37,6 +37,7 @@
   --font-size-editor-code-block: 13px;
   --font-weight-editor: 400;
   --line-height-editor: 1.5;
+  --line-height-editor-title: normal;
 
   /* Color variables */
   --color-text-black: #212121;
@@ -95,8 +96,8 @@
 
   /* Rich Text Editor Variales */
   --editor-font-family-menu: var(--mantine-font-family);
-  --editor-font-family-light: FuturaLT-Light, sans-serif;
-  --editor-font-family-book: FuturaLT-Book, sans-serif;
+  --editor-font-family-light: Futura Lt Light, sans-serif;
+  --editor-font-family-book: Futura Lt Book, sans-serif;
   --editor-toolbar-height: rem(56px);
   --editor-toolbar-min-width: rem(660px);
   --editor-menu-popup-padding: rem(4px);

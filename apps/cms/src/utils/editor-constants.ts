@@ -15,12 +15,15 @@ export const blockTypeToBlockName = {
 };
 
 export const FONT_FAMILY_OPTIONS: [string, string][] = [
-  ['Arial', 'Arial'],
-  ['Courier New', 'Courier New'],
-  ['Georgia', 'Georgia'],
-  ['Times New Roman', 'Times New Roman'],
-  ['Trebuchet MS', 'Trebuchet MS'],
-  ['Verdana', 'Verdana'],
+  ['Futura Lt Light', 'Futura Lt Light'],
+  ['Futura Lt Book', 'Futura Lt Book'],
+  ['Madefor', 'Madefor'],
+  ['Lato', 'Lato'],
+  ['Lato Light', 'Lato Light'],
+  ['Roboto', 'Roboto'],
+  ['Roboto Light', 'Roboto Light'],
+  ['Geist', 'Geist'],
+  ['Geist Light', 'Geist Light'],
 ];
 
 export const FONT_SIZE_OPTIONS: [string, string][] = [
