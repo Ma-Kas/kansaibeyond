@@ -22,6 +22,7 @@ import UpdateBlogCategory from '../pages/NewUpdateBlogCategory/UpdateBlogCategor
 import BlogTags from '../pages/BlogTags/BlogTags';
 import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
 import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
+import Users from '../pages/Users/Users';
 import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
 
 const Router = () => {
@@ -76,6 +77,10 @@ const Router = () => {
             {
               path: 'blog/tags/:tagSlug/edit',
               element: <UpdateBlogTag />,
+            },
+            {
+              path: 'users',
+              element: <Users />,
             },
           ],
         },

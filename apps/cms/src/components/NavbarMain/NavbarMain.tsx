@@ -58,7 +58,6 @@ const navbarData = [
       { label: 'Tags', link: '/dashboard/blog/tags' },
     ],
   },
-  { label: 'Users', icon: IconUsers, link: '/dashboard/users' },
   { label: 'Image Library', icon: IconPhoto, link: '/dashboard/images' },
 ];
 
