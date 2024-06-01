@@ -71,6 +71,11 @@ thead.card_header {
     );
   }
 
+  td:nth-child(2) {
+    display: flex;
+    justify-content: center;
+  }
+
   th:nth-child(3),
   td:nth-child(3) {
     font-weight: var(--font-weight-bold);

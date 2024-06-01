@@ -4,6 +4,21 @@ export const MIN_TAGS_PER_POST = 1;
 export const MAX_TAGS_PER_POST = 10;
 export const MAX_RELATED_POSTS = 3;
 
+export enum USER_ROLES {
+  OWNER = 'OWNER',
+  ADMIN = 'ADMIN',
+  TECH = 'TECH',
+  WRITER = 'WRITER',
+  GUEST = 'GUEST',
+}
+
+export enum SELECTABLE_USER_ROLES {
+  ADMIN = 'ADMIN',
+  TECH = 'TECH',
+  WRITER = 'WRITER',
+  GUEST = 'GUEST',
+}
+
 export const BACKEND_BASE_URL = import.meta.env.DEV
   ? import.meta.env.VITE_BACKEND_BASE_URL_DEV
   : import.meta.env.VITE_BACKEND_BASE_URL_PROD;

@@ -60,7 +60,8 @@ const Users = () => {
         <h1 className={classes['page_main_content_header_title']}>Users</h1>
       </div>
       <div className={classes['page_main_content_header_sub']}>
-        Manage users on your page.
+        Manage users on your page, set permissions, and edit account
+        information.
       </div>
     </>
   );

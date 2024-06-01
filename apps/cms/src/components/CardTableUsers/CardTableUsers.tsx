@@ -2,7 +2,7 @@ import cx from 'clsx';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Checkbox, Button } from '@mantine/core';
+import { Checkbox, Button, Select } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
@@ -14,6 +14,7 @@ import {
 import {
   ConfirmDeleteModal,
   ConfirmToggleDisableModal,
+  GeneralConfirmModal,
 } from '../FeedbackModals/FeedbackModals';
 import {
   SuccessNotification,
@@ -25,7 +26,9 @@ import { deleteUser, updateUser, User } from '../../requests/userRequests';
 import {
   CLOUDINARY_BASE_URL,
   USER_LIST_THUMB_TRANSFORM,
+  SELECTABLE_USER_ROLES,
 } from '../../config/constants';
+import { hasOwnerPermission } from '../../utils/permission-group-handler';
 
 import classes from './CardTableUsers.module.css';
 
@@ -74,6 +77,20 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
       notifications.show(ErrorNotification({ bodyText: err.message }));
     },
   });
+
+  const handleUserRoleChange = (user: UserTableData, newRole: string) => {
+    modals.openConfirmModal(
+      GeneralConfirmModal({
+        titleText: `Update User Role?`,
+        bodyText: `Are you sure you want to change the role of user "${user.displayName}"? `,
+        onConfirm: () =>
+          userUpdateMutation.mutate({
+            username: user.username,
+            values: { role: newRole },
+          }),
+      })
+    );
+  };
 
   const toggleRow = (id: number) =>
     setSelection((current) =>
@@ -151,6 +168,26 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
       },
     ];
 
+    const furtherEditDropdownItemsOwner = [
+      {
+        text: 'Edit User',
+        icon: IconEdit,
+        onClick: () => navigate(`${item.username}/edit`),
+      },
+      {
+        text: 'Delete User',
+        icon: IconTrash,
+        onClick: () =>
+          modals.openConfirmModal(
+            ConfirmDeleteModal({
+              titleText: `Delete user "${item.displayName}?`,
+              bodyText: `Are you sure you want to delete user "${item.displayName}? This action cannot be undone.`,
+              onConfirm: () => userDeleteMutation.mutate(item.username),
+            })
+          ),
+      },
+    ];
+
     return (
       <tr
         key={item.id}
@@ -186,8 +223,26 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
           )}
         </td>
         <td>{item.displayName}</td>
+        <td>
+          {hasOwnerPermission(item.role) ? (
+            <div style={{ paddingLeft: '12px' }}>{item.role}</div>
+          ) : (
+            <Select
+              data={(
+                Object.values(
+                  SELECTABLE_USER_ROLES
+                ) as Array<SELECTABLE_USER_ROLES>
+              ).map((role) => {
+                return { value: role, label: role };
+              })}
+              value={item.role}
+              onChange={(value, _option) => handleUserRoleChange(item, value!)}
+              allowDeselect={false}
+              withCheckIcon={false}
+            />
+          )}
+        </td>
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
-        <td>{item.role}</td>
         <td className={item.disabled ? classes.disabled : undefined}>
           {item.disabled ? 'DISABLED' : ''}
         </td>
@@ -201,7 +256,13 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
             >
               Edit
             </Button>
-            <FurtherEditDropdown items={furtherEditDropdownItems} />
+            <FurtherEditDropdown
+              items={
+                hasOwnerPermission(item.role)
+                  ? furtherEditDropdownItemsOwner
+                  : furtherEditDropdownItems
+              }
+            />
           </div>
         </td>
       </tr>
@@ -226,8 +287,10 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
             {selection.length === 0 ? 'Select all' : `${selection.length}`}
           </th>
           <th>Display Name</th>
+          <th>
+            <div style={{ paddingLeft: '12px' }}>Role</div>
+          </th>
           <th>Posts</th>
-          <th>Role</th>
           <th>Disabled</th>
           <th></th>
         </tr>

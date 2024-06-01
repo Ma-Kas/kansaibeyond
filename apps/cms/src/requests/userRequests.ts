@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { z } from 'zod';
-import { BACKEND_BASE_URL } from '../config/constants';
+import { BACKEND_BASE_URL, USER_ROLES } from '../config/constants';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
 
 // Zod Schemas
@@ -37,6 +37,15 @@ const userPostSchema = z.object(
     userId: z.number().optional(),
   }
 ).strict();
+
+// prettier-ignore
+const userRoleSchema = z.union([
+  z.literal(USER_ROLES.OWNER),
+  z.literal(USER_ROLES.ADMIN),
+  z.literal(USER_ROLES.TECH),
+  z.literal(USER_ROLES.WRITER),
+  z.literal(USER_ROLES.GUEST),
+]);
 
 // prettier-ignore
 const commentUserSchema = z.object(
@@ -95,7 +104,7 @@ const userSchema = z.object(
     firstName: z.string(),
     lastName: z.string(),
     introduction: z.string().nullable(),
-    role: z.string(),
+    role: userRoleSchema,
     disabled: z.boolean(),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
