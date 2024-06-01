@@ -140,3 +140,35 @@ export const postSetFormFieldError = (errMessage: string) => {
     }
   }
 };
+
+export const userSetFormFieldError = (errMessage: string) => {
+  if (!errMessage.includes('SequelizeUniqueConstraintError')) {
+    // Not an error that should be displayed in form fields
+    return { field: null, error: errMessage };
+  } else {
+    const usernameArr = ['username', 'Username', 'userName'];
+    const emailArr = ['email', 'Email'];
+    const displayNameArr = [
+      'displayName',
+      'displayname',
+      'display_name',
+      'Display Name',
+      'display name',
+    ];
+    if (stringsInString(usernameArr, errMessage)) {
+      return {
+        field: 'username',
+        error: 'This username already exists.',
+      };
+    } else if (stringsInString(emailArr, errMessage)) {
+      return { field: 'email', error: 'This email address is already in use.' };
+    } else if (stringsInString(displayNameArr, errMessage)) {
+      return {
+        field: 'displayName',
+        error: 'This display name is already in use.',
+      };
+    } else {
+      return { field: null, error: errMessage };
+    }
+  }
+};

@@ -23,6 +23,7 @@ import BlogTags from '../pages/BlogTags/BlogTags';
 import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
 import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
 import Users from '../pages/Users/Users';
+import UpdateUser from '../pages/UpdateUser/UpdateUser';
 import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
 
 const Router = () => {
@@ -81,6 +82,10 @@ const Router = () => {
             {
               path: 'users',
               element: <Users />,
+            },
+            {
+              path: 'users/:username/edit',
+              element: <UpdateUser />,
             },
           ],
         },

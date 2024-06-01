@@ -284,7 +284,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
             />
           </th>
           <th style={{ textAlign: 'center' }}>
-            {selection.length === 0 ? 'Select all' : `${selection.length}`}
+            {selection.length === 0 ? '' : `${selection.length}`}
           </th>
           <th>Display Name</th>
           <th>
