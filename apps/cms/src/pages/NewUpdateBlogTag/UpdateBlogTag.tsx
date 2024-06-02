@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Group, Loader, TextInput } from '@mantine/core';
@@ -9,6 +9,7 @@ import { zodResolver } from 'mantine-form-zod-resolver';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import { getOneTag, updateTag } from '../../requests/tagRequests';
 import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import {
   SuccessNotification,
   ErrorNotification,
@@ -26,11 +27,11 @@ const UpdateBlogTag = () => {
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+    mainContentBodyElement: mainContentBodyRef.current,
+  });
 
   const queryClient = useQueryClient();
   const tagQuery = useQuery({
@@ -47,28 +48,6 @@ const UpdateBlogTag = () => {
     },
     validate: zodResolver(tagSchema),
   });
-
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      const contentHeaderHeight = window.getComputedStyle(
-        mainContentHeaderElement
-      ).height;
-      const contentBodyMarginTop = window.getComputedStyle(
-        mainContentBodyElement
-      ).marginTop;
-
-      const top = `${
-        Number(contentHeaderHeight.slice(0, -2)) +
-        Number(contentBodyMarginTop.slice(0, -2))
-      }px`;
-      setHeaderTopStyle(top);
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
 
   useEffect(() => {
     if (tagQuery.isSuccess && tagQuery.data) {

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -26,6 +26,7 @@ import {
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import { destroyWidgets } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-helpers';
 import CardEditCoverImage from '../../components/CardEditCoverImage/CardEditCoverImage';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME,
@@ -47,11 +48,11 @@ const UpdateBlogCategory = () => {
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+    mainContentBodyElement: mainContentBodyRef.current,
+  });
 
   const queryClient = useQueryClient();
   const categoryQuery = useQuery({
@@ -73,28 +74,6 @@ const UpdateBlogCategory = () => {
     },
     validate: zodResolver(categorySchema),
   });
-
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      const contentHeaderHeight = window.getComputedStyle(
-        mainContentHeaderElement
-      ).height;
-      const contentBodyMarginTop = window.getComputedStyle(
-        mainContentBodyElement
-      ).marginTop;
-
-      const top = `${
-        Number(contentHeaderHeight.slice(0, -2)) +
-        Number(contentBodyMarginTop.slice(0, -2))
-      }px`;
-      setHeaderTopStyle(top);
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
 
   useEffect(() => {
     if (categoryQuery.isSuccess && categoryQuery.data) {

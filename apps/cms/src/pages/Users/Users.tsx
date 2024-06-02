@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Loader } from '@mantine/core';
 
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import CardTableUsers from '../../components/CardTableUsers/CardTableUsers';
-import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import { getAllUsers } from '../../requests/userRequests';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 
@@ -13,45 +13,16 @@ import classes from '../../components/PageMainContent/PageMainContent.module.css
 const Users = () => {
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+    mainContentBodyElement: mainContentBodyRef.current,
+  });
 
   const usersQuery = useQuery({
     queryKey: ['users'],
     queryFn: getAllUsers,
     retry: 1,
-  });
-
-  // Set ref of cardElement when rendered,
-  // so tabs in header can get that ref and createPortal to it
-  // Otherwise header gets rendered first, and card to portal to doesn't exist yet
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  // Manage card header position on rerender
-  useLayoutEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
-
-  window.addEventListener('resize', () => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
   });
 
   const usersHeader = (

@@ -1,10 +1,4 @@
-import {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -27,8 +21,8 @@ import {
   ErrorNotification,
   LoadingNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
-import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
 import { destroyWidgets } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-helpers';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import CardEditUserIcon from '../../components/CardEditUserIcon/CardEditUserIcon';
 import {
   CLOUDINARY_API_KEY,
@@ -51,11 +45,11 @@ const UpdateUser = () => {
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+    mainContentBodyElement: mainContentBodyRef.current,
+  });
 
   const queryClient = useQueryClient();
   const userQuery = useQuery({
@@ -85,32 +79,6 @@ const UpdateUser = () => {
       },
     },
     validate: zodResolver(updateUserSchema),
-  });
-
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  // Manage card header position on rerender
-  useLayoutEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
-
-  window.addEventListener('resize', () => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
   });
 
   // Initialize form with fetched user data
