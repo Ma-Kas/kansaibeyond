@@ -32,7 +32,7 @@ const userContactSchema = z.object(
 ).strict();
 
 // prettier-ignore
-export const updateUserSchema = z.object(
+const updateUserSchema = z.object(
     {
       username: z
         .string()
@@ -63,3 +63,5 @@ export const updateUserSchema = z.object(
   ).strict();
 
 export type UpdateUserType = z.infer<typeof updateUserSchema>;
+
+export { updateUserSchema };

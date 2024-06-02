@@ -29,7 +29,7 @@ import {
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
 import { destroyWidgets } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-helpers';
-import CardEditCoverImage from '../../components/CardEditCoverImage/CardEditCoverImage';
+import CardEditUserIcon from '../../components/CardEditUserIcon/CardEditUserIcon';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME,
@@ -362,18 +362,17 @@ const UpdateUser = () => {
                 {...userForm.getInputProps('introduction')}
               />
 
-              {/* <InputWrapper
-                  id='category-image'
-                  label='Category Image'
-                  description='Set a cover image for this category'
-                  withAsterisk
-                >
-                  <CardEditCoverImage
-                    id='category-image'
-                    openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                    coverImage={userForm.getValues().coverImage}
-                  />
-                </InputWrapper> */}
+              <InputWrapper
+                id='user-icon'
+                label='Profile Picture'
+                description='Set a picture or icon for your profile'
+              >
+                <CardEditUserIcon
+                  id='user-icon'
+                  openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                  userIcon={userForm.getValues().userIcon}
+                />
+              </InputWrapper>
             </form>
           </div>
         </div>
