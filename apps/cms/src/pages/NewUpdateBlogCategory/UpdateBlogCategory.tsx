@@ -164,22 +164,6 @@ const UpdateBlogCategory = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (categoryQuery.isPending || categoryQuery.isRefetching) {
-    return (
-      <div className={classes['page_main_loading_error_container']}>
-        <Loader size='xl' />
-      </div>
-    );
-  }
-
-  if (categoryQuery.error) {
-    return (
-      <div className={classes['page_main_loading_error_container']}>
-        <DynamicErrorPage error={categoryQuery.error} />
-      </div>
-    );
-  }
-
   const handleSubmit = (values: unknown) => {
     const parseResult = categorySchema.safeParse(values);
     if (parseResult.success) {
@@ -236,85 +220,114 @@ const UpdateBlogCategory = () => {
     </>
   );
 
+  const switchRenderOnFetchResult = () => {
+    if (categoryQuery.isPending || categoryQuery.isRefetching) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_loading']}>
+            <Loader size='xl' />
+          </div>
+        </div>
+      );
+    }
+    if (categoryQuery.data) {
+      return (
+        <div className={classes['page_main_content_body_card_new_update_page']}>
+          <div className={localClasses['card_inner']}>
+            <div
+              style={{ top: headerTopStyle }}
+              className={localClasses['card_header']}
+            >
+              <div className={localClasses['card_header_inner']}>
+                Edit Category
+              </div>
+            </div>
+            <div className={localClasses['card_body']}>
+              <form
+                className={localClasses['card_body_inner']}
+                id='new-category-form'
+                onSubmit={categoryForm.onSubmit(
+                  (values) => handleSubmit(values),
+                  (validationErrors) => handleImageError(validationErrors)
+                )}
+              >
+                <div className={localClasses['card_body_inner_left']}>
+                  <TextInput
+                    label='Category Name'
+                    placeholder='e.g. Japan, Japan Travel'
+                    description='Keep category names short and descriptive'
+                    {...categoryForm.getInputProps('categoryName')}
+                    required
+                    autoFocus
+                  />
+                  <TextInput
+                    classNames={{ section: localClasses['text_input_section'] }}
+                    leftSection={<div>/blog/categories/</div>}
+                    leftSectionWidth={'14.5ch'}
+                    label='URL Slug'
+                    placeholder='your-category-here'
+                    description='URL slug displayed for this category'
+                    {...categoryForm.getInputProps('categorySlug')}
+                    required
+                  />
+                  <Textarea
+                    label='Description'
+                    autosize
+                    minRows={6}
+                    placeholder='Add a note about the category or give examples of what is included.'
+                    description='Optional longer description of this category'
+                    {...categoryForm.getInputProps('description')}
+                  />
+                </div>
+                <div className={localClasses['card_body_inner_right']}>
+                  <InputWrapper
+                    id='category-image'
+                    label='Category Image'
+                    description='Set a cover image for this category'
+                    withAsterisk
+                  >
+                    <CardEditCoverImage
+                      id='category-image'
+                      openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                      coverImage={categoryForm.getValues().coverImage}
+                    />
+                  </InputWrapper>
+
+                  <TextInput
+                    label='Category Image Alternative Text'
+                    placeholder='e.g. Mount Fuji and cherry blossoms'
+                    description='Help screen readers announce image'
+                    {...categoryForm.getInputProps('coverImage.altText')}
+                    required
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (categoryQuery.error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error']}>
+            <DynamicErrorPage error={categoryQuery.error} />
+          </div>
+        </div>
+      );
+    }
+
+    return <div></div>;
+  };
+
   return (
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
       header={editHeader}
     >
-      <div className={classes['page_main_content_body_card_new_update_page']}>
-        <div className={localClasses['card_inner']}>
-          <div
-            style={{ top: headerTopStyle }}
-            className={localClasses['card_header']}
-          >
-            <div className={localClasses['card_header_inner']}>
-              Edit Category
-            </div>
-          </div>
-          <div className={localClasses['card_body']}>
-            <form
-              className={localClasses['card_body_inner']}
-              id='new-category-form'
-              onSubmit={categoryForm.onSubmit(
-                (values) => handleSubmit(values),
-                (validationErrors) => handleImageError(validationErrors)
-              )}
-            >
-              <div className={localClasses['card_body_inner_left']}>
-                <TextInput
-                  label='Category Name'
-                  placeholder='e.g. Japan, Japan Travel'
-                  description='Keep category names short and descriptive'
-                  {...categoryForm.getInputProps('categoryName')}
-                  required
-                  autoFocus
-                />
-                <TextInput
-                  classNames={{ section: localClasses['text_input_section'] }}
-                  leftSection={<div>/blog/categories/</div>}
-                  leftSectionWidth={'14.5ch'}
-                  label='URL Slug'
-                  placeholder='your-category-here'
-                  description='URL slug displayed for this category'
-                  {...categoryForm.getInputProps('categorySlug')}
-                  required
-                />
-                <Textarea
-                  label='Description'
-                  autosize
-                  minRows={6}
-                  placeholder='Add a note about the category or give examples of what is included.'
-                  description='Optional longer description of this category'
-                  {...categoryForm.getInputProps('description')}
-                />
-              </div>
-              <div className={localClasses['card_body_inner_right']}>
-                <InputWrapper
-                  id='category-image'
-                  label='Category Image'
-                  description='Set a cover image for this category'
-                  withAsterisk
-                >
-                  <CardEditCoverImage
-                    id='category-image'
-                    openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                    coverImage={categoryForm.getValues().coverImage}
-                  />
-                </InputWrapper>
-
-                <TextInput
-                  label='Category Image Alternative Text'
-                  placeholder='e.g. Mount Fuji and cherry blossoms'
-                  description='Help screen readers announce image'
-                  {...categoryForm.getInputProps('coverImage.altText')}
-                  required
-                />
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      {switchRenderOnFetchResult()}
     </PageMainContent>
   );
 };

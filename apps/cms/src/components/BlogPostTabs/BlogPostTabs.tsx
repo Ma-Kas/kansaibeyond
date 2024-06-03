@@ -68,9 +68,7 @@ const BlogPostTabs = ({
                     value={tab.value}
                   >
                     <div
-                      className={
-                        classes['page_main_content_body_card_error_loading']
-                      }
+                      className={classes['page_main_content_body_card_loading']}
                     >
                       <Loader size='xl' />
                     </div>
@@ -108,9 +106,7 @@ const BlogPostTabs = ({
                     value={tab.value}
                   >
                     <div
-                      className={
-                        classes['page_main_content_body_card_error_loading']
-                      }
+                      className={classes['page_main_content_body_card_error']}
                     >
                       <DynamicErrorPage error={error} />
                     </div>

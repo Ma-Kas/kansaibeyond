@@ -40,7 +40,7 @@ const Users = () => {
     if (usersQuery.isPending || usersQuery.isRefetching) {
       return (
         <div className={classes['page_main_content_body_card']}>
-          <div className={classes['page_main_content_body_card_error_loading']}>
+          <div className={classes['page_main_content_body_card_loading']}>
             <Loader size='xl' />
           </div>
         </div>
@@ -62,7 +62,7 @@ const Users = () => {
     if (usersQuery.error) {
       return (
         <div className={classes['page_main_content_body_card']}>
-          <div className={classes['page_main_content_body_card_error_loading']}>
+          <div className={classes['page_main_content_body_card_error']}>
             <DynamicErrorPage error={usersQuery.error} />
           </div>
         </div>

@@ -53,7 +53,7 @@ const BlogTags = () => {
     if (tagsQuery.isPending || tagsQuery.isRefetching) {
       return (
         <div className={classes['page_main_content_body_card']}>
-          <div className={classes['page_main_content_body_card_error_loading']}>
+          <div className={classes['page_main_content_body_card_loading']}>
             <Loader size='xl' />
           </div>
         </div>
@@ -75,7 +75,7 @@ const BlogTags = () => {
     if (tagsQuery.error) {
       return (
         <div className={classes['page_main_content_body_card']}>
-          <div className={classes['page_main_content_body_card_error_loading']}>
+          <div className={classes['page_main_content_body_card_error']}>
             <DynamicErrorPage error={tagsQuery.error} />
           </div>
         </div>

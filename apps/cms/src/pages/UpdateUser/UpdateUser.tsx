@@ -48,7 +48,6 @@ const UpdateUser = () => {
 
   const headerTopStyle = useCardHeaderTopPosition({
     mainContentHeaderElement: mainContentHeaderRef.current,
-    mainContentBodyElement: mainContentBodyRef.current,
   });
 
   const queryClient = useQueryClient();
@@ -188,22 +187,6 @@ const UpdateUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (userQuery.isPending || userQuery.isRefetching) {
-    return (
-      <div className={classes['page_main_loading_error_container']}>
-        <Loader size='xl' />
-      </div>
-    );
-  }
-
-  if (userQuery.error) {
-    return (
-      <div className={classes['page_main_loading_error_container']}>
-        <DynamicErrorPage error={userQuery.error} />
-      </div>
-    );
-  }
-
   const handleSubmit = (values: unknown) => {
     const parseResult = updateUserSchema.safeParse(values);
     if (parseResult.success) {
@@ -263,88 +246,117 @@ const UpdateUser = () => {
     </>
   );
 
+  const switchRenderOnFetchResult = () => {
+    if (userQuery.isPending || userQuery.isRefetching) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_loading']}>
+            <Loader size='xl' />
+          </div>
+        </div>
+      );
+    }
+    if (userQuery.data) {
+      return (
+        <div className={classes['page_main_content_body_card_new_update_page']}>
+          <div className={localClasses['card_inner']}>
+            <div
+              style={{ top: headerTopStyle }}
+              className={localClasses['card_header']}
+            >
+              <div className={localClasses['card_header_inner']}>Edit User</div>
+            </div>
+            <div className={localClasses['card_body']}>
+              <form
+                className={localClasses['card_body_inner']}
+                id='update-user-form'
+                onSubmit={userForm.onSubmit(
+                  (values) => handleSubmit(values),
+                  (validationErrors) => handleImageError(validationErrors)
+                )}
+              >
+                <TextInput
+                  label='Display Name'
+                  placeholder='Your display name'
+                  description='This is the name under which all your content will appear'
+                  {...userForm.getInputProps('displayName')}
+                  required
+                />
+                <TextInput
+                  label='Username'
+                  placeholder='Your unique username'
+                  description='Username under which your profile can be found'
+                  {...userForm.getInputProps('username')}
+                  required
+                />
+                <TextInput
+                  label='New Password'
+                  placeholder='Your secret new password'
+                  description='You can change your password right here'
+                  {...userForm.getInputProps('password')}
+                />
+                <TextInput
+                  label='First Name'
+                  placeholder='Your first name'
+                  description="Don't worry, this is not publically visible"
+                  {...userForm.getInputProps('firstName')}
+                  required
+                />
+                <TextInput
+                  label='Last Name'
+                  placeholder='Your last name'
+                  description="Don't worry, this is not publically visible"
+                  {...userForm.getInputProps('lastName')}
+                  required
+                />
+
+                <Textarea
+                  label='Introduction'
+                  autosize
+                  minRows={6}
+                  placeholder='Tell people a bit about yourself...'
+                  description='Optional space for you to write something extra about yourself'
+                  {...userForm.getInputProps('introduction')}
+                />
+
+                <InputWrapper
+                  id='user-icon'
+                  label='Profile Picture'
+                  description='Set a picture or icon for your profile'
+                >
+                  <CardEditUserIcon
+                    id='user-icon'
+                    openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                    userIcon={userForm.getValues().userIcon}
+                  />
+                </InputWrapper>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (userQuery.error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error']}>
+            <DynamicErrorPage error={userQuery.error} />
+          </div>
+        </div>
+      );
+    }
+
+    return <div></div>;
+  };
+
   return (
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
       header={editHeader}
     >
-      <div className={localClasses['page_main_content_body_card']}>
-        <div className={localClasses['card_inner']}>
-          <div
-            style={{ top: headerTopStyle }}
-            className={localClasses['card_header']}
-          >
-            <div className={localClasses['card_header_inner']}>Edit User</div>
-          </div>
-          <div className={localClasses['card_body']}>
-            <form
-              className={localClasses['card_body_inner']}
-              id='update-user-form'
-              onSubmit={userForm.onSubmit(
-                (values) => handleSubmit(values),
-                (validationErrors) => handleImageError(validationErrors)
-              )}
-            >
-              <TextInput
-                label='Display Name'
-                placeholder='Your display name'
-                description='This is the name under which all your content will appear'
-                {...userForm.getInputProps('displayName')}
-                required
-              />
-              <TextInput
-                label='Username'
-                placeholder='Your unique username'
-                description='Username under which your profile can be found'
-                {...userForm.getInputProps('username')}
-                required
-              />
-              <TextInput
-                label='New Password'
-                placeholder='Your secret new password'
-                description='You can change your password right here'
-                {...userForm.getInputProps('password')}
-              />
-              <TextInput
-                label='First Name'
-                placeholder='Your first name'
-                description="Don't worry, this is not publically visible"
-                {...userForm.getInputProps('firstName')}
-                required
-              />
-              <TextInput
-                label='Last Name'
-                placeholder='Your last name'
-                description="Don't worry, this is not publically visible"
-                {...userForm.getInputProps('lastName')}
-                required
-              />
-
-              <Textarea
-                label='Introduction'
-                autosize
-                minRows={6}
-                placeholder='Tell people a bit about yourself...'
-                description='Optional space for you to write something extra about yourself'
-                {...userForm.getInputProps('introduction')}
-              />
-
-              <InputWrapper
-                id='user-icon'
-                label='Profile Picture'
-                description='Set a picture or icon for your profile'
-              >
-                <CardEditUserIcon
-                  id='user-icon'
-                  openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                  userIcon={userForm.getValues().userIcon}
-                />
-              </InputWrapper>
-            </form>
-          </div>
-        </div>
-      </div>
+      {switchRenderOnFetchResult()}
     </PageMainContent>
   );
 };

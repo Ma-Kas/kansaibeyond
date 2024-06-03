@@ -94,22 +94,6 @@ const UpdateBlogTag = () => {
     },
   });
 
-  if (tagQuery.isPending || tagQuery.isRefetching) {
-    return (
-      <div className={classes['page_main_loading_error_container']}>
-        <Loader size='xl' />
-      </div>
-    );
-  }
-
-  if (tagQuery.error) {
-    return (
-      <div className={classes['page_main_loading_error_container']}>
-        <DynamicErrorPage error={tagQuery.error} />
-      </div>
-    );
-  }
-
   const handleSubmit = (values: unknown) => {
     const parseResult = tagSchema.safeParse(values);
     if (parseResult.success) {
@@ -150,48 +134,77 @@ const UpdateBlogTag = () => {
     </>
   );
 
+  const switchRenderOnFetchResult = () => {
+    if (tagQuery.isPending || tagQuery.isRefetching) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_loading']}>
+            <Loader size='xl' />
+          </div>
+        </div>
+      );
+    }
+    if (tagQuery.data) {
+      return (
+        <div className={classes['page_main_content_body_card_new_update_page']}>
+          <div className={localClasses['card_inner']}>
+            <div
+              style={{ top: headerTopStyle }}
+              className={localClasses['card_header']}
+            >
+              <div className={localClasses['card_header_inner']}>Edit Tag</div>
+            </div>
+            <div className={localClasses['card_body']}>
+              <form
+                className={localClasses['card_body_inner']}
+                id='tag-edit-form'
+                onSubmit={tagForm.onSubmit((values) => handleSubmit(values))}
+              >
+                <TextInput
+                  label='Tag Name'
+                  placeholder='e.g. Japan, Japan Travel'
+                  description='Keep tags short and descriptive'
+                  {...tagForm.getInputProps('tagName')}
+                  required
+                  autoFocus
+                />
+                <TextInput
+                  classNames={{ section: localClasses['text_input_section'] }}
+                  leftSection={<div>/blog/tags/</div>}
+                  leftSectionWidth={'10ch'}
+                  label='URL Slug'
+                  placeholder='your-tag-here'
+                  description='URL slug displayed for this tag'
+                  {...tagForm.getInputProps('tagSlug')}
+                  required
+                />
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (tagQuery.error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error']}>
+            <DynamicErrorPage error={tagQuery.error} />
+          </div>
+        </div>
+      );
+    }
+
+    return <div></div>;
+  };
+
   return (
     <PageMainContent
       mainContentHeaderRef={mainContentHeaderRef}
       mainContentBodyRef={mainContentBodyRef}
       header={editHeader}
     >
-      <div className={classes['page_main_content_body_card_new_update_page']}>
-        <div className={localClasses['card_inner']}>
-          <div
-            style={{ top: headerTopStyle }}
-            className={localClasses['card_header']}
-          >
-            <div className={localClasses['card_header_inner']}>Edit Tag</div>
-          </div>
-          <div className={localClasses['card_body']}>
-            <form
-              className={localClasses['card_body_inner']}
-              id='tag-edit-form'
-              onSubmit={tagForm.onSubmit((values) => handleSubmit(values))}
-            >
-              <TextInput
-                label='Tag Name'
-                placeholder='e.g. Japan, Japan Travel'
-                description='Keep tags short and descriptive'
-                {...tagForm.getInputProps('tagName')}
-                required
-                autoFocus
-              />
-              <TextInput
-                classNames={{ section: localClasses['text_input_section'] }}
-                leftSection={<div>/blog/tags/</div>}
-                leftSectionWidth={'10ch'}
-                label='URL Slug'
-                placeholder='your-tag-here'
-                description='URL slug displayed for this tag'
-                {...tagForm.getInputProps('tagSlug')}
-                required
-              />
-            </form>
-          </div>
-        </div>
-      </div>
+      {switchRenderOnFetchResult()}
     </PageMainContent>
   );
 };

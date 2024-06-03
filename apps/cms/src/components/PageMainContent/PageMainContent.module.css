@@ -101,11 +101,15 @@
   flex-direction: column;
 }
 
-.page_main_content_body_card {
-  min-height: var(--dashboard-content-card-min-height);
+.page_main_content_body_card_loading {
+  min-height: var(--dashboard-content-card-loading-min-height);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.page_main_content_body_card_error_loading {
+.page_main_content_body_card_error {
   flex: 1;
   display: flex;
   justify-content: center;
