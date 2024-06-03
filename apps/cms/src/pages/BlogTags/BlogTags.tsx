@@ -21,7 +21,6 @@ const BlogTags = () => {
   // header position can be dynamically created from their size
   const headerTopStyle = useCardHeaderTopPosition({
     mainContentHeaderElement: mainContentHeaderRef.current,
-    mainContentBodyElement: mainContentBodyRef.current,
   });
 
   const tagsQuery = useQuery({

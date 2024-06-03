@@ -2,7 +2,6 @@ import { useLayoutEffect, useState } from 'react';
 
 type WindowResizeProps = {
   mainContentHeaderElement: HTMLDivElement | null;
-  mainContentBodyElement: HTMLDivElement | null;
 };
 
 // Calculate the top of the sticky card header based on content_header height
@@ -10,24 +9,15 @@ type WindowResizeProps = {
 // Used on rerender through useLayoutEffect, and on window resize event
 const useCardHeaderTopPosition = ({
   mainContentHeaderElement,
-  mainContentBodyElement,
 }: WindowResizeProps) => {
   const [headerTopStyle, setHeaderTopStyle] = useState('');
-  useLayoutEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      const updateTopStyle = () => {
-        const contentHeaderHeight = window.getComputedStyle(
-          mainContentHeaderElement
-        ).height;
-        const contentBodyMarginTop = window.getComputedStyle(
-          mainContentBodyElement
-        ).marginTop;
 
-        const top = `${
-          Number(contentHeaderHeight.slice(0, -2)) +
-          Number(contentBodyMarginTop.slice(0, -2))
-        }px`;
-        setHeaderTopStyle(top);
+  useLayoutEffect(() => {
+    if (mainContentHeaderElement) {
+      const updateTopStyle = () => {
+        // +1 to account for card border
+        const top = mainContentHeaderElement.clientHeight + 1;
+        setHeaderTopStyle(`${top}px`);
       };
 
       window.addEventListener('resize', updateTopStyle);
@@ -35,7 +25,7 @@ const useCardHeaderTopPosition = ({
       return () => window.removeEventListener('resize', updateTopStyle);
     }
     return;
-  }, [mainContentHeaderElement, mainContentBodyElement]);
+  }, [mainContentHeaderElement]);
   return headerTopStyle;
 };
 

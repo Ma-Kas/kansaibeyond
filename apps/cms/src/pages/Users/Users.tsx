@@ -16,7 +16,6 @@ const Users = () => {
 
   const headerTopStyle = useCardHeaderTopPosition({
     mainContentHeaderElement: mainContentHeaderRef.current,
-    mainContentBodyElement: mainContentBodyRef.current,
   });
 
   const usersQuery = useQuery({

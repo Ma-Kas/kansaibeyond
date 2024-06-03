@@ -1,13 +1,3 @@
-.page_main_content_body_card {
-  width: 100%;
-  margin-top: -1px;
-  border: var(--editor-menu-border);
-  border-radius: var(--dashboard-content-card-radius);
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 .card_inner {
   font-size: var(--font-size-regular);
   font-weight: var(--font-weight-regular);

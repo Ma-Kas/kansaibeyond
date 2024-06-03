@@ -30,7 +30,6 @@ const UpdateBlogTag = () => {
 
   const headerTopStyle = useCardHeaderTopPosition({
     mainContentHeaderElement: mainContentHeaderRef.current,
-    mainContentBodyElement: mainContentBodyRef.current,
   });
 
   const queryClient = useQueryClient();
@@ -157,7 +156,7 @@ const UpdateBlogTag = () => {
       mainContentBodyRef={mainContentBodyRef}
       header={editHeader}
     >
-      <div className={localClasses['page_main_content_body_card']}>
+      <div className={classes['page_main_content_body_card_new_update_page']}>
         <div className={localClasses['card_inner']}>
           <div
             style={{ top: headerTopStyle }}

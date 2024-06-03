@@ -36,7 +36,6 @@ const BlogPostTabs = ({
 
   const headerTopStyle = useCardHeaderTopPosition({
     mainContentHeaderElement,
-    mainContentBodyElement,
   });
 
   if (!cardElement || !mainContentHeaderElement || !mainContentBodyElement) {
