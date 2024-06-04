@@ -7,6 +7,8 @@ type ConfirmDeleteProps = {
   onConfirm: () => void;
 };
 
+type ToggleDisableProps = ConfirmDeleteProps & { disable: boolean };
+
 type ErrorNotificationProps = {
   titleText: string;
   bodyText: string;
@@ -38,6 +40,25 @@ export const ConfirmTrashModal = ({
     centered: true,
     children: <Text className={classes['body']}>{bodyText}</Text>,
     labels: { confirm: 'Trash', cancel: 'Cancel' },
+    cancelProps: { className: classes['cancelBtn'] },
+    confirmProps: { className: classes['deleteBtn'] },
+    onConfirm: onConfirm,
+  };
+};
+
+export const ConfirmToggleDisableModal = ({
+  titleText,
+  bodyText,
+  disable,
+  onConfirm,
+}: ToggleDisableProps) => {
+  return {
+    title: <Text className={classes['title']}>{titleText}</Text>,
+    centered: true,
+    children: <Text className={classes['body']}>{bodyText}</Text>,
+    labels: disable
+      ? { confirm: 'Disable', cancel: 'Cancel' }
+      : { confirm: 'Enable', cancel: 'Cancel' },
     cancelProps: { className: classes['cancelBtn'] },
     confirmProps: { className: classes['deleteBtn'] },
     onConfirm: onConfirm,

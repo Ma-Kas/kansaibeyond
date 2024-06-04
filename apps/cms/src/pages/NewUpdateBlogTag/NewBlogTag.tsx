@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Group, TextInput } from '@mantine/core';
@@ -8,6 +8,7 @@ import { zodResolver } from 'mantine-form-zod-resolver';
 
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import { postTag } from '../../requests/tagRequests';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import { tagSetFormFieldError } from '../../utils/backend-error-response-validation';
 import {
   SuccessNotification,
@@ -23,11 +24,10 @@ const NewBlogTag = () => {
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+  });
 
   const queryClient = useQueryClient();
 
@@ -39,28 +39,6 @@ const NewBlogTag = () => {
     },
     validate: zodResolver(tagSchema),
   });
-
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      const contentHeaderHeight = window.getComputedStyle(
-        mainContentHeaderElement
-      ).height;
-      const contentBodyMarginTop = window.getComputedStyle(
-        mainContentBodyElement
-      ).marginTop;
-
-      const top = `${
-        Number(contentHeaderHeight.slice(0, -2)) +
-        Number(contentBodyMarginTop.slice(0, -2))
-      }px`;
-      setHeaderTopStyle(top);
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
 
   const tagPostMutation = useMutation({
     mutationFn: postTag,
@@ -129,7 +107,7 @@ const NewBlogTag = () => {
       mainContentBodyRef={mainContentBodyRef}
       header={editHeader}
     >
-      <div className={localClasses['page_main_content_body_card']}>
+      <div className={classes['page_main_content_body_card_new_update_page']}>
         <div className={localClasses['card_inner']}>
           <div
             style={{ top: headerTopStyle }}

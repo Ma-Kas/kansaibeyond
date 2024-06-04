@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Loader } from '@mantine/core';
@@ -6,7 +6,7 @@ import { IconPlus } from '@tabler/icons-react';
 
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import CardTableTags from '../../components/CardTableTags/CardTableTags';
-import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import { getAllTags } from '../../requests/tagRequests';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 
@@ -16,45 +16,17 @@ const BlogTags = () => {
   const navigate = useNavigate();
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  // Pass ref of header and body element when they exist, so that card
+  // header position can be dynamically created from their size
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+  });
 
   const tagsQuery = useQuery({
     queryKey: ['tags'],
     queryFn: getAllTags,
     retry: 1,
-  });
-
-  // Set ref of cardElement when rendered,
-  // so tabs in header can get that ref and createPortal to it
-  // Otherwise header gets rendered first, and card to portal to doesn't exist yet
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  // Manage card header position on rerender
-  useLayoutEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
-
-  window.addEventListener('resize', () => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
   });
 
   const blogTagsHeader = (
@@ -81,7 +53,7 @@ const BlogTags = () => {
     if (tagsQuery.isPending || tagsQuery.isRefetching) {
       return (
         <div className={classes['page_main_content_body_card']}>
-          <div className={classes['page_main_content_body_card_error_loading']}>
+          <div className={classes['page_main_content_body_card_loading']}>
             <Loader size='xl' />
           </div>
         </div>
@@ -103,7 +75,7 @@ const BlogTags = () => {
     if (tagsQuery.error) {
       return (
         <div className={classes['page_main_content_body_card']}>
-          <div className={classes['page_main_content_body_card_error_loading']}>
+          <div className={classes['page_main_content_body_card_error']}>
             <DynamicErrorPage error={tagsQuery.error} />
           </div>
         </div>

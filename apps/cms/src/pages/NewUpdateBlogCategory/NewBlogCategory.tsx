@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -22,6 +22,7 @@ import {
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import { destroyWidgets } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-helpers';
 import CardEditCoverImage from '../../components/CardEditCoverImage/CardEditCoverImage';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME,
@@ -40,11 +41,10 @@ const NewBlogCategory = () => {
 
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
-  const [mainContentHeaderElement, setMainContentHeaderElement] =
-    useState<HTMLDivElement | null>(null);
-  const [mainContentBodyElement, setMainContentBodyElement] =
-    useState<HTMLDivElement | null>(null);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
+
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement: mainContentHeaderRef.current,
+  });
 
   const queryClient = useQueryClient();
 
@@ -61,28 +61,6 @@ const NewBlogCategory = () => {
     },
     validate: zodResolver(categorySchema),
   });
-
-  useEffect(() => {
-    setMainContentHeaderElement(mainContentHeaderRef.current);
-    setMainContentBodyElement(mainContentBodyRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      const contentHeaderHeight = window.getComputedStyle(
-        mainContentHeaderElement
-      ).height;
-      const contentBodyMarginTop = window.getComputedStyle(
-        mainContentBodyElement
-      ).marginTop;
-
-      const top = `${
-        Number(contentHeaderHeight.slice(0, -2)) +
-        Number(contentBodyMarginTop.slice(0, -2))
-      }px`;
-      setHeaderTopStyle(top);
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
 
   const categoryPostMutation = useMutation({
     mutationFn: postCategory,
@@ -205,7 +183,7 @@ const NewBlogCategory = () => {
       mainContentBodyRef={mainContentBodyRef}
       header={editHeader}
     >
-      <div className={localClasses['page_main_content_body_card']}>
+      <div className={classes['page_main_content_body_card_new_update_page']}>
         <div className={localClasses['card_inner']}>
           <div
             style={{ top: headerTopStyle }}

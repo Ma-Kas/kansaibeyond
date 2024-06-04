@@ -1,13 +1,13 @@
 import { Loader, Tabs } from '@mantine/core';
-import { Fragment, useLayoutEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import CardTablePosts from '../CardTablePosts/CardTablePosts';
-import handleCardHeaderPosition from '../../utils/handle-list-view-card-header';
 import { Post } from '../../requests/postRequests';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
 
 import classes from './BlogPostTabs.module.css';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 
 export type TabData = {
   value: string;
@@ -33,27 +33,9 @@ const BlogPostTabs = ({
   cardElement,
 }: TabDataProps) => {
   const [activeTab, setActiveTab] = useState<string | null>(tabData[0].value);
-  const [headerTopStyle, setHeaderTopStyle] = useState('');
 
-  // Manage card header position on rerender
-  useLayoutEffect(() => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
-  }, [mainContentBodyElement, mainContentHeaderElement]);
-
-  window.addEventListener('resize', () => {
-    if (mainContentHeaderElement && mainContentBodyElement) {
-      handleCardHeaderPosition(
-        mainContentHeaderElement,
-        mainContentBodyElement,
-        setHeaderTopStyle
-      );
-    }
+  const headerTopStyle = useCardHeaderTopPosition({
+    mainContentHeaderElement,
   });
 
   if (!cardElement || !mainContentHeaderElement || !mainContentBodyElement) {
@@ -86,9 +68,7 @@ const BlogPostTabs = ({
                     value={tab.value}
                   >
                     <div
-                      className={
-                        classes['page_main_content_body_card_error_loading']
-                      }
+                      className={classes['page_main_content_body_card_loading']}
                     >
                       <Loader size='xl' />
                     </div>
@@ -126,9 +106,7 @@ const BlogPostTabs = ({
                     value={tab.value}
                   >
                     <div
-                      className={
-                        classes['page_main_content_body_card_error_loading']
-                      }
+                      className={classes['page_main_content_body_card_error']}
                     >
                       <DynamicErrorPage error={error} />
                     </div>

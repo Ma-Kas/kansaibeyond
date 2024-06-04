@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { z } from 'zod';
-import { BACKEND_BASE_URL } from '../config/constants';
+import { BACKEND_BASE_URL, USER_ROLES } from '../config/constants';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
 
 // Zod Schemas
@@ -31,11 +31,21 @@ const userPostSchema = z.object(
     status: postStatusSchema,
     views: z.number(),
     readTime: z.number(),
-    updatedAt: z.string(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
     deletedAt: z.string().nullable(),
     userId: z.number().optional(),
   }
 ).strict();
+
+// prettier-ignore
+const userRoleSchema = z.union([
+  z.literal(USER_ROLES.OWNER),
+  z.literal(USER_ROLES.ADMIN),
+  z.literal(USER_ROLES.TECH),
+  z.literal(USER_ROLES.WRITER),
+  z.literal(USER_ROLES.GUEST),
+]);
 
 // prettier-ignore
 const commentUserSchema = z.object(
@@ -94,10 +104,10 @@ const userSchema = z.object(
     firstName: z.string(),
     lastName: z.string(),
     introduction: z.string().nullable(),
-    role: z.string(),
+    role: userRoleSchema,
     disabled: z.boolean(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
     deletedAt: z.string().nullable(),
     posts: z.array(userPostSchema),
     comments: z.array(userCommentSchema),
@@ -105,16 +115,72 @@ const userSchema = z.object(
   }
 ).strict();
 
-const newUserSchema = userSchema.omit({
+export type User = z.infer<typeof userSchema>;
+
+const newUpdateUserSchema = userSchema.omit({
   posts: true,
   comments: true,
   contact: true,
 });
 
+const allUsersSchema = z.array(userSchema);
+
+// prettier-ignore
+const deleteUserSchema = z.object(
+  {
+    message: z.string(),
+  }
+).strict();
+
+export const getAllUsers = async () => {
+  try {
+    const response = await axios.get(`${BACKEND_BASE_URL}/users`);
+    return allUsersSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
+export const getOneUser = async (username: string) => {
+  try {
+    const response = await axios.get(`${BACKEND_BASE_URL}/users/${username}`);
+    return userSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
 export const postUser = async (userData: unknown) => {
   try {
     const response = await axios.post(`${BACKEND_BASE_URL}/users`, userData);
-    return newUserSchema.parse(response.data);
+    return newUpdateUserSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
+export const updateUser = async (username: string, userData: unknown) => {
+  try {
+    const response = await axios.put(
+      `${BACKEND_BASE_URL}/users/${username}`,
+      userData
+    );
+    return newUpdateUserSchema.parse(response.data);
+  } catch (err) {
+    handleRequestErrors(err);
+    return null;
+  }
+};
+
+export const deleteUser = async (username: string) => {
+  try {
+    const response = await axios.delete(
+      `${BACKEND_BASE_URL}/users/${username}`
+    );
+    return deleteUserSchema.parse(response.data);
   } catch (err) {
     handleRequestErrors(err);
     return null;

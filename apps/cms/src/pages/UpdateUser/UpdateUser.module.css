@@ -6,6 +6,9 @@
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
+
+  --within_section_main_gap: var(--dashboard-content-card-padding-horizontal);
+  --within_section_minor_gap: rem(12px);
 }
 
 .card_header {
@@ -40,11 +43,46 @@
 }
 
 .card_body_inner > * {
-  margin-top: 12px;
+  margin-top: var(--within_section_minor_gap);
+}
+
+.input_section_header {
+  font-size: rem(16px);
+  font-weight: var(--font-weight-bold);
+  color: var(--mantine-primary-color-filled);
+  margin: 0 0 var(--within_section_minor_gap);
+}
+
+.input_section_header:not(:first-child) {
+  margin-top: calc(var(--within_section_minor_gap) * 5);
+}
+
+.profile_info_section {
+  display: flex;
+  gap: var(--within_section_main_gap);
+}
+
+.user_info_stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--within_section_minor_gap);
+}
+
+.user_info_two_columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--within_section_minor_gap);
+
+  @media (max-width: rem(950px)) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .text_input_section {
-  padding-left: 12px;
+  padding-left: var(--within_section_minor_gap);
   font-size: var(--mantine-font-size-sm);
   color: var(--mantine-color-dimmed);
 }

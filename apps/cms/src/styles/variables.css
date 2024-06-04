@@ -75,6 +75,7 @@
   --dashboard-content-tabs-margin-top: rem(32px);
   --dashboard-content-tabs-gap: rem(16px);
   --dashboard-content-card-min-height: rem(500px);
+  --dashboard-content-card-loading-min-height: rem(500px);
   --dashboard-content-card-radius: rem(8px);
   --dashboard-content-input-radius: rem(4px);
   --dashboard-content-input-border-color: rgb(206, 212, 218);
@@ -89,10 +90,12 @@
   --content-card-table-row-gap: rem(12px);
   --content-card-table-posts-image-width: rem(85px);
   --content-card-table-category-image-width: rem(64px);
+  --content-card-table-users-image-width: rem(50px);
   --content-card-table-checkbox-width: rem(20px);
   --content-card-table-button-group-gap: rem(10px);
   --content-card-table-button-group-height: rem(30px);
   --content-card-table-button-group-width: rem(105px);
+  --content-card-user-icon-container-edit-max-width: rem(200px);
 
   /* Rich Text Editor Variales */
   --editor-font-family-menu: var(--mantine-font-family);
