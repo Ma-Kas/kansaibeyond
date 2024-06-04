@@ -120,7 +120,7 @@ const UpdateBlogTag = () => {
 
           <Button
             className={classes['page_main_header_confirm_button']}
-            form='tag-edit-form'
+            form='update-tag-form'
             type='submit'
           >
             Save
@@ -157,7 +157,7 @@ const UpdateBlogTag = () => {
             <div className={localClasses['card_body']}>
               <form
                 className={localClasses['card_body_inner']}
-                id='tag-edit-form'
+                id='update-tag-form'
                 onSubmit={tagForm.onSubmit((values) => handleSubmit(values))}
               >
                 <TextInput

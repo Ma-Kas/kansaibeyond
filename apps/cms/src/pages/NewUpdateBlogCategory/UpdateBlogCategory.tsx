@@ -207,7 +207,7 @@ const UpdateBlogCategory = () => {
 
           <Button
             className={classes['page_main_header_confirm_button']}
-            form='new-category-form'
+            form='update-category-form'
             type='submit'
           >
             Save
@@ -245,7 +245,7 @@ const UpdateBlogCategory = () => {
             <div className={localClasses['card_body']}>
               <form
                 className={localClasses['card_body_inner']}
-                id='new-category-form'
+                id='update-category-form'
                 onSubmit={categoryForm.onSubmit(
                   (values) => handleSubmit(values),
                   (validationErrors) => handleImageError(validationErrors)

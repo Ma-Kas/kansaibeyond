@@ -8,25 +8,22 @@ import {
 import NotFoundError from '../../errors/NotFoundError';
 import BadRequestError from '../../errors/BadRequestError';
 
-import { createUserWhere } from '../../utils/limit-query-to-own-creation';
+// import { createUserWhere } from '../../utils/limit-query-to-own-creation';
 import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_affiliates = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const affiliates = await Affiliate.findAll({
-      attributes: {
-        exclude: ['userId'],
-      },
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'role'],
-          where: createUserWhere(req),
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
+          // where: createUserWhere(req),
         },
       ],
       order: [['blogName', 'ASC']],
@@ -48,13 +45,10 @@ export const get_one_affiliate = async (
 
     const affiliate = await Affiliate.findOne({
       where: { id: req.params.id },
-      attributes: {
-        exclude: ['userId'],
-      },
       include: [
         {
           model: User,
-          attributes: ['username', 'userIcon', 'role'],
+          attributes: ['username', 'displayName', 'userIcon', 'role'],
         },
       ],
     });

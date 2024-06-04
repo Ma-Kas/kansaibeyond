@@ -101,6 +101,23 @@ export const tagSetFormFieldError = (errMessage: string) => {
   }
 };
 
+export const affiliateSetFormFieldError = (errMessage: string) => {
+  if (!errMessage.includes('SequelizeUniqueConstraintError')) {
+    // Not an error that should be displayed in form fields
+    return { field: null, error: errMessage };
+  } else {
+    const blogNameArr = ['blog_name', 'Blog Name', 'blogName'];
+    const blogUrlArr = ['blog_url', 'Blog Url', 'blogUrl'];
+    if (stringsInString(blogNameArr, errMessage)) {
+      return { field: 'blogName', error: 'This blog name already exists.' };
+    } else if (stringsInString(blogUrlArr, errMessage)) {
+      return { field: 'blogUrl', error: 'This blog url already exists.' };
+    } else {
+      return { field: null, error: errMessage };
+    }
+  }
+};
+
 export const categorySetFormFieldError = (errMessage: string) => {
   if (!errMessage.includes('SequelizeUniqueConstraintError')) {
     // Not an error that should be displayed in form fields

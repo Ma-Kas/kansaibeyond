@@ -13,6 +13,7 @@ import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import MainShell from './PageShell/MainShell';
 import ComposerShell from './PageShell/ComposerShell';
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage';
+import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
 
 // Sub-Route Imports
 import BlogPosts from '../pages/BlogPosts/BlogPosts';
@@ -24,7 +25,9 @@ import NewBlogTag from '../pages/NewUpdateBlogTag/NewBlogTag';
 import UpdateBlogTag from '../pages/NewUpdateBlogTag/UpdateBlogTag';
 import Users from '../pages/Users/Users';
 import UpdateUser from '../pages/UpdateUser/UpdateUser';
-import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
+import AffiliateBlogs from '../pages/AffiliateBlogs/AffiliateBlogs';
+import NewAffiliateBlog from '../pages/NewUpdateAffiliateBlog/NewAffiliateBlog';
+import UpdateAffiliateBlog from '../pages/NewUpdateAffiliateBlog/UpdateAffiliateBlog';
 
 const Router = () => {
   const queryClient = useQueryClient();
@@ -86,6 +89,18 @@ const Router = () => {
             {
               path: 'users/:username/edit',
               element: <UpdateUser />,
+            },
+            {
+              path: 'affiliates',
+              element: <AffiliateBlogs />,
+            },
+            {
+              path: 'affiliates/create-affiliate',
+              element: <NewAffiliateBlog />,
+            },
+            {
+              path: 'affiliates/:id/edit',
+              element: <UpdateAffiliateBlog />,
             },
           ],
         },
