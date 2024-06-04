@@ -33,10 +33,37 @@ import {
   InsertReturnData,
 } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-types';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
-import { updateUserSchema, UpdateUserType } from './types';
+import {
+  updateUserSchema,
+  UpdateUserType,
+  UpdateUserContactType,
+} from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './UpdateUser.module.css';
+
+// Sets empty optional input fields to null, omits empty password field
+// To match expected database data format
+const sanitizeUserUpdateData = (input: UpdateUserType): UpdateUserType => {
+  // introduction, password, all in contact
+  const sanitizedUpdateData = { ...input };
+  if (sanitizedUpdateData.password === '') {
+    delete sanitizedUpdateData.password;
+  }
+  if (sanitizedUpdateData.userIcon === '') {
+    delete sanitizedUpdateData.userIcon;
+  }
+  const sanitizedContact = { ...sanitizedUpdateData.contact };
+  if (sanitizedContact) {
+    Object.keys(sanitizedContact).forEach((field) => {
+      if (sanitizedContact[field as keyof UpdateUserContactType] === '') {
+        sanitizedContact[field as keyof UpdateUserContactType] = null;
+      }
+    });
+  }
+
+  return { ...sanitizedUpdateData, contact: { ...sanitizedContact } };
+};
 
 const UpdateUser = () => {
   const navigate = useNavigate();
@@ -96,12 +123,24 @@ const UpdateUser = () => {
           ? userQuery.data.introduction
           : '',
         contact: {
-          email: '',
-          homepage: '',
-          twitter: '',
-          instagram: '',
-          youtube: '',
-          linkedin: '',
+          email: userQuery.data.contact.email
+            ? userQuery.data.contact.email
+            : '',
+          homepage: userQuery.data.contact.homepage
+            ? userQuery.data.contact.homepage
+            : '',
+          twitter: userQuery.data.contact.twitter
+            ? userQuery.data.contact.twitter
+            : '',
+          instagram: userQuery.data.contact.instagram
+            ? userQuery.data.contact.instagram
+            : '',
+          youtube: userQuery.data.contact.youtube
+            ? userQuery.data.contact.youtube
+            : '',
+          linkedin: userQuery.data.contact.linkedin
+            ? userQuery.data.contact.linkedin
+            : '',
         },
       });
     }
@@ -116,22 +155,13 @@ const UpdateUser = () => {
       values: UpdateUserType;
     }) => updateUser(originalUsername, values),
     onSuccess: async (data) => {
-      // Avoid background refetch if originalUsername changed, as it can't be reached on
-      // that url anymore. Delete cache entry instead
-      if (originalUsername === userForm.getValues().username) {
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['users'] }),
-          queryClient.invalidateQueries({ queryKey: [originalUsername] }),
-        ]);
-      } else {
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['users'] }),
-          queryClient.removeQueries({
-            queryKey: [originalUsername],
-            exact: true,
-          }),
-        ]);
-      }
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['users'] }),
+        queryClient.removeQueries({
+          queryKey: [originalUsername],
+          exact: true,
+        }),
+      ]);
 
       navigate('../..', { relative: 'path' });
       if (data) {
@@ -190,9 +220,10 @@ const UpdateUser = () => {
   const handleSubmit = (values: unknown) => {
     const parseResult = updateUserSchema.safeParse(values);
     if (parseResult.success) {
+      const sanitizedUserUpdateData = sanitizeUserUpdateData(parseResult.data);
       userUpdateMutation.mutate({
         originalUsername,
-        values: parseResult.data,
+        values: sanitizedUserUpdateData,
       });
     }
   };
@@ -220,7 +251,7 @@ const UpdateUser = () => {
         <h1 className={classes['page_main_content_header_title']}>
           {userForm.getValues().displayName
             ? userForm.getValues().displayName
-            : 'Untitled User'}
+            : 'User'}
         </h1>
         <Group className={classes['page_main_header_button_group']}>
           <Button
@@ -256,6 +287,7 @@ const UpdateUser = () => {
         </div>
       );
     }
+
     if (userQuery.data) {
       return (
         <div className={classes['page_main_content_body_card_new_update_page']}>
@@ -264,7 +296,9 @@ const UpdateUser = () => {
               style={{ top: headerTopStyle }}
               className={localClasses['card_header']}
             >
-              <div className={localClasses['card_header_inner']}>Edit User</div>
+              <div className={localClasses['card_header_inner']}>
+                Edit Account and Profile Information
+              </div>
             </div>
             <div className={localClasses['card_body']}>
               <form
@@ -275,61 +309,120 @@ const UpdateUser = () => {
                   (validationErrors) => handleImageError(validationErrors)
                 )}
               >
-                <TextInput
-                  label='Display Name'
-                  placeholder='Your display name'
-                  description='This is the name under which all your content will appear'
-                  {...userForm.getInputProps('displayName')}
-                  required
-                />
-                <TextInput
-                  label='Username'
-                  placeholder='Your unique username'
-                  description='Username under which your profile can be found'
-                  {...userForm.getInputProps('username')}
-                  required
-                />
-                <TextInput
-                  label='New Password'
-                  placeholder='Your secret new password'
-                  description='You can change your password right here'
-                  {...userForm.getInputProps('password')}
-                />
-                <TextInput
-                  label='First Name'
-                  placeholder='Your first name'
-                  description="Don't worry, this is not publically visible"
-                  {...userForm.getInputProps('firstName')}
-                  required
-                />
-                <TextInput
-                  label='Last Name'
-                  placeholder='Your last name'
-                  description="Don't worry, this is not publically visible"
-                  {...userForm.getInputProps('lastName')}
-                  required
-                />
-
-                <Textarea
-                  label='Introduction'
-                  autosize
-                  minRows={6}
-                  placeholder='Tell people a bit about yourself...'
-                  description='Optional space for you to write something extra about yourself'
-                  {...userForm.getInputProps('introduction')}
-                />
-
-                <InputWrapper
-                  id='user-icon'
-                  label='Profile Picture'
-                  description='Set a picture or icon for your profile'
-                >
-                  <CardEditUserIcon
+                <h3 className={localClasses['input_section_header']}>
+                  Account information
+                </h3>
+                <section className={localClasses['profile_info_section']}>
+                  <InputWrapper
                     id='user-icon'
-                    openMediaLibrary={createCloudinaryMediaLibraryWidget}
-                    userIcon={userForm.getValues().userIcon}
+                    label='Profile Picture'
+                    description='Set a picture or icon for your profile'
+                  >
+                    <CardEditUserIcon
+                      id='user-icon'
+                      openMediaLibrary={createCloudinaryMediaLibraryWidget}
+                      userIcon={userForm.getValues().userIcon}
+                    />
+                  </InputWrapper>
+                  <div className={localClasses['user_info_stack']}>
+                    <TextInput
+                      label='Display Name'
+                      placeholder='Your display name'
+                      description='This is the name under which all your content will appear'
+                      {...userForm.getInputProps('displayName')}
+                      required
+                    />
+                    <div className={localClasses['user_info_two_columns']}>
+                      <TextInput
+                        label='Username'
+                        placeholder='Your unique username'
+                        description='Username to log in with'
+                        {...userForm.getInputProps('username')}
+                        required
+                      />
+                      <TextInput
+                        label='Email'
+                        placeholder='Your email address'
+                        description='Email address for account'
+                        {...userForm.getInputProps('email')}
+                        required
+                      />
+                    </div>
+                    <TextInput
+                      label='New Password'
+                      placeholder='Your secret new password'
+                      description='Set a new password here'
+                      {...userForm.getInputProps('password')}
+                    />
+                  </div>
+                </section>
+
+                <section className={localClasses['user_info_two_columns']}>
+                  <TextInput
+                    label='First Name'
+                    placeholder='Your first name'
+                    description="Don't worry, this is not publically visible"
+                    {...userForm.getInputProps('firstName')}
+                    required
                   />
-                </InputWrapper>
+                  <TextInput
+                    label='Last Name'
+                    placeholder='Your last name'
+                    description="Don't worry, this is not publically visible"
+                    {...userForm.getInputProps('lastName')}
+                    required
+                  />
+                </section>
+
+                <h3 className={localClasses['input_section_header']}>
+                  Public profile information
+                </h3>
+                <section className={localClasses['user_info_stack']}>
+                  <Textarea
+                    label='Introduction'
+                    autosize
+                    minRows={6}
+                    placeholder='Tell readers a bit about yourself...'
+                    description='Space for you to share something about yourself'
+                    {...userForm.getInputProps('introduction')}
+                  />
+                  <TextInput
+                    label='Public Email'
+                    placeholder='Your email address'
+                    description='Email address for readers to reach you'
+                    {...userForm.getInputProps('contact.email')}
+                  />
+                  <TextInput
+                    label='Website'
+                    placeholder='Your website, blog etc'
+                    description='Space to link to your website, blog etc'
+                    {...userForm.getInputProps('contact.homepage')}
+                  />
+                  <TextInput
+                    label='Twitter'
+                    placeholder='Your Twitter account'
+                    description='Space to link to your account'
+                    {...userForm.getInputProps('contact.twitter')}
+                  />
+                  <TextInput
+                    label='Instagram'
+                    placeholder='Your Instagram account'
+                    description='Space to link to your account'
+                    {...userForm.getInputProps('contact.instagram')}
+                  />
+                  <TextInput
+                    label='YouTube'
+                    placeholder='Your YouTube channel'
+                    description='Space to link to your channel'
+                    {...userForm.getInputProps('contact.youtube')}
+                  />
+                  <TextInput
+                    label='LinkedIn'
+                    placeholder='Your LinkedIn profile'
+                    description='Space to link to your profile'
+                    {...userForm.getInputProps('contact.linkedin')}
+                  />
+                </section>
               </form>
             </div>
           </div>

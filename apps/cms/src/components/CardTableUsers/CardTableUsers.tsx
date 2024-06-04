@@ -9,7 +9,8 @@ import {
   IconTrash,
   IconEdit,
   IconUserCircle,
-  IconRefresh,
+  IconUserX,
+  IconUserCheck,
 } from '@tabler/icons-react';
 import {
   ConfirmDeleteModal,
@@ -119,7 +120,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
         ? [
             {
               text: 'Enable User',
-              icon: IconRefresh,
+              icon: IconUserCheck,
               onClick: () =>
                 modals.openConfirmModal(
                   ConfirmToggleDisableModal({
@@ -138,7 +139,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
         : [
             {
               text: 'Disable User',
-              icon: IconRefresh,
+              icon: IconUserX,
               onClick: () =>
                 modals.openConfirmModal(
                   ConfirmToggleDisableModal({

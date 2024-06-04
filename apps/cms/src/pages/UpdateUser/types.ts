@@ -7,29 +7,43 @@ const userContactSchema = z.object(
       .string()
       .max(100, { message: 'Must be under 100 characters.' })
       .email({ message: 'Please provide a valid email address.' })
-      .optional(),
+      .optional()
+      .or(z.literal(''))
+      .nullable(),
     homepage: z
       .string()
       .url({ message: 'Please provide a valid address.' })
-      .optional(),
+      .optional()
+      .or(z.literal(''))
+      .nullable(),
     twitter: z
       .string()
       .url({ message: 'Please provide a valid address.' })
-      .optional(),
+      .optional()
+      .or(z.literal(''))
+      .nullable(),
     instagram: z
       .string()
       .url({ message: 'Please provide a valid address.' })
-      .optional(),
+      .optional()
+      .or(z.literal(''))
+      .nullable(),
     youtube: z
       .string()
       .url({ message: 'Please provide a valid address.' })
-      .optional(),
+      .optional()
+      .or(z.literal(''))
+      .nullable(),
     linkedin: z
       .string()
       .url({ message: 'Please provide a valid address.' })
-      .optional(),
+      .optional()
+      .or(z.literal(''))
+      .nullable(),
   }
 ).strict();
+
+export type UpdateUserContactType = z.infer<typeof userContactSchema>;
 
 // prettier-ignore
 const updateUserSchema = z.object(
@@ -57,7 +71,7 @@ const updateUserSchema = z.object(
         .string()
         .min(1, { message: 'Last name cannot be empty.' })
         .max(50, { message: 'Must be under 50 characters.' }),
-      introduction: z.string().optional(),
+      introduction: z.string().optional().nullable(),
       contact: userContactSchema.optional()
     }
   ).strict();
