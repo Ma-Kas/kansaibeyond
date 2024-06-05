@@ -19,49 +19,103 @@ export const get_all_posts = async (
   next: NextFunction
 ) => {
   try {
-    const allPosts = await Post.findAll({
-      attributes: {
-        exclude: ['createdAt', 'userId', 'categoryId', 'content'],
-      },
-      include: [
-        {
-          model: User,
-          attributes: ['username', 'displayName', 'userIcon', 'role'],
-          where: createUserWhere(req),
+    const session = getSessionOrThrow(req);
+
+    if (req.query.filter) {
+      if (
+        session.role !== 'ADMIN' &&
+        session.userId !== Number(req.query.filter)
+      ) {
+        throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+      }
+      const allPosts = await Post.findAll({
+        attributes: {
+          exclude: ['createdAt', 'userId', 'categoryId', 'content'],
         },
-        {
-          model: Category,
-          attributes: ['id', 'categoryName', 'categorySlug'],
-          through: {
-            attributes: [],
+        include: [
+          {
+            model: User,
+            attributes: ['username', 'displayName', 'userIcon', 'role'],
+            where: { id: Number(req.query.filter) },
           },
-        },
-        {
-          model: Tag,
-          attributes: ['id', 'tagName', 'tagSlug'],
-          through: {
-            attributes: [],
-          },
-        },
-        {
-          model: Comment,
-          attributes: ['id', 'content', 'name'],
-          include: [
-            {
-              model: User,
-              attributes: ['username'],
+          {
+            model: Category,
+            attributes: ['id', 'categoryName', 'categorySlug'],
+            through: {
+              attributes: [],
             },
-          ],
+          },
+          {
+            model: Tag,
+            attributes: ['id', 'tagName', 'tagSlug'],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Comment,
+            attributes: ['id', 'content', 'name'],
+            include: [
+              {
+                model: User,
+                attributes: ['username'],
+              },
+            ],
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      if (!allPosts) {
+        throw new NotFoundError({ message: 'No posts found' });
+      }
+
+      res.status(200).json(allPosts);
+    } else {
+      const allPosts = await Post.findAll({
+        attributes: {
+          exclude: ['createdAt', 'userId', 'categoryId', 'content'],
         },
-      ],
-      order: [['createdAt', 'DESC']],
-    });
+        include: [
+          {
+            model: User,
+            attributes: ['username', 'displayName', 'userIcon', 'role'],
+            where: createUserWhere(req),
+          },
+          {
+            model: Category,
+            attributes: ['id', 'categoryName', 'categorySlug'],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Tag,
+            attributes: ['id', 'tagName', 'tagSlug'],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Comment,
+            attributes: ['id', 'content', 'name'],
+            include: [
+              {
+                model: User,
+                attributes: ['username'],
+              },
+            ],
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
 
-    if (!allPosts) {
-      throw new NotFoundError({ message: 'No posts found' });
+      if (!allPosts) {
+        throw new NotFoundError({ message: 'No posts found' });
+      }
+
+      res.status(200).json(allPosts);
     }
-
-    res.status(200).json(allPosts);
   } catch (err: unknown) {
     next(err);
   }
