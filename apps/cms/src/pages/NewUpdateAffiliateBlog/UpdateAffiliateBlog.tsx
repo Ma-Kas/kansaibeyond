@@ -1,7 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Group, Loader, TextInput, Textarea } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Loader,
+  TextInput,
+  Textarea,
+  Select,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { zodResolver } from 'mantine-form-zod-resolver';
@@ -11,6 +18,7 @@ import {
   getOneAffiliate,
   updateAffiliate,
 } from '../../requests/affiliateRequests';
+import { getAllUsers } from '../../requests/userRequests';
 import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import { affiliateSetFormFieldError } from '../../utils/backend-error-response-validation';
 import {
@@ -29,8 +37,9 @@ import localClasses from './NewUpdateAffiliateBlog.module.css';
 const sanitizeAffiliateData = (input: Affiliate): Affiliate => {
   // introduction, password, all in contact
   const sanitizedUpdateData = { ...input };
+
   if (sanitizedUpdateData.userId === 0) {
-    delete sanitizedUpdateData.userId;
+    sanitizedUpdateData.userId = null;
   }
 
   return sanitizedUpdateData;
@@ -55,14 +64,23 @@ const UpdateAffiliateBlog = () => {
     retry: 1,
   });
 
+  const usersQuery = useQuery({
+    queryKey: ['users'],
+    queryFn: getAllUsers,
+    retry: 1,
+  });
+
   const affiliateForm = useForm({
     mode: 'controlled',
     initialValues: {
       blogName: '',
       blogUrl: '',
       blogDescription: '',
-      userId: 0,
+      userId: '0',
     },
+
+    transformValues: (values) => ({ ...values, userId: Number(values.userId) }),
+
     validate: zodResolver(affiliateSchema),
   });
 
@@ -76,7 +94,9 @@ const UpdateAffiliateBlog = () => {
         blogDescription: affiliateQuery.data.blogDescription
           ? affiliateQuery.data.blogDescription
           : '',
-        userId: affiliateQuery.data.userId ? affiliateQuery.data.userId : 0,
+        userId: affiliateQuery.data.userId
+          ? affiliateQuery.data.userId.toString()
+          : '0',
       });
     }
   }, [affiliateForm, affiliateQuery.isSuccess, affiliateQuery.data]);
@@ -161,7 +181,12 @@ const UpdateAffiliateBlog = () => {
   );
 
   const switchRenderOnFetchResult = () => {
-    if (affiliateQuery.isPending || affiliateQuery.isRefetching) {
+    if (
+      affiliateQuery.isPending ||
+      affiliateQuery.isRefetching ||
+      usersQuery.isPending ||
+      usersQuery.isRefetching
+    ) {
       return (
         <div className={classes['page_main_content_body_card']}>
           <div className={classes['page_main_content_body_card_loading']}>
@@ -170,7 +195,7 @@ const UpdateAffiliateBlog = () => {
         </div>
       );
     }
-    if (affiliateQuery.data) {
+    if (affiliateQuery.data && usersQuery.data) {
       return (
         <div className={classes['page_main_content_body_card_new_update_page']}>
           <div className={localClasses['card_inner']}>
@@ -214,6 +239,18 @@ const UpdateAffiliateBlog = () => {
                   {...affiliateForm.getInputProps('blogDescription')}
                   required
                 />
+                <Select
+                  label='Associated User'
+                  description='If blog owner is registered on this website, you can link them'
+                  placeholder='Pick a user to associate'
+                  data={Object.values(usersQuery.data).map((user) => {
+                    return {
+                      value: user.id.toString(),
+                      label: `${user.displayName} - ${user.email}`,
+                    };
+                  })}
+                  {...affiliateForm.getInputProps('userId')}
+                />
               </form>
             </div>
           </div>
@@ -226,6 +263,15 @@ const UpdateAffiliateBlog = () => {
         <div className={classes['page_main_content_body_card']}>
           <div className={classes['page_main_content_body_card_error']}>
             <DynamicErrorPage error={affiliateQuery.error} />
+          </div>
+        </div>
+      );
+    }
+    if (usersQuery.error) {
+      return (
+        <div className={classes['page_main_content_body_card']}>
+          <div className={classes['page_main_content_body_card_error']}>
+            <DynamicErrorPage error={usersQuery.error} />
           </div>
         </div>
       );

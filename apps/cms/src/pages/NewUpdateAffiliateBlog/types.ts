@@ -15,6 +15,7 @@ export const affiliateSchema = z.object(
         .min(1, { message: 'Blog description cannot be empty.' }),
       userId: z
         .number()
+        .or(z.string())
         .optional()
         .nullable(),
     }

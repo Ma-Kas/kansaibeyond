@@ -125,7 +125,7 @@ const CardTableAffiliates = ({
           </th>
           <th>Blog Name</th>
           <th>Blog URL</th>
-          <th>User</th>
+          <th>Associated User</th>
           <th></th>
         </tr>
       </thead>
