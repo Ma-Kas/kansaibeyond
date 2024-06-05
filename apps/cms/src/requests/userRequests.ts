@@ -39,7 +39,7 @@ const userPostSchema = z.object(
 ).strict();
 
 // prettier-ignore
-const userRoleSchema = z.union([
+export const userRoleSchema = z.union([
   z.literal(USER_ROLES.OWNER),
   z.literal(USER_ROLES.ADMIN),
   z.literal(USER_ROLES.TECH),

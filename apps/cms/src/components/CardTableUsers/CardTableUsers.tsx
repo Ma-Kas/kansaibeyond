@@ -226,7 +226,9 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
         <td>{item.displayName}</td>
         <td>
           {hasOwnerPermission(item.role) ? (
-            <div style={{ paddingLeft: '12px' }}>{item.role}</div>
+            <div style={{ paddingLeft: '12px' }}>{`${item.role[0]}${item.role
+              .slice(1)
+              .toLowerCase()}`}</div>
           ) : (
             <Select
               data={(
@@ -234,7 +236,10 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
                   SELECTABLE_USER_ROLES
                 ) as Array<SELECTABLE_USER_ROLES>
               ).map((role) => {
-                return { value: role, label: role };
+                return {
+                  value: role,
+                  label: `${role[0]}${role.slice(1).toLowerCase()}`,
+                };
               })}
               value={item.role}
               onChange={(value, _option) => handleUserRoleChange(item, value!)}
