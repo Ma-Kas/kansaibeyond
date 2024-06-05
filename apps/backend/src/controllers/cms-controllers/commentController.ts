@@ -11,28 +11,49 @@ import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 
 export const get_all_comments = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const allComments = await Comment.findAll({
-      attributes: {
-        exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
-      },
-      include: [
-        {
-          model: User,
-          attributes: ['username', 'userIcon', 'role'],
+    if (req.query.filter) {
+      const allComments = await Comment.findAll({
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
         },
-        {
-          model: Post,
-          attributes: ['id', 'postSlug'],
+        include: [
+          {
+            model: User,
+            attributes: ['username', 'userIcon', 'role'],
+            where: { id: Number(req.query.filter) },
+          },
+          {
+            model: Post,
+            attributes: ['id', 'postSlug'],
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+      res.status(200).json(allComments);
+    } else {
+      const allComments = await Comment.findAll({
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'userId', 'postId'],
         },
-      ],
-      order: [['createdAt', 'DESC']],
-    });
-    res.status(200).json(allComments);
+        include: [
+          {
+            model: User,
+            attributes: ['username', 'userIcon', 'role'],
+          },
+          {
+            model: Post,
+            attributes: ['id', 'postSlug'],
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+      res.status(200).json(allComments);
+    }
   } catch (err: unknown) {
     next(err);
   }

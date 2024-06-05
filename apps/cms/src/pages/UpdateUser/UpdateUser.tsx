@@ -257,7 +257,7 @@ const UpdateUser = () => {
           <Button
             type='button'
             className={classes['page_main_header_cancel_button']}
-            onClick={() => navigate('../..', { relative: 'path' })}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>

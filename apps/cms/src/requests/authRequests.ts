@@ -8,6 +8,7 @@ import { handleRequestErrors } from '../utils/backend-error-response-validation'
 const authSchema = z.object(
   {
     id: z.number(),
+    username: z.string(),
     displayName: z.string(),
     userIcon: z.string().nullable(),
     role: z.string(),

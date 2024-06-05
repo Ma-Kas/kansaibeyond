@@ -2,7 +2,7 @@ import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import PageMainContent from '../../components/PageMainContent/PageMainContent';
 import BlogPostTabs, {
@@ -17,6 +17,10 @@ import { newPostSchema } from '../../components/PageShell/types';
 
 const BlogPosts = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const userFilter = searchParams.get('filter');
+
   const cardRef = useRef<HTMLDivElement | null>(null);
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
@@ -30,7 +34,7 @@ const BlogPosts = () => {
 
   const postsQuery = useQuery({
     queryKey: ['posts'],
-    queryFn: getAllPosts,
+    queryFn: () => getAllPosts(userFilter),
     retry: 1,
   });
 

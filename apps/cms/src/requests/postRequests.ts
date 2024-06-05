@@ -121,9 +121,11 @@ const deletePostSchema = z.object(
   }
 ).strict();
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (userFilter: string | null = null) => {
   try {
-    const response = await axios.get(`${BACKEND_BASE_URL}/posts`);
+    const response = await axios.get(
+      `${BACKEND_BASE_URL}/posts${userFilter ? `?filter=${userFilter}` : ''}`
+    );
     return getAllPostsSchema.parse(response.data);
   } catch (err) {
     handleRequestErrors(err);

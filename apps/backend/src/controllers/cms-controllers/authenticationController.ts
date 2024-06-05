@@ -42,7 +42,7 @@ export const get_authentication = async (
 
     const user = await User.findOne({
       where: { id: validSession.userId },
-      attributes: ['id', 'displayName', 'userIcon', 'role'],
+      attributes: ['id', 'username', 'displayName', 'userIcon', 'role'],
     });
 
     if (!user) {

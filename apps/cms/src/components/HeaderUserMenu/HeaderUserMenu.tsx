@@ -6,6 +6,7 @@ import {
   IconChevronDown,
   IconLogout,
   IconMessage,
+  IconMessages,
   IconSettings,
 } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
@@ -17,15 +18,18 @@ import {
   SuccessNotification,
 } from '../FeedbackPopups/FeedbackPopups';
 import { ConfirmLogoutModal } from '../FeedbackModals/FeedbackModals';
+import useAuth from '../../hooks/useAuth';
+import {
+  CLOUDINARY_BASE_URL,
+  USER_LIST_THUMB_TRANSFORM,
+} from '../../config/constants';
 
 import classes from './HeaderUserMenu.module.css';
 
-const user = {
-  name: 'Kansai & Beyond',
-  image: null,
-};
-
 const HeaderUserMenu = () => {
+  const { user } = useAuth();
+  const loggedInUser = user!;
+
   const [userMenuOpened, setHeaderUserMenuOpened] = useState(false);
 
   const navigate = useNavigate();
@@ -58,24 +62,48 @@ const HeaderUserMenu = () => {
         <UnstyledButton
           className={
             // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
-            cx(classes.user, {
+            cx(classes['user_menu'], {
               [classes.userActive]: userMenuOpened,
             })
           }
         >
           <Group gap={7}>
-            <Avatar src={user.image} alt={user.name} radius='xl' size={20} />
+            <Avatar
+              src={
+                loggedInUser.userIcon
+                  ? `${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${loggedInUser.userIcon}`
+                  : null
+              }
+              alt={loggedInUser.displayName}
+              radius='xl'
+              size={20}
+            />
             <IconChevronDown />
           </Group>
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
+          classNames={{ itemLabel: classes['user_menu_heading'] }}
+          className={classes['user_menu_heading_container']}
           leftSection={
-            <Avatar src={user.image} alt={user.name} radius='xl' size={50} />
+            <Avatar
+              src={
+                loggedInUser.userIcon
+                  ? `${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${loggedInUser.userIcon}`
+                  : null
+              }
+              alt={loggedInUser.displayName}
+              radius='xl'
+              size={50}
+            />
           }
+          component='div'
         >
-          {user.name}
+          <div>{loggedInUser.displayName}</div>
+          <div>{`${loggedInUser.role[0]}${loggedInUser.role
+            .slice(1)
+            .toLowerCase()}`}</div>
         </Menu.Item>
 
         <Menu.Divider />
@@ -87,15 +115,21 @@ const HeaderUserMenu = () => {
               stroke={1.5}
             />
           }
+          onClick={() =>
+            navigate(`/dashboard/blog/posts?filter=${loggedInUser.id}`)
+          }
         >
           Your posts
         </Menu.Item>
         <Menu.Item
           leftSection={
-            <IconMessage
+            <IconMessages
               style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
+          }
+          onClick={() =>
+            navigate(`/dashboard/blog/comments?filter=${loggedInUser.id}`)
           }
         >
           Your comments
@@ -110,6 +144,9 @@ const HeaderUserMenu = () => {
               style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
+          }
+          onClick={() =>
+            navigate(`/dashboard/users/${loggedInUser.username}/edit`)
           }
         >
           Account settings
