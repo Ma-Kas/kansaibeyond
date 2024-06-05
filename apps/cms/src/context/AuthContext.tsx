@@ -5,6 +5,7 @@ import { authQuery } from '../utils/auth-loader';
 
 export type AuthUserType = {
   id: number;
+  username: string;
   displayName: string;
   userIcon: string | null;
   role: string;
