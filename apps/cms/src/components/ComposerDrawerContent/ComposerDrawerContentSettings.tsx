@@ -81,7 +81,7 @@ const ComposerDrawerContentSettings = ({ postData }: { postData: Post }) => {
 
   const postsQuery = useQuery({
     queryKey: ['posts'],
-    queryFn: getAllPosts,
+    queryFn: () => getAllPosts(),
     retry: 1,
   });
 

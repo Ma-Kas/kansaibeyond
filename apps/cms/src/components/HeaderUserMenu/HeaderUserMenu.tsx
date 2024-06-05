@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import cx from 'clsx';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Menu, Group, UnstyledButton, rem, Stack } from '@mantine/core';
+import { Avatar, Menu, Group, UnstyledButton, rem } from '@mantine/core';
 import {
   IconChevronDown,
   IconLogout,
@@ -116,7 +116,7 @@ const HeaderUserMenu = () => {
             />
           }
           onClick={() =>
-            navigate(`/dashboard/blog/posts?filter=${loggedInUser.username}`)
+            navigate(`/dashboard/blog/posts?filter=${loggedInUser.id}`)
           }
         >
           Your posts
@@ -129,7 +129,7 @@ const HeaderUserMenu = () => {
             />
           }
           onClick={() =>
-            navigate(`/dashboard/blog/comments?filter=${loggedInUser.username}`)
+            navigate(`/dashboard/blog/comments?filter=${loggedInUser.id}`)
           }
         >
           Your comments
