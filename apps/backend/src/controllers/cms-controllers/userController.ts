@@ -12,7 +12,10 @@ import NotFoundError from '../../errors/NotFoundError';
 import { sequelize } from '../../utils/db';
 import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
-import { hasAdminPermission } from '../../utils/permission-group-handler';
+import {
+  hasAdminPermission,
+  hasOwnerPermission,
+} from '../../utils/permission-group-handler';
 
 export const get_all_users = async (
   req: Request,
@@ -53,7 +56,12 @@ export const get_one_user = async (
     if (!user) {
       throw new NotFoundError({ message: 'User not found.' });
     }
+
     if (!hasAdminPermission(session.role) && session.userId !== user.id) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (hasOwnerPermission(user.role) && !hasOwnerPermission(session.role)) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(user);
@@ -103,6 +111,13 @@ export const update_one_user = async (
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
+    if (
+      hasOwnerPermission(userToUpdate.role) &&
+      !hasOwnerPermission(session.role)
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     const userUpdateData = validateUserUpdate(req.body);
     // No update data => return original user
     if (!userUpdateData) {
@@ -179,6 +194,13 @@ export const delete_one_user = async (
     if (
       !hasAdminPermission(session.role) &&
       session.userId !== userToDelete.id
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (
+      hasOwnerPermission(userToDelete.role) &&
+      !hasOwnerPermission(session.role)
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }

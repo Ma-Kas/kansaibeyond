@@ -19,6 +19,8 @@ export const SELECTABLE_USER_ROLES = {
   GUEST: 'GUEST',
 } as const;
 
+export const OWNER_USERNAME = import.meta.env.VITE_OWNER_USERNAME;
+
 export const BACKEND_BASE_URL = import.meta.env.DEV
   ? import.meta.env.VITE_BACKEND_BASE_URL_DEV
   : import.meta.env.VITE_BACKEND_BASE_URL_PROD;
