@@ -34,6 +34,11 @@ import {
   CLOUDINARY_BASE_URL,
   POST_LIST_THUMB_TRANSFORM,
 } from '../../config/constants';
+import useAuth from '../../hooks/useAuth';
+import {
+  hasAdminPermission,
+  hasWriterPermission,
+} from '../../utils/permission-group-handler';
 
 import classes from './CardTablePosts.module.css';
 
@@ -44,6 +49,8 @@ type TableProps = {
 };
 
 const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
 
@@ -160,22 +167,46 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
               icon: IconEdit,
               onClick: () => navigate(`/composer/edit/${item.postSlug}`),
             },
-            {
-              text: 'Publish Post',
-              icon: IconSend,
-              onClick: () =>
-                modals.openConfirmModal(
-                  GeneralConfirmModal({
-                    titleText: `Publish post "${item.title}?`,
-                    bodyText: `You are about to publish post "${item.title}" to the website. Proceed?`,
-                    onConfirm: () =>
-                      postUpdateMutation.mutate({
-                        urlSlug: item.postSlug,
-                        values: { status: 'published' },
-                      }),
-                  })
-                ),
-            },
+            ...(user && hasAdminPermission(user.role)
+              ? [
+                  {
+                    text: 'Publish Post',
+                    icon: IconSend,
+                    onClick: () =>
+                      modals.openConfirmModal(
+                        GeneralConfirmModal({
+                          titleText: `Publish post "${item.title}?`,
+                          bodyText: `You are about to publish post "${item.title}" to the website. Proceed?`,
+                          onConfirm: () =>
+                            postUpdateMutation.mutate({
+                              urlSlug: item.postSlug,
+                              values: { status: 'published' },
+                            }),
+                        })
+                      ),
+                  },
+                ]
+              : []),
+            ...(user && !hasAdminPermission(user.role)
+              ? [
+                  {
+                    text: 'Request to Publish',
+                    icon: IconSend,
+                    onClick: () =>
+                      modals.openConfirmModal(
+                        GeneralConfirmModal({
+                          titleText: `Submit post for review?`,
+                          bodyText: `You are about to submit post "${item.title}" for a review by an admin. If approved, it will be published to the website. Proceed?`,
+                          onConfirm: () =>
+                            postUpdateMutation.mutate({
+                              urlSlug: item.postSlug,
+                              values: { status: 'pending' },
+                            }),
+                        })
+                      ),
+                  },
+                ]
+              : []),
             {
               text: 'Move to Trash',
               icon: IconTrash,
@@ -188,18 +219,6 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
                   })
                 ),
             },
-            {
-              text: 'Delete Post',
-              icon: IconTrashX,
-              onClick: () =>
-                modals.openConfirmModal(
-                  ConfirmDeleteModal({
-                    titleText: `Delete post "${item.title}?`,
-                    bodyText: `Are you sure you want to delete post "${item.title}"? This action cannot be undone.`,
-                    onConfirm: () => postDeleteMutation.mutate(item.postSlug),
-                  })
-                ),
-            },
           ];
         }
         case 'pending': {
@@ -209,22 +228,47 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
               icon: IconEdit,
               onClick: () => navigate(`/composer/edit/${item.postSlug}`),
             },
-            {
-              text: 'Publish Post',
-              icon: IconSend,
-              onClick: () =>
-                modals.openConfirmModal(
-                  GeneralConfirmModal({
-                    titleText: `Publish post "${item.title}?`,
-                    bodyText: `You are about to publish post "${item.title}" to the website. Proceed?`,
-                    onConfirm: () =>
-                      postUpdateMutation.mutate({
-                        urlSlug: item.postSlug,
-                        values: { status: 'published' },
-                      }),
-                  })
-                ),
-            },
+            ...(user && hasAdminPermission(user.role)
+              ? [
+                  {
+                    text: 'Publish Post',
+                    icon: IconSend,
+                    onClick: () =>
+                      modals.openConfirmModal(
+                        GeneralConfirmModal({
+                          titleText: `Publish post "${item.title}?`,
+                          bodyText: `You are about to publish post "${item.title}" to the website. Proceed?`,
+                          onConfirm: () =>
+                            postUpdateMutation.mutate({
+                              urlSlug: item.postSlug,
+                              values: { status: 'published' },
+                            }),
+                        })
+                      ),
+                  },
+                ]
+              : []),
+            ...(user && !hasAdminPermission(user.role)
+              ? [
+                  {
+                    text: 'Revert to Draft',
+                    icon: IconRefresh,
+                    onClick: () =>
+                      modals.openConfirmModal(
+                        GeneralConfirmModal({
+                          titleText: `Revert post back to draft?`,
+                          bodyText: `Are you sure you want to revert the post "${item.title}" back to draft?`,
+                          onConfirm: () =>
+                            postUpdateMutation.mutate({
+                              urlSlug: item.postSlug,
+                              values: { status: 'draft' },
+                            }),
+                        })
+                      ),
+                  },
+                ]
+              : []),
+
             {
               text: 'Move to Trash',
               icon: IconTrash,
@@ -326,20 +370,24 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             }`}</div>
           </div>
         </td>
-        <td>
-          <div className={classes['card_body_table_row_button_group']}>
-            <Button
-              type='button'
-              radius={'xl'}
-              onClick={() => navigate(`/composer/edit/${item.postSlug}`)}
-            >
-              Edit
-            </Button>
-            <FurtherEditDropdown
-              items={switchfurtherEditDropDownItemsOnTab()}
-            />
-          </div>
-        </td>
+        {user && hasWriterPermission(user.role) && (
+          <td>
+            {user.id === item.userId && (
+              <div className={classes['card_body_table_row_button_group']}>
+                <Button
+                  type='button'
+                  radius={'xl'}
+                  onClick={() => navigate(`/composer/edit/${item.postSlug}`)}
+                >
+                  Edit
+                </Button>
+                <FurtherEditDropdown
+                  items={switchfurtherEditDropDownItemsOnTab()}
+                />
+              </div>
+            )}
+          </td>
+        )}
       </tr>
     );
   });
@@ -367,7 +415,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
               : `${selection.length} Selected`}
           </th>
           <th></th>
-          <th></th>
+          {user && hasWriterPermission(user.role) && <th></th>}
         </tr>
       </thead>
       <tbody className={classes['card_body']}>{blogRows}</tbody>

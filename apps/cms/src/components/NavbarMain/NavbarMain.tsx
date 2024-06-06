@@ -10,6 +10,7 @@ import {
 } from '@tabler/icons-react';
 import NavbarLinksGroup from '../NavbarLinksGroup/NavbarLinksGroup';
 import useAuth from '../../hooks/useAuth';
+import { hasTechPermission } from '../../utils/permission-group-handler';
 import classes from './NavbarMain.module.css';
 
 const navbarDataAdmin = [
@@ -65,7 +66,7 @@ const NavbarMain = () => {
   const { user } = useAuth();
 
   const links =
-    user && ['ADMIN', 'TECH'].includes(user.role)
+    user && hasTechPermission(user.role)
       ? navbarDataAdmin.map((item) => (
           <NavbarLinksGroup {...item} key={item.label} />
         ))

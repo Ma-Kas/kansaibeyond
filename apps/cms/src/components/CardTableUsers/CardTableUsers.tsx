@@ -231,11 +231,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
               .toLowerCase()}`}</div>
           ) : (
             <Select
-              data={(
-                Object.values(
-                  SELECTABLE_USER_ROLES
-                ) as Array<SELECTABLE_USER_ROLES>
-              ).map((role) => {
+              data={Object.values(SELECTABLE_USER_ROLES).map((role) => {
                 return {
                   value: role,
                   label: `${role[0]}${role.slice(1).toLowerCase()}`,
