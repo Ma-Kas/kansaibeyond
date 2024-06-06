@@ -9,6 +9,7 @@ import { NewComment, NewRegisteredComment } from '../../types/types';
 import BadRequestError from '../../errors/BadRequestError';
 import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
+import { hasAdminPermission } from '../../utils/permission-group-handler';
 
 export const get_all_comments = async (
   req: Request,
@@ -138,7 +139,10 @@ export const delete_one_comment = async (
       throw new NotFoundError({ message: 'Comment to delete was not found.' });
     }
 
-    if (session.role !== 'ADMIN' && commentToDelete.userId !== session.userId) {
+    if (
+      !hasAdminPermission(session.role) &&
+      commentToDelete.userId !== session.userId
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

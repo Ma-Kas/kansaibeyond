@@ -4,6 +4,7 @@ import { NewUser, UpdateUser } from '../types/types';
 
 import zodSchemaParser from './zod-schema-parser';
 import BadRequestError from '../errors/BadRequestError';
+import { USER_ROLES } from './constants';
 
 // prettier-ignore
 const newUserSchema = z.object(
@@ -18,10 +19,10 @@ const newUserSchema = z.object(
 ).strict();
 
 const userRoleSchema = z.union([
-  z.literal('ADMIN'),
-  z.literal('TECH'),
-  z.literal('WRITER'),
-  z.literal('GUEST'),
+  z.literal(USER_ROLES.ADMIN),
+  z.literal(USER_ROLES.TECH),
+  z.literal(USER_ROLES.WRITER),
+  z.literal(USER_ROLES.GUEST),
 ]);
 
 // prettier-ignore

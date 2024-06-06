@@ -13,6 +13,7 @@ import { sequelize } from '../utils/db';
 import Contact from './contact';
 import Affiliate from './affiliate';
 import { UserRole } from '../types/types';
+import { USER_ROLES } from '../utils/constants';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
@@ -79,7 +80,7 @@ User.init(
     },
     role: {
       type: DataTypes.TEXT,
-      defaultValue: 'GUEST',
+      defaultValue: USER_ROLES.GUEST,
       allowNull: false,
     },
     disabled: {

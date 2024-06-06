@@ -10,9 +10,9 @@ import {
 import BadRequestError from '../../errors/BadRequestError';
 import NotFoundError from '../../errors/NotFoundError';
 import { sequelize } from '../../utils/db';
-import { createUserWhere } from '../../utils/limit-query-to-own-creation';
 import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
+import { hasAdminPermission } from '../../utils/permission-group-handler';
 
 export const get_all_users = async (
   req: Request,
@@ -20,10 +20,15 @@ export const get_all_users = async (
   next: NextFunction
 ) => {
   try {
+    const session = getSessionOrThrow(req);
+
+    if (!hasAdminPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     const allUsers = await User.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [{ model: Post }, { model: Comment }, { model: Contact }],
-      where: createUserWhere(req),
       order: [['displayName', 'ASC']],
     });
 
@@ -48,7 +53,7 @@ export const get_one_user = async (
     if (!user) {
       throw new NotFoundError({ message: 'User not found.' });
     }
-    if (session.role !== 'ADMIN' && session.userId !== user.id) {
+    if (!hasAdminPermission(session.role) && session.userId !== user.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(user);
@@ -92,7 +97,10 @@ export const update_one_user = async (
     if (!userToUpdate) {
       throw new NotFoundError({ message: 'User to update was not found.' });
     }
-    if (session.role !== 'ADMIN' && session.userId !== userToUpdate.id) {
+    if (
+      !hasAdminPermission(session.role) &&
+      session.userId !== userToUpdate.id
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     const userUpdateData = validateUserUpdate(req.body);
@@ -102,7 +110,7 @@ export const update_one_user = async (
       res.status(204).send();
     } else {
       // Disallow disabling users or changing user role if not admin
-      if ('disabled' in userUpdateData && session.role !== 'ADMIN') {
+      if (!hasAdminPermission(session.role) && 'disabled' in userUpdateData) {
         throw new UnauthorizedError({
           message: 'ADMIN permission required',
         });
@@ -168,7 +176,10 @@ export const delete_one_user = async (
     if (!userToDelete) {
       throw new NotFoundError({ message: 'User to delete was not found.' });
     }
-    if (session.role !== 'ADMIN' && session.userId !== userToDelete.id) {
+    if (
+      !hasAdminPermission(session.role) &&
+      session.userId !== userToDelete.id
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

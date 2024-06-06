@@ -8,10 +8,6 @@ import {
 import NotFoundError from '../../errors/NotFoundError';
 import BadRequestError from '../../errors/BadRequestError';
 
-// import { createUserWhere } from '../../utils/limit-query-to-own-creation';
-import { getSessionOrThrow } from '../../utils/get-session-or-throw';
-import UnauthorizedError from '../../errors/UnauthorizedError';
-
 export const get_all_affiliates = async (
   _req: Request,
   res: Response,
@@ -23,7 +19,6 @@ export const get_all_affiliates = async (
         {
           model: User,
           attributes: ['username', 'displayName', 'userIcon', 'role'],
-          // where: createUserWhere(req),
         },
       ],
       order: [['blogName', 'ASC']],
@@ -41,8 +36,6 @@ export const get_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const session = getSessionOrThrow(req);
-
     const affiliate = await Affiliate.findOne({
       where: { id: req.params.id },
       include: [
@@ -54,10 +47,6 @@ export const get_one_affiliate = async (
     });
     if (!affiliate) {
       throw new NotFoundError({ message: 'Affiliate not found.' });
-    }
-
-    if (session.role !== 'ADMIN' && affiliate.userId !== session.userId) {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     res.status(200).json(affiliate);
@@ -72,11 +61,6 @@ export const post_new_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const session = getSessionOrThrow(req);
-
-    if (session.role !== 'ADMIN') {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
-    }
     const newAffiliate = validateNewAffiliate(req.body);
     if (newAffiliate) {
       const addedAffiliate = await Affiliate.create(newAffiliate);
@@ -95,8 +79,6 @@ export const update_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const session = getSessionOrThrow(req);
-
     const affiliateToUpdate = await Affiliate.findOne({
       where: { id: req.params.id },
     });
@@ -104,13 +86,6 @@ export const update_one_affiliate = async (
       throw new NotFoundError({
         message: 'Affiliate to update was not found.',
       });
-    }
-
-    if (
-      session.role !== 'ADMIN' &&
-      affiliateToUpdate.userId !== session.userId
-    ) {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     const affiliateUpdateData = validateAffiliateUpdate(req.body);
@@ -136,12 +111,6 @@ export const delete_one_affiliate = async (
   next: NextFunction
 ) => {
   try {
-    const session = getSessionOrThrow(req);
-
-    if (session.role !== 'ADMIN') {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
-    }
-
     const affiliateToDelete = await Affiliate.findOne({
       where: { id: req.params.id },
     });
