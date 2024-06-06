@@ -415,7 +415,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
               : `${selection.length} Selected`}
           </th>
           <th></th>
-          {user && hasWriterPermission(user.role) && <th></th>}
+          <th></th>
         </tr>
       </thead>
       <tbody className={classes['card_body']}>{blogRows}</tbody>

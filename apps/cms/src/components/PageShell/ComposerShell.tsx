@@ -13,6 +13,7 @@ import { updatePostSchema } from './types';
 import ComposerHeader from '../ComposerHeader/ComposerHeader';
 import ComposerSidebar from '../ComposerSidebar/ComposerSidebar';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
+import UnauthorizedErrorPage from '../../pages/ErrorPages/UnauthorizedErrorPage';
 import {
   SuccessNotification,
   ErrorNotification,
@@ -198,7 +199,11 @@ const ComposerShell = () => {
     return (
       <main className={classes['shell_composer']}>
         <div className={classes['shell_composer_loading_error_container']}>
-          <DynamicErrorPage error={postQuery.error} />
+          {postQuery.error.message === 'Unauthorized to access.' ? (
+            <UnauthorizedErrorPage />
+          ) : (
+            <DynamicErrorPage error={postQuery.error} />
+          )}
         </div>
       </main>
     );
