@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string;
+  readonly VITE_OWNER_USERNAME: string;
   readonly VITE_BACKEND_BASE_URL_DEV: string;
   readonly VITE_BACKEND_BASE_URL_PROD: string;
   readonly VITE_FRONTEND_BASE_URL_DEV: string;

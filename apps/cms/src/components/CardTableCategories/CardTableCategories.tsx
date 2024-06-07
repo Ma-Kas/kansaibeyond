@@ -17,6 +17,8 @@ import {
   CLOUDINARY_BASE_URL,
   CATEGORY_LIST_THUMB_TRANSFORM,
 } from '../../config/constants';
+import useAuth from '../../hooks/useAuth';
+import { hasAdminPermission } from '../../utils/permission-group-handler';
 
 import classes from './CardTableCategories.module.css';
 
@@ -38,6 +40,8 @@ const CardTableCategories = ({
   headerTopStyle,
   categoryTableData,
 }: TableProps) => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
 
@@ -114,18 +118,20 @@ const CardTableCategories = ({
         <td>{item.categoryName}</td>
         <td>{`/${item.categorySlug}`}</td>
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
-        <td>
-          <div className={classes['card_body_table_row_button_group']}>
-            <Button
-              type='button'
-              radius={'xl'}
-              onClick={() => navigate(`${item.categorySlug}/edit`)}
-            >
-              Edit
-            </Button>
-            <FurtherEditDropdown items={furtherEditDropdownItems} />
-          </div>
-        </td>
+        {user && hasAdminPermission(user.role) && (
+          <td>
+            <div className={classes['card_body_table_row_button_group']}>
+              <Button
+                type='button'
+                radius={'xl'}
+                onClick={() => navigate(`${item.categorySlug}/edit`)}
+              >
+                Edit
+              </Button>
+              <FurtherEditDropdown items={furtherEditDropdownItems} />
+            </div>
+          </td>
+        )}
       </tr>
     );
   });
@@ -150,7 +156,7 @@ const CardTableCategories = ({
           <th>Category Name</th>
           <th>URL Slug</th>
           <th>Posts</th>
-          <th></th>
+          {user && hasAdminPermission(user.role) && <th></th>}
         </tr>
       </thead>
       <tbody className={classes['card_body']}>{categoryRows}</tbody>

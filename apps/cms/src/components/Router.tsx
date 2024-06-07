@@ -12,6 +12,9 @@ import LoginPage from '../pages/LoginPage/LoginPage';
 import SignUpPage from '../pages/SignUpPage/SignUpPage';
 import MainShell from './PageShell/MainShell';
 import ComposerShell from './PageShell/ComposerShell';
+import AdminRoute from './AdminRoute/AdminRoute';
+import RestrictedRoute from './RestrictedRoute/RestrictedRoute';
+
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage';
 import DisabledErrorPage from '../pages/ErrorPages/DisabledErrorPage';
 
@@ -64,11 +67,19 @@ const Router = () => {
             },
             {
               path: 'blog/categories/create-category',
-              element: <NewBlogCategory />,
+              element: (
+                <AdminRoute>
+                  <NewBlogCategory />
+                </AdminRoute>
+              ),
             },
             {
               path: 'blog/categories/:categorySlug/edit',
-              element: <UpdateBlogCategory />,
+              element: (
+                <AdminRoute>
+                  <UpdateBlogCategory />
+                </AdminRoute>
+              ),
             },
             {
               path: 'blog/tags',
@@ -84,27 +95,46 @@ const Router = () => {
             },
             {
               path: 'users',
-              element: <Users />,
+              element: (
+                <AdminRoute>
+                  <Users />
+                </AdminRoute>
+              ),
             },
             {
               path: 'users/:username/edit',
-              element: <UpdateUser />,
+              element: (
+                <RestrictedRoute>
+                  <UpdateUser />
+                </RestrictedRoute>
+              ),
             },
             {
               path: 'affiliates',
-              element: <AffiliateBlogs />,
+              element: (
+                <AdminRoute>
+                  <AffiliateBlogs />
+                </AdminRoute>
+              ),
             },
             {
               path: 'affiliates/create-affiliate',
-              element: <NewAffiliateBlog />,
+              element: (
+                <AdminRoute>
+                  <NewAffiliateBlog />
+                </AdminRoute>
+              ),
             },
             {
               path: 'affiliates/:id/edit',
-              element: <UpdateAffiliateBlog />,
+              element: (
+                <AdminRoute>
+                  <UpdateAffiliateBlog />
+                </AdminRoute>
+              ),
             },
           ],
         },
-        { path: 'composer/new-post', element: <ComposerShell /> },
         { path: 'composer/edit/:postSlug', element: <ComposerShell /> },
       ],
     },

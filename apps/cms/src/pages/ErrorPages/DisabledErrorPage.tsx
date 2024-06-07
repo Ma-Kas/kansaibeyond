@@ -1,5 +1,6 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RedPanda from '../../assets/images/red_panda_error.svg';
+import { Button, Group } from '@mantine/core';
 
 import classes from './ErrorPages.module.css';
 
@@ -9,7 +10,7 @@ const DisabledErrorPage = () => {
   return (
     <div className={classes['error_container']}>
       <div className={classes.label}>Oops</div>
-      <p className={classes['dynamic_heading']}>Your account is disabled</p>
+      <p className={classes.title}>Your account is disabled</p>
       <div className={classes['error_cat_container']}>
         <img src={RedPanda} alt='Error image' />
       </div>
@@ -20,21 +21,17 @@ const DisabledErrorPage = () => {
       <p className={classes['dynamic_description']}>
         Otherwise, there is probably a reason why your account has been
         disabled. If you believe this to be a mistake, please contact an admin.
-        In the meantime, you can&nbsp;
-        <span>
-          <Link
-            className={classes['link']}
-            to={'..'}
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(-1);
-            }}
-          >
-            go back
-          </Link>
-        </span>
-        .
       </p>
+      <Group justify='center'>
+        <Button
+          type='button'
+          variant='subtle'
+          size='md'
+          onClick={() => navigate(-1)}
+        >
+          Click here to go back
+        </Button>
+      </Group>
     </div>
   );
 };

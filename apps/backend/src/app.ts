@@ -7,6 +7,7 @@ import cors from 'cors';
 
 // Project Dependencies
 import { auth } from './middleware/auth';
+import { adminAuth } from './middleware/adminAuth';
 import cmsAuthRouter from './routes/cms-routes/authentication';
 import cmsLoginRouter from './routes/cms-routes/login';
 import cmsLogoutRouter from './routes/cms-routes/logout';
@@ -53,7 +54,7 @@ cmsRouter.use('/v1/categories', auth, cmsCategoryRouter);
 cmsRouter.use('/v1/posts', auth, cmsPostRouter);
 cmsRouter.use('/v1/tags', auth, cmsTagRouter);
 cmsRouter.use('/v1/comments', auth, cmsCommentRouter);
-cmsRouter.use('/v1/affiliates', auth, cmsAffiliateRouter);
+cmsRouter.use('/v1/affiliates', auth, adminAuth, cmsAffiliateRouter);
 
 // Frontend Routes
 frontendRouter.use('/v1/posts', frontendPostRouter);

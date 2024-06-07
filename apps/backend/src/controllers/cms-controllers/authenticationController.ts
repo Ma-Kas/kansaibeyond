@@ -50,6 +50,7 @@ export const get_authentication = async (
     }
 
     if (user.disabled) {
+      await Session.destroy({ where: { userId: user.id } });
       throw new UnauthorizedError({ message: 'Account disabled.' });
     }
 

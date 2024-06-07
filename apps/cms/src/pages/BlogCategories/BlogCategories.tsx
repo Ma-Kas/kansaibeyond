@@ -9,9 +9,14 @@ import CardTableCategories from '../../components/CardTableCategories/CardTableC
 import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import { getAllCategories } from '../../requests/categoryRequests';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
+import useAuth from '../../hooks/useAuth';
+import { hasAdminPermission } from '../../utils/permission-group-handler';
+
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 
 const BlogCategories = () => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
@@ -34,14 +39,16 @@ const BlogCategories = () => {
         <h1 className={classes['page_main_content_header_title']}>
           Categories
         </h1>
-        <Button
-          type='button'
-          radius={'xl'}
-          leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('create-category')}
-        >
-          Create Category
-        </Button>
+        {user && hasAdminPermission(user.role) && (
+          <Button
+            type='button'
+            radius={'xl'}
+            leftSection={<IconPlus className={classes['new_button_icon']} />}
+            onClick={() => navigate('create-category')}
+          >
+            Create Category
+          </Button>
+        )}
       </div>
       <div className={classes['page_main_content_header_sub']}>
         Group posts by topic to help readers and search engines find your

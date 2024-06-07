@@ -52,7 +52,7 @@ const commentUserSchema = z.object(
   {
     displayName: z.string(),
     userIcon: z.string().nullable(),
-    role: z.string(),
+    role: userRoleSchema,
   }
 ).strict();
 

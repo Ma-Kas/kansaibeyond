@@ -1,8 +1,10 @@
+import { USER_ROLES } from '../utils/constants';
+
 ////////////////////////////////////////////////////////////////////////////////
 // Utility Types                                                              //
 ////////////////////////////////////////////////////////////////////////////////
 
-type UserRole = 'ADMIN' | 'TECH' | 'WRITER' | 'GUEST';
+type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 type CoverImage = {
   urlSlug: string;

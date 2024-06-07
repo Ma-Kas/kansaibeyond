@@ -11,11 +11,15 @@ import BlogPostTabs, {
 import { getAllPosts, postPost } from '../../requests/postRequests';
 import { postSetFormFieldError } from '../../utils/backend-error-response-validation';
 import { ErrorNotification } from '../../components/FeedbackPopups/FeedbackPopups';
+import { newPostSchema } from '../../components/PageShell/types';
+import useAuth from '../../hooks/useAuth';
+import { hasWriterPermission } from '../../utils/permission-group-handler';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
-import { newPostSchema } from '../../components/PageShell/types';
 
 const BlogPosts = () => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -171,14 +175,16 @@ const BlogPosts = () => {
     <>
       <div className={classes['page_main_content_header_main']}>
         <h1 className={classes['page_main_content_header_title']}>Posts</h1>
-        <Button
-          type='button'
-          radius={'xl'}
-          leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={handleNewPostCreation}
-        >
-          Create New Post
-        </Button>
+        {user && hasWriterPermission(user.role) && (
+          <Button
+            type='button'
+            radius={'xl'}
+            leftSection={<IconPlus className={classes['new_button_icon']} />}
+            onClick={handleNewPostCreation}
+          >
+            Create New Post
+          </Button>
+        )}
       </div>
       <div className={classes['page_main_content_header_sub']}>
         Manage your blog posts.

@@ -29,7 +29,11 @@ import {
   USER_LIST_THUMB_TRANSFORM,
   SELECTABLE_USER_ROLES,
 } from '../../config/constants';
-import { hasOwnerPermission } from '../../utils/permission-group-handler';
+import useAuth from '../../hooks/useAuth';
+import {
+  hasAdminPermission,
+  hasOwnerPermission,
+} from '../../utils/permission-group-handler';
 
 import classes from './CardTableUsers.module.css';
 
@@ -41,6 +45,8 @@ type TableProps = {
 };
 
 const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
 
@@ -169,26 +175,6 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
       },
     ];
 
-    const furtherEditDropdownItemsOwner = [
-      {
-        text: 'Edit User',
-        icon: IconEdit,
-        onClick: () => navigate(`${item.username}/edit`),
-      },
-      {
-        text: 'Delete User',
-        icon: IconTrash,
-        onClick: () =>
-          modals.openConfirmModal(
-            ConfirmDeleteModal({
-              titleText: `Delete user "${item.displayName}?`,
-              bodyText: `Are you sure you want to delete user "${item.displayName}? This action cannot be undone.`,
-              onConfirm: () => userDeleteMutation.mutate(item.username),
-            })
-          ),
-      },
-    ];
-
     return (
       <tr
         key={item.id}
@@ -231,11 +217,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
               .toLowerCase()}`}</div>
           ) : (
             <Select
-              data={(
-                Object.values(
-                  SELECTABLE_USER_ROLES
-                ) as Array<SELECTABLE_USER_ROLES>
-              ).map((role) => {
+              data={Object.values(SELECTABLE_USER_ROLES).map((role) => {
                 return {
                   value: role,
                   label: `${role[0]}${role.slice(1).toLowerCase()}`,
@@ -254,22 +236,21 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
         </td>
 
         <td>
-          <div className={classes['card_body_table_row_button_group']}>
-            <Button
-              type='button'
-              radius={'xl'}
-              onClick={() => navigate(`${item.username}/edit`)}
-            >
-              Edit
-            </Button>
-            <FurtherEditDropdown
-              items={
-                hasOwnerPermission(item.role)
-                  ? furtherEditDropdownItemsOwner
-                  : furtherEditDropdownItems
-              }
-            />
-          </div>
+          {user &&
+            (hasOwnerPermission(user.role) ||
+              (hasAdminPermission(user.role) &&
+                !hasOwnerPermission(item.role))) && (
+              <div className={classes['card_body_table_row_button_group']}>
+                <Button
+                  type='button'
+                  radius={'xl'}
+                  onClick={() => navigate(`${item.username}/edit`)}
+                >
+                  Edit
+                </Button>
+                <FurtherEditDropdown items={furtherEditDropdownItems} />
+              </div>
+            )}
         </td>
       </tr>
     );

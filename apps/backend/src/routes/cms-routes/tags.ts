@@ -2,6 +2,7 @@
 
 import express from 'express';
 import * as tagController from '../../controllers/cms-controllers/tagController';
+import { adminAuth } from '../../middleware/adminAuth';
 
 const router = express.Router();
 
@@ -18,6 +19,6 @@ router.post('/', tagController.post_new_tag);
 router.put('/:tagSlug', tagController.update_one_tag);
 
 // DELETE route for deleting one specific tag based on tagSlug query
-router.delete('/:tagSlug', tagController.delete_one_tag);
+router.delete('/:tagSlug', adminAuth, tagController.delete_one_tag);
 
 export default router;

@@ -1,4 +1,4 @@
-import { USER_ROLES } from '../config/constants';
+import { USER_ROLES } from './constants';
 
 export const hasOwnerPermission = (role: string): boolean => {
   return role === USER_ROLES.OWNER;

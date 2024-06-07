@@ -12,8 +12,12 @@ import {
   ErrorNotification,
 } from '../FeedbackPopups/FeedbackPopups';
 import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
-
 import { deleteTag } from '../../requests/tagRequests';
+import useAuth from '../../hooks/useAuth';
+import {
+  hasAdminPermission,
+  hasWriterPermission,
+} from '../../utils/permission-group-handler';
 
 import classes from './CardTableTags.module.css';
 
@@ -30,6 +34,8 @@ type TableProps = {
 };
 
 const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const [selection, setSelection] = useState<number[]>([]);
 
@@ -62,7 +68,15 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
 
   const tagRows = tagTableData.map((item) => {
     const selected = selection.includes(item.id);
+
     const furtherEditDropdownItems = [
+      {
+        text: 'Edit Tag',
+        icon: IconEdit,
+        onClick: () => navigate(`${item.tagSlug}/edit`),
+      },
+    ];
+    const furtherEditDropdownAdminItems = [
       {
         text: 'Edit Tag',
         icon: IconEdit,
@@ -98,18 +112,26 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
         <td>{item.tagName}</td>
         <td>{`/${item.tagSlug}`}</td>
         <td>{`${item.posts} ${item.posts === 1 ? 'post' : 'posts'}`}</td>
-        <td>
-          <div className={classes['card_body_table_row_button_group']}>
-            <Button
-              type='button'
-              radius={'xl'}
-              onClick={() => navigate(`${item.tagSlug}/edit`)}
-            >
-              Edit
-            </Button>
-            <FurtherEditDropdown items={furtherEditDropdownItems} />
-          </div>
-        </td>
+        {user && hasWriterPermission(user.role) && (
+          <td>
+            <div className={classes['card_body_table_row_button_group']}>
+              <Button
+                type='button'
+                radius={'xl'}
+                onClick={() => navigate(`${item.tagSlug}/edit`)}
+              >
+                Edit
+              </Button>
+              <FurtherEditDropdown
+                items={
+                  hasAdminPermission(user.role)
+                    ? furtherEditDropdownAdminItems
+                    : furtherEditDropdownItems
+                }
+              />
+            </div>
+          </td>
+        )}
       </tr>
     );
   });
@@ -130,7 +152,7 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
           <th>Tag Name</th>
           <th>URL Slug</th>
           <th>Posts</th>
-          <th></th>
+          {user && hasWriterPermission(user.role) && <th></th>}
         </tr>
       </thead>
       <tbody className={classes['card_body']}>{tagRows}</tbody>

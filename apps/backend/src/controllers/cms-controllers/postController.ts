@@ -10,8 +10,25 @@ import BadRequestError from '../../errors/BadRequestError';
 import NotFoundError from '../../errors/NotFoundError';
 import { sequelize } from '../../utils/db';
 import { getSessionOrThrow } from '../../utils/get-session-or-throw';
-import { createUserWhere } from '../../utils/limit-query-to-own-creation';
 import UnauthorizedError from '../../errors/UnauthorizedError';
+import {
+  hasAdminPermission,
+  hasOwnerPermission,
+  hasWriterPermission,
+} from '../../utils/permission-group-handler';
+
+const getUserRoleOfPost = (post: Post) => {
+  if (
+    'user' in post &&
+    post.user &&
+    typeof post.user === 'object' &&
+    'role' in post.user &&
+    typeof post.user.role === 'string'
+  ) {
+    return post.user.role;
+  }
+  return '';
+};
 
 export const get_all_posts = async (
   req: Request,
@@ -19,18 +36,10 @@ export const get_all_posts = async (
   next: NextFunction
 ) => {
   try {
-    const session = getSessionOrThrow(req);
-
     if (req.query.filter) {
-      if (
-        session.role !== 'ADMIN' &&
-        session.userId !== Number(req.query.filter)
-      ) {
-        throw new UnauthorizedError({ message: 'Unauthorized to access.' });
-      }
       const allPosts = await Post.findAll({
         attributes: {
-          exclude: ['createdAt', 'userId', 'categoryId', 'content'],
+          exclude: ['createdAt', 'categoryId', 'content'],
         },
         include: [
           {
@@ -74,13 +83,12 @@ export const get_all_posts = async (
     } else {
       const allPosts = await Post.findAll({
         attributes: {
-          exclude: ['createdAt', 'userId', 'categoryId', 'content'],
+          exclude: ['createdAt', 'categoryId', 'content'],
         },
         include: [
           {
             model: User,
             attributes: ['username', 'displayName', 'userIcon', 'role'],
-            where: createUserWhere(req),
           },
           {
             model: Category,
@@ -177,7 +185,18 @@ export const get_one_post = async (
       throw new NotFoundError({ message: 'Post not found.' });
     }
 
-    if (session.role !== 'ADMIN' && session.userId !== post.userId) {
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(post))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasAdminPermission(session.role) && post.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(post);
@@ -201,7 +220,7 @@ export const post_new_post = async (
       throw new NotFoundError({ message: 'User not found' });
     }
 
-    if (!['ADMIN', 'WRITER'].includes(user.role)) {
+    if (!hasWriterPermission(session.role)) {
       throw new UnauthorizedError({ message: 'Unauthorized to create post.' });
     }
 
@@ -255,9 +274,25 @@ export const update_one_post = async (
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
-    if (session.role !== 'ADMIN' && postToUpdate.userId !== session.userId) {
+
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(postToUpdate))
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (
+      !hasAdminPermission(session.role) &&
+      postToUpdate.userId !== session.userId
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     const validatedUpdateData = validatePostUpdateData(req.body);
 
     // No update data => return original post
@@ -342,7 +377,22 @@ export const trash_one_post = async (
     if (postToTrash.status === 'trash') {
       res.status(204).end();
     }
-    if (session.role !== 'ADMIN' && postToTrash.userId !== session.userId) {
+
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(postToTrash))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (
+      !hasAdminPermission(session.role) &&
+      postToTrash.userId !== session.userId
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
@@ -375,7 +425,21 @@ export const delete_one_post = async (
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
-    if (session.role !== 'ADMIN' && postToDelete.userId !== session.userId) {
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(postToDelete))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (
+      !hasAdminPermission(session.role) &&
+      postToDelete.userId !== session.userId
+    ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 

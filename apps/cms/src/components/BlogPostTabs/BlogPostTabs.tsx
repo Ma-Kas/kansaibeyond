@@ -5,9 +5,9 @@ import { createPortal } from 'react-dom';
 import CardTablePosts from '../CardTablePosts/CardTablePosts';
 import { Post } from '../../requests/postRequests';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
+import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 
 import classes from './BlogPostTabs.module.css';
-import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 
 export type TabData = {
   value: string;

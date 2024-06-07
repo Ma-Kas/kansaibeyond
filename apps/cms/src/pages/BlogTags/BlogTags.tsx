@@ -9,10 +9,14 @@ import CardTableTags from '../../components/CardTableTags/CardTableTags';
 import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import { getAllTags } from '../../requests/tagRequests';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
+import useAuth from '../../hooks/useAuth';
+import { hasWriterPermission } from '../../utils/permission-group-handler';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 
 const BlogTags = () => {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
   const mainContentHeaderRef = useRef<HTMLDivElement | null>(null);
   const mainContentBodyRef = useRef<HTMLDivElement | null>(null);
@@ -33,14 +37,16 @@ const BlogTags = () => {
     <>
       <div className={classes['page_main_content_header_main']}>
         <h1 className={classes['page_main_content_header_title']}>Tags</h1>
-        <Button
-          type='button'
-          radius={'xl'}
-          leftSection={<IconPlus className={classes['new_button_icon']} />}
-          onClick={() => navigate('create-tag')}
-        >
-          Create Tag
-        </Button>
+        {user && hasWriterPermission(user.role) && (
+          <Button
+            type='button'
+            radius={'xl'}
+            leftSection={<IconPlus className={classes['new_button_icon']} />}
+            onClick={() => navigate('create-tag')}
+          >
+            Create Tag
+          </Button>
+        )}
       </div>
       <div className={classes['page_main_content_header_sub']}>
         Create and manage tags to help readers find the blog posts they're

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { isFuture } from 'date-fns';
 
 import { Session, User } from '../models';
-import UnauthorizedError from '../errors/UnauthorizedError';
+import ForbiddenError from '../errors/ForbiddenError';
 
 interface AuthorizationRequest extends Request {
   session: Session;
@@ -20,7 +20,7 @@ const auth = async (req: Request, _res: Response, next: NextFunction) => {
     }
 
     if (!cookie) {
-      throw new UnauthorizedError({ message: 'Session cookie not found.' });
+      throw new ForbiddenError({ message: 'Session cookie not found.' });
     }
 
     const validSession = await Session.findOne({
@@ -29,16 +29,17 @@ const auth = async (req: Request, _res: Response, next: NextFunction) => {
         {
           model: User,
           attributes: ['disabled'],
+          where: { disabled: false },
         },
       ],
     });
 
     if (!validSession) {
-      throw new UnauthorizedError({ message: 'Session not found.' });
+      throw new ForbiddenError({ message: 'Session not found.' });
     }
 
     if (!isFuture(new Date(validSession.expiresAt))) {
-      throw new UnauthorizedError({ message: 'Session expired' });
+      throw new ForbiddenError({ message: 'Session expired.' });
     }
 
     (req as AuthorizationRequest).session = validSession;
