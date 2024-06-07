@@ -130,6 +130,11 @@ export const update_one_user = async (
           message: 'ADMIN permission required',
         });
       }
+      if (!hasAdminPermission(session.role) && 'role' in userUpdateData) {
+        throw new UnauthorizedError({
+          message: 'ADMIN permission required',
+        });
+      }
       // Only re-crypt password if password has changed
       if (userUpdateData.password) {
         userUpdateData.password = await bcrypt.hash(
