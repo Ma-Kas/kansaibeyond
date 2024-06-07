@@ -37,6 +37,7 @@ import {
 import useAuth from '../../hooks/useAuth';
 import {
   hasAdminPermission,
+  hasOwnerPermission,
   hasWriterPermission,
 } from '../../utils/permission-group-handler';
 
@@ -370,9 +371,12 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
             }`}</div>
           </div>
         </td>
-        {user && hasWriterPermission(user.role) && (
-          <td>
-            {user.id === item.userId && (
+        <td>
+          {user &&
+            (hasOwnerPermission(user.role) ||
+              (hasAdminPermission(user.role) &&
+                !hasOwnerPermission(item.user.role)) ||
+              (hasWriterPermission(user.role) && user.id === item.userId)) && (
               <div className={classes['card_body_table_row_button_group']}>
                 <Button
                   type='button'
@@ -386,8 +390,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
                 />
               </div>
             )}
-          </td>
-        )}
+        </td>
       </tr>
     );
   });

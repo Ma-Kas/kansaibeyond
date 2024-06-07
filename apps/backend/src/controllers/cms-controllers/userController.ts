@@ -57,13 +57,14 @@ export const get_one_user = async (
       throw new NotFoundError({ message: 'User not found.' });
     }
 
+    if (hasOwnerPermission(user.role) && !hasOwnerPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     if (!hasAdminPermission(session.role) && session.userId !== user.id) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
-    if (hasOwnerPermission(user.role) && !hasOwnerPermission(session.role)) {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
-    }
     res.status(200).json(user);
   } catch (err: unknown) {
     next(err);
@@ -105,15 +106,17 @@ export const update_one_user = async (
     if (!userToUpdate) {
       throw new NotFoundError({ message: 'User to update was not found.' });
     }
-    if (
-      !hasAdminPermission(session.role) &&
-      session.userId !== userToUpdate.id
-    ) {
-      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
-    }
+
     if (
       hasOwnerPermission(userToUpdate.role) &&
       !hasOwnerPermission(session.role)
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (
+      !hasAdminPermission(session.role) &&
+      session.userId !== userToUpdate.id
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
@@ -196,16 +199,17 @@ export const delete_one_user = async (
     if (!userToDelete) {
       throw new NotFoundError({ message: 'User to delete was not found.' });
     }
+
     if (
-      !hasAdminPermission(session.role) &&
-      session.userId !== userToDelete.id
+      hasOwnerPermission(userToDelete.role) &&
+      !hasOwnerPermission(session.role)
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
 
     if (
-      hasOwnerPermission(userToDelete.role) &&
-      !hasOwnerPermission(session.role)
+      !hasAdminPermission(session.role) &&
+      session.userId !== userToDelete.id
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }

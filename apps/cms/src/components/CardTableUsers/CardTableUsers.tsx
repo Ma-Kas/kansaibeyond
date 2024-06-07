@@ -30,7 +30,10 @@ import {
   SELECTABLE_USER_ROLES,
 } from '../../config/constants';
 import useAuth from '../../hooks/useAuth';
-import { hasOwnerPermission } from '../../utils/permission-group-handler';
+import {
+  hasAdminPermission,
+  hasOwnerPermission,
+} from '../../utils/permission-group-handler';
 
 import classes from './CardTableUsers.module.css';
 
@@ -233,8 +236,10 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
         </td>
 
         <td>
-          {(user && hasOwnerPermission(user.role)) ||
-            (!hasOwnerPermission(item.role) && (
+          {user &&
+            (hasOwnerPermission(user.role) ||
+              (hasAdminPermission(user.role) &&
+                !hasOwnerPermission(item.role))) && (
               <div className={classes['card_body_table_row_button_group']}>
                 <Button
                   type='button'
@@ -245,7 +250,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
                 </Button>
                 <FurtherEditDropdown items={furtherEditDropdownItems} />
               </div>
-            ))}
+            )}
         </td>
       </tr>
     );

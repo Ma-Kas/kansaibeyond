@@ -13,8 +13,22 @@ import { getSessionOrThrow } from '../../utils/get-session-or-throw';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 import {
   hasAdminPermission,
+  hasOwnerPermission,
   hasWriterPermission,
 } from '../../utils/permission-group-handler';
+
+const getUserRoleOfPost = (post: Post) => {
+  if (
+    'user' in post &&
+    post.user &&
+    typeof post.user === 'object' &&
+    'role' in post.user &&
+    typeof post.user.role === 'string'
+  ) {
+    return post.user.role;
+  }
+  return '';
+};
 
 export const get_all_posts = async (
   req: Request,
@@ -171,7 +185,18 @@ export const get_one_post = async (
       throw new NotFoundError({ message: 'Post not found.' });
     }
 
-    if (!hasAdminPermission(session.role) && session.userId !== post.userId) {
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(post))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasAdminPermission(session.role) && post.userId !== session.userId) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
     res.status(200).json(post);
@@ -249,12 +274,25 @@ export const update_one_post = async (
     if (!postToUpdate) {
       throw new NotFoundError({ message: 'Post to update was not found.' });
     }
+
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(postToUpdate))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     if (
       !hasAdminPermission(session.role) &&
       postToUpdate.userId !== session.userId
     ) {
       throw new UnauthorizedError({ message: 'Unauthorized to access.' });
     }
+
     const validatedUpdateData = validatePostUpdateData(req.body);
 
     // No update data => return original post
@@ -339,6 +377,18 @@ export const trash_one_post = async (
     if (postToTrash.status === 'trash') {
       res.status(204).end();
     }
+
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(postToTrash))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     if (
       !hasAdminPermission(session.role) &&
       postToTrash.userId !== session.userId
@@ -375,6 +425,17 @@ export const delete_one_post = async (
     if (!postToDelete) {
       throw new NotFoundError({ message: 'Post to delete was not found.' });
     }
+    if (
+      !hasOwnerPermission(session.role) &&
+      hasOwnerPermission(getUserRoleOfPost(postToDelete))
+    ) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
+    if (!hasWriterPermission(session.role)) {
+      throw new UnauthorizedError({ message: 'Unauthorized to access.' });
+    }
+
     if (
       !hasAdminPermission(session.role) &&
       postToDelete.userId !== session.userId
