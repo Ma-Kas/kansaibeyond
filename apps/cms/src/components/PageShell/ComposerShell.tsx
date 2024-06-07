@@ -1,7 +1,7 @@
 // General Imports
 import { useEffect, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Loader } from '@mantine/core';
 import { FormErrors } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -49,6 +49,7 @@ const initialConfig: InitialConfigType = {
 };
 
 const ComposerShell = () => {
+  const navigate = useNavigate();
   const postFormRef = useRef<HTMLFormElement | null>(null);
 
   const { postSlug } = useParams();
@@ -124,6 +125,10 @@ const ComposerShell = () => {
             detail: { data: () => data },
           })
         );
+      }
+      // navigate to updated postSlug
+      if (data?.postSlug !== currentUrlSlug) {
+        navigate(`/composer/edit/${data?.postSlug}`);
       }
     },
     onError: (err) => {
