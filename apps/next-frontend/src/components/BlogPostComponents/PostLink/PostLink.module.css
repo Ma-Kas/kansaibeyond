@@ -1,0 +1,11 @@
+.post_link {
+  color: var(--color-font-post-link);
+  text-decoration: none;
+  max-width: 100%;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.post_link:hover {
+  text-decoration: underline;
+}

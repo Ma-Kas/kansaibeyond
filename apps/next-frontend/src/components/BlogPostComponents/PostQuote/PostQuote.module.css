@@ -1,0 +1,6 @@
+.post_quote {
+  color: var(--color-font-post-quote);
+  margin: var(--post-quote-margin);
+  border-left: var(--post-quote-border);
+  padding-left: var(--post-quote-padding-left);
+}
