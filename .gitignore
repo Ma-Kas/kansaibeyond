@@ -4,6 +4,11 @@
 node_modules
 .pnp
 .pnp.js
+.yarn/install-state.gz
+
+# next.js
+.next/
+out/
 
 # Local env files
 .env
@@ -30,6 +35,9 @@ dist
 
 **/mockdata.ts
 
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
 # Debug
 npm-debug.log*
