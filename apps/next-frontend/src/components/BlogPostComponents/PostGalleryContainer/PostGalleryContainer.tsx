@@ -1,9 +1,9 @@
 import type * as CSS from 'csstype';
-import { ImageGalleryContainerNode } from '../../../types/post-content-types';
+import { ImageGalleryContainerNode } from '@/types/post-content-types';
 import {
   CLOUDINARY_BASE_URL,
   POST_GALLERY_IMAGE_TRANSFORM,
-} from '../../../config/constants';
+} from '@/config/constants';
 
 import classes from './PostGalleryContainer.module.css';
 

@@ -1,12 +1,28 @@
-const parseInlineStyle = (style: string) => {
-  // Takes an inline style string, parses it into key/value pair
-  // Usable with react's style property
-  const template = document.createElement('template');
-  template.setAttribute('style', style);
-  return Object.entries(template.style)
-    .filter(([key]) => !/^[0-9]+$/.test(key))
-    .filter(([, value]) => Boolean(value))
-    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+const formatStringToCamelCase = (str: string) => {
+  const splitString = str.split('-');
+  if (splitString.length === 1) return splitString[0];
+  return (
+    splitString[0] +
+    splitString
+      .slice(1)
+      .map((word) => word[0].toUpperCase() + word.slice(1))
+      .join('')
+  );
+};
+
+// Takes an inline style string, parses it into key/value pair
+// Usable with react's style property
+export const parseInlineStyle = (inlineString: string) => {
+  const style: Record<string, string> = {};
+  inlineString.split(';').forEach((el) => {
+    const [property, value] = el.split(':');
+    if (!property) return;
+
+    const formattedProperty = formatStringToCamelCase(property.trim());
+    style[formattedProperty] = value.trim();
+  });
+
+  return style;
 };
 
 export default parseInlineStyle;

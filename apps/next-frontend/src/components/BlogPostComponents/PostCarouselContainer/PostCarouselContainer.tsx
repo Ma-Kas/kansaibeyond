@@ -3,13 +3,13 @@ import useEmblaCarousel from 'embla-carousel-react';
 import {
   PrevButton,
   NextButton,
-} from '../../EmblaCarousel/EmblaCarouselArrowButtons';
-import usePrevNextButtons from '../../EmblaCarousel/usePrevNextButtons';
-import { ImageCarouselContainerNode } from '../../../types/post-content-types';
+} from '@/components/EmblaCarousel/EmblaCarouselArrowButtons';
+import usePrevNextButtons from '@/components/EmblaCarousel/usePrevNextButtons';
+import { ImageCarouselContainerNode } from '@/types/post-content-types';
 import {
   CLOUDINARY_BASE_URL,
   POST_CAROUSEL_IMAGE_TRANSFORM,
-} from '../../../config/constants';
+} from '@/config/constants';
 
 import classes from './PostCarouselContainer.module.css';
 

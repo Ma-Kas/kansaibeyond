@@ -1,11 +1,11 @@
 export const BACKEND_BASE_URL = process.env.DEV
-  ? process.env.VITE_BACKEND_BASE_URL_DEV
-  : process.env.VITE_BACKEND_BASE_URL_PROD;
+  ? process.env.BACKEND_BASE_URL_DEV
+  : process.env.BACKEND_BASE_URL_PROD;
 
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
 
 // Cloudinary Image Transformation Constants
-export const CLOUDINARY_BASE_URL = process.env.VITE_CLOUDINARY_BASE_URL;
+export const CLOUDINARY_BASE_URL = process.env.CLOUDINARY_BASE_URL;
 export const CATEGORY_COVER_IMAGE_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
 export const POST_FEATURED_IMAGE_TRANSFORM = '/c_fill,w_450,q_50,f_auto';
 

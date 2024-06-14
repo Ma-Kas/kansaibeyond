@@ -1,8 +1,8 @@
-import parseInlineStyle from '../../../utils/parse-inline-style-string';
+import parseInlineStyle from '@/utils/parse-inline-style-string';
 import {
   TEXT_FORMAT_STATES,
   TEXT_FORMAT_ENUM,
-} from '../../../pages/BlogPostView/utils/post-content-constants';
+} from '@/utils/post-content-constants';
 
 import classes from './PostText.module.css';
 

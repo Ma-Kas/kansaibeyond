@@ -1,4 +1,4 @@
-import parseInlineStyle from '../../../utils/parse-inline-style-string';
+import parseInlineStyle from '@/utils/parse-inline-style-string';
 
 import classes from './PostRoot.module.css';
 

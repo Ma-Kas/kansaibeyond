@@ -1,7 +1,6 @@
 import type * as CSS from 'csstype';
-import { Property } from 'csstype';
-import { INDENTATION_FACTOR } from '../../../pages/BlogPostView/utils/post-content-constants';
-import { QuoteNode } from '../../../types/post-content-types';
+import { INDENTATION_FACTOR } from '@/utils/post-content-constants';
+import { QuoteNode } from '@/types/post-content-types';
 
 import classes from './PostQuote.module.css';
 
@@ -15,7 +14,7 @@ type Props = {
 const PostQuote = ({ format, indent, quoteNode, children }: Props) => {
   const style: CSS.Properties = {};
   if (format && format !== '') {
-    style.textAlign = format as Property.TextAlign;
+    style.textAlign = format as CSS.Property.TextAlign;
   }
   if (indent) {
     style.paddingInlineStart = `${indent * INDENTATION_FACTOR}px`;

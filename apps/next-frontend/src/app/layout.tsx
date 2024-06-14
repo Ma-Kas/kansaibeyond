@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
+// import Script from 'next/script';
+// import { INSTAGRAM_SCRIPT_URL } from '@/config/constants';
 import '@/styles/index.css';
+import '@/styles/variables.css';
 
 export const metadata: Metadata = {
   title: 'Kansai & Beyond',
@@ -13,7 +16,10 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* <Script src={INSTAGRAM_SCRIPT_URL} strategy='beforeInteractive' /> */}
+      </body>
     </html>
   );
 };

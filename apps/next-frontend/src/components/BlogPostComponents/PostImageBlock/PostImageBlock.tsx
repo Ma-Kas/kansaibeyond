@@ -1,9 +1,6 @@
 import type * as CSS from 'csstype';
-import {
-  ImageAlignmentType,
-  ImageBlockNode,
-} from '../../../types/post-content-types';
-import parseInlineStyle from '../../../utils/parse-inline-style-string';
+import { ImageAlignmentType, ImageBlockNode } from '@/types/post-content-types';
+import parseInlineStyle from '@/utils/parse-inline-style-string';
 
 import classes from './PostImageBlock.module.css';
 

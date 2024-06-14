@@ -1,8 +1,8 @@
-import parseInlineStyle from '../../../utils/parse-inline-style-string';
+import parseInlineStyle from '@/utils/parse-inline-style-string';
 import {
   CLOUDINARY_BASE_URL,
   POST_SINGLE_IMAGE_TRANSFORM,
-} from '../../../config/constants';
+} from '@/config/constants';
 
 import classes from './PostImage.module.css';
 

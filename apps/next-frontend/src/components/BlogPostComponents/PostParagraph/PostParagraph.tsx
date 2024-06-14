@@ -1,7 +1,6 @@
 import type * as CSS from 'csstype';
-import { Property } from 'csstype';
-import { INDENTATION_FACTOR } from '../../../pages/BlogPostView/utils/post-content-constants';
-import { ParagraphNode } from '../../../types/post-content-types';
+import { INDENTATION_FACTOR } from '@/utils/post-content-constants';
+import { ParagraphNode } from '@/types/post-content-types';
 
 import classes from './PostParagraph.module.css';
 
@@ -16,7 +15,7 @@ const PostParagraph = ({ format, indent, paragraphNode, children }: Props) => {
   const style: CSS.Properties = {};
 
   if (format && format !== '') {
-    style.textAlign = format as Property.TextAlign;
+    style.textAlign = format as CSS.Property.TextAlign;
   }
 
   if (indent) {
