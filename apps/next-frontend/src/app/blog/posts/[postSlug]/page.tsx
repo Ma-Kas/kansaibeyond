@@ -1,11 +1,5 @@
-// import dynamic from 'next/dynamic';
-
 import { getOnePost } from '@/lib/requests/postRequests';
 import BlogPostView from '@/components/BlogPostView/BlogPostView';
-
-// const NoSSR = dynamic(() => import('@/components/BlogPostView/BlogPostView'), {
-//   ssr: false,
-// });
 
 const PostPage = async ({
   params: { postSlug },

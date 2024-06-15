@@ -19,14 +19,14 @@ import PostCarouselContainer from '@/components/BlogPostComponents/PostCarouselC
 import PostEmbedBlock from '@/components/BlogPostComponents/PostEmbedBlock/PostEmbedBlock';
 import PostEmbed from '@/components/BlogPostComponents/PostEmbed/PostEmbed';
 
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 
-const PostEmbedNoSSR = dynamic(
-  () => import('@/components/BlogPostComponents/PostEmbed/PostEmbed'),
-  {
-    ssr: false,
-  }
-);
+// const PostEmbedNoSSR = dynamic(
+//   () => import('@/components/BlogPostComponents/PostEmbed/PostEmbed'),
+//   {
+//     ssr: false,
+//   }
+// );
 
 // Indentation
 export const INDENTATION_FACTOR = 40; // Value in px to multiply the indent value with
@@ -87,7 +87,7 @@ export const keysToComponentMap = {
   'carousel-block': PostCarouselBlock,
   'carousel-container': PostCarouselContainer,
   'embed-block': PostEmbedBlock,
-  embed: PostEmbedNoSSR,
+  embed: PostEmbed,
   quote: PostQuote,
   list: PostList,
   listitem: PostListItem,

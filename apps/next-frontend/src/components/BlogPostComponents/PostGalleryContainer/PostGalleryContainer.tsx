@@ -110,17 +110,17 @@ const PostGalleryContainer = ({ containerNode }: Props) => {
   };
 
   return (
-    <div
+    <figure
       className={classes['post_gallery_container']}
       {...(containerStyle && { style: containerStyle })}
     >
       {switchRenderOnGalleryType()}
       {containerNode.captionText && (
-        <div className={classes['post_gallery_caption']}>
+        <figcaption className={classes['post_gallery_caption']}>
           {containerNode.captionText}
-        </div>
+        </figcaption>
       )}
-    </div>
+    </figure>
   );
 };
 

@@ -11,7 +11,7 @@ const PostHorizontalRule = ({ style }: Props) => {
     <hr
       className={classes['post_horizontal_rule']}
       {...(style && { style: parseInlineStyle(style) })}
-    ></hr>
+    />
   );
 };
 

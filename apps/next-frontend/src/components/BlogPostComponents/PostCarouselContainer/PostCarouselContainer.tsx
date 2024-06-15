@@ -68,7 +68,7 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
   const inlineStyles = setInlineStyleOverride();
 
   return (
-    <div
+    <figure
       className={classes['post_carousel_container']}
       {...(containerStyle && { style: containerStyle })}
     >
@@ -98,11 +98,11 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
         <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
       </div>
       {containerNode.captionText && (
-        <div className={classes['post_carousel_caption']}>
+        <figcaption className={classes['post_carousel_caption']}>
           {containerNode.captionText}
-        </div>
+        </figcaption>
       )}
-    </div>
+    </figure>
   );
 };
 
