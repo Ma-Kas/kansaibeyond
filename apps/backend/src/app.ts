@@ -4,6 +4,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import helmet from 'helmet';
 
 // Project Dependencies
 import { auth } from './middleware/auth';
@@ -37,6 +38,7 @@ const frontendRouter = express.Router();
 const corsCMSOptions = setCMSCorsOptions();
 const corsFrontendOptions = setFrontendCorsOptions();
 
+app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 

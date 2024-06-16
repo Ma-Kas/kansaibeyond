@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-// import Script from 'next/script';
-// import { INSTAGRAM_SCRIPT_URL } from '@/config/constants';
 import '@/styles/index.css';
 import '@/styles/variables.css';
 
@@ -16,10 +14,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en'>
-      <body>
-        {children}
-        {/* <Script src={INSTAGRAM_SCRIPT_URL} strategy='beforeInteractive' /> */}
-      </body>
+      <body>{children}</body>
     </html>
   );
 };

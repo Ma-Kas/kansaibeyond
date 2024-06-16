@@ -1,3 +1,7 @@
+'use client';
+
+/* eslint-disable @next/next/no-img-element */
+
 import type * as CSS from 'csstype';
 import useEmblaCarousel from 'embla-carousel-react';
 import {
