@@ -372,6 +372,7 @@ export default function EmbedComponent({
             <div
               className={isFocused ? 'embed focused' : 'embed'}
               ref={embedRef}
+              data-theme='light'
             >
               <Tweet id={source} />
             </div>

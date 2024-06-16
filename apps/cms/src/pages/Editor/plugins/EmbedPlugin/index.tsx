@@ -99,7 +99,7 @@ export function InsertYoutubeDialog({
       setInput(value);
       return;
     }
-    const newIframe = `<iframe width='100%' height='100%' credentialless src='https://www.youtube-nocookie.com/embed/${videoID}' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowFullScreen title=${title} referrerpolicy='strict-origin-when-cross-origin'/>`;
+    const newIframe = `<iframe width='100%' height='100%' credentialless src='https://www.youtube-nocookie.com/embed/${videoID}' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowFullScreen title=${title} referrerpolicy='strict-origin-when-cross-origin'></iframe>`;
 
     setInput(value);
     setSource(newIframe);
@@ -161,7 +161,7 @@ export function InsertYoutubeShortDialog({
       setInput(value);
       return;
     }
-    const newIframe = `<iframe width='100%' height='100%' credentialless src='https://www.youtube-nocookie.com/embed/${videoID}' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowFullScreen title='YouTube Short Video' referrerpolicy='strict-origin-when-cross-origin'/>`;
+    const newIframe = `<iframe width='100%' height='100%' credentialless src='https://www.youtube-nocookie.com/embed/${videoID}' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowFullScreen title='YouTube Short Video' referrerpolicy='strict-origin-when-cross-origin'></iframe>`;
 
     setInput(value);
     setSource(newIframe);
@@ -357,7 +357,7 @@ export function InsertGoogleMapsDialog({
     }
     setMaxWidth(width);
     setAspectRatio(`${Number(width) / Number(height)} / 1`);
-    const newIframe = `<iframe width='100%' height='100%' frameborder='0' style='border: 0' src='${src}' credentialless allowFullScreen title='Google Maps' referrerpolicy='strict-origin-when-cross-origin'/>`;
+    const newIframe = `<iframe width='100%' height='100%' frameborder='0' style='border: 0' src='${src}' credentialless allowFullScreen title='Google Maps' referrerpolicy='strict-origin-when-cross-origin'></iframe>`;
 
     setInput(value);
     setSource(newIframe);
