@@ -1,0 +1,20 @@
+.post_image_block {
+  display: flex;
+}
+
+.post_image_container {
+}
+
+.post_image_figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.post_image_caption {
+  color: var(--color-font-black);
+  font-size: var(--font-size-post-figcaption);
+  text-align: center;
+  word-wrap: break-word;
+  padding: var(--font-size-post-figcaption) 0;
+}
