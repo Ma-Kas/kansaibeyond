@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
@@ -5,7 +6,7 @@ export const handleRequestErrors = (err: unknown) => {
   if (err === null) {
     throw new Error('Unexpected error!');
   }
-  if (err instanceof Error) {
+  if (err instanceof AxiosError) {
     // Axios Errors, anything regarding actual response, request cycle
     const response = err.response;
 
