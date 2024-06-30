@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
+import Header from '@/components/Header/Header';
 import '@/styles/index.css';
 import '@/styles/variables.css';
+import classes from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Kansai & Beyond',
-  description: 'A Japan travel blog and travel guide website.',
+  description: 'A Japan blog and travel guide website.',
 };
 
 const RootLayout = ({
@@ -14,7 +16,10 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main className={classes['page_main']}>{children}</main>
+      </body>
     </html>
   );
 };
