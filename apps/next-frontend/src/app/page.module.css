@@ -1,3 +1,9 @@
 .page_main {
   padding-top: var(--page-header-desktop-height);
 }
+
+@media (max-width: 768px) {
+  .page_main {
+    padding-top: var(--page-header-mobile-height);
+  }
+}

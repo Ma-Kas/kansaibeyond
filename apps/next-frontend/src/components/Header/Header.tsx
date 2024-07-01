@@ -1,10 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import cx from 'clsx';
 
 import HeaderBannerImage from '@public/images/header_banner.png';
-import NavLinks from '../NavLinks/NavLinks';
 
 import classes from './Header.module.css';
 
@@ -40,10 +42,36 @@ const navLinksRight: NavLink[] = [
 ];
 
 const Header = () => {
+  const pathname = usePathname();
+  const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setHeaderMenuOpen(false);
+  }, [pathname]);
+
+  const handleHamburgerMenu = () => {
+    setHeaderMenuOpen(!headerMenuOpen);
+  };
+
   return (
-    <header className={classes['page_header_desktop']}>
+    <header className={classes['page_header']}>
       <nav className={classes['header_nav_left']}>
-        <NavLinks navLinks={navLinksLeft} />
+        {navLinksLeft.map((link) => {
+          return (
+            <Link
+              className={
+                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                cx(classes['header_nav_link'], {
+                  [classes['nav_link_current']]: pathname === link.href,
+                })
+              }
+              key={link.name}
+              href={link.href}
+            >
+              {link.name.toUpperCase()}
+            </Link>
+          );
+        })}
       </nav>
       <Link
         title='Link to home'
@@ -51,7 +79,7 @@ const Header = () => {
         className={classes['header_image_container']}
       >
         <Image
-          className={classes['header_image_desktop']}
+          className={classes['header_image']}
           src={HeaderBannerImage}
           alt='Kansai & Beyond Logo'
           priority={true}
@@ -59,7 +87,87 @@ const Header = () => {
         />
       </Link>
       <nav className={classes['header_nav_right']}>
-        <NavLinks navLinks={navLinksRight} />
+        {navLinksRight.map((link) => {
+          return (
+            <Link
+              className={
+                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                cx(classes['header_nav_link'], {
+                  [classes['nav_link_current']]: pathname === link.href,
+                })
+              }
+              key={link.name}
+              href={link.href}
+            >
+              {link.name.toUpperCase()}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Mobile Hamburger Menu */}
+      <button
+        className={classes['header_hamburger_btn']}
+        aria-controls='navigation-main'
+        aria-expanded={headerMenuOpen}
+        onClick={handleHamburgerMenu}
+      >
+        <svg
+          className={classes.hamburger}
+          viewBox='0 0 100 100'
+          width={30}
+          fill='var(--color-ui-blackish)'
+        >
+          <rect
+            className={classes['hamburger_top']}
+            width={80}
+            height={10}
+            x={10}
+            y={25}
+            rx={2.5}
+          ></rect>
+          <rect
+            className={classes['hamburger_middle']}
+            width={80}
+            height={10}
+            x={10}
+            y={45}
+            rx={2.5}
+          ></rect>
+          <rect
+            className={classes['hamburger_bottom']}
+            width={80}
+            height={10}
+            x={10}
+            y={65}
+            rx={2.5}
+          ></rect>
+        </svg>
+      </button>
+
+      {/* Mobile Navigation Dropdown */}
+
+      <nav
+        className={classes['header_nav_mobile']}
+        data-is-open={headerMenuOpen}
+        id='navigation-main'
+      >
+        {navLinksLeft.concat(navLinksRight).map((link) => {
+          return (
+            <Link
+              className={
+                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+                cx(classes['header_nav_link'], {
+                  [classes['nav_link_current']]: pathname === link.href,
+                })
+              }
+              key={link.name}
+              href={link.href}
+            >
+              {link.name.toUpperCase()}
+            </Link>
+          );
+        })}
       </nav>
     </header>
   );
