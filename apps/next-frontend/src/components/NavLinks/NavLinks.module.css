@@ -1,9 +1,0 @@
-.header_nav_link {
-  color: var(--color-font-black);
-  text-decoration: none;
-  text-align: center;
-}
-
-.nav_link_current {
-  color: var(--color-status-blue);
-}

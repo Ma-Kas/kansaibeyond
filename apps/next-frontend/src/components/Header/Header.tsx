@@ -41,6 +41,25 @@ const navLinksRight: NavLink[] = [
   },
 ];
 
+const createNavLinks = (navLinks: NavLink[], pathname: string) => {
+  return navLinks.map((link) => {
+    return (
+      <Link
+        className={
+          // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
+          cx(classes['header_nav_link'], {
+            [classes['nav_link_current']]: pathname === link.href,
+          })
+        }
+        key={link.name}
+        href={link.href}
+      >
+        {link.name.toUpperCase()}
+      </Link>
+    );
+  });
+};
+
 const Header = () => {
   const pathname = usePathname();
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
@@ -56,22 +75,7 @@ const Header = () => {
   return (
     <header className={classes['page_header']}>
       <nav className={classes['header_nav_left']}>
-        {navLinksLeft.map((link) => {
-          return (
-            <Link
-              className={
-                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
-                cx(classes['header_nav_link'], {
-                  [classes['nav_link_current']]: pathname === link.href,
-                })
-              }
-              key={link.name}
-              href={link.href}
-            >
-              {link.name.toUpperCase()}
-            </Link>
-          );
-        })}
+        {createNavLinks(navLinksLeft, pathname)}
       </nav>
       <Link
         title='Link to home'
@@ -87,22 +91,7 @@ const Header = () => {
         />
       </Link>
       <nav className={classes['header_nav_right']}>
-        {navLinksRight.map((link) => {
-          return (
-            <Link
-              className={
-                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
-                cx(classes['header_nav_link'], {
-                  [classes['nav_link_current']]: pathname === link.href,
-                })
-              }
-              key={link.name}
-              href={link.href}
-            >
-              {link.name.toUpperCase()}
-            </Link>
-          );
-        })}
+        {createNavLinks(navLinksRight, pathname)}
       </nav>
 
       {/* Mobile Hamburger Menu */}
@@ -146,28 +135,12 @@ const Header = () => {
       </button>
 
       {/* Mobile Navigation Dropdown */}
-
       <nav
         className={classes['header_nav_mobile']}
         data-is-open={headerMenuOpen}
         id='navigation-main'
       >
-        {navLinksLeft.concat(navLinksRight).map((link) => {
-          return (
-            <Link
-              className={
-                // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
-                cx(classes['header_nav_link'], {
-                  [classes['nav_link_current']]: pathname === link.href,
-                })
-              }
-              key={link.name}
-              href={link.href}
-            >
-              {link.name.toUpperCase()}
-            </Link>
-          );
-        })}
+        {createNavLinks(navLinksLeft.concat(navLinksRight), pathname)}
       </nav>
     </header>
   );
