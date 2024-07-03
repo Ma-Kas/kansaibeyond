@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <>
       <div>Home</div>
-      {/* <div>
+      <div>
         Hello world Hello world Hello world Hello world Hello world Hello world
         Hello world Hello world Hello world Hello world Hello world Hello world
         Hello world Hello world Hello world Hello world Hello world Hello world
@@ -229,7 +229,7 @@ const Home = () => {
         Hello world Hello world Hello world Hello world Hello world Hello world
         Hello world Hello world Hello world Hello world Hello world Hello world
         Hello world Hello world Hello world Hello world Hello world Hello world
-      </div> */}
+      </div>
     </>
   );
 };

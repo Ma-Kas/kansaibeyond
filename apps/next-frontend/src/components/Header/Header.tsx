@@ -78,7 +78,7 @@ const Header = () => {
         {createNavLinks(navLinksLeft, pathname)}
       </nav>
       <Link
-        title='Link to home'
+        title='Home'
         href={'/'}
         className={classes['header_image_container']}
       >

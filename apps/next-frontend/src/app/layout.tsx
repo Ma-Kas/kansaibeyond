@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
+
 import '@/styles/index.css';
 import '@/styles/variables.css';
 import '@/styles/post-transform-variables.css';
@@ -20,6 +22,7 @@ const RootLayout = ({
       <body>
         <Header />
         <main className={classes['page_main']}>{children}</main>
+        <Footer />
       </body>
     </html>
   );

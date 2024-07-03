@@ -3,6 +3,10 @@ export const BACKEND_BASE_URL = process.env.DEV
   : process.env.BACKEND_BASE_URL_PROD;
 
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
+export const KANSAIBEYOND_TWITTER = 'https://x.com/kansaibeyond';
+export const KANSAIBEYOND_INSTAGRAM = 'https://www.instagram.com/kansaibeyond';
+export const KANSAIBEYOND_YOUTUBE =
+  'https://www.youtube.com/channel/UCOX-Lsp71XRKLP0S38LegCA';
 
 // Cloudinary Image Transformation Constants
 export const CLOUDINARY_BASE_URL = process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL;
