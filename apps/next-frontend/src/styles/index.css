@@ -89,6 +89,13 @@
 }
 
 @font-face {
+  font-family: 'Ivy Mode';
+  font-style: normal;
+  font-weight: 100;
+  src: url('../../public/fonts/ivy-mode-thin.ttf') format('truetype');
+}
+
+@font-face {
   font-family: 'Sebastian Bobby';
   font-style: normal;
   src: url('../../public/fonts/SebastianBobby.ttf') format('truetype');

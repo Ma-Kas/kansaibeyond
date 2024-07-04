@@ -5,6 +5,10 @@
   --breakpoint-lg: 1024px;
 
   /* Main layout variables */
+  --page-content-max-width: 1100px;
+  --page-section-gap: 55px;
+  --page-section-gap-handwriting: 35px;
+
   --page-header-desktop-height: 150px;
   --page-header-mobile-height: 100px;
   --page-header-image-width-desktop: 160px;
@@ -24,10 +28,13 @@
   --font-family-light: 'Futura Lt Light', sans-serif;
   --font-family-book: 'Futura Lt Book', sans-serif;
   --font-family-handwriting: 'Sebastian Bobby', serif;
+  --font-family-ivy-mode: 'Ivy Mode', sans-serif;
 
   --font-size-header: 14px;
   --font-size-footer: 14px;
+  --font-size-page-section-heading: 29px;
 
+  --font-weight-thin: 100;
   --font-weight-regular: 400;
   --font-weight-bold: 600;
 
