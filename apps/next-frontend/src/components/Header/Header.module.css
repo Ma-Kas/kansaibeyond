@@ -19,6 +19,9 @@
   width: var(--page-header-image-width-desktop);
   height: auto;
   max-height: var(--page-header-desktop-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header_image_container:hover {
