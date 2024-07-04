@@ -3,6 +3,42 @@
   padding-bottom: var(--page-footer-height);
 }
 
+.welcome_section {
+  position: relative;
+  height: var(--welcome-section-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 90% 30% / cover url('../../public/images/welcome.jpg');
+}
+
+.welcome_content {
+  position: relative;
+  font-family: var(--font-family-light);
+  font-size: 16px;
+  text-align: center;
+  text-shadow: 1px 1px 2px var(--color-page-off-black);
+  color: var(--color-page-off-white);
+  max-width: var(--welcome-banner-content-max-width);
+  padding: var(--page-padding-horizontal);
+}
+
+.welcome_content * {
+  margin: 0;
+}
+
+.welcome_content p:first-child {
+  font-family: var(--font-family-handwriting);
+  font-size: 6rem;
+}
+
+.welcome_content p:nth-child(2) {
+  font-family: var(--font-family-book);
+  font-size: 3rem;
+  margin-top: -1.5rem;
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 768px) {
   .page_main {
     padding-top: var(--page-header-mobile-height);

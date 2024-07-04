@@ -88,6 +88,12 @@
   src: url('../../public/fonts/ReenieBeanie-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Sebastian Bobby';
+  font-style: normal;
+  src: url('../../public/fonts/SebastianBobby.ttf') format('truetype');
+}
+
 body {
   margin: 0;
   position: relative;

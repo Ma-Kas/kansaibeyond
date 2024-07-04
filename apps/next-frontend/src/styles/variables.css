@@ -13,12 +13,17 @@
   --page-footer-height: 270px;
   --page-padding-horizontal: 20px;
 
+  --welcome-section-height: 500px;
+  --welcome-banner-content-max-width: 500px;
+
+  --z-index-backgrounds: -1;
   --z-index-header: 999;
   --z-index-mobile-nav: 998;
 
   /* Font variables */
   --font-family-light: 'Futura Lt Light', sans-serif;
   --font-family-book: 'Futura Lt Book', sans-serif;
+  --font-family-handwriting: 'Sebastian Bobby', serif;
 
   --font-size-header: 14px;
   --font-size-footer: 14px;
@@ -29,7 +34,7 @@
   /* Color variables */
   --color-page-bg: #ffffff;
   --color-page-off-white: #fafafa;
-  --color-ui-blackish: #2e2e2e;
+  --color-page-off-black: #2e2e2e;
   --color-font-black: #000000;
 
   --color-panda-brown-0: hsl(13, 57%, 87%);

@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/Footer';
 import '@/styles/index.css';
 import '@/styles/variables.css';
 import '@/styles/post-transform-variables.css';
+
 import classes from './page.module.css';
 
 export const metadata: Metadata = {

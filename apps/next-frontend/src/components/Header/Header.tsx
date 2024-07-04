@@ -97,6 +97,7 @@ const Header = () => {
       {/* Mobile Hamburger Menu */}
       <button
         className={classes['header_hamburger_btn']}
+        aria-label='Navigation Menu'
         aria-controls='navigation-main'
         aria-expanded={headerMenuOpen}
         onClick={handleHamburgerMenu}
@@ -105,7 +106,7 @@ const Header = () => {
           className={classes.hamburger}
           viewBox='0 0 100 100'
           width={30}
-          fill='var(--color-ui-blackish)'
+          fill='var(--color-page-off-black)'
         >
           <rect
             className={classes['hamburger_top']}
