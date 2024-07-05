@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import cx from 'clsx';
 
-import HeaderBannerImage from '@public/images/header_banner.png';
+import HeaderBannerImage from '@public/images/kb_logo_opt_a.webp';
+import { KANSAIBEYOND_THATCH } from '@/config/constants';
 
 import classes from './Header.module.css';
 
@@ -23,10 +24,6 @@ const navLinksLeft: NavLink[] = [
   {
     name: 'About',
     href: '/about',
-  },
-  {
-    name: 'Travel Guides',
-    href: '/travel-guides',
   },
 ];
 
@@ -76,6 +73,15 @@ const Header = () => {
     <header className={classes['page_header']}>
       <nav className={classes['header_nav_left']}>
         {createNavLinks(navLinksLeft, pathname)}
+        <a
+          className={classes['header_nav_link']}
+          title='Travel Guides'
+          href={KANSAIBEYOND_THATCH}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          TRAVEL GUIDES
+        </a>
       </nav>
       <Link
         title='Home'
@@ -141,7 +147,17 @@ const Header = () => {
         data-is-open={headerMenuOpen}
         id='navigation-main'
       >
-        {createNavLinks(navLinksLeft.concat(navLinksRight), pathname)}
+        {createNavLinks(navLinksLeft, pathname)}
+        <a
+          className={classes['header_nav_link']}
+          title='Travel Guides'
+          href={KANSAIBEYOND_THATCH}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          TRAVEL GUIDES
+        </a>
+        {createNavLinks(navLinksRight, pathname)}
       </nav>
     </header>
   );

@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import PandaImage from '@public/images/takoyaki_panda.png';
+import PandaImage from '@public/images/red_panda_opt_a.webp';
 import TwitterIcon from '@public/images/brand-x.svg';
 import InstagramIcon from '@public/images/brand-instagram.svg';
 import YouTubeIcon from '@public/images/brand-youtube.svg';

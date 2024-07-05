@@ -56,13 +56,13 @@
 }
 
 .header_nav_link {
-  color: var(--color-font-black);
+  color: var(--color-page-off-black);
   text-decoration: none;
   text-align: center;
 }
 
 .nav_link_current {
-  color: var(--color-status-blue);
+  color: var(--color-panda-orange-5);
 }
 
 /* Hamburger Menu */

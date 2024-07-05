@@ -9,8 +9,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: 90% 30% / cover url('../../public/images/welcome.jpg');
+  /* background: 90% 30% / cover url('../../public/images/welcome_opt_d.webp'); */
   margin-bottom: var(--page-section-gap-handwriting);
+}
+
+.welcome_section_bg_image {
+  z-index: var(--z-index-backgrounds);
+  object-fit: cover;
+  object-position: 90% 30%;
 }
 
 .welcome_content {
@@ -70,6 +76,7 @@
 }
 
 .quickstart_card {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,12 +84,18 @@
   aspect-ratio: 1;
 }
 
-.quickstart_card:nth-child(1) {
-  background: center center / cover url('../../public/images/kimono.jpg');
+.quickstart_card_bg_image:nth-of-type(1),
+.quickstart_card_bg_image:nth-of-type(2) {
+  z-index: var(--z-index-backgrounds);
+  object-fit: cover;
 }
 
-.quickstart_card:nth-child(2) {
-  background: right center / cover url('../../public/images/fuji.jpg');
+.quickstart_card_bg_image:nth-of-type(1) {
+  object-position: center center;
+}
+
+.quickstart_card_bg_image:nth-of-type(2) {
+  object-position: right center;
 }
 
 .quickstart_card_content {
@@ -112,4 +125,8 @@
     padding-top: var(--page-header-mobile-height);
     padding-bottom: var(--page-footer-height);
   }
+
+  /* .welcome_section {
+    background: 90% 30% / cover url('../../public/images/welcome_opt_m.webp');
+  } */
 }
