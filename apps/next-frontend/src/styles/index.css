@@ -11,18 +11,6 @@
 }
 
 @font-face {
-  font-family: 'Futura Lt Light';
-  font-style: normal;
-  src: url('../../public/fonts/FuturaLT-Light.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Futura Lt Book';
-  font-style: normal;
-  src: url('../../public/fonts/FuturaLT-Book.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'Geist';
   font-style: normal;
   src: url('../../public/fonts/Geist-Regular.ttf') format('truetype');
@@ -80,25 +68,6 @@
   font-family: 'Roboto Light';
   font-style: italic;
   src: url('../../public/fonts/Roboto-LightItalic.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Reenie Beanie';
-  font-style: normal;
-  src: url('../../public/fonts/ReenieBeanie-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Ivy Mode';
-  font-style: normal;
-  font-weight: 100;
-  src: url('../../public/fonts/ivy-mode-thin.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Sebastian Bobby';
-  font-style: normal;
-  src: url('../../public/fonts/SebastianBobby.ttf') format('truetype');
 }
 
 body {

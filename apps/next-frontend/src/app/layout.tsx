@@ -2,6 +2,13 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 
+import {
+  futuraLtLight,
+  futuraLtBook,
+  ivyMode,
+  handwriting,
+} from '@/styles/fonts';
+
 import '@/styles/index.css';
 import '@/styles/variables.css';
 import '@/styles/post-transform-variables.css';
@@ -20,7 +27,9 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en'>
-      <body>
+      <body
+        className={`${futuraLtLight.variable} ${futuraLtBook.variable} ${ivyMode.variable} ${handwriting.variable}`}
+      >
         <Header />
         <main className={classes['page_main']}>{children}</main>
         <Footer />

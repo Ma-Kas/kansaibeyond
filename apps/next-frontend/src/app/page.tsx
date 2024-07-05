@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import WelcomeImage from '@public/images/welcome_opt_d.webp';
+import Image from 'next/image';
+import WelcomeImage from '@public/images/welcome_opt_a.webp';
 import KimonoImage from '@public/images/kimono_opt_a.webp';
 import FujiImage from '@public/images/fuji_opt_a.webp';
 import { KANSAIBEYOND_THATCH } from '@/config/constants';
 
 import classes from './page.module.css';
-import Image from 'next/image';
 
 const Home = () => {
   return (
@@ -17,6 +17,7 @@ const Home = () => {
           alt=''
           priority={true}
           sizes='100vw'
+          quality={100}
           fill
           placeholder='blur'
         />
@@ -62,6 +63,7 @@ const Home = () => {
               alt=''
               sizes='550px'
               fill
+              quality={100}
               placeholder='blur'
             />
             <a
