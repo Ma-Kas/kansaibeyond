@@ -19,7 +19,8 @@
 
   --welcome-section-height: 500px;
   --welcome-banner-content-max-width: 500px;
-  --about-section-height: 800px;
+  --introduction-section-height: 800px;
+  --hire-me-section-height: 350px;
 
   --z-index-backgrounds: -1;
   --z-index-header: 999;

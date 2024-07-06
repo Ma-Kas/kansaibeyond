@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
-import { KANSAIBEYOND_EMAIL } from '@/config/constants';
+import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
 
 import classes from './about.module.css';
 
@@ -45,6 +45,28 @@ const AboutPage = () => {
               </a>
             </p>
           </div>
+        </article>
+      </section>
+      <section className={classes['hire_me_section']}>
+        <article className={classes['hire_me_content']}>
+          <h2>
+            <span>Need</span>&nbsp;Japan Travel Help?
+          </h2>
+          <p>
+            Visit my travel services pages on thatch.co and get inspired! Or,
+            hire me to get personalized recommendations tailored to all your
+            needs!!
+          </p>
+          <a
+            className={classes['button_link']}
+            title='Thatch.co Travel Guides'
+            href={KANSAIBEYOND_THATCH}
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='Hire me here'
+          >
+            <span>Hire me here</span>
+          </a>
         </article>
       </section>
     </>
