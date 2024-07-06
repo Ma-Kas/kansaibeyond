@@ -9,16 +9,17 @@
   --page-section-gap: 55px;
   --page-section-gap-handwriting: 35px;
 
-  --page-header-desktop-height: 150px;
-  --page-header-mobile-height: 100px;
-  --page-header-image-width-desktop: 160px;
-  --page-header-image-width-mobile: 125px;
+  --page-header-desktop-height: 110px;
+  --page-header-mobile-height: 75px;
+  --page-header-image-width-desktop: 130px;
+  --page-header-image-width-mobile: 100px;
 
   --page-footer-height: 270px;
   --page-padding-horizontal: 20px;
 
   --welcome-section-height: 500px;
   --welcome-banner-content-max-width: 500px;
+  --about-section-height: 800px;
 
   --z-index-backgrounds: -1;
   --z-index-header: 999;
@@ -36,8 +37,8 @@
   /* Color variables */
   --color-page-bg: #ffffff;
   --color-page-off-white: #fafafa;
-  --color-page-off-black: #2e2e2e;
-  --color-font-black: #000000;
+  --color-page-off-black: var(--color-panda-grey-9);
+  --color-black: #000000;
 
   --color-panda-brown-0: hsl(13, 57%, 87%);
   --color-panda-brown-1: hsl(13, 57%, 83%);
@@ -59,6 +60,16 @@
   --color-panda-orange-7: hsl(17, 82%, 42%);
   --color-panda-orange-8: hsl(17, 82%, 33%);
   --color-panda-orange-9: hsl(17, 82%, 24%);
+  --color-panda-grey-0: hsl(0, 0%, 94%);
+  --color-panda-grey-1: hsl(0, 0%, 88%);
+  --color-panda-grey-2: hsl(0, 0%, 84%);
+  --color-panda-grey-3: hsl(0, 0%, 74%);
+  --color-panda-grey-4: hsl(0, 0%, 65%);
+  --color-panda-grey-5: hsl(0, 0%, 56%);
+  --color-panda-grey-6: hsl(0, 0%, 47%); /*  This is the panda */
+  --color-panda-grey-7: hsl(0, 0%, 37%);
+  --color-panda-grey-8: hsl(0, 0%, 27%);
+  --color-panda-grey-9: hsl(0, 0%, 18%);
 
   --color-status-blue: #228be6;
   --color-status-greyed: #868aa5;

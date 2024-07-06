@@ -12,7 +12,7 @@
 }
 
 .post_image_caption {
-  color: var(--color-font-black);
+  color: var(--color-black);
   font-size: var(--font-size-post-figcaption);
   text-align: center;
   word-wrap: break-word;

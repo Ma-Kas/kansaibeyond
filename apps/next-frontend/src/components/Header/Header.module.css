@@ -6,6 +6,7 @@
   font-size: var(--font-size-header);
   background-color: var(--color-page-bg);
   position: fixed;
+  top: 0;
   left: 0;
   right: 0;
   height: var(--page-header-desktop-height);
@@ -13,6 +14,8 @@
   display: grid;
   grid-template-columns: 1fr var(--page-header-image-width-desktop) 1fr;
   gap: var(--header-item-gap);
+  box-shadow: 0 1px 3px -3px rgba(0, 0, 0, 0.05),
+    0 10px 5px -5px rgba(0, 0, 0, 0.05), 0 7px 7px -7px rgba(0, 0, 0, 0.04);
 }
 
 .header_image_container {
@@ -141,8 +144,8 @@
     display: flex;
     opacity: 1;
     flex-direction: column;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05),
-      rgba(0, 0, 0, 0.05) 0 10px 15px -5px, rgba(0, 0, 0, 0.04) 0 7px 7px -5px;
+    box-shadow: 0 1px 3px -3px rgba(0, 0, 0, 0.05),
+      0 10px 5px -5px rgba(0, 0, 0, 0.05), 0 7px 7px -7px rgba(0, 0, 0, 0.04);
     padding: 0 var(--page-padding-horizontal) var(--page-padding-horizontal);
   }
 

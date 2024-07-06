@@ -41,6 +41,7 @@
 
 .welcome_content p:nth-child(2) {
   font-family: var(--font-family-book);
+  text-transform: uppercase;
   font-size: 3rem;
   margin-top: -1.5rem;
   margin-bottom: 1rem;
@@ -58,7 +59,7 @@
   font-weight: var(--font-weight-thin);
   text-align: center;
   color: var(--color-page-off-black);
-  margin: 0 0 1rem;
+  margin: 0;
 }
 
 .quickstart_section h2 span {

@@ -26,17 +26,17 @@ const Home = () => {
           <p>Kansai & Beyond</p>
           <p>
             Our blog is the go-to destination for anyone seeking a comprehensive
-            and genuine account of life in Japan. We’re passionate about sharing
-            everything Japan has to offer, from the delicious cuisine to the
-            rich history and breathtaking scenery. Follow us on our journey as
-            we explore this fascinating country and discover the true beauty of
-            Japan.
+            and genuine account of life in Japan. We&apos;re passionate about
+            sharing everything Japan has to offer, from the delicious cuisine to
+            the rich history and breathtaking scenery. Follow us on our journey
+            as we explore this fascinating country and discover the true beauty
+            of Japan.
           </p>
         </article>
       </section>
       <section className={classes['quickstart_section']}>
         <h2>
-          <span>Jump</span>&nbsp;RIGHT IN
+          <span>Jump</span>&nbsp;right in ...
         </h2>
         <div className={classes['quickstart_card_container']}>
           <article className={classes['quickstart_card']}>
