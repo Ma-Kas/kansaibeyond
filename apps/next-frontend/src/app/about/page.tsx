@@ -69,6 +69,18 @@ const AboutPage = () => {
           </a>
         </article>
       </section>
+      <section className={classes['more_about_section']}>
+        <h2>
+          Learn more about my<span>&nbsp;journey!</span>
+        </h2>
+        <div className={classes['more_about_container']}>
+          <div className={classes['blog_post_card_placeholder_container']}>
+            <article
+              className={classes['blog_post_card_placeholder']}
+            ></article>
+          </div>
+        </div>
+      </section>
     </>
   );
 };
