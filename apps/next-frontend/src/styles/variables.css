@@ -51,24 +51,34 @@
   --color-panda-brown-6: hsl(13, 57%, 43%);
   --color-panda-brown-7: hsl(13, 57%, 34%);
   --color-panda-brown-8: hsl(13, 57%, 25%);
-  --color-panda-brown-9: hsl(13, 57%, 16%); /*  This is the panda */
+  --color-panda-brown-9: hsl(13, 57%, 16%); /*  This is the panda body */
+  --color-panda-tail-black: #1f1f1f;
   --color-panda-orange-0: hsl(17, 82%, 95%);
   --color-panda-orange-1: hsl(17, 82%, 91%);
   --color-panda-orange-2: hsl(17, 82%, 87%);
   --color-panda-orange-3: hsl(17, 82%, 78%);
   --color-panda-orange-4: hsl(17, 82%, 69%);
-  --color-panda-orange-5: hsl(17, 82%, 60%); /*  This is the panda */
+  --color-panda-orange-5: hsl(17, 82%, 60%); /*  This is the panda tail */
   --color-panda-orange-6: hsl(17, 82%, 51%);
   --color-panda-orange-7: hsl(17, 82%, 42%);
   --color-panda-orange-8: hsl(17, 82%, 33%);
   --color-panda-orange-9: hsl(17, 82%, 24%);
+  --color-human-panda-brown-0: hsl(22, 32%, 99%);
+  --color-human-panda-brown-1: hsl(22, 32%, 99%);
+  --color-human-panda-brown-2: hsl(22, 32%, 95%);
+  --color-human-panda-brown-3: hsl(22, 32%, 86%);
+  --color-human-panda-brown-4: hsl(22, 32%, 77%);
+  --color-human-panda-brown-5: hsl(22, 32%, 68%); /* This is the light hair */
+  --color-human-panda-brown-6: hsl(22, 32%, 59%);
+  --color-human-panda-brown-7: hsl(22, 32%, 50%);
+  --color-human-panda-brown-8: hsl(22, 29%, 45%); /* This is the dark hair */
   --color-panda-grey-0: hsl(0, 0%, 94%);
   --color-panda-grey-1: hsl(0, 0%, 88%);
   --color-panda-grey-2: hsl(0, 0%, 84%);
   --color-panda-grey-3: hsl(0, 0%, 74%);
   --color-panda-grey-4: hsl(0, 0%, 65%);
   --color-panda-grey-5: hsl(0, 0%, 56%);
-  --color-panda-grey-6: hsl(0, 0%, 47%); /*  This is the panda */
+  --color-panda-grey-6: hsl(0, 0%, 47%); /*  This is the panda shadow */
   --color-panda-grey-7: hsl(0, 0%, 37%);
   --color-panda-grey-8: hsl(0, 0%, 27%);
   --color-panda-grey-9: hsl(0, 0%, 18%);

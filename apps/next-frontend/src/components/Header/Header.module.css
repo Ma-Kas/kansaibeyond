@@ -2,7 +2,7 @@
   --header-item-gap: 2rem;
 
   z-index: var(--z-index-header);
-  font-family: var(--font-family-book);
+  font-family: var(--font-family-light);
   font-size: var(--font-size-header);
   background-color: var(--color-page-bg);
   position: fixed;
@@ -66,6 +66,7 @@
 
 .nav_link_current {
   color: var(--color-panda-orange-5);
+  font-weight: var(--font-weight-bold);
 }
 
 /* Hamburger Menu */

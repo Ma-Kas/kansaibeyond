@@ -6,7 +6,7 @@
 
 .introduction_section_image_container {
   flex: 3;
-  background-color: var(--color-panda-grey-2);
+  background-color: var(--color-human-panda-brown-5);
   margin: 0;
   display: flex;
   justify-content: center;
@@ -22,14 +22,16 @@
 
 .introduction_content_container {
   flex: 2;
-  background-color: var(--color-panda-grey-7);
+  background-color: var(--color-page-off-black);
+  box-sizing: border-box;
+  /* border: 5px solid var(--color-panda-orange-5); */
   padding: calc(var(--page-padding-horizontal) * 4)
     var(--page-padding-horizontal);
 }
 
 .introduction_content {
   max-width: 350px;
-  color: white;
+  color: var(--color-page-off-white);
   font-family: var(--font-family-light);
   font-size: 16px;
   margin: 0 auto;
@@ -74,8 +76,6 @@
 }
 
 .hire_me_section {
-  /* background-color: var(--color-panda-orange-1); */
-  /* height: var(--hire-me-section-height); */
   margin-bottom: var(--page-section-gap-handwriting);
   display: flex;
   justify-content: center;
@@ -158,7 +158,7 @@
 }
 
 .more_about_container {
-  background-color: var(--color-panda-orange-1);
+  background-color: var(--color-panda-orange-0);
   height: var(--more-about-section-height);
 }
 
@@ -188,5 +188,11 @@
   .introduction_content_container {
     flex: 1;
     padding: calc(var(--page-padding-horizontal) * 1.5);
+  }
+
+  .more_about_section h2 {
+    line-height: 0.55;
+    margin-top: calc(var(--page-section-gap) + var(--page-padding-horizontal));
+    margin-bottom: 2rem;
   }
 }

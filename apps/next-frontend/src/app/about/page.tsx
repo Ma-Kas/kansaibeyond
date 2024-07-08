@@ -40,7 +40,10 @@ const AboutPage = () => {
             <p>
               contact us:
               <br />
-              <a title='Send us an email' href={`mailto:${KANSAIBEYOND_EMAIL}`}>
+              <a
+                title={`mailto:${KANSAIBEYOND_EMAIL}`}
+                href={`mailto:${KANSAIBEYOND_EMAIL}`}
+              >
                 {KANSAIBEYOND_EMAIL}
               </a>
             </p>
@@ -50,7 +53,7 @@ const AboutPage = () => {
       <section className={classes['hire_me_section']}>
         <article className={classes['hire_me_content']}>
           <h2>
-            <span>Need</span>&nbsp;Japan Travel Help?
+            <span>Need</span>&nbsp;Travel Help?
           </h2>
           <p>
             Visit my travel services pages on thatch.co and get inspired! Or,
@@ -71,7 +74,7 @@ const AboutPage = () => {
       </section>
       <section className={classes['more_about_section']}>
         <h2>
-          Learn more about my<span>&nbsp;journey!</span>
+          Learn about my<span>&nbsp;journey!</span>
         </h2>
         <div className={classes['more_about_container']}>
           <div className={classes['blog_post_card_placeholder_container']}>
