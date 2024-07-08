@@ -23,6 +23,8 @@
   --hire-me-section-height: 350px;
   --more-about-section-height: 400px;
 
+  --image-filter-hover: blur(2px) brightness(80%);
+
   --z-index-backgrounds: -1;
   --z-index-header: 999;
   --z-index-mobile-nav: 998;
