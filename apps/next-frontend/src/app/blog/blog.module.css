@@ -1,11 +1,13 @@
-.category_list_section {
+.category_list_section,
+.recent_post_list_section {
   max-width: var(--page-content-max-width);
   margin: 0 auto;
   margin-bottom: var(--page-section-gap);
   padding: 0 var(--page-padding-horizontal);
 }
 
-.category_list_section h2 {
+.category_list_section h2,
+.recent_post_list_section h2 {
   font-family: var(--font-family-ivy-mode);
   font-size: var(--font-size-page-section-heading);
   font-weight: var(--font-weight-thin);
@@ -14,7 +16,8 @@
   margin: 0;
 }
 
-.category_list_section h2 span {
+.category_list_section h2 span,
+.recent_post_list_section h2 span {
   position: relative;
   font-family: var(--font-family-handwriting);
   font-size: 6rem;
@@ -22,7 +25,8 @@
   color: var(--color-panda-orange-5);
 }
 
-.category_cards_container {
+.category_cards_container,
+.recent_post_cards_container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;

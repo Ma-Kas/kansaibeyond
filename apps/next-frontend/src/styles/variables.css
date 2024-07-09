@@ -30,6 +30,7 @@
   --z-index-mobile-nav: 998;
 
   /* Font variables */
+  --font-size-ui-regular: 14px;
   --font-size-header: 14px;
   --font-size-footer: 14px;
   --font-size-page-section-heading: 29px;

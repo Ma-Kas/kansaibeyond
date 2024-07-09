@@ -66,6 +66,7 @@ export const get_all_posts = async (
           attributes: ['id'],
         },
       ],
+      where: { status: 'published' },
       order: [['createdAt', 'DESC']],
     });
 
