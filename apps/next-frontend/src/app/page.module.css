@@ -52,23 +52,6 @@
   margin-bottom: var(--page-section-gap);
 }
 
-.quickstart_section h2 {
-  font-family: var(--font-family-ivy-mode);
-  font-size: var(--font-size-page-section-heading);
-  font-weight: var(--font-weight-thin);
-  text-align: center;
-  color: var(--color-page-off-black);
-  margin: 0;
-}
-
-.quickstart_section h2 span {
-  position: relative;
-  font-family: var(--font-family-handwriting);
-  font-size: 6rem;
-  bottom: -15px;
-  color: var(--color-panda-orange-5);
-}
-
 .quickstart_card_container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));

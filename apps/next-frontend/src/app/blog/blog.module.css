@@ -1,5 +1,6 @@
 .category_list_section,
-.recent_post_list_section {
+.recent_post_list_section,
+.featured_post_section {
   max-width: var(--page-content-max-width);
   margin: 0 auto;
   margin-bottom: var(--page-section-gap);
@@ -20,25 +21,6 @@
 }
 
 .link_container_all_posts a:hover {
-  color: var(--color-panda-orange-5);
-}
-
-.category_list_section h2,
-.recent_post_list_section h2 {
-  font-family: var(--font-family-ivy-mode);
-  font-size: var(--font-size-page-section-heading);
-  font-weight: var(--font-weight-thin);
-  text-align: center;
-  color: var(--color-page-off-black);
-  margin: 0;
-}
-
-.category_list_section h2 span,
-.recent_post_list_section h2 span {
-  position: relative;
-  font-family: var(--font-family-handwriting);
-  font-size: 6rem;
-  bottom: -15px;
   color: var(--color-panda-orange-5);
 }
 

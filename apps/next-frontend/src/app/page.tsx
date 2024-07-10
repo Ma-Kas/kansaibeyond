@@ -4,6 +4,7 @@ import WelcomeImage from '@public/images/welcome_opt_a.webp';
 import KimonoImage from '@public/images/kimono_opt_a.webp';
 import FujiImage from '@public/images/fuji_opt_a.webp';
 import { KANSAIBEYOND_THATCH } from '@/config/constants';
+import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
 import classes from './page.module.css';
 
@@ -35,9 +36,9 @@ const Home = () => {
         </article>
       </section>
       <section className={classes['quickstart_section']}>
-        <h2>
+        <SectionHeading>
           <span>Jump</span>&nbsp;right in ...
-        </h2>
+        </SectionHeading>
         <div className={classes['quickstart_card_container']}>
           <article className={classes['quickstart_card']}>
             <Image

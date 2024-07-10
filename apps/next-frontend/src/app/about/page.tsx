@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
 import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
+import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
 import classes from './about.module.css';
 
@@ -52,9 +53,9 @@ const AboutPage = () => {
       </section>
       <section className={classes['hire_me_section']}>
         <article className={classes['hire_me_content']}>
-          <h2>
+          <SectionHeading>
             <span>Need</span>&nbsp;Travel Help?
-          </h2>
+          </SectionHeading>
           <p>
             Visit my travel services pages on thatch.co and get inspired! Or,
             hire me to get personalized recommendations tailored to all your
@@ -73,9 +74,9 @@ const AboutPage = () => {
         </article>
       </section>
       <section className={classes['more_about_section']}>
-        <h2>
+        <SectionHeading>
           Learn about my<span>&nbsp;journey!</span>
-        </h2>
+        </SectionHeading>
         <div className={classes['more_about_container']}>
           <div className={classes['blog_post_card_placeholder_container']}>
             <article
