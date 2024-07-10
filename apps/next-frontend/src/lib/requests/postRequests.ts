@@ -109,11 +109,67 @@ const allPostsSchema = z.array(listPostSchema);
 export const getAllPosts = async () => {
   const response = await fetch(`${BACKEND_BASE_URL}/posts`);
   if (!response.ok) {
-    throw new Error('Post List fetch error\n');
+    throw new Error('Post list fetch error\n');
   }
 
   const data: unknown = await response.json();
-  console.log(data);
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
+};
+
+export const getRecentPosts = async () => {
+  const response = await fetch(`${BACKEND_BASE_URL}/posts?limit=7`);
+  if (!response.ok) {
+    throw new Error('Recent post list fetch error\n');
+  }
+
+  const data: unknown = await response.json();
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
+};
+
+export const getPostsOfCategory = async (categorySlug: string) => {
+  const response = await fetch(
+    `${BACKEND_BASE_URL}/posts?category=${categorySlug}`
+  );
+  if (!response.ok) {
+    throw new Error('Post list fetch error\n');
+  }
+
+  const data: unknown = await response.json();
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
+};
+
+export const getPostsOfTag = async (tagSlug: string) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/posts?tag=${tagSlug}`);
+  if (!response.ok) {
+    throw new Error('Post list fetch error\n');
+  }
+
+  const data: unknown = await response.json();
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
+};
+
+export const getPostsOfUser = async (username: string) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/posts?user=${username}`);
+  if (!response.ok) {
+    throw new Error('Post list fetch error\n');
+  }
+
+  const data: unknown = await response.json();
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
+};
+
+export const getSearchPosts = async (query: string) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/posts?q=${query}`);
+  if (!response.ok) {
+    throw new Error('Post list fetch error\n');
+  }
+
+  const data: unknown = await response.json();
   const parsedPosts = allPostsSchema.parse(data);
   return parsedPosts;
 };

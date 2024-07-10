@@ -1,23 +1,28 @@
 .post_information_container {
+  --icon-size: 32px;
+
   font-size: var(--font-size-ui-regular);
+  color: var(--color-page-off-black);
+  max-height: var(--icon-size);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
 }
 
 .author_icon_container {
   box-sizing: border-box;
+  flex-shrink: 0;
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: var(--icon-size);
+  height: var(--icon-size);
   margin: 0;
   border-radius: 50%;
   overflow: hidden;
 }
 
 .author_icon_container:has(.author_icon_placeholder) {
-  background-color: var(--color-panda-grey-1);
+  background-color: var(--color-panda-grey-0);
 }
 
 .author_icon,
@@ -37,13 +42,12 @@
 .info_container {
   font-family: var(--font-family-light);
   font-weight: var(--font-weight-regular);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  overflow: hidden;
 }
 
 .info_container p {
+  max-height: 50%;
+  text-overflow: ellipsis;
   margin: 0;
 }
 

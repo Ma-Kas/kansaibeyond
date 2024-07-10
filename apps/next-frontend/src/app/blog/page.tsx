@@ -1,15 +1,14 @@
-// import { getAllCategoriesList } from '@/lib/requests/categoryRequests';
+import { getAllCategoriesList } from '@/lib/requests/categoryRequests';
 import { getAllPosts } from '@/lib/requests/postRequests';
 import PostCard from '@/components/PostCard/PostCard';
-// import CategoryCard from '@/components/CategoryCard/CategoryCard';
+import CategoryCard from '@/components/CategoryCard/CategoryCard';
 
 import classes from './blog.module.css';
+import Link from 'next/link';
 
 const BlogHubPage = async () => {
   const posts = await getAllPosts();
-  // const categories = await getAllCategoriesList();
-  // console.log(posts);
-  console.log(posts[0]);
+  const categories = await getAllCategoriesList();
 
   return (
     <>
@@ -22,8 +21,11 @@ const BlogHubPage = async () => {
             return <PostCard key={post.id} post={post} />;
           })}
         </div>
+        <div className={classes['link_container_all_posts']}>
+          <Link href={'/blog/posts'}>VIEW ALL POSTS</Link>
+        </div>
       </section>
-      {/* <section className={classes['category_list_section']}>
+      <section className={classes['category_list_section']}>
         <h2>
           <span>explore</span>&nbsp;categories
         </h2>
@@ -32,7 +34,7 @@ const BlogHubPage = async () => {
             return <CategoryCard key={category.id} category={category} />;
           })}
         </div>
-      </section> */}
+      </section>
     </>
   );
 };
