@@ -2,10 +2,14 @@ import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
 import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
+import { getOnePost } from '@/lib/requests/postRequests';
 
 import classes from './about.module.css';
 
-const AboutPage = () => {
+const AboutPage = async () => {
+  const featuredPost = await getOnePost('hong-kong-films');
+
   return (
     <>
       <section className={classes['introduction_section']}>
@@ -75,15 +79,9 @@ const AboutPage = () => {
       </section>
       <section className={classes['more_about_section']}>
         <SectionHeading>
-          Learn about my<span>&nbsp;journey!</span>
+          Read my<span>&nbsp;story</span>
         </SectionHeading>
-        <div className={classes['more_about_container']}>
-          <div className={classes['blog_post_card_placeholder_container']}>
-            <article
-              className={classes['blog_post_card_placeholder']}
-            ></article>
-          </div>
-        </div>
+        <FeaturedPost post={featuredPost} />
       </section>
     </>
   );

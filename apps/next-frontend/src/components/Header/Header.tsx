@@ -11,6 +11,17 @@ import { KANSAIBEYOND_THATCH } from '@/config/constants';
 
 import classes from './Header.module.css';
 
+// Helper for highlighting whether current url is down the line of header link path
+const isLinkInCurrentPath = (pathname: string, link: string): boolean => {
+  if (pathname === link) {
+    return true;
+  } else if (pathname.substring(0, pathname.indexOf('/', 1)) === link) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export type NavLink = {
   name: string;
   href: string;
@@ -45,7 +56,10 @@ const createNavLinks = (navLinks: NavLink[], pathname: string) => {
         className={
           // eslint-disable-next-line  @typescript-eslint/no-unsafe-call
           cx(classes['header_nav_link'], {
-            [classes['nav_link_current']]: pathname === link.href,
+            [classes['nav_link_current']]: isLinkInCurrentPath(
+              pathname,
+              link.href
+            ),
           })
         }
         key={link.name}

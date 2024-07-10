@@ -3,6 +3,7 @@ import { getAllCategoriesList } from '@/lib/requests/categoryRequests';
 import { getAllPosts } from '@/lib/requests/postRequests';
 
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import PostCard from '@/components/PostCard/PostCard';
 import CategoryCard from '@/components/CategoryCard/CategoryCard';
 
@@ -18,6 +19,7 @@ const BlogHubPage = async () => {
         <SectionHeading>
           <span>Featured</span>&nbsp;post
         </SectionHeading>
+        <FeaturedPost post={posts[8]} />
       </section>
       <section className={classes['recent_post_list_section']}>
         <SectionHeading>

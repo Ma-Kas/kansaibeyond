@@ -76,6 +76,8 @@
 }
 
 .hire_me_section {
+  max-width: var(--page-content-max-width);
+  margin: 0 auto;
   margin-bottom: var(--page-section-gap-handwriting);
   display: flex;
   justify-content: center;
@@ -120,29 +122,10 @@
 }
 
 .more_about_section {
-  margin-bottom: var(--page-section-gap);
-}
-
-.more_about_container {
-  background-color: var(--color-panda-orange-0);
-  height: var(--more-about-section-height);
-}
-
-.blog_post_card_placeholder_container {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  padding: var(--page-padding-horizontal);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.blog_post_card_placeholder {
-  background-color: white;
   max-width: var(--page-content-max-width);
-  height: 100%;
-  flex: 1;
+  margin: 0 auto;
+  margin-bottom: var(--page-section-gap);
+  padding: 0 var(--page-padding-horizontal);
 }
 
 @media (max-width: 768px) {
@@ -156,9 +139,9 @@
     padding: calc(var(--page-padding-horizontal) * 1.5);
   }
 
-  .more_about_section h2 {
+  /* .more_about_section h2 {
     line-height: 0.55;
     margin-top: calc(var(--page-section-gap) + var(--page-padding-horizontal));
     margin-bottom: 2rem;
-  }
+  } */
 }
