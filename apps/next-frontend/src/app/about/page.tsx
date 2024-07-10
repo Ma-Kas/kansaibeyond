@@ -8,7 +8,7 @@ import { getOnePost } from '@/lib/requests/postRequests';
 import classes from './about.module.css';
 
 const AboutPage = async () => {
-  const featuredPost = await getOnePost('hong-kong-films');
+  const featuredPost = await getOnePost('my-japan-story');
 
   return (
     <>

@@ -22,7 +22,6 @@ const PostCard = async ({ post }: { post: PostForList }) => {
           src={`${CLOUDINARY_BASE_URL}${POST_CARD_IMAGE_TRANSFORM}${post.coverImage?.urlSlug}`}
           alt=''
           sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 500px'
-          quality={100}
           fill
           placeholder='blur'
           blurDataURL={blurDataUrl}

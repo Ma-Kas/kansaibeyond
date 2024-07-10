@@ -22,7 +22,7 @@ const FeaturedPost = async ({ post }: { post: PostForList }) => {
           src={`${CLOUDINARY_BASE_URL}${POST_FEATURED_IMAGE_TRANSFORM}${post.coverImage?.urlSlug}`}
           alt=''
           sizes='(max-width: 1024px) 90vw, 1100px'
-          quality={100}
+          priority={true}
           fill
           placeholder='blur'
           blurDataURL={blurDataUrl}
