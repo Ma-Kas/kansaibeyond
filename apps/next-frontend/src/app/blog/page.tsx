@@ -16,7 +16,7 @@ const BlogHubPage = async () => {
         <SectionHeading>
           <span>Featured</span>&nbsp;post
         </SectionHeading>
-        <FeaturedPost post={posts[8]} />
+        <FeaturedPost post={posts[0]} />
       </section>
       <PostGridSection posts={posts} withViewMoreLink={true}>
         <SectionHeading>

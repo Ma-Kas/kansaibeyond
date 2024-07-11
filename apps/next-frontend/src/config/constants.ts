@@ -1,4 +1,4 @@
-export const BACKEND_BASE_URL = process.env.DEV
+export const BACKEND_BASE_URL = process.env.NODE_ENV
   ? process.env.BACKEND_BASE_URL_DEV
   : process.env.BACKEND_BASE_URL_PROD;
 
