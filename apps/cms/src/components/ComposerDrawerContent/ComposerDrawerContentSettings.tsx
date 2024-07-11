@@ -145,7 +145,9 @@ const ComposerDrawerContentSettings = ({ postData }: { postData: Post }) => {
             placeholder='Search Posts'
             // Filter out self, to disallow setting self to relatedPost (if anyone actually would try)
             data={postsQuery.data
-              .filter((post) => post.id !== postData.id)
+              .filter(
+                (post) => post.id !== postData.id && post.status === 'published'
+              )
               .map((post) => {
                 return { value: post.id.toString(), label: post.title };
               })}

@@ -45,6 +45,8 @@ app.use(express.json());
 // Main Routes
 app.use('/api/cms', cors(corsCMSOptions), cmsRouter);
 app.use('/api/frontend', cors(corsFrontendOptions), frontendRouter);
+// TODO :DELETE THIS TEST ROUTE
+app.use('/api/frontend_test', frontendRouter);
 
 // CMS Routes
 cmsRouter.use('/v1/auth', cmsAuthRouter);
