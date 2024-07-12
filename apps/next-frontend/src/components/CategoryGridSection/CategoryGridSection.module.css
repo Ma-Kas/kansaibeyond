@@ -1,0 +1,15 @@
+.category_grid_section {
+  max-width: var(--page-content-max-width);
+  margin: 0 auto;
+  margin-bottom: var(--page-section-gap-handwriting);
+  padding: 0 var(--page-padding-horizontal);
+}
+
+.category_cards_container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--card-grid-min-column-size), 1fr)
+  );
+  gap: var(--card-grid-gap);
+}

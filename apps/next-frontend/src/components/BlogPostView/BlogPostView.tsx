@@ -5,10 +5,10 @@ import classes from './BlogPostView.module.css';
 
 const BlogPostView = ({ postData }: { postData: Post }) => {
   return (
-    <main className={classes['blog_post_main']}>
+    <div className={classes['blog_post_main']}>
       <h1 className={classes['blog_post_title']}>{postData.title}</h1>
       {constructComponentTree(JSON.parse(postData.content))}
-    </main>
+    </div>
   );
 };
 

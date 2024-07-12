@@ -109,6 +109,7 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
     return createElement(keysToComponentMap[parsedNode.type], {
       key: crypto.randomUUID(),
       src: parsedNode.src,
+      alt: parsedNode.altText,
     });
   } else if (isImageGalleryBlockNode(input)) {
     // Render Blog Post Image Gallery Block

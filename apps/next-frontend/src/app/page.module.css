@@ -1,0 +1,103 @@
+.page_main {
+  padding-top: var(--page-header-desktop-height);
+  padding-bottom: var(--page-footer-height);
+}
+
+.welcome_section {
+  position: relative;
+  height: var(--welcome-section-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--page-section-gap-handwriting);
+}
+
+.welcome_section_bg_image {
+  z-index: var(--z-index-backgrounds);
+  object-fit: cover;
+  object-position: 90% 30%;
+}
+
+.welcome_content {
+  position: relative;
+  font-family: var(--font-family-light);
+  font-size: var(--font-size-welcome-content);
+  text-align: center;
+  text-shadow: var(--text-shadow-on-bg-image);
+  color: var(--color-page-off-white);
+  max-width: var(--welcome-banner-content-max-width);
+  padding: var(--page-padding-horizontal);
+}
+
+.welcome_content * {
+  margin: 0;
+}
+
+.welcome_content h1 {
+  font-family: var(--font-family-handwriting);
+  font-weight: var(--font-weight-regular);
+  font-size: 6rem;
+}
+
+.welcome_content p:nth-child(2) {
+  text-transform: uppercase;
+  font-size: 3rem;
+  margin-top: -1.5rem;
+  margin-bottom: 1rem;
+}
+
+.quickstart_section {
+  max-width: var(--page-content-max-width);
+  margin: 0 auto;
+  margin-bottom: var(--page-section-gap);
+}
+
+.quickstart_card_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.quickstart_card {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.quickstart_card_bg_image:nth-of-type(0),
+.quickstart_card_bg_image:nth-of-type(1) {
+  z-index: var(--z-index-backgrounds);
+  object-fit: cover;
+  object-position: 80% center;
+}
+
+.quickstart_card_content {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family-light);
+  font-weight: var(--font-weight-regular);
+  font-size: 5rem;
+  line-height: 1;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  text-shadow: 2px 2px 4px var(--color-page-off-black);
+  color: var(--color-page-off-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quickstart_card_content:hover {
+  backdrop-filter: var(--image-filter-hover);
+  color: var(--color-panda-orange-5);
+}
+
+@media (max-width: 768px) {
+  .page_main {
+    padding-top: var(--page-header-mobile-height);
+    padding-bottom: var(--page-footer-height);
+  }
+}

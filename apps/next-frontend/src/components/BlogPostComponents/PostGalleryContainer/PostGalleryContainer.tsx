@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import type * as CSS from 'csstype';
 import { ImageGalleryContainerNode } from '@/types/post-content-types';
 import {

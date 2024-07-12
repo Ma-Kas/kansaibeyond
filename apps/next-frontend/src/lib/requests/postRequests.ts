@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { z } from 'zod';
-import { BACKEND_BASE_URL } from '@/config/constants';
-import { handleRequestErrors } from '@/utils/backend-error-response-validation';
+import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
 
 // Zod Schemas
 // prettier-ignore
@@ -20,13 +18,21 @@ const postStatusSchema = z.union([
   z.literal('trash'),
 ]);
 
+const userRoleSchema = z.union([
+  z.literal(USER_ROLES.OWNER),
+  z.literal(USER_ROLES.ADMIN),
+  z.literal(USER_ROLES.TECH),
+  z.literal(USER_ROLES.WRITER),
+  z.literal(USER_ROLES.GUEST),
+]);
+
 // prettier-ignore
 const postUserSchema = z.object(
   {
     username: z.string(),
     displayName: z.string(),
     userIcon: z.string().nullable(),
-    role: z.string(),
+    role: userRoleSchema,
   }
 ).strict();
 
@@ -71,7 +77,7 @@ const postCommentSchema = z.object(
 ).strict();
 
 // prettier-ignore
-const getPostSchema = z.object(
+const postSchema = z.object(
   {
     id: z.number(),
     postSlug: z.string(),
@@ -92,25 +98,46 @@ const getPostSchema = z.object(
   }
 ).strict();
 
-export type Post = z.infer<typeof getPostSchema>;
+const listPostSchema = postSchema.omit({ content: true });
 
-const getAllPostsSchema = z.array(getPostSchema);
+export type Post = z.infer<typeof postSchema>;
+export type PostForList = z.infer<typeof listPostSchema>;
+export type PostUser = z.infer<typeof postUserSchema>;
 
-export const getAllPosts = async () => {
-  try {
-    const response = await axios.get(`${BACKEND_BASE_URL}/posts`);
-    return getAllPostsSchema.parse(response.data);
-  } catch (err) {
-    handleRequestErrors(err);
-    return null;
+const allPostsSchema = z.array(listPostSchema);
+
+export const getAllPosts = async (queryParams?: string) => {
+  console.log(queryParams);
+  const response = queryParams
+    ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`)
+    : await fetch(`${BACKEND_BASE_URL}/posts`);
+  if (!response.ok) {
+    throw new Error('Post list fetch error\n');
   }
+
+  const data: unknown = await response.json();
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
+};
+
+export const getSearchPosts = async (query: string) => {
+  const response = await fetch(`${BACKEND_BASE_URL}/posts/search?q=${query}`);
+  if (!response.ok) {
+    throw new Error('Post list fetch error\n');
+  }
+
+  const data: unknown = await response.json();
+  const parsedPosts = allPostsSchema.parse(data);
+  return parsedPosts;
 };
 
 export const getOnePost = async (postSlug: string) => {
-  try {
-    const response = await axios.get(`${BACKEND_BASE_URL}/posts/${postSlug}`);
-    return getPostSchema.parse(response.data);
-  } catch (err) {
-    return null;
+  const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`);
+  if (!response.ok) {
+    throw new Error('Post fetch error\n');
   }
+
+  const data: unknown = await response.json();
+  const parsedPost = postSchema.parse(data);
+  return parsedPost;
 };
