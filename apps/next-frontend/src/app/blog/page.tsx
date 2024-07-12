@@ -8,7 +8,7 @@ import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import classes from './blog.module.css';
 
 const BlogHubPage = async () => {
-  const posts = await getAllPosts();
+  const posts = await getAllPosts('?limit=7');
 
   return (
     <>
@@ -18,7 +18,7 @@ const BlogHubPage = async () => {
         </SectionHeading>
         <FeaturedPost post={posts[0]} />
       </section>
-      <PostGridSection posts={posts} withViewMoreLink={true}>
+      <PostGridSection posts={posts.slice(1)} withViewMoreLink={true}>
         <SectionHeading>
           <span>recent</span>&nbsp;posts
         </SectionHeading>

@@ -25,7 +25,7 @@
 .post_cards_container {
   display: grid;
   grid-template-columns: repeat(
-    auto-fit,
+    auto-fill,
     minmax(var(--card-grid-min-column-size), 1fr)
   );
   gap: var(--card-grid-gap);
