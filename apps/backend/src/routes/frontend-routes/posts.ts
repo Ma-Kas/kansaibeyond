@@ -5,8 +5,8 @@ import * as postController from '../../controllers/frontend-controllers/postCont
 
 const router = express.Router();
 
-// GET route for retrieving all posts
-router.get('/', postController.get_all_posts);
+// GET route for retrieving multiple posts based on query string
+router.get('/', postController.get_multiple_posts);
 
 // GET route for retrieving one specific post based on postSlug query
 router.get('/:postSlug', postController.get_one_post);

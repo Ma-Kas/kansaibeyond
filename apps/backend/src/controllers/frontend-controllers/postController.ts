@@ -1,124 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
-import { WhereOptions, InferAttributes, Op, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 import { Post, Category, User, Comment, Tag } from '../../models';
+import {
+  createDynamicWhere,
+  createLimit,
+} from '../../utils/create-query-filters-from-query-params';
 
 import NotFoundError from '../../errors/NotFoundError';
 
-// Creating conditional where filters for post queries based on query string
-// const createCategoryWhere = (req: Request) => {
-//   let where: WhereOptions<InferAttributes<Category, { omit: never }>> = {};
-
-//   if (req.query.category && typeof req.query.category === 'string') {
-//     where = {
-//       categorySlug: req.query.category,
-//     };
-//   }
-
-//   return where;
-// };
-// const createTagWhere = (req: Request) => {
-//   let where: WhereOptions<InferAttributes<Tag, { omit: never }>> = {};
-
-//   if (req.query.tag && typeof req.query.tag === 'string') {
-//     where = {
-//       tagSlug: req.query.tag,
-//     };
-//   }
-
-//   return where;
-// };
-// const createUserWhere = (req: Request) => {
-//   let where: WhereOptions<InferAttributes<User, { omit: never }>> = {};
-
-//   if (req.query.username && typeof req.query.username === 'string') {
-//     where = {
-//       username: req.query.username,
-//     };
-//   }
-
-//   return where;
-// };
-const createLimit = (req: Request) => {
-  if (!req.query.limit || typeof req.query.limit !== 'string') {
-    return undefined;
-  }
-
-  if (
-    Number.isNaN(req.query.limit) ||
-    !Number.isInteger(Number(req.query.limit))
-  )
-    return undefined;
-
-  return Number(req.query.limit);
-};
-// const createExperimentalWhere = (req: Request) => {
-//   const categoryQuery =
-//     req.query.category && typeof req.query.category === 'string' ? true : false;
-//   const tagQuery =
-//     req.query.tag && typeof req.query.tag === 'string' ? true : false;
-//   const userQuery =
-//     req.query.username && typeof req.query.username === 'string' ? true : false;
-
-//   const where: WhereOptions<InferAttributes<Post, { omit: never }>> = {
-//     [Op.and]: [
-//       { status: 'published' },
-//       ...(categoryQuery
-//         ? [{ '$categories.category_slug$': req.query.category }]
-//         : []),
-//       ...(tagQuery ? [{ '$tags.tag_slug$': req.query.tag }] : []),
-//       ...(userQuery ? [{ '$user.username$': req.query.username }] : []),
-//     ],
-//   };
-
-//   return where;
-// };
-
-const createExperimentalWhere = (req: Request) => {
-  const categoryQuery =
-    req.query.category && typeof req.query.category === 'string' ? true : false;
-  const tagQuery =
-    req.query.tag && typeof req.query.tag === 'string' ? true : false;
-  const userQuery =
-    req.query.username && typeof req.query.username === 'string' ? true : false;
-
-  const where: WhereOptions<InferAttributes<Post, { omit: never }>> = {
-    [Op.and]: [
-      { status: 'published' },
-      ...(categoryQuery
-        ? [
-            {
-              id: [
-                Sequelize.literal(
-                  `(SELECT pc2.post_id FROM posts_categories pc2 JOIN categories c2 ON pc2.category_id = c2.id WHERE c2.category_slug = '${req.query.category}')`
-                ),
-              ],
-            },
-          ]
-        : []),
-      ...(tagQuery
-        ? [
-            {
-              id: [
-                Sequelize.literal(
-                  `(SELECT pt2.post_id FROM posts_tags pt2 JOIN tags t2 ON pt2.tag_id = t2.id WHERE t2.tag_slug = '${req.query.tag}')`
-                ),
-              ],
-            },
-          ]
-        : []),
-      ...(userQuery ? [{ '$user.username$': req.query.username }] : []),
-    ],
-  };
-
-  return where;
-};
-
-export const get_all_posts = async (
+export const get_multiple_posts = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const experimentalWhere = createExperimentalWhere(req);
+  const dynamicWhere = createDynamicWhere(req);
   const postLimit = createLimit(req);
 
   try {
@@ -153,7 +48,11 @@ export const get_all_posts = async (
         },
       ],
 
-      where: experimentalWhere,
+      where: dynamicWhere,
+      replacements: {
+        categoryReplacement: req.query.category,
+        tagReplacement: req.query.tag,
+      },
       limit: postLimit,
       order: [['updatedAt', 'DESC']],
     });
