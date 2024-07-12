@@ -1,5 +1,4 @@
 .featured_post {
-  --banner-height: 440px;
   --info-section-height: 90px;
 
   font-size: var(--font-size-ui-regular);

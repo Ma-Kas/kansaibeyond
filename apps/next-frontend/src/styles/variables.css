@@ -23,6 +23,8 @@
   --hire-me-section-height: 350px;
   --more-about-section-height: 400px;
 
+  --banner-height: 440px;
+
   --card-grid-gap: 30px;
   --card-grid-min-column-size: 300px;
   --card-border: 5px solid var(--color-panda-orange-5);

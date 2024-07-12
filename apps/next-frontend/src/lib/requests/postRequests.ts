@@ -107,7 +107,6 @@ export type PostUser = z.infer<typeof postUserSchema>;
 const allPostsSchema = z.array(listPostSchema);
 
 export const getAllPosts = async (queryParams?: string) => {
-  console.log(queryParams);
   const response = queryParams
     ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`)
     : await fetch(`${BACKEND_BASE_URL}/posts`);
