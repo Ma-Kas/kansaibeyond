@@ -26,3 +26,19 @@ export const get_all_categories = async (
     next(err);
   }
 };
+
+export const get_one_category = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const category = await Category.findOne({
+      where: { categorySlug: req.params.categorySlug },
+    });
+
+    res.status(200).json(category);
+  } catch (err: unknown) {
+    next(err);
+  }
+};

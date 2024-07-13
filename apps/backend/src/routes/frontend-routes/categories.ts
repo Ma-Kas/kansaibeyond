@@ -8,4 +8,7 @@ const router = express.Router();
 // GET route for retrieving all categories
 router.get('/', categoryController.get_all_categories);
 
+// GET route for retrieving specific category based on categorySlug
+router.get('/:categorySlug', categoryController.get_one_category);
+
 export default router;
