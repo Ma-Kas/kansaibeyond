@@ -9,6 +9,9 @@ export const get_all_affiliates = async (
 ) => {
   try {
     const affiliates = await Affiliate.findAll({
+      attributes: {
+        exclude: ['userId'],
+      },
       include: [
         {
           model: User,
