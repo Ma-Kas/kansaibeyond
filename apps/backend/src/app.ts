@@ -21,6 +21,7 @@ import cmsAffiliateRouter from './routes/cms-routes/affiliates';
 
 import frontendPostRouter from './routes/frontend-routes/posts';
 import frontendCategoryRouter from './routes/frontend-routes/categories';
+import frontendTagRouter from './routes/frontend-routes/tags';
 
 import errorHandler from './middleware/errorHandler';
 import {
@@ -61,6 +62,7 @@ cmsRouter.use('/v1/affiliates', auth, adminAuth, cmsAffiliateRouter);
 // Frontend Routes
 frontendRouter.use('/v1/posts', frontendPostRouter);
 frontendRouter.use('/v1/categories', frontendCategoryRouter);
+frontendRouter.use('/v1/tags', frontendTagRouter);
 
 // Error Handling
 app.use(errorHandler);
