@@ -1,4 +1,5 @@
-.section_heading {
+.section_heading,
+.section_heading_double {
   font-family: var(--font-family-ivy-mode);
   font-size: var(--font-size-page-section-heading);
   font-weight: var(--font-weight-thin);
@@ -7,10 +8,18 @@
   margin: 0;
 }
 
-.section_heading span {
+.section_heading_double {
+  margin-top: 2rem !important;
+}
+
+.section_heading span,
+.section_heading_double span {
   position: relative;
   font-family: var(--font-family-handwriting);
   font-size: 6rem;
-  bottom: -15px;
   color: var(--color-panda-orange-5);
+}
+
+.section_heading span {
+  bottom: -15px;
 }

@@ -14,6 +14,8 @@ export const USER_ROLES = {
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
 export const KANSAIBEYOND_THATCH = 'https://www.thatch.co/@kansai';
+export const KANSAIBEYOND_THATCH_HK_FOOD =
+  'https://www.thatch.co/guide/2v5gfojl4v2on/view';
 export const KANSAIBEYOND_TWITTER = 'https://x.com/kansaibeyond';
 export const KANSAIBEYOND_INSTAGRAM = 'https://www.instagram.com/kansaibeyond';
 export const KANSAIBEYOND_YOUTUBE =
