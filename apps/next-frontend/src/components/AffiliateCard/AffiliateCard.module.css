@@ -12,9 +12,7 @@
 }
 
 .card_container:nth-of-type(even) {
-  background-color: var(--color-page-bg);
-  border: var(--card-border);
-  /* margin-top: -5px; */
+  background-color: var(--color-panda-grey-1);
 }
 
 .card_container:has(.card_link_container:hover) {
