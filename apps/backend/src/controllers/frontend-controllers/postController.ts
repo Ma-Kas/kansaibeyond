@@ -146,7 +146,9 @@ export const get_one_post = async (
         {
           model: Post,
           as: 'relatedPosts',
-          attributes: ['id', 'title'],
+          attributes: {
+            exclude: ['userId', 'categoryId', 'content', 'relatedPosts'],
+          },
           include: [
             {
               model: User,

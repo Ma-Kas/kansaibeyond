@@ -37,14 +37,6 @@ const postUserSchema = z.object(
 ).strict();
 
 // prettier-ignore
-const postRelatedSchema = z.object(
-  {
-    id: z.number(),
-    title: z.string(),
-  }
-).strict();
-
-// prettier-ignore
 const postCategorySchema = z.object(
   {
     id: z.number(),
@@ -77,6 +69,25 @@ const postCommentSchema = z.object(
 ).strict();
 
 // prettier-ignore
+const relatedPostSchema = z.object(
+  {
+    id: z.number(),
+    postSlug: z.string(),
+    title: z.string(),
+    coverImage: coverImageSchema.nullable(),
+    status: postStatusSchema,
+    views: z.number(),
+    readTime: z.number(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    deletedAt: z.string().nullable(),
+    user: postUserSchema,
+    categories: z.array(postCategorySchema),
+    tags: z.array(postTagSchema),
+  }
+).strict();
+
+// prettier-ignore
 const postSchema = z.object(
   {
     id: z.number(),
@@ -91,7 +102,7 @@ const postSchema = z.object(
     updatedAt: z.string(),
     deletedAt: z.string().nullable(),
     user: postUserSchema,
-    relatedPosts: z.array(postRelatedSchema).optional(),
+    relatedPosts: z.array(relatedPostSchema).optional(),
     categories: z.array(postCategorySchema),
     tags: z.array(postTagSchema),
     comments: z.array(postCommentSchema)
@@ -132,6 +143,7 @@ export const getSearchPosts = async (query: string) => {
 
 export const getOnePost = async (postSlug: string) => {
   const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`);
+
   if (!response.ok) {
     throw new Error('Post fetch error\n');
   }
