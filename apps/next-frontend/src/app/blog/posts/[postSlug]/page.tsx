@@ -8,11 +8,7 @@ const PostPage = async ({
 }) => {
   const post = await getOnePost(postSlug);
 
-  return (
-    <div style={{ padding: '40px 0' }}>
-      <BlogPostView postData={post} />
-    </div>
-  );
+  return <BlogPostView postData={post} />;
 };
 
 export default PostPage;

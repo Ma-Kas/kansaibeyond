@@ -4,4 +4,8 @@ const formatShortDate = (dateString: string): string => {
   return format(new Date(dateString), 'MMM d, yyyy');
 };
 
-export { formatShortDate };
+const formatLongDate = (dateString: string): string => {
+  return format(new Date(dateString), 'MMMM dd, yyyy');
+};
+
+export { formatShortDate, formatLongDate };

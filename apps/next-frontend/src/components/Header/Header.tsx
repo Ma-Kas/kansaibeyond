@@ -85,94 +85,94 @@ const Header = () => {
 
   return (
     <header className={classes['page_header']}>
-      <nav className={classes['header_nav_left']}>
-        {createNavLinks(navLinksLeft, pathname)}
-        <a
-          className={classes['header_nav_link']}
-          title='Travel Guides'
-          href={KANSAIBEYOND_THATCH}
-          target='_blank'
-          rel='noopener noreferrer'
+      <div className={classes['page_header_inner']}>
+        <nav className={classes['header_nav_left']}>
+          {createNavLinks(navLinksLeft, pathname)}
+          <a
+            className={classes['header_nav_link']}
+            title='Travel Guides'
+            href={KANSAIBEYOND_THATCH}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            JAPAN TRAVEL GUIDES
+          </a>
+        </nav>
+        <Link
+          title='Home'
+          href={'/'}
+          className={classes['header_image_container']}
         >
-          TRAVEL GUIDES
-        </a>
-      </nav>
-      <Link
-        title='Home'
-        href={'/'}
-        className={classes['header_image_container']}
-      >
-        <Image
-          className={classes['header_image']}
-          src={HeaderBannerImage}
-          alt='Kansai & Beyond Logo'
-          priority={true}
-          aria-hidden={true}
-        />
-      </Link>
-      <nav className={classes['header_nav_right']}>
-        {createNavLinks(navLinksRight, pathname)}
-      </nav>
-
-      {/* Mobile Hamburger Menu */}
-      <button
-        className={classes['header_hamburger_btn']}
-        aria-label='Navigation Menu'
-        aria-controls='navigation-main'
-        aria-expanded={headerMenuOpen}
-        onClick={handleHamburgerMenu}
-      >
-        <svg
-          className={classes.hamburger}
-          viewBox='0 0 100 100'
-          width={30}
-          fill='var(--color-page-off-black)'
+          <Image
+            className={classes['header_image']}
+            src={HeaderBannerImage}
+            alt='Kansai & Beyond Logo'
+            priority={true}
+            aria-hidden={true}
+          />
+        </Link>
+        <nav className={classes['header_nav_right']}>
+          {createNavLinks(navLinksRight, pathname)}
+        </nav>
+        {/* Mobile Hamburger Menu */}
+        <button
+          className={classes['header_hamburger_btn']}
+          aria-label='Navigation Menu'
+          aria-controls='navigation-main'
+          aria-expanded={headerMenuOpen}
+          onClick={handleHamburgerMenu}
         >
-          <rect
-            className={classes['hamburger_top']}
-            width={80}
-            height={10}
-            x={10}
-            y={25}
-            rx={2.5}
-          ></rect>
-          <rect
-            className={classes['hamburger_middle']}
-            width={80}
-            height={10}
-            x={10}
-            y={45}
-            rx={2.5}
-          ></rect>
-          <rect
-            className={classes['hamburger_bottom']}
-            width={80}
-            height={10}
-            x={10}
-            y={65}
-            rx={2.5}
-          ></rect>
-        </svg>
-      </button>
-
-      {/* Mobile Navigation Dropdown */}
-      <nav
-        className={classes['header_nav_mobile']}
-        data-is-open={headerMenuOpen}
-        id='navigation-main'
-      >
-        {createNavLinks(navLinksLeft, pathname)}
-        <a
-          className={classes['header_nav_link']}
-          title='Travel Guides'
-          href={KANSAIBEYOND_THATCH}
-          target='_blank'
-          rel='noopener noreferrer'
+          <svg
+            className={classes.hamburger}
+            viewBox='0 0 100 100'
+            width={30}
+            fill='var(--color-page-off-black)'
+          >
+            <rect
+              className={classes['hamburger_top']}
+              width={80}
+              height={10}
+              x={10}
+              y={25}
+              rx={2.5}
+            ></rect>
+            <rect
+              className={classes['hamburger_middle']}
+              width={80}
+              height={10}
+              x={10}
+              y={45}
+              rx={2.5}
+            ></rect>
+            <rect
+              className={classes['hamburger_bottom']}
+              width={80}
+              height={10}
+              x={10}
+              y={65}
+              rx={2.5}
+            ></rect>
+          </svg>
+        </button>
+        {/* Mobile Navigation Dropdown */}
+        <nav
+          className={classes['header_nav_mobile']}
+          data-is-open={headerMenuOpen}
+          id='navigation-main'
         >
-          TRAVEL GUIDES
-        </a>
-        {createNavLinks(navLinksRight, pathname)}
-      </nav>
+          {createNavLinks(navLinksLeft, pathname)}
+          <a
+            className={classes['header_nav_link']}
+            title='Travel Guides'
+            href={KANSAIBEYOND_THATCH}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            JAPAN TRAVEL GUIDES
+          </a>
+          {createNavLinks(navLinksRight, pathname)}
+        </nav>
+      </div>
     </header>
   );
 };

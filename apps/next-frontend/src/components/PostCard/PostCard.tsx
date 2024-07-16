@@ -49,7 +49,7 @@ const PostCard = async ({ post }: { post: PostForList }) => {
         <PostInformation user={post.user} postDate={post.updatedAt} />
         <Link
           className={classes['post_link']}
-          href={`blog/posts/${post.postSlug}`}
+          href={`/blog/posts/${post.postSlug}`}
           aria-label={post.title}
         >
           VIEW POST
