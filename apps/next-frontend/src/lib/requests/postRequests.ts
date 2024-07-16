@@ -105,7 +105,7 @@ const postSchema = z.object(
     relatedPosts: z.array(relatedPostSchema).optional(),
     categories: z.array(postCategorySchema),
     tags: z.array(postTagSchema),
-    comments: z.array(postCommentSchema)
+    comments: z.array(postCommentSchema).optional()
   }
 ).strict();
 
