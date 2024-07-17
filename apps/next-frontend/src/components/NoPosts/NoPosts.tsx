@@ -4,7 +4,7 @@ import classes from './NoPosts.module.css';
 
 type Props = {
   message: string;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 const NoPosts = ({ message, children }: Props) => {
