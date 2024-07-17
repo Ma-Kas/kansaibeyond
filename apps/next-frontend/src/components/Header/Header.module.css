@@ -152,6 +152,11 @@
     padding: 0 var(--page-padding-horizontal) var(--page-padding-horizontal);
   }
 
+  .header_nav_mobile_searchbar {
+    max-width: 250px;
+    margin: 1.5rem auto 0;
+  }
+
   .header_nav_link {
     padding: calc(var(--page-padding-horizontal) / 2);
   }
