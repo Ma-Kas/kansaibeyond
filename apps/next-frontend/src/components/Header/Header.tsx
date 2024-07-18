@@ -30,6 +30,10 @@ export type NavLink = {
 
 const navLinksLeft: NavLink[] = [
   {
+    name: 'Home',
+    href: '/',
+  },
+  {
     name: 'Blog',
     href: '/blog',
   },
@@ -47,6 +51,10 @@ const navLinksRight: NavLink[] = [
   {
     name: 'A Taste of Hong Kong',
     href: '/taste-of-hong-kong',
+  },
+  {
+    name: 'Search',
+    href: '/search',
   },
 ];
 
@@ -171,7 +179,7 @@ const Header = () => {
           >
             JAPAN TRAVEL GUIDES
           </a>
-          {createNavLinks(navLinksRight, pathname)}
+          {createNavLinks(navLinksRight.toSpliced(-1, 1), pathname)}
           <div className={classes['header_nav_mobile_searchbar']}>
             <Searchbar inHeader />
           </div>

@@ -95,7 +95,7 @@
   color: var(--color-panda-orange-5);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .page_main {
     padding-top: var(--page-header-mobile-height);
     padding-bottom: var(--page-footer-height);

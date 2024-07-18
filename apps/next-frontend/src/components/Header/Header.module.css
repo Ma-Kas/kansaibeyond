@@ -16,7 +16,7 @@
 
 .page_header_inner {
   height: var(--page-header-desktop-height);
-  max-width: var(--post-content-max-width);
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 var(--page-padding-horizontal);
   display: grid;
@@ -103,7 +103,7 @@
 }
 
 /* Mobile Only Media Query */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .page_header {
     height: var(--page-header-mobile-height);
   }
