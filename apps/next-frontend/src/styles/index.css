@@ -76,6 +76,7 @@ body {
   padding: 0;
   position: relative;
   min-height: 100vh;
+  overflow-y: scroll;
 }
 
 .react-tweet-theme {

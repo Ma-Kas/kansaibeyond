@@ -1,0 +1,22 @@
+.search_section,
+.search_section_empty {
+  max-width: var(--page-content-max-width);
+  padding: 0 var(--page-padding-horizontal);
+}
+
+.search_section {
+  max-width: var(--page-content-max-width);
+  margin: var(--page-section-gap) auto var(--page-section-gap-handwriting);
+  padding: 0 var(--page-padding-horizontal);
+}
+
+.search_section h2 {
+  margin-bottom: var(--page-section-gap-handwriting);
+}
+
+.search_section_empty {
+  max-width: var(--page-content-max-width);
+  margin: 0 auto;
+  margin-bottom: var(--page-section-gap-handwriting);
+  padding: 0 var(--page-padding-horizontal);
+}

@@ -1,0 +1,50 @@
+.form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--color-panda-grey-2);
+  padding: 0.75rem 1rem;
+}
+
+.form_header {
+  padding: 0.25rem 1rem;
+}
+
+.form:focus-within {
+  border: 1px solid var(--color-panda-orange-5);
+}
+
+.input {
+  font-family: var(--font-family-light);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-footer);
+  color: var(--color-panda-grey-5);
+  background: transparent;
+  flex: 1;
+  border: none;
+}
+
+.input:focus {
+  color: var(--color-page-off-black);
+  outline: none;
+}
+
+.icon {
+  height: 100%;
+  width: 100%;
+  /* Filter result equals --color-panda-grey-8 */
+  filter: brightness(0) saturate(100%) invert(22%) sepia(0%) saturate(798%)
+    hue-rotate(194deg) brightness(122%) contrast(98%);
+}
+
+.button {
+  cursor: pointer;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}

@@ -2,6 +2,7 @@
   /* Breakpoints */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
+  --breakpoint-hd: 900px;
   --breakpoint-lg: 1024px;
 
   /* Main layout variables */

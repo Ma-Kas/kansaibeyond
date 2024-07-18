@@ -8,7 +8,7 @@ import classes from './PostGridSection.module.css';
 type Props = {
   posts: PostForList[];
   withViewMoreLink: boolean;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 const PostGridSection = ({ posts, withViewMoreLink, children }: Props) => {
