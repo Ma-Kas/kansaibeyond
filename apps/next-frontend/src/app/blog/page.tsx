@@ -10,7 +10,7 @@ import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import classes from './blog.module.css';
 
 const BlogHubPage = async () => {
-  const posts = await getAllPosts('?limit=7');
+  const posts = await getAllPosts('?limit=6&offset=1');
   const categorySectionHeading = (
     <SectionHeading>
       <span>explore</span>&nbsp;categories
@@ -23,10 +23,10 @@ const BlogHubPage = async () => {
         <SectionHeading>
           <span>Featured</span>&nbsp;post
         </SectionHeading>
-        <FeaturedPost post={posts[0]} />
+        <FeaturedPost queryParam='?limit=1' />
       </section>
       {/* Post Card Grid */}
-      <PostGridSection posts={posts.slice(1)} withViewMoreLink={true}>
+      <PostGridSection posts={posts} withViewMoreLink={true}>
         <SectionHeading>
           <span>recent</span>&nbsp;posts
         </SectionHeading>

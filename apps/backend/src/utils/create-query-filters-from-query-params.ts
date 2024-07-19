@@ -45,6 +45,10 @@ export const createDynamicWhere = (req: Request) => {
     req.query.tag && typeof req.query.tag === 'string' ? true : false;
   const userQuery =
     req.query.username && typeof req.query.username === 'string' ? true : false;
+  const post_slugQuery =
+    req.query.post_slug && typeof req.query.post_slug === 'string'
+      ? true
+      : false;
 
   const where: WhereOptions<InferAttributes<Post, { omit: never }>> = {
     [Op.and]: [
@@ -76,6 +80,7 @@ export const createDynamicWhere = (req: Request) => {
           ]
         : []),
       ...(userQuery ? [{ '$user.username$': req.query.username }] : []),
+      ...(post_slugQuery ? [{ postSlug: req.query.post_slug as string }] : []),
     ],
   };
 

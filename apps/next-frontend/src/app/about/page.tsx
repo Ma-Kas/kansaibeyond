@@ -3,13 +3,10 @@ import introductionImage from '@public/images/kb_about_opt_a.webp';
 import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
-import { getOnePost } from '@/lib/requests/postRequests';
 
 import classes from './about.module.css';
 
-const AboutPage = async () => {
-  const featuredPost = await getOnePost('my-japan-story');
-
+const AboutPage = () => {
   return (
     <>
       <section className={classes['introduction_section']}>
@@ -81,7 +78,7 @@ const AboutPage = async () => {
         <SectionHeading>
           Read my<span>&nbsp;story</span>
         </SectionHeading>
-        <FeaturedPost post={featuredPost} />
+        <FeaturedPost queryParam='?post_slug=my-japan-story' />
       </section>
     </>
   );
