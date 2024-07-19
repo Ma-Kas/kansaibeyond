@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import CategoryBanner from '@/components/CategoryBanner/CategoryBanner';
+import CategoryBannerSkeleton from '@/components/Skeletons/CategoryBannerSkeleton';
 import NoPosts from '@/components/NoPosts/NoPosts';
 import { getAllPosts } from '@/lib/requests/postRequests';
 
@@ -16,7 +18,9 @@ const CategoryPage = async ({
   return (
     <>
       <section className={classes['category_banner_section']}>
-        <CategoryBanner categorySlug={categorySlug} />
+        <Suspense fallback={<CategoryBannerSkeleton />}>
+          <CategoryBanner categorySlug={categorySlug} />
+        </Suspense>
       </section>
       {posts.length !== 0 && (
         <PostGridSection posts={posts} withViewMoreLink={false}>
