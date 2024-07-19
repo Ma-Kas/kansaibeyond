@@ -7,8 +7,14 @@ import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './blog.module.css';
+import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 
 const BlogHubPage = () => {
+  const postsSectionHeading = (
+    <SectionHeading>
+      <span>recent</span>&nbsp;posts
+    </SectionHeading>
+  );
   const categorySectionHeading = (
     <SectionHeading>
       <span>explore</span>&nbsp;categories
@@ -26,11 +32,20 @@ const BlogHubPage = () => {
         </Suspense>
       </section>
       {/* Post Card Grid */}
-      <PostGridSection queryParams='?limit=6&offset=1' withViewMoreLink={true}>
-        <SectionHeading>
-          <span>recent</span>&nbsp;posts
-        </SectionHeading>
-      </PostGridSection>
+      <Suspense
+        fallback={
+          <PostGridSectionSkeleton cardNumber={6} withViewMoreLink={true}>
+            {postsSectionHeading}
+          </PostGridSectionSkeleton>
+        }
+      >
+        <PostGridSection
+          queryParams='?limit=6&offset=1'
+          withViewMoreLink={true}
+        >
+          {postsSectionHeading}
+        </PostGridSection>
+      </Suspense>
       {/* Category Card Grid */}
       <Suspense
         fallback={

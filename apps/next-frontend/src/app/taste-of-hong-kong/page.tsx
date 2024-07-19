@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
+import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import {
   KANSAIBEYOND_EMAIL,
@@ -10,6 +12,12 @@ import dimSumImage from '@public/images/hk_dim_sum.jpg';
 import classes from './TasteHK.module.css';
 
 const TasteOfHKPage = () => {
+  const reviewSectionHeading = (
+    <SectionHeading>
+      <span>explore</span>&nbsp;reviews
+    </SectionHeading>
+  );
+
   return (
     <>
       <article className={classes['hero_banner']}>
@@ -79,14 +87,20 @@ const TasteOfHKPage = () => {
           </p>
         </article>
       </section>
-      <PostGridSection
-        queryParams='?tag=taste-of-hong-kong'
-        withViewMoreLink={false}
+      <Suspense
+        fallback={
+          <PostGridSectionSkeleton cardNumber={3} withViewMoreLink={false}>
+            {reviewSectionHeading}
+          </PostGridSectionSkeleton>
+        }
       >
-        <SectionHeading>
-          <span>explore</span>&nbsp;reviews
-        </SectionHeading>
-      </PostGridSection>
+        <PostGridSection
+          queryParams='?tag=taste-of-hong-kong'
+          withViewMoreLink={false}
+        >
+          {reviewSectionHeading}
+        </PostGridSection>
+      </Suspense>
     </>
   );
 };

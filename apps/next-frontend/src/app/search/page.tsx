@@ -1,11 +1,18 @@
+import { Suspense } from 'react';
 import Searchbar from '@/components/Searchbar/Searchbar';
 import SearchPostGridSection from '@/components/PostGridSection/SearchPostGridSection';
+import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
 import classes from './search.module.css';
 
 const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
   const query = searchParams?.q || '';
+  const resultSectionHeading = (
+    <SectionHeading>
+      <span>Found</span>&nbsp;posts
+    </SectionHeading>
+  );
 
   if (query) {
     return (
@@ -19,15 +26,21 @@ const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
           <Searchbar inHeader={false} />
         </section>
 
-        <SearchPostGridSection
-          query={query}
-          withViewMoreLink={false}
-          noResultMessage='No posts match your search.'
+        <Suspense
+          fallback={
+            <PostGridSectionSkeleton cardNumber={3} withViewMoreLink={false}>
+              {resultSectionHeading}
+            </PostGridSectionSkeleton>
+          }
         >
-          <SectionHeading>
-            <span>Found</span>&nbsp;posts
-          </SectionHeading>
-        </SearchPostGridSection>
+          <SearchPostGridSection
+            query={query}
+            withViewMoreLink={false}
+            noResultMessage='No posts match your search.'
+          >
+            {resultSectionHeading}
+          </SearchPostGridSection>
+        </Suspense>
       </>
     );
   } else {
