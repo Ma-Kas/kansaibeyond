@@ -2,10 +2,8 @@ import classes from './Skeletons.module.css';
 
 const FeaturedPostSkeleton = () => {
   return (
-    <article className={classes['featured_post']}>
-      <div
-        className={`${classes['featured_post_image']} ${classes['shimmer']}`}
-      >
+    <article className={`${classes['featured_post']} ${classes['shimmer']}`}>
+      <div className={classes['featured_post_image']}>
         <div className={classes['featured_post_title']}>
           <div></div>
           <div></div>

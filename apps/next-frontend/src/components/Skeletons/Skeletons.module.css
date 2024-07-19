@@ -3,10 +3,11 @@
 
   position: relative;
   box-shadow: var(--box-shadow-card);
+  overflow: hidden;
 }
 
 .featured_post_image {
-  position: relative;
+  background-color: var(--color-panda-grey-0);
   width: 100%;
   height: calc(var(--banner-height) - var(--info-section-height));
   margin: 0;
@@ -62,21 +63,23 @@
 }
 
 /* Shimmer Animation */
-.shimmer {
-  background: linear-gradient(
-    -45deg,
-    var(--color-panda-grey-0) 40%,
-    var(--color-page-bg) 50%,
-    var(--color-panda-grey-0) 60%
+.shimmer::before {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-page-bg) 60%,
+    transparent
   );
-  background-size: 300%;
-  background-position-x: 100%;
-  animation: shimmer 2s infinite linear;
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite ease;
 }
 
 @keyframes shimmer {
   to {
-    background-position-x: 0%;
+    transform: translateX(100%);
   }
 }
 
