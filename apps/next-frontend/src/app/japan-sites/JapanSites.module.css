@@ -1,5 +1,4 @@
-.banner_section,
-.affiliate_cards_section {
+.banner_section {
   max-width: var(--page-content-max-width);
   margin: 0 auto;
   margin-bottom: var(--page-section-gap-handwriting);

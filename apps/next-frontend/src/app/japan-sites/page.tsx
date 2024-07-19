@@ -1,13 +1,12 @@
+import { Suspense } from 'react';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
-import AffiliateCard from '@/components/AffiliateCard/AffiliateCard';
+import AffiliateCardsSection from '@/components/AffiliateCardsSection/AffiliateCardsSection';
+import AffiliateCardsSectionSkeleton from '@/components/AffiliateCardsSection/AffiliateCardsSectionSkeleton';
 import { KANSAIBEYOND_EMAIL } from '@/config/constants';
-import { getAllAffiliates } from '@/lib/requests/affiliateRequests';
 
 import classes from './JapanSites.module.css';
 
-const JapanSitesPage = async () => {
-  const affiliates = await getAllAffiliates();
-
+const JapanSitesPage = () => {
   return (
     <>
       <section className={classes['banner_section']}>
@@ -44,11 +43,9 @@ const JapanSitesPage = async () => {
           </a>
         </article>
       </section>
-      <section className={classes['affiliate_cards_section']}>
-        {affiliates.map((affiliate) => {
-          return <AffiliateCard key={affiliate.id} affiliate={affiliate} />;
-        })}
-      </section>
+      <Suspense fallback={<AffiliateCardsSectionSkeleton />}>
+        <AffiliateCardsSection />
+      </Suspense>
     </>
   );
 };
