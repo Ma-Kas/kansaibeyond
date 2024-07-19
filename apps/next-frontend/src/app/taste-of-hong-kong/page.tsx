@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { getAllPosts } from '@/lib/requests/postRequests';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import {
@@ -10,9 +9,7 @@ import dimSumImage from '@public/images/hk_dim_sum.jpg';
 
 import classes from './TasteHK.module.css';
 
-const TasteOfHKPage = async () => {
-  const posts = await getAllPosts('?tag=taste-of-hong-kong');
-
+const TasteOfHKPage = () => {
   return (
     <>
       <article className={classes['hero_banner']}>
@@ -82,7 +79,10 @@ const TasteOfHKPage = async () => {
           </p>
         </article>
       </section>
-      <PostGridSection posts={posts} withViewMoreLink={false}>
+      <PostGridSection
+        queryParams='?tag=taste-of-hong-kong'
+        withViewMoreLink={false}
+      >
         <SectionHeading>
           <span>explore</span>&nbsp;reviews
         </SectionHeading>

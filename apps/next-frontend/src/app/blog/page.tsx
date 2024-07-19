@@ -1,6 +1,4 @@
 import { Suspense } from 'react';
-import { getAllPosts } from '@/lib/requests/postRequests';
-
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
@@ -10,8 +8,7 @@ import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './blog.module.css';
 
-const BlogHubPage = async () => {
-  const posts = await getAllPosts('?limit=6&offset=1');
+const BlogHubPage = () => {
   const categorySectionHeading = (
     <SectionHeading>
       <span>explore</span>&nbsp;categories
@@ -29,7 +26,7 @@ const BlogHubPage = async () => {
         </Suspense>
       </section>
       {/* Post Card Grid */}
-      <PostGridSection posts={posts} withViewMoreLink={true}>
+      <PostGridSection queryParams='?limit=6&offset=1' withViewMoreLink={true}>
         <SectionHeading>
           <span>recent</span>&nbsp;posts
         </SectionHeading>
