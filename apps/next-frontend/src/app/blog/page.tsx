@@ -6,6 +6,7 @@ import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
 import CategoryGridSectionSkeleton from '@/components/CategoryGridSection/CategoryGridSkeleton';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
+import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './blog.module.css';
 
@@ -23,7 +24,9 @@ const BlogHubPage = async () => {
         <SectionHeading>
           <span>Featured</span>&nbsp;post
         </SectionHeading>
-        <FeaturedPost queryParam='?limit=1' />
+        <Suspense fallback={<FeaturedPostSkeleton />}>
+          <FeaturedPost queryParam='?limit=1' />
+        </Suspense>
       </section>
       {/* Post Card Grid */}
       <PostGridSection posts={posts} withViewMoreLink={true}>

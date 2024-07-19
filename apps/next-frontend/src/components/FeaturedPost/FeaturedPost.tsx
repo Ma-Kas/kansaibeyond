@@ -14,7 +14,9 @@ import classes from './FeaturedPost.module.css';
 const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
   const post = await getAllPosts(queryParam);
 
-  const blurDataUrl = await getBase64ImageUrl(post[0].coverImage!.urlSlug);
+  const blurDataUrl = post[0].coverImage
+    ? await getBase64ImageUrl(post[0].coverImage.urlSlug)
+    : '';
 
   return (
     <article key={post[0].id} className={classes['featured_post']}>

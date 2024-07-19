@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
 import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
+import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './about.module.css';
 
@@ -78,7 +80,9 @@ const AboutPage = () => {
         <SectionHeading>
           Read my<span>&nbsp;story</span>
         </SectionHeading>
-        <FeaturedPost queryParam='?post_slug=my-japan-story' />
+        <Suspense fallback={<FeaturedPostSkeleton />}>
+          <FeaturedPost queryParam='?post_slug=my-japan-story' />
+        </Suspense>
       </section>
     </>
   );
