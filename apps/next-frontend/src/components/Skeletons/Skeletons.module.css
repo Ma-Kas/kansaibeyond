@@ -66,6 +66,69 @@
 }
 
 /*  */
+/* Post Card  */
+/*  */
+.post_card {
+  position: relative;
+  box-shadow: var(--box-shadow-card);
+  overflow: hidden;
+}
+
+.post_card_image {
+  background-color: var(--color-panda-grey-0);
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+}
+
+.post_card_title {
+  position: absolute;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+}
+
+.post_card_title div {
+  margin-top: 0.5rem;
+  background-color: var(--color-page-bg);
+  border-radius: 0.5rem;
+}
+
+.post_card_title div:first-child {
+  height: 45px;
+  width: max(200px, 50%);
+  max-width: 80%;
+}
+
+.post_card_title div:nth-child(2) {
+  height: 18px;
+  width: max(200px, 80%);
+  max-width: 90%;
+}
+
+.post_card_bottom {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  justify-content: left;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.post_card_bottom div {
+  background-color: var(--color-panda-grey-0);
+  border-radius: 0.5rem;
+  height: 20px;
+  width: 80px;
+}
+
+.post_card_bottom div:first-child {
+  height: 32px;
+  width: min(160px, 90%);
+}
+
+/*  */
 /* Affiliate Card */
 /*  */
 .affiliate_card {
