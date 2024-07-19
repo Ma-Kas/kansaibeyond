@@ -1,3 +1,6 @@
+/*  */
+/* Featured Post Card */
+/*  */
 .featured_post {
   --info-section-height: 90px;
 
@@ -62,11 +65,19 @@
   width: min(170px, 90%);
 }
 
+/*  */
+/* Affiliate Card */
+/*  */
 .affiliate_card {
   position: relative;
   width: 100%;
   height: 200px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .affiliate_card:nth-of-type(even) {
@@ -77,32 +88,55 @@
   background-color: var(--color-panda-grey-1);
 }
 
-.affiliate_content {
-  position: absolute;
-  inset: 5px;
+.affiliate_card div {
+  background-color: var(--color-page-bg);
+  border-radius: 0.5rem;
+}
+
+.affiliate_card div:first-child {
+  height: 40px;
+  width: min(300px, 60%);
+}
+
+.affiliate_card div:nth-child(2) {
+  height: 20px;
+  width: min(500px, 80%);
+}
+
+/*  */
+/* Category Banner */
+/*  */
+.category_banner {
+  position: relative;
+  width: 100%;
+  height: var(--banner-height);
+  background-color: var(--color-panda-grey-0);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
+  overflow: hidden;
 }
 
-.affiliate_content div {
+.category_banner div {
   background-color: var(--color-page-bg);
   border-radius: 0.5rem;
 }
 
-.affiliate_content div:first-child {
-  height: 40px;
+.category_banner div:first-child {
+  height: 80px;
   width: min(300px, 60%);
 }
 
-.affiliate_content div:nth-child(2) {
-  height: 20px;
+.category_banner div:nth-child(2) {
+  height: 60px;
   width: min(500px, 80%);
 }
 
+/*  */
 /* Shimmer Animation */
+/*  */
 .shimmer::before {
   position: absolute;
   inset: 0;
