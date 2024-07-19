@@ -4,6 +4,7 @@ import { Post, Category, User, Comment, Tag } from '../../models';
 import {
   createDynamicWhere,
   createLimit,
+  createOffset,
   createSearchWhere,
 } from '../../utils/create-query-filters-from-query-params';
 
@@ -16,6 +17,7 @@ export const get_multiple_posts = async (
 ) => {
   const dynamicWhere = createDynamicWhere(req);
   const postLimit = createLimit(req);
+  const dynamicOffset = createOffset(req);
 
   try {
     const allPosts = await Post.findAll({
@@ -56,6 +58,7 @@ export const get_multiple_posts = async (
       },
       limit: postLimit,
       order: [['updatedAt', 'DESC']],
+      offset: dynamicOffset,
     });
 
     if (!allPosts) {

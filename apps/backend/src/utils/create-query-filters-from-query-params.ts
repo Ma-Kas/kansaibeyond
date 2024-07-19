@@ -20,6 +20,22 @@ export const createLimit = (req: Request) => {
   return Number(req.query.limit);
 };
 
+// Offsets the query by number of rows provided, to skip those x first entries
+// Useful for pagination
+export const createOffset = (req: Request) => {
+  if (!req.query.offset || typeof req.query.offset !== 'string') {
+    return undefined;
+  }
+
+  if (
+    Number.isNaN(req.query.offset) ||
+    !Number.isInteger(Number(req.query.offset))
+  )
+    return undefined;
+
+  return Number(req.query.offset);
+};
+
 // Create filter for post query to account for optional query strings category, tag and user
 // Always includes filter to limit post status to published
 export const createDynamicWhere = (req: Request) => {
