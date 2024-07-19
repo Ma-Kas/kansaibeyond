@@ -129,6 +129,45 @@
 }
 
 /*  */
+/* Category Card */
+/*  */
+.category_card {
+  --category-name-container-height: 40px;
+  --category-name-container-width: 250px;
+  position: relative;
+  overflow: hidden;
+}
+
+.category_card_image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background-color: var(--color-panda-grey-0);
+  margin: 0 0 calc(var(--category-name-container-height) / 2);
+}
+
+.category_card_bottom {
+  position: absolute;
+  bottom: 3px; /* Necessary hack to prevent shadow clipping due to overflow hidden */
+  left: 0;
+  right: 0;
+  background-color: var(--color-page-bg);
+  box-shadow: var(--box-shadow-card);
+  width: var(--category-name-container-width);
+  min-height: var(--category-name-container-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.category_card_bottom div {
+  background-color: var(--color-panda-grey-0);
+  border-radius: 0.5rem;
+  height: 20px;
+  width: 150px;
+}
+
+/*  */
 /* Affiliate Card */
 /*  */
 .affiliate_card {
@@ -201,6 +240,7 @@
 /* Shimmer Animation */
 /*  */
 .shimmer::before {
+  z-index: var(--z-index-loading-shimmer);
   position: absolute;
   inset: 0;
   content: '';
