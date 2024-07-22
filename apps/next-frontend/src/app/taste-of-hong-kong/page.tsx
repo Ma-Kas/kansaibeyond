@@ -7,7 +7,7 @@ import {
   KANSAIBEYOND_EMAIL,
   KANSAIBEYOND_THATCH_HK_FOOD,
 } from '@/config/constants';
-import dimSumImage from '@public/images/hk_dim_sum.jpg';
+import dimSumImage from '@public/images/hk_dim_sum_opt_a.webp';
 
 import classes from './TasteHK.module.css';
 
