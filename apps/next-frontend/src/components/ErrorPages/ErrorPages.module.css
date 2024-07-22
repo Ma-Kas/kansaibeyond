@@ -1,0 +1,59 @@
+.error_section {
+  font-family: var(--font-family-light);
+  color: var(--color-page-off-black);
+  text-align: center;
+  max-width: var(--page-content-max-width);
+  margin: 1rem auto var(--page-section-gap-handwriting);
+  padding: 0 var(--page-padding-horizontal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error_content {
+  max-width: var(--error-page-content-max-width);
+  font-family: var(--font-family-light);
+  font-weight: var(--font-weight-regular);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error_content * {
+  margin: 0;
+}
+
+.error_content p:first-child {
+  font-size: 5rem;
+  color: var(--color-panda-grey-5);
+}
+
+.error_content h1 {
+  font-size: var(--font-size-page-section-heading);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.error_image {
+  max-width: var(--error-page-image-max-width);
+  height: auto;
+}
+
+.button_link {
+  text-decoration: none;
+  color: var(--color-page-bg);
+  background-color: var(--color-panda-orange-5);
+  margin-top: 2rem;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button_link:hover {
+  background: transparent;
+  color: var(--color-panda-orange-5);
+  outline: 1px solid var(--color-panda-orange-5);
+}
