@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Tag, Post } from '../../models';
+import NotFoundError from '../../errors/NotFoundError';
 
 export const get_all_tags = async (
   _req: Request,
@@ -19,6 +20,10 @@ export const get_all_tags = async (
       ],
       order: [['tagName', 'ASC']],
     });
+
+    if (!tags) {
+      throw new NotFoundError({ message: 'No tags found' });
+    }
 
     res.status(200).json(tags);
   } catch (err: unknown) {
@@ -44,6 +49,9 @@ export const get_one_tag = async (
         },
       ],
     });
+    if (!tag) {
+      throw new NotFoundError({ message: 'Tag not found.' });
+    }
     res.status(200).json(tag);
   } catch (err: unknown) {
     next(err);
