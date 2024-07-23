@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
+import { handleRequestErrors } from '@/utils/backend-error-response-validation';
+import CustomError from '@/utils/custom-error';
 
 // Zod Schemas
 const userRoleSchema = z.union([
@@ -35,14 +37,23 @@ export type Affiliate = z.infer<typeof affiliateSchema>;
 
 const allAffiliatesSchema = z.array(affiliateSchema);
 
+// @ts-expect-error: return paths handled within handeRequestErrors
 export const getAllAffiliates = async () => {
-  const response = await fetch(`${BACKEND_BASE_URL}/affiliates`);
-  if (!response.ok) {
-    throw new Error('Affiliate fetch error\n');
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/affiliates`);
+
+    if (!response.ok) {
+      throw new CustomError({
+        digest: response.statusText,
+        message: response.statusText,
+      });
+    }
+
+    const data: unknown = await response.json();
+
+    const parsedAffiliates = allAffiliatesSchema.parse(data);
+    return parsedAffiliates;
+  } catch (err: unknown) {
+    handleRequestErrors(err);
   }
-
-  const data: unknown = await response.json();
-
-  const parsedAffiliates = allAffiliatesSchema.parse(data);
-  return parsedAffiliates;
 };
