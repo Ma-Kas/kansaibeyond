@@ -1,38 +1,46 @@
-import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
-import { fromZodError } from 'zod-validation-error';
+import CustomError from './custom-error';
+import { isNotFoundError } from 'next/dist/client/components/not-found';
 
-export const handleRequestErrors = (err: unknown) => {
+export const ERRORS_DICTIONARY = {
+  UNEXPECTED_ERROR: 'Unexpected Error',
+  BAD_REQUEST: 'Bad Request Error',
+  SERVER_ERROR: 'Server Error',
+  NOT_FOUND: 'Not Found',
+};
+
+export const handleRequestErrors = (err: unknown): never => {
+  // Error should not be null, early escape hatch
   if (err === null) {
-    throw new Error('Unexpected error!');
-  }
-  if (err instanceof AxiosError) {
-    // Axios Errors, anything regarding actual response, request cycle
-    const response = err.response;
-
-    if (!response) {
-      // Network errors pass along message
-      throw new Error(err.message);
-    }
-
-    if (
-      // Try to get custom error message from backend, else throw axios error message
-      !response.data?.errors[0].message ||
-      typeof response.data?.errors[0].message !== 'string'
-    ) {
-      throw new Error(err.message);
-    } else {
-      const message = response.data?.errors[0].message as string;
-      throw new Error(message);
-    }
-  } else if (err instanceof ZodError) {
-    // Error thrown during zod validation of received data
-    const validationError = fromZodError(err, {
-      includePath: true,
+    throw new CustomError({
+      digest: ERRORS_DICTIONARY.UNEXPECTED_ERROR,
+      message: ERRORS_DICTIONARY.UNEXPECTED_ERROR,
     });
-    throw new Error(validationError.toString());
-  } else {
-    // Unhandled error, pass along message
+  }
+  if (err instanceof CustomError) {
+    // Error returned from backend, meaning database or server error
     throw err;
+  } else if (isNotFoundError(err)) {
+    // Forcing Next.js NotFoundPage rendering
+    throw err;
+  } else if (err instanceof ZodError) {
+    console.log(err);
+    // Error thrown during zod validation of received data
+    throw new CustomError({
+      digest: ERRORS_DICTIONARY.BAD_REQUEST,
+      message: ERRORS_DICTIONARY.BAD_REQUEST,
+    });
+  } else if (err instanceof Error && err.message === 'fetch failed') {
+    // Next.js fetching error
+    throw new CustomError({
+      digest: ERRORS_DICTIONARY.SERVER_ERROR,
+      message: ERRORS_DICTIONARY.SERVER_ERROR,
+    });
+  } else {
+    // Any remaining unhandled errors
+    throw new CustomError({
+      digest: ERRORS_DICTIONARY.UNEXPECTED_ERROR,
+      message: ERRORS_DICTIONARY.UNEXPECTED_ERROR,
+    });
   }
 };
