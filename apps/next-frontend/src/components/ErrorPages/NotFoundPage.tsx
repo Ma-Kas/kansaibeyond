@@ -1,10 +1,11 @@
 /* eslint @typescript-eslint/no-unsafe-assignment: 0 */
 // Necessary due to Next.js typing svg in Image component as "any"
 
+import Link from 'next/link';
 import Image from 'next/image';
 import errorPanda from '@public/images/red_panda_error.svg';
+
 import classes from './ErrorPages.module.css';
-import Link from 'next/link';
 
 const NotFoundPage = () => {
   return (
