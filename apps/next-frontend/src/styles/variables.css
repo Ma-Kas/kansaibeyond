@@ -108,6 +108,7 @@
   --color-panda-grey-8: hsl(0, 0%, 27%);
   --color-panda-grey-9: hsl(0, 0%, 18%);
 
+  --color-status-error-bg: #e57373;
   --color-status-blue: #228be6;
   --color-status-greyed: #868aa5;
   --color-status-disabled: #ced4da;
