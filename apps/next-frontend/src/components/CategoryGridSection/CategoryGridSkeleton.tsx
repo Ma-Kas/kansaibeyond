@@ -9,7 +9,7 @@ const CategoryGridSectionSkeleton = ({ children }: { children: ReactNode }) => {
       {children}
       <div className={classes['category_cards_container']}>
         {[...Array(6).keys()].map((value) => {
-          return <CategoryCardSkeleton key={value} />;
+          return <CategoryCardSkeleton key={value} cardNo={value} />;
         })}
       </div>
     </section>

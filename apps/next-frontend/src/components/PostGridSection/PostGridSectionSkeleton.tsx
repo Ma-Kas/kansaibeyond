@@ -19,7 +19,7 @@ const PostGridSectionSkeleton = ({
       {children}
       <div className={classes['post_cards_container']}>
         {[...Array(cardNumber).keys()].map((value) => {
-          return <PostCardSkeleton key={value} />;
+          return <PostCardSkeleton key={value} cardNo={value} />;
         })}
       </div>
       {withViewMoreLink && (

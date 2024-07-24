@@ -1,9 +1,9 @@
 import classes from './Skeletons.module.css';
 
-const CategoryCardSkeleton = ({ key }: { key: number }) => {
+const CategoryCardSkeleton = ({ cardNo }: { cardNo: number }) => {
   return (
     <article
-      key={key}
+      key={cardNo}
       className={`${classes['category_card']} ${classes.shimmer}`}
     >
       <div className={classes['category_card_image']}></div>
