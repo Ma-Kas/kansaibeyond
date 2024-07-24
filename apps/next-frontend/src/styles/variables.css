@@ -24,6 +24,9 @@
   --hire-me-section-height: 350px;
   --more-about-section-height: 400px;
 
+  --error-page-content-max-width: 500px;
+  --error-page-image-max-width: 300px;
+
   --banner-height: 440px;
   --hero-banner-height: 350px;
   --no-posts-min-height: 3rem;
@@ -40,6 +43,8 @@
   --z-index-backgrounds: -1;
   --z-index-header: 999;
   --z-index-mobile-nav: 998;
+  --z-index-modals: 997;
+  --z-index-loading-shimmer: 996;
 
   /* Font variables */
   --font-size-ui-regular: 14px;
@@ -103,6 +108,7 @@
   --color-panda-grey-8: hsl(0, 0%, 27%);
   --color-panda-grey-9: hsl(0, 0%, 18%);
 
+  --color-status-error-bg: #e57373;
   --color-status-blue: #228be6;
   --color-status-greyed: #868aa5;
   --color-status-disabled: #ced4da;

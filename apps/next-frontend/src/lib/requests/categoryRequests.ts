@@ -1,5 +1,8 @@
 import { z } from 'zod';
+import { notFound } from 'next/navigation';
 import { BACKEND_BASE_URL } from '@/config/constants';
+import { handleRequestErrors } from '@/utils/backend-error-response-validation';
+import CustomError from '@/utils/custom-error';
 
 // Zod Schemas
 // prettier-ignore
@@ -36,28 +39,47 @@ const allCategoriesSchema = z.array(categorySchema);
 const singleCategorySchema = categorySchema.omit({ posts: true });
 
 export const getAllCategoriesList = async () => {
-  const response = await fetch(`${BACKEND_BASE_URL}/categories`);
-  if (!response.ok) {
-    throw new Error('Categories fetch error\n');
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/categories`);
+
+    if (!response.ok) {
+      throw new CustomError({
+        digest: response.statusText,
+        message: response.statusText,
+      });
+    }
+
+    const data: unknown = await response.json();
+
+    const parsedCategories = allCategoriesSchema.parse(data);
+    return parsedCategories;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
   }
-
-  const data: unknown = await response.json();
-
-  const parsedCategories = allCategoriesSchema.parse(data);
-  return parsedCategories;
 };
 
 export const getOneCategory = async (categorySlug: string) => {
-  const response = await fetch(
-    `${BACKEND_BASE_URL}/categories/${categorySlug}`
-  );
+  try {
+    const response = await fetch(
+      `${BACKEND_BASE_URL}/categories/${categorySlug}`
+    );
 
-  if (!response.ok) {
-    throw new Error('Category fetch error\n');
+    if (!response.ok) {
+      if (response.status === 404) {
+        notFound();
+      } else {
+        throw new CustomError({
+          digest: response.statusText,
+          message: response.statusText,
+        });
+      }
+    }
+
+    const data: unknown = await response.json();
+
+    const parsedCategory = singleCategorySchema.parse(data);
+    return parsedCategory;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
   }
-
-  const data: unknown = await response.json();
-
-  const parsedCategory = singleCategorySchema.parse(data);
-  return parsedCategory;
 };

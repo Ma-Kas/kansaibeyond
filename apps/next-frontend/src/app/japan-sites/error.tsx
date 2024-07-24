@@ -1,12 +1,18 @@
-import { Suspense } from 'react';
+'use client';
+
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
-import AffiliateCardsSection from '@/components/AffiliateCardsSection/AffiliateCardsSection';
-import AffiliateCardsSectionSkeleton from '@/components/AffiliateCardsSection/AffiliateCardsSectionSkeleton';
+import PostGridError from '@/components/ErrorPages/PostGridError';
 import { KANSAIBEYOND_EMAIL } from '@/config/constants';
 
 import classes from './JapanSites.module.css';
 
-const JapanSitesPage = () => {
+const Error = ({
+  error,
+  reset,
+}: {
+  error: Error & { digest: string };
+  reset: () => void;
+}) => {
   return (
     <>
       <section className={classes['banner_section']}>
@@ -43,11 +49,9 @@ const JapanSitesPage = () => {
           </a>
         </article>
       </section>
-      <Suspense fallback={<AffiliateCardsSectionSkeleton />}>
-        <AffiliateCardsSection />
-      </Suspense>
+      <PostGridError errorMessage={error.digest} reset={reset}></PostGridError>
     </>
   );
 };
 
-export default JapanSitesPage;
+export default Error;

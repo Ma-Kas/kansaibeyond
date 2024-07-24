@@ -3,10 +3,6 @@
   margin: 0 auto;
   margin-bottom: var(--page-section-gap-handwriting);
   padding: 0 var(--page-padding-horizontal);
-}
-
-.banner_section {
-  margin-bottom: var(--page-section-gap);
   display: flex;
   justify-content: center;
   align-items: center;

@@ -5,21 +5,25 @@ import {
   CLOUDINARY_BASE_URL,
   POST_FEATURED_IMAGE_TRANSFORM,
 } from '@/config/constants';
-import { PostForList } from '@/lib/requests/postRequests';
+import { getAllPosts } from '@/lib/requests/postRequests';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
 import PostInformation from '../PostInformation/PostInformation';
 
 import classes from './FeaturedPost.module.css';
 
-const FeaturedPost = async ({ post }: { post: PostForList }) => {
-  const blurDataUrl = await getBase64ImageUrl(post.coverImage!.urlSlug);
+const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
+  const post = await getAllPosts(queryParam);
+
+  const blurDataUrl = post[0].coverImage
+    ? await getBase64ImageUrl(post[0].coverImage.urlSlug)
+    : '';
 
   return (
-    <article key={post.id} className={classes['featured_post']}>
+    <article key={post[0].id} className={classes['featured_post']}>
       <figure className={classes['featured_post_image_container']}>
         <Image
           className={classes['featured_post_image']}
-          src={`${CLOUDINARY_BASE_URL}${POST_FEATURED_IMAGE_TRANSFORM}${post.coverImage?.urlSlug}`}
+          src={`${CLOUDINARY_BASE_URL}${POST_FEATURED_IMAGE_TRANSFORM}${post[0].coverImage?.urlSlug}`}
           alt=''
           sizes='(max-width: 1024px) 90vw, 1100px'
           priority={true}
@@ -28,9 +32,9 @@ const FeaturedPost = async ({ post }: { post: PostForList }) => {
           blurDataURL={blurDataUrl}
         />
         <div className={classes['featured_post_title_category_container']}>
-          <h2>{post.title}</h2>
+          <h2>{post[0].title}</h2>
           <div className={classes['featured_post_category_link_container']}>
-            {post.categories.map((category, index, arr) => {
+            {post[0].categories.map((category, index, arr) => {
               return (
                 <Fragment key={category.id}>
                   <Link
@@ -47,11 +51,11 @@ const FeaturedPost = async ({ post }: { post: PostForList }) => {
         </div>
       </figure>
       <div className={classes['featured_post_bottom']}>
-        <PostInformation user={post.user} postDate={post.updatedAt} />
+        <PostInformation user={post[0].user} postDate={post[0].updatedAt} />
         <Link
           className={classes['featured_post_link']}
-          href={`blog/posts/${post.postSlug}`}
-          aria-label={post.title}
+          href={`blog/posts/${post[0].postSlug}`}
+          aria-label={post[0].title}
         >
           VIEW POST
         </Link>

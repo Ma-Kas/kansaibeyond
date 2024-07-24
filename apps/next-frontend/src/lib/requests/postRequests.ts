@@ -1,5 +1,8 @@
 import { z } from 'zod';
+import { notFound } from 'next/navigation';
 import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
+import CustomError from '@/utils/custom-error';
+import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 
 // Zod Schemas
 // prettier-ignore
@@ -118,37 +121,64 @@ export type PostUser = z.infer<typeof postUserSchema>;
 const allPostsSchema = z.array(listPostSchema);
 
 export const getAllPosts = async (queryParams?: string) => {
-  const response = queryParams
-    ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`)
-    : await fetch(`${BACKEND_BASE_URL}/posts`);
-  if (!response.ok) {
-    throw new Error('Post list fetch error\n');
-  }
+  try {
+    const response = queryParams
+      ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`)
+      : await fetch(`${BACKEND_BASE_URL}/posts`);
 
-  const data: unknown = await response.json();
-  const parsedPosts = allPostsSchema.parse(data);
-  return parsedPosts;
+    if (!response.ok) {
+      throw new CustomError({
+        digest: response.statusText,
+        message: response.statusText,
+      });
+    }
+
+    const data: unknown = await response.json();
+    const parsedPosts = allPostsSchema.parse(data);
+    return parsedPosts;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
+  }
 };
 
 export const getSearchPosts = async (query: string) => {
-  const response = await fetch(`${BACKEND_BASE_URL}/posts/search?q=${query}`);
-  if (!response.ok) {
-    throw new Error('Post list fetch error\n');
-  }
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/posts/search?q=${query}`);
 
-  const data: unknown = await response.json();
-  const parsedPosts = allPostsSchema.parse(data);
-  return parsedPosts;
+    if (!response.ok) {
+      throw new CustomError({
+        digest: response.statusText,
+        message: response.statusText,
+      });
+    }
+
+    const data: unknown = await response.json();
+    const parsedPosts = allPostsSchema.parse(data);
+    return parsedPosts;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
+  }
 };
 
 export const getOnePost = async (postSlug: string) => {
-  const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`);
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`);
 
-  if (!response.ok) {
-    throw new Error('Post fetch error\n');
+    if (!response.ok) {
+      if (response.status === 404) {
+        notFound();
+      } else {
+        throw new CustomError({
+          digest: response.statusText,
+          message: response.statusText,
+        });
+      }
+    }
+
+    const data: unknown = await response.json();
+    const parsedPost = postSchema.parse(data);
+    return parsedPost;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
   }
-
-  const data: unknown = await response.json();
-  const parsedPost = postSchema.parse(data);
-  return parsedPost;
 };

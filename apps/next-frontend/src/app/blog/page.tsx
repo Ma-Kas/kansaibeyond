@@ -1,14 +1,25 @@
-import { getAllPosts } from '@/lib/requests/postRequests';
-
+import { Suspense } from 'react';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
+import CategoryGridSectionSkeleton from '@/components/CategoryGridSection/CategoryGridSkeleton';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
+import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './blog.module.css';
+import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 
-const BlogHubPage = async () => {
-  const posts = await getAllPosts('?limit=7');
+const BlogHubPage = () => {
+  const postsSectionHeading = (
+    <SectionHeading>
+      <span>recent</span>&nbsp;posts
+    </SectionHeading>
+  );
+  const categorySectionHeading = (
+    <SectionHeading>
+      <span>explore</span>&nbsp;categories
+    </SectionHeading>
+  );
 
   return (
     <>
@@ -16,18 +27,35 @@ const BlogHubPage = async () => {
         <SectionHeading>
           <span>Featured</span>&nbsp;post
         </SectionHeading>
-        <FeaturedPost post={posts[0]} />
+        <Suspense fallback={<FeaturedPostSkeleton />}>
+          <FeaturedPost queryParam='?limit=1' />
+        </Suspense>
       </section>
-      <PostGridSection posts={posts.slice(1)} withViewMoreLink={true}>
-        <SectionHeading>
-          <span>recent</span>&nbsp;posts
-        </SectionHeading>
-      </PostGridSection>
-      <CategoryGridSection>
-        <SectionHeading>
-          <span>explore</span>&nbsp;categories
-        </SectionHeading>
-      </CategoryGridSection>
+      {/* Post Card Grid */}
+      <Suspense
+        fallback={
+          <PostGridSectionSkeleton cardNumber={6} withViewMoreLink={true}>
+            {postsSectionHeading}
+          </PostGridSectionSkeleton>
+        }
+      >
+        <PostGridSection
+          queryParams='?limit=6&offset=1'
+          withViewMoreLink={true}
+        >
+          {postsSectionHeading}
+        </PostGridSection>
+      </Suspense>
+      {/* Category Card Grid */}
+      <Suspense
+        fallback={
+          <CategoryGridSectionSkeleton>
+            {categorySectionHeading}
+          </CategoryGridSectionSkeleton>
+        }
+      >
+        <CategoryGridSection>{categorySectionHeading}</CategoryGridSection>
+      </Suspense>
     </>
   );
 };

@@ -1,7 +1,6 @@
-import { Suspense } from 'react';
+'use client';
+
 import Image from 'next/image';
-import PostGridSection from '@/components/PostGridSection/PostGridSection';
-import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import {
   KANSAIBEYOND_EMAIL,
@@ -10,8 +9,15 @@ import {
 import dimSumImage from '@public/images/hk_dim_sum_opt_a.webp';
 
 import classes from './TasteHK.module.css';
+import PostGridError from '@/components/ErrorPages/PostGridError';
 
-const TasteOfHKPage = () => {
+const Error = ({
+  error,
+  reset,
+}: {
+  error: Error & { digest: string };
+  reset: () => void;
+}) => {
   const reviewSectionHeading = (
     <SectionHeading>
       <span>explore</span>&nbsp;reviews
@@ -87,22 +93,11 @@ const TasteOfHKPage = () => {
           </p>
         </article>
       </section>
-      <Suspense
-        fallback={
-          <PostGridSectionSkeleton cardNumber={3} withViewMoreLink={false}>
-            {reviewSectionHeading}
-          </PostGridSectionSkeleton>
-        }
-      >
-        <PostGridSection
-          queryParams='?tag=taste-of-hong-kong'
-          withViewMoreLink={false}
-        >
-          {reviewSectionHeading}
-        </PostGridSection>
-      </Suspense>
+      <PostGridError errorMessage={error.digest} reset={reset}>
+        {reviewSectionHeading}
+      </PostGridError>
     </>
   );
 };
 
-export default TasteOfHKPage;
+export default Error;

@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import Link from 'next/link';
 import constructComponentTree from '@/utils/postContentConstructor';
-import PostGridSection from '../PostGridSection/PostGridSection';
+import RelatedPostGridSection from '../PostGridSection/RelatedPostGridSection';
 import SectionHeading from '../SectionHeading/SectionHeading';
 import UserInformation from '../UserInformation/UserInformation';
 import { Post } from '@/lib/requests/postRequests';
@@ -55,11 +55,14 @@ const BlogPostView = ({ postData }: { postData: Post }) => {
         </footer>
       </article>
       {postData.relatedPosts && postData.relatedPosts.length !== 0 && (
-        <PostGridSection posts={postData.relatedPosts} withViewMoreLink={false}>
+        <RelatedPostGridSection
+          posts={postData.relatedPosts}
+          withViewMoreLink={false}
+        >
           <SectionHeading>
             <span>related</span>&nbsp;posts
           </SectionHeading>
-        </PostGridSection>
+        </RelatedPostGridSection>
       )}
     </>
   );

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import PostCard from '../PostCard/PostCard';
-import { getAllPosts } from '@/lib/requests/postRequests';
+import { getSearchPosts } from '@/lib/requests/postRequests';
 
 import classes from './PostGridSection.module.css';
 import NoPosts from '../NoPosts/NoPosts';
@@ -9,18 +9,18 @@ import SectionHeading from '../SectionHeading/SectionHeading';
 
 type Props = {
   withViewMoreLink: boolean;
-  queryParams: string;
+  query: string;
   noResultMessage?: string;
   children?: ReactNode;
 };
 
-const PostGridSection = async ({
+const SearchPostGridSection = async ({
   withViewMoreLink,
-  queryParams,
+  query,
   noResultMessage,
   children,
 }: Props) => {
-  const posts = await getAllPosts(queryParams);
+  const posts = await getSearchPosts(query);
 
   if (noResultMessage) {
     return (
@@ -43,7 +43,7 @@ const PostGridSection = async ({
         {posts.length === 0 && (
           <NoPosts message={noResultMessage}>
             <SectionHeading>
-              <span>explore</span>&nbsp;posts
+              <span>Found</span>&nbsp;posts
             </SectionHeading>
           </NoPosts>
         )}
@@ -68,4 +68,4 @@ const PostGridSection = async ({
   }
 };
 
-export default PostGridSection;
+export default SearchPostGridSection;

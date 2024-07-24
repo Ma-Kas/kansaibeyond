@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { Affiliate, User } from '../../models';
+import NotFoundError from '../../errors/NotFoundError';
 
 export const get_all_affiliates = async (
   _req: Request,
@@ -20,6 +21,10 @@ export const get_all_affiliates = async (
       ],
       order: [['blogName', 'ASC']],
     });
+
+    if (!affiliates) {
+      throw new NotFoundError({ message: 'No affiliates found.' });
+    }
 
     res.status(200).json(affiliates);
   } catch (err: unknown) {

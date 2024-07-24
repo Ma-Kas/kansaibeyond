@@ -1,0 +1,273 @@
+/*  */
+/* Featured Post Card */
+/*  */
+.featured_post {
+  --info-section-height: 90px;
+
+  position: relative;
+  box-shadow: var(--box-shadow-card);
+  overflow: hidden;
+}
+
+.featured_post_image {
+  background-color: var(--color-panda-grey-0);
+  width: 100%;
+  height: calc(var(--banner-height) - var(--info-section-height));
+  margin: 0;
+}
+
+.featured_post_title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 2rem;
+}
+
+.featured_post_title div {
+  margin-top: 0.5rem;
+  background-color: var(--color-page-bg);
+  border-radius: 0.5rem;
+}
+
+.featured_post_title div:first-child {
+  height: 45px;
+  width: max(150px, 30%);
+  max-width: 80%;
+}
+
+.featured_post_title div:nth-child(2) {
+  height: 20px;
+  width: max(200px, 40%);
+  max-width: 90%;
+}
+
+.featured_post_bottom {
+  box-sizing: border-box;
+  min-height: var(--info-section-height);
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  justify-content: left;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+}
+
+.featured_post_bottom div {
+  background-color: var(--color-panda-grey-0);
+  border-radius: 0.5rem;
+  height: 20px;
+  width: 80px;
+}
+
+.featured_post_bottom div:first-child {
+  height: 32px;
+  width: min(170px, 90%);
+}
+
+/*  */
+/* Post Card  */
+/*  */
+.post_card {
+  position: relative;
+  box-shadow: var(--box-shadow-card);
+  overflow: hidden;
+}
+
+.post_card_image {
+  background-color: var(--color-panda-grey-0);
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0;
+}
+
+.post_card_title {
+  position: absolute;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+}
+
+.post_card_title div {
+  margin-top: 0.5rem;
+  background-color: var(--color-page-bg);
+  border-radius: 0.5rem;
+}
+
+.post_card_title div:first-child {
+  height: 45px;
+  width: max(200px, 50%);
+  max-width: 80%;
+}
+
+.post_card_title div:nth-child(2) {
+  height: 18px;
+  width: max(200px, 80%);
+  max-width: 90%;
+}
+
+.post_card_bottom {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  justify-content: left;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.post_card_bottom div {
+  background-color: var(--color-panda-grey-0);
+  border-radius: 0.5rem;
+  height: 20px;
+  width: 80px;
+}
+
+.post_card_bottom div:first-child {
+  height: 32px;
+  width: min(160px, 90%);
+}
+
+/*  */
+/* Category Card */
+/*  */
+.category_card {
+  --category-name-container-height: 40px;
+  --category-name-container-width: 250px;
+  position: relative;
+  overflow: hidden;
+}
+
+.category_card_image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background-color: var(--color-panda-grey-0);
+  margin: 0 0 calc(var(--category-name-container-height) / 2);
+}
+
+.category_card_bottom {
+  position: absolute;
+  bottom: 3px; /* Necessary hack to prevent shadow clipping due to overflow hidden */
+  left: 0;
+  right: 0;
+  background-color: var(--color-page-bg);
+  box-shadow: var(--box-shadow-card);
+  width: var(--category-name-container-width);
+  min-height: var(--category-name-container-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.category_card_bottom div {
+  background-color: var(--color-panda-grey-0);
+  border-radius: 0.5rem;
+  height: 20px;
+  width: 150px;
+}
+
+/*  */
+/* Affiliate Card */
+/*  */
+.affiliate_card {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.affiliate_card:nth-of-type(even) {
+  background-color: var(--color-panda-grey-0);
+}
+
+.affiliate_card:nth-of-type(odd) {
+  background-color: var(--color-panda-grey-1);
+}
+
+.affiliate_card div {
+  background-color: var(--color-page-bg);
+  border-radius: 0.5rem;
+}
+
+.affiliate_card div:first-child {
+  height: 40px;
+  width: min(300px, 60%);
+}
+
+.affiliate_card div:nth-child(2) {
+  height: 20px;
+  width: min(500px, 80%);
+}
+
+/*  */
+/* Category Banner */
+/*  */
+.category_banner {
+  position: relative;
+  width: 100%;
+  height: var(--banner-height);
+  background-color: var(--color-panda-grey-0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+.category_banner div {
+  background-color: var(--color-page-bg);
+  border-radius: 0.5rem;
+}
+
+.category_banner div:first-child {
+  height: 80px;
+  width: min(300px, 60%);
+}
+
+.category_banner div:nth-child(2) {
+  height: 60px;
+  width: min(500px, 80%);
+}
+
+/*  */
+/* Shimmer Animation */
+/*  */
+.shimmer::before {
+  z-index: var(--z-index-loading-shimmer);
+  position: absolute;
+  inset: 0;
+  content: '';
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-page-bg) 60%,
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite ease;
+}
+
+.affiliate_card:nth-of-type(even).shimmer::before {
+  animation-delay: 500ms;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Mobile Only Media Query */
+@media (max-width: 640px) {
+  .featured_post_title,
+  .featured_post_bottom {
+    padding: 1rem;
+  }
+}
