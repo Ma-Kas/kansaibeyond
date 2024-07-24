@@ -27,7 +27,6 @@ export type Tag = z.infer<typeof tagSchema>;
 
 const allTagsSchema = z.array(tagSchema);
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getAllTags = async () => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/tags`);
@@ -44,11 +43,10 @@ export const getAllTags = async () => {
     const parsedTags = allTagsSchema.parse(data);
     return parsedTags;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getOneTag = async (tagSlug: string) => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
@@ -69,6 +67,6 @@ export const getOneTag = async (tagSlug: string) => {
     const parsedTag = tagSchema.parse(data);
     return parsedTag;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };

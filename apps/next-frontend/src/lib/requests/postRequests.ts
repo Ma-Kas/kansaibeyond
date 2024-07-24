@@ -120,7 +120,6 @@ export type PostUser = z.infer<typeof postUserSchema>;
 
 const allPostsSchema = z.array(listPostSchema);
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getAllPosts = async (queryParams?: string) => {
   try {
     const response = queryParams
@@ -138,11 +137,10 @@ export const getAllPosts = async (queryParams?: string) => {
     const parsedPosts = allPostsSchema.parse(data);
     return parsedPosts;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getSearchPosts = async (query: string) => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/posts/search?q=${query}`);
@@ -158,11 +156,10 @@ export const getSearchPosts = async (query: string) => {
     const parsedPosts = allPostsSchema.parse(data);
     return parsedPosts;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getOnePost = async (postSlug: string) => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`);
@@ -182,6 +179,6 @@ export const getOnePost = async (postSlug: string) => {
     const parsedPost = postSchema.parse(data);
     return parsedPost;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };

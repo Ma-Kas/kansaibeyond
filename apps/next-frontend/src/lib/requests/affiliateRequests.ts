@@ -37,7 +37,6 @@ export type Affiliate = z.infer<typeof affiliateSchema>;
 
 const allAffiliatesSchema = z.array(affiliateSchema);
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getAllAffiliates = async () => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/affiliates`);
@@ -54,6 +53,6 @@ export const getAllAffiliates = async () => {
     const parsedAffiliates = allAffiliatesSchema.parse(data);
     return parsedAffiliates;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };

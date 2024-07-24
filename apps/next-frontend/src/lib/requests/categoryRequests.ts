@@ -38,7 +38,6 @@ export type Category = z.infer<typeof categorySchema>;
 const allCategoriesSchema = z.array(categorySchema);
 const singleCategorySchema = categorySchema.omit({ posts: true });
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getAllCategoriesList = async () => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/categories`);
@@ -55,11 +54,10 @@ export const getAllCategoriesList = async () => {
     const parsedCategories = allCategoriesSchema.parse(data);
     return parsedCategories;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };
 
-// @ts-expect-error: return paths handled within handeRequestErrors
 export const getOneCategory = async (categorySlug: string) => {
   try {
     const response = await fetch(
@@ -82,6 +80,6 @@ export const getOneCategory = async (categorySlug: string) => {
     const parsedCategory = singleCategorySchema.parse(data);
     return parsedCategory;
   } catch (err: unknown) {
-    handleRequestErrors(err);
+    return handleRequestErrors(err);
   }
 };

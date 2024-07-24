@@ -9,15 +9,14 @@ export const ERRORS_DICTIONARY = {
   NOT_FOUND: 'Not Found',
 };
 
-export const handleRequestErrors = (err: unknown): never => {
+export const handleRequestErrors = (err: unknown) => {
   // Error should not be null, early escape hatch
   if (err === null) {
     throw new CustomError({
       digest: ERRORS_DICTIONARY.UNEXPECTED_ERROR,
       message: ERRORS_DICTIONARY.UNEXPECTED_ERROR,
     });
-  }
-  if (err instanceof CustomError) {
+  } else if (err instanceof CustomError) {
     // Error returned from backend, meaning database or server error
     throw err;
   } else if (isNotFoundError(err)) {
