@@ -10,6 +10,20 @@
   align-items: center;
 }
 
+.post_grid_section {
+  max-width: var(--page-content-max-width);
+  margin: 0 auto;
+  margin-bottom: var(--page-section-gap-handwriting);
+  padding: 0 var(--page-padding-horizontal);
+}
+
+.error_container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  min-height: var(--no-posts-min-height);
+}
+
 .error_content,
 .featured_post_content {
   font-family: var(--font-family-light);
@@ -44,6 +58,7 @@
 }
 
 .error_content h1,
+.error_content h3,
 .featured_post_content h3 {
   font-size: var(--font-size-page-section-heading);
   text-transform: uppercase;
