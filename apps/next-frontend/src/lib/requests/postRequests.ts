@@ -118,7 +118,9 @@ export type Post = z.infer<typeof postSchema>;
 export type PostForList = z.infer<typeof listPostSchema>;
 export type PostUser = z.infer<typeof postUserSchema>;
 
-const allPostsSchema = z.array(listPostSchema);
+const allPostsSchema = z
+  .object({ rows: z.array(listPostSchema), count: z.number() })
+  .strict();
 
 export const getAllPosts = async (queryParams?: string) => {
   try {
