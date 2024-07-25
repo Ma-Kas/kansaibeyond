@@ -23,7 +23,7 @@ const BlogPostView = ({ postData }: { postData: Post }) => {
                 return (
                   <Fragment key={category.id}>
                     <Link
-                      href={`/blog/categories/${category.categorySlug}`}
+                      href={`/blog/categories/${category.categorySlug}?page=1`}
                       aria-label={`Category: ${category.categoryName}`}
                     >
                       {category.categoryName}
@@ -41,7 +41,7 @@ const BlogPostView = ({ postData }: { postData: Post }) => {
                 return (
                   <Fragment key={tag.id}>
                     <Link
-                      href={`/blog/tags/${tag.tagSlug}`}
+                      href={`/blog/tags/${tag.tagSlug}?page=1`}
                       aria-label={`Tag: ${tag.tagName}`}
                     >
                       {tag.tagName}
@@ -55,10 +55,7 @@ const BlogPostView = ({ postData }: { postData: Post }) => {
         </footer>
       </article>
       {postData.relatedPosts && postData.relatedPosts.length !== 0 && (
-        <RelatedPostGridSection
-          posts={postData.relatedPosts}
-          withViewMoreLink={false}
-        >
+        <RelatedPostGridSection posts={postData.relatedPosts}>
           <SectionHeading>
             <span>related</span>&nbsp;posts
           </SectionHeading>

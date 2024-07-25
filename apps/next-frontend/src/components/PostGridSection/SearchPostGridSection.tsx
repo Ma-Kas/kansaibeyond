@@ -8,19 +8,19 @@ import NoPosts from '../NoPosts/NoPosts';
 import SectionHeading from '../SectionHeading/SectionHeading';
 
 type Props = {
-  withViewMoreLink: boolean;
+  withViewAllLink: boolean;
   query: string;
   noResultMessage?: string;
   children?: ReactNode;
 };
 
 const SearchPostGridSection = async ({
-  withViewMoreLink,
+  withViewAllLink,
   query,
   noResultMessage,
   children,
 }: Props) => {
-  const posts = await getSearchPosts(query);
+  const { rows: posts } = await getSearchPosts(query);
 
   if (noResultMessage) {
     return (
@@ -33,9 +33,9 @@ const SearchPostGridSection = async ({
                 return <PostCard key={post.id} post={post} />;
               })}
             </div>
-            {withViewMoreLink && (
+            {withViewAllLink && (
               <div className={classes['all_posts_link']}>
-                <Link href={'/blog/posts'}>VIEW ALL POSTS</Link>
+                <Link href={'/blog/posts?page=1'}>VIEW ALL POSTS</Link>
               </div>
             )}
           </section>
@@ -58,9 +58,9 @@ const SearchPostGridSection = async ({
             return <PostCard key={post.id} post={post} />;
           })}
         </div>
-        {withViewMoreLink && (
+        {withViewAllLink && (
           <div className={classes['all_posts_link']}>
-            <Link href={'/blog/posts'}>VIEW ALL POSTS</Link>
+            <Link href={'/blog/posts?page=1'}>VIEW ALL POSTS</Link>
           </div>
         )}
       </section>

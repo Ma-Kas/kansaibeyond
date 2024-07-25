@@ -33,7 +33,7 @@ const PostCard = async ({ post }: { post: PostForList }) => {
               return (
                 <Fragment key={category.id}>
                   <Link
-                    href={`/blog/categories/${category.categorySlug}`}
+                    href={`/blog/categories/${category.categorySlug}?page=1`}
                     aria-label={`Category: ${category.categoryName}`}
                   >
                     {category.categoryName}

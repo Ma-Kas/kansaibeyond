@@ -28,14 +28,14 @@ const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
 
         <Suspense
           fallback={
-            <PostGridSectionSkeleton cardNumber={3} withViewMoreLink={false}>
+            <PostGridSectionSkeleton cardNumber={3} withViewAllLink={false}>
               {resultSectionHeading}
             </PostGridSectionSkeleton>
           }
         >
           <SearchPostGridSection
             query={query}
-            withViewMoreLink={false}
+            withViewAllLink={false}
             noResultMessage='No posts match your search.'
           >
             {resultSectionHeading}

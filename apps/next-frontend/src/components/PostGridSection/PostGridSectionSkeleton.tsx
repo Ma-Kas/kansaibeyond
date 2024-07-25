@@ -5,13 +5,13 @@ import Link from 'next/link';
 
 type Props = {
   cardNumber: number;
-  withViewMoreLink: boolean;
+  withViewAllLink: boolean;
   children?: ReactNode;
 };
 
 const PostGridSectionSkeleton = ({
   cardNumber,
-  withViewMoreLink,
+  withViewAllLink,
   children,
 }: Props) => {
   return (
@@ -22,9 +22,9 @@ const PostGridSectionSkeleton = ({
           return <PostCardSkeleton key={value} cardNo={value} />;
         })}
       </div>
-      {withViewMoreLink && (
+      {withViewAllLink && (
         <div className={classes['all_posts_link']}>
-          <Link href={'/blog/posts'}>VIEW ALL POSTS</Link>
+          <Link href={'/blog/posts?page=1'}>VIEW ALL POSTS</Link>
         </div>
       )}
     </section>
