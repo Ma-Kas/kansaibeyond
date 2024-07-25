@@ -15,7 +15,7 @@ const CategoryCard = async ({ category }: { category: Category }) => {
   return (
     <article key={category.id} className={classes['category_card']}>
       <Link
-        href={`/blog/categories/${category.categorySlug}`}
+        href={`/blog/categories/${category.categorySlug}?page=1`}
         aria-label={category.categoryName}
       >
         <figure className={classes['category_card_image_container']}>

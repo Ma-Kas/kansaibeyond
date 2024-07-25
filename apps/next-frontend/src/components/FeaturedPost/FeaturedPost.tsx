@@ -12,7 +12,7 @@ import PostInformation from '../PostInformation/PostInformation';
 import classes from './FeaturedPost.module.css';
 
 const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
-  const post = await getAllPosts(queryParam);
+  const { rows: post } = await getAllPosts(queryParam);
 
   const blurDataUrl = post[0].coverImage
     ? await getBase64ImageUrl(post[0].coverImage.urlSlug)
@@ -38,7 +38,7 @@ const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
               return (
                 <Fragment key={category.id}>
                   <Link
-                    href={`/blog/categories/${category.categorySlug}`}
+                    href={`/blog/categories/${category.categorySlug}?page=1`}
                     aria-label={`Category: ${category.categoryName}`}
                   >
                     {category.categoryName}

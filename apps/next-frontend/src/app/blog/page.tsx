@@ -34,15 +34,12 @@ const BlogHubPage = () => {
       {/* Post Card Grid */}
       <Suspense
         fallback={
-          <PostGridSectionSkeleton cardNumber={6} withViewMoreLink={true}>
+          <PostGridSectionSkeleton cardNumber={6} withViewAllLink={true}>
             {postsSectionHeading}
           </PostGridSectionSkeleton>
         }
       >
-        <PostGridSection
-          queryParams='?limit=6&offset=1'
-          withViewMoreLink={true}
-        >
+        <PostGridSection queryParams='?limit=6&offset=1' withViewAllLink={true}>
           {postsSectionHeading}
         </PostGridSection>
       </Suspense>

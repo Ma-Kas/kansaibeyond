@@ -23,7 +23,6 @@ export const handleRequestErrors = (err: unknown) => {
     // Forcing Next.js NotFoundPage rendering
     throw err;
   } else if (err instanceof ZodError) {
-    console.log(err);
     // Error thrown during zod validation of received data
     throw new CustomError({
       digest: ERRORS_DICTIONARY.BAD_REQUEST,

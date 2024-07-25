@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import PostGridSection from '@/components/PostGridSection/PostGridSection';
+import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import CategoryBanner from '@/components/CategoryBanner/CategoryBanner';
 import CategoryBannerSkeleton from '@/components/Skeletons/CategoryBannerSkeleton';
@@ -8,8 +8,10 @@ import classes from './category.module.css';
 
 const CategoryPage = ({
   params: { categorySlug },
+  searchParams,
 }: {
   params: { categorySlug: string };
+  searchParams?: { page?: string; s?: string };
 }) => {
   return (
     <>
@@ -19,15 +21,15 @@ const CategoryPage = ({
         </Suspense>
       </section>
 
-      <PostGridSection
+      <PaginatedPostGridSection
         queryParams={`?category=${categorySlug}`}
-        withViewMoreLink={false}
+        searchParams={searchParams}
         noResultMessage='There are no posts in this category yet.'
       >
         <SectionHeading>
           <span>explore</span>&nbsp;posts
         </SectionHeading>
-      </PostGridSection>
+      </PaginatedPostGridSection>
     </>
   );
 };

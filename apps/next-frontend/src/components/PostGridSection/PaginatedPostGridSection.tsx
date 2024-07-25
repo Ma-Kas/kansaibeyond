@@ -3,11 +3,10 @@ import Link from 'next/link';
 import PostCard from '../PostCard/PostCard';
 import NoPosts from '../NoPosts/NoPosts';
 import SectionHeading from '../SectionHeading/SectionHeading';
-import { getSearchPosts } from '@/lib/requests/postRequests';
+import { getAllPosts } from '@/lib/requests/postRequests';
 import { PAGINATION_PAGE_SIZE } from '@/config/constants';
 import {
   isValidParam,
-  isValidSearchQuery,
   constructPaginationQuery,
   calculatePaginationPages,
 } from '@/utils/pagination-helpers';
@@ -15,24 +14,23 @@ import {
 import classes from './PostGridSection.module.css';
 
 type Props = {
-  query: string;
-  searchParams?: { q?: string; page?: string; s?: string };
+  queryParams: string;
+  searchParams?: { page?: string; s?: string };
   noResultMessage?: string;
   children?: ReactNode;
 };
 
-const SearchPostGridSection = async ({
-  query,
+const PaginatedPostGridSection = async ({
+  queryParams,
   searchParams,
   noResultMessage,
   children,
 }: Props) => {
-  const searchQuery = isValidSearchQuery(query) || '';
   const currentPage = isValidParam(searchParams?.page) || 1;
   const pageSize = isValidParam(searchParams?.s) || PAGINATION_PAGE_SIZE;
 
-  const { rows: posts, count } = await getSearchPosts(
-    constructPaginationQuery(searchQuery, currentPage, pageSize)
+  const { rows: posts, count } = await getAllPosts(
+    constructPaginationQuery(queryParams, currentPage, pageSize)
   );
 
   const { totalPages, shouldPaginate } = calculatePaginationPages(
@@ -56,7 +54,7 @@ const SearchPostGridSection = async ({
                 {currentPage > 1 && (
                   <Link
                     className={classes['previous_page_link']}
-                    href={`/search${searchQuery}&page=${currentPage - 1}`}
+                    href={`/blog/posts?page=${currentPage - 1}`}
                   >
                     PREVIOUS PAGE
                   </Link>
@@ -64,7 +62,7 @@ const SearchPostGridSection = async ({
                 {currentPage < totalPages && (
                   <Link
                     className={classes['next_page_link']}
-                    href={`/search${searchQuery}&page=${currentPage + 1}`}
+                    href={`/blog/posts?page=${currentPage + 1}`}
                   >
                     NEXT PAGE
                   </Link>
@@ -76,7 +74,7 @@ const SearchPostGridSection = async ({
         {posts.length === 0 && (
           <NoPosts message={noResultMessage}>
             <SectionHeading>
-              <span>Found</span>&nbsp;posts
+              <span>explore</span>&nbsp;posts
             </SectionHeading>
           </NoPosts>
         )}
@@ -96,7 +94,7 @@ const SearchPostGridSection = async ({
             {currentPage > 1 && (
               <Link
                 className={classes['previous_page_link']}
-                href={`/search${searchQuery}&page=${currentPage - 1}`}
+                href={`/blog/posts?page=${currentPage - 1}`}
               >
                 PREVIOUS PAGE
               </Link>
@@ -104,7 +102,7 @@ const SearchPostGridSection = async ({
             {currentPage < totalPages && (
               <Link
                 className={classes['next_page_link']}
-                href={`/search${searchQuery}&page=${currentPage + 1}`}
+                href={`/blog/posts?page=${currentPage + 1}`}
               >
                 NEXT PAGE
               </Link>
@@ -116,4 +114,4 @@ const SearchPostGridSection = async ({
   }
 };
 
-export default SearchPostGridSection;
+export default PaginatedPostGridSection;

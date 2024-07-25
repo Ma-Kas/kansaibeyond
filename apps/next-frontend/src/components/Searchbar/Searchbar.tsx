@@ -26,10 +26,12 @@ const Searchbar = ({ inHeader }: { inHeader: boolean }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const queryParams =
+      params && params.get('q') ? `?q=${params.get('q')}&page=1` : '';
     if (pathname === '/search') {
-      router.replace(`${pathname}?${params.toString()}`);
+      router.replace(`/search${queryParams}`);
     } else {
-      router.push(`/search?${params.toString()}`);
+      router.push(`/search${queryParams}`);
     }
   };
 

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import PostGridSection from '@/components/PostGridSection/PostGridSection';
+import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
@@ -7,30 +7,32 @@ import { getOneTag } from '@/lib/requests/tagRequests';
 
 const TagPage = async ({
   params: { tagSlug },
+  searchParams,
 }: {
   params: { tagSlug: string };
+  searchParams?: { page?: string; s?: string };
 }) => {
   const tag = await getOneTag(tagSlug);
 
   return (
     <Suspense
       fallback={
-        <PostGridSectionSkeleton cardNumber={6} withViewMoreLink={false}>
+        <PostGridSectionSkeleton cardNumber={6} withViewAllLink={false}>
           <SectionHeading>
             <span>Tag</span>
           </SectionHeading>
         </PostGridSectionSkeleton>
       }
     >
-      <PostGridSection
+      <PaginatedPostGridSection
         queryParams={`?tag=${tagSlug}`}
-        withViewMoreLink={false}
+        searchParams={searchParams}
         noResultMessage='There are no posts with this tag.'
       >
         <SectionHeading>
           <span>Tag</span>&nbsp;{tag.tagName}
         </SectionHeading>
-      </PostGridSection>
+      </PaginatedPostGridSection>
     </Suspense>
   );
 };

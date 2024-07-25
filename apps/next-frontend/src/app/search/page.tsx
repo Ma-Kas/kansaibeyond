@@ -6,7 +6,11 @@ import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
 import classes from './search.module.css';
 
-const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
+const SearchPage = ({
+  searchParams,
+}: {
+  searchParams?: { q?: string; page?: string; s?: string };
+}) => {
   const query = searchParams?.q || '';
   const resultSectionHeading = (
     <SectionHeading>
@@ -28,14 +32,14 @@ const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
 
         <Suspense
           fallback={
-            <PostGridSectionSkeleton cardNumber={3} withViewMoreLink={false}>
+            <PostGridSectionSkeleton cardNumber={3} withViewAllLink={false}>
               {resultSectionHeading}
             </PostGridSectionSkeleton>
           }
         >
           <SearchPostGridSection
             query={query}
-            withViewMoreLink={false}
+            searchParams={searchParams}
             noResultMessage='No posts match your search.'
           >
             {resultSectionHeading}

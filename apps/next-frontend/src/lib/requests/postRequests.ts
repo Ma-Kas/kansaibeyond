@@ -118,7 +118,9 @@ export type Post = z.infer<typeof postSchema>;
 export type PostForList = z.infer<typeof listPostSchema>;
 export type PostUser = z.infer<typeof postUserSchema>;
 
-const allPostsSchema = z.array(listPostSchema);
+const allPostsSchema = z
+  .object({ rows: z.array(listPostSchema), count: z.number() })
+  .strict();
 
 export const getAllPosts = async (queryParams?: string) => {
   try {
@@ -141,9 +143,11 @@ export const getAllPosts = async (queryParams?: string) => {
   }
 };
 
-export const getSearchPosts = async (query: string) => {
+export const getSearchPosts = async (queryParams: string) => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/posts/search?q=${query}`);
+    const response = await fetch(
+      `${BACKEND_BASE_URL}/posts/search${queryParams}`
+    );
 
     if (!response.ok) {
       throw new CustomError({

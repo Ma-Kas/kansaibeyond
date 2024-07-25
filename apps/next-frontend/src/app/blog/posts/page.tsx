@@ -1,9 +1,13 @@
 import { Suspense } from 'react';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
-import PostGridSection from '@/components/PostGridSection/PostGridSection';
+import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 
-const PostsPage = () => {
+const PostsPage = ({
+  searchParams,
+}: {
+  searchParams?: { page?: string; s?: string };
+}) => {
   const sectionHeading = (
     <SectionHeading>
       <span>All</span>&nbsp;posts
@@ -14,14 +18,14 @@ const PostsPage = () => {
     <>
       <Suspense
         fallback={
-          <PostGridSectionSkeleton cardNumber={6} withViewMoreLink={false}>
+          <PostGridSectionSkeleton cardNumber={6} withViewAllLink={false}>
             {sectionHeading}
           </PostGridSectionSkeleton>
         }
       >
-        <PostGridSection queryParams='' withViewMoreLink={false}>
+        <PaginatedPostGridSection searchParams={searchParams} queryParams=''>
           {sectionHeading}
-        </PostGridSection>
+        </PaginatedPostGridSection>
       </Suspense>
     </>
   );

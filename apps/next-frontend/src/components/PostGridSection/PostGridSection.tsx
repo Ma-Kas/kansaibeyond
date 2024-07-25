@@ -1,26 +1,26 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import PostCard from '../PostCard/PostCard';
+import NoPosts from '../NoPosts/NoPosts';
+import SectionHeading from '../SectionHeading/SectionHeading';
 import { getAllPosts } from '@/lib/requests/postRequests';
 
 import classes from './PostGridSection.module.css';
-import NoPosts from '../NoPosts/NoPosts';
-import SectionHeading from '../SectionHeading/SectionHeading';
 
 type Props = {
-  withViewMoreLink: boolean;
+  withViewAllLink: boolean;
   queryParams: string;
   noResultMessage?: string;
   children?: ReactNode;
 };
 
 const PostGridSection = async ({
-  withViewMoreLink,
+  withViewAllLink,
   queryParams,
   noResultMessage,
   children,
 }: Props) => {
-  const posts = await getAllPosts(queryParams);
+  const { rows: posts } = await getAllPosts(queryParams);
 
   if (noResultMessage) {
     return (
@@ -33,9 +33,9 @@ const PostGridSection = async ({
                 return <PostCard key={post.id} post={post} />;
               })}
             </div>
-            {withViewMoreLink && (
+            {withViewAllLink && (
               <div className={classes['all_posts_link']}>
-                <Link href={'/blog/posts'}>VIEW ALL POSTS</Link>
+                <Link href={'/blog/posts?page=1'}>VIEW ALL POSTS</Link>
               </div>
             )}
           </section>
@@ -58,9 +58,9 @@ const PostGridSection = async ({
             return <PostCard key={post.id} post={post} />;
           })}
         </div>
-        {withViewMoreLink && (
+        {withViewAllLink && (
           <div className={classes['all_posts_link']}>
-            <Link href={'/blog/posts'}>VIEW ALL POSTS</Link>
+            <Link href={'/blog/posts?page=1'}>VIEW ALL POSTS</Link>
           </div>
         )}
       </section>

@@ -89,14 +89,14 @@ const TasteOfHKPage = () => {
       </section>
       <Suspense
         fallback={
-          <PostGridSectionSkeleton cardNumber={3} withViewMoreLink={false}>
+          <PostGridSectionSkeleton cardNumber={3} withViewAllLink={false}>
             {reviewSectionHeading}
           </PostGridSectionSkeleton>
         }
       >
         <PostGridSection
           queryParams='?tag=taste-of-hong-kong'
-          withViewMoreLink={false}
+          withViewAllLink={false}
         >
           {reviewSectionHeading}
         </PostGridSection>
