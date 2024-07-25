@@ -20,7 +20,7 @@ export const get_multiple_posts = async (
   const dynamicOffset = createOffset(req);
 
   try {
-    const allPosts = await Post.findAll({
+    const allPosts = await Post.findAndCountAll({
       attributes: {
         exclude: ['userId', 'categoryId', 'content'],
       },
@@ -59,9 +59,10 @@ export const get_multiple_posts = async (
       limit: postLimit,
       order: [['updatedAt', 'DESC']],
       offset: dynamicOffset,
+      distinct: true,
     });
 
-    if (!allPosts) {
+    if (!allPosts.rows) {
       throw new NotFoundError({ message: 'No posts found' });
     }
 
@@ -77,9 +78,11 @@ export const get_search_posts = async (
   next: NextFunction
 ) => {
   const searchWhere = createSearchWhere(req);
+  const postLimit = createLimit(req);
+  const dynamicOffset = createOffset(req);
 
   try {
-    const allPosts = await Post.findAll({
+    const allPosts = await Post.findAndCountAll({
       attributes: {
         exclude: ['userId', 'categoryId', 'content'],
       },
@@ -115,10 +118,13 @@ export const get_search_posts = async (
         categoryReplacement: `%${req.query.q}%`,
         tagReplacement: `%${req.query.q}%`,
       },
+      limit: postLimit,
       order: [['updatedAt', 'DESC']],
+      offset: dynamicOffset,
+      distinct: true,
     });
 
-    if (!allPosts) {
+    if (!allPosts.rows) {
       throw new NotFoundError({ message: 'No posts found' });
     }
 
