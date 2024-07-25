@@ -11,6 +11,8 @@ export const USER_ROLES = {
   GUEST: 'GUEST',
 } as const;
 
+export const PAGINATION_PAGE_SIZE = 12;
+
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
 export const KANSAIBEYOND_THATCH = 'https://www.thatch.co/@kansai';
