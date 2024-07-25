@@ -143,9 +143,11 @@ export const getAllPosts = async (queryParams?: string) => {
   }
 };
 
-export const getSearchPosts = async (query: string) => {
+export const getSearchPosts = async (queryParams: string) => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/posts/search?q=${query}`);
+    const response = await fetch(
+      `${BACKEND_BASE_URL}/posts/search${queryParams}`
+    );
 
     if (!response.ok) {
       throw new CustomError({

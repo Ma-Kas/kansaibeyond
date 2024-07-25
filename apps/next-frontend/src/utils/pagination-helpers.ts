@@ -11,6 +11,15 @@ export const isValidParam = (searchParam: unknown) => {
   return Number(searchParam);
 };
 
+// Is search term present and valid, if so prepend ?q= to pass along to fetch
+export const isValidSearchQuery = (searchParam: unknown) => {
+  if (!searchParam || typeof searchParam !== 'string') {
+    return undefined;
+  }
+
+  return `?q=${searchParam}`;
+};
+
 // Construct query string for the api call
 // If extra query params are present (e.g. category, tag), patch those in
 // otherwise pagination params only

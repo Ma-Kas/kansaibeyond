@@ -6,7 +6,11 @@ import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
 import classes from './search.module.css';
 
-const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
+const SearchPage = ({
+  searchParams,
+}: {
+  searchParams?: { q?: string; page?: string; s?: string };
+}) => {
   const query = searchParams?.q || '';
   const resultSectionHeading = (
     <SectionHeading>
@@ -35,7 +39,7 @@ const SearchPage = ({ searchParams }: { searchParams?: { q?: string } }) => {
         >
           <SearchPostGridSection
             query={query}
-            withViewAllLink={false}
+            searchParams={searchParams}
             noResultMessage='No posts match your search.'
           >
             {resultSectionHeading}
