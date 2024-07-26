@@ -27,7 +27,9 @@ const SearchPage = ({
             <br />
             {`"${query}"`}
           </SectionHeading>
-          <Searchbar inHeader={false} />
+          <Suspense>
+            <Searchbar inHeader={false} />
+          </Suspense>
         </section>
 
         <Suspense
