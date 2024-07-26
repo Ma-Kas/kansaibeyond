@@ -1,15 +1,16 @@
 import { Group, Container } from '@mantine/core';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
+import { FRONTEND_BASE_URL, KANSAIBEYOND_EMAIL } from '../../config/constants';
 
 import classes from './HeaderMain.module.css';
 
 const menuLinks = [
   { link: 'https://github.com/Ma-Kas/kansaibeyond', label: 'About' },
-  { link: 'https://github.com/Ma-Kas/kansaibeyond', label: 'Support' },
+  { link: `mailto:${KANSAIBEYOND_EMAIL}`, label: 'Support' },
 ];
 
 const titleLink = {
-  link: 'http://www.kansaibeyond.com',
+  link: FRONTEND_BASE_URL,
   label: 'Kansai & Beyond',
 };
 
@@ -20,6 +21,7 @@ const HeaderMain = ({ authorized }: { authorized: boolean }) => {
         key={link.label}
         href={link.link}
         target='_blank'
+        rel='noopener noreferrer'
         className={classes.link}
       >
         {link.label}
@@ -35,6 +37,7 @@ const HeaderMain = ({ authorized }: { authorized: boolean }) => {
             key={titleLink.link}
             href={titleLink.link}
             target='_blank'
+            rel='noopener noreferrer'
             className={classes.link}
           >
             {titleLink.label}

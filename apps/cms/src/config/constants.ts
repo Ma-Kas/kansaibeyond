@@ -19,6 +19,8 @@ export const SELECTABLE_USER_ROLES = {
   GUEST: 'GUEST',
 } as const;
 
+export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
+
 export const OWNER_USERNAME = import.meta.env.VITE_OWNER_USERNAME;
 
 export const BACKEND_BASE_URL = import.meta.env.DEV
