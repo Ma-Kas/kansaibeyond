@@ -6,6 +6,7 @@ import { validateLoginData } from '../../utils/validate-login-data';
 import NotFoundError from '../../errors/NotFoundError';
 import UnauthorizedError from '../../errors/UnauthorizedError';
 import {
+  COOKIE_DOMAIN,
   COOKIE_SAME_SITE_POLICY,
   SESSION_DURATION_HOURS,
   SameSiteType,
@@ -53,8 +54,9 @@ export const post_login = async (
     // Send cookie for session
     res.cookie('sessionId', sessionId, {
       maxAge: hoursToMilliseconds(SESSION_DURATION_HOURS),
-      secure: true,
       httpOnly: true,
+      domain: COOKIE_DOMAIN,
+      secure: true,
       sameSite: COOKIE_SAME_SITE_POLICY as SameSiteType, // Workaround for dev and Chrome's new cookie fuckery
     });
 

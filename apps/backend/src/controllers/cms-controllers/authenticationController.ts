@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { addHours, hoursToMilliseconds, isFuture } from 'date-fns';
 import { Session, User } from '../../models';
 import {
+  COOKIE_DOMAIN,
   COOKIE_SAME_SITE_POLICY,
   SESSION_DURATION_HOURS,
   SameSiteType,
@@ -70,8 +71,9 @@ export const get_authentication = async (
     // Update cookie for renewed session
     res.cookie('sessionId', renewedSessionId, {
       maxAge: hoursToMilliseconds(SESSION_DURATION_HOURS),
-      secure: true,
       httpOnly: true,
+      domain: COOKIE_DOMAIN,
+      secure: true,
       sameSite: COOKIE_SAME_SITE_POLICY as SameSiteType, // Workaround for dev and Chrome's new cookie fuckery
     });
 

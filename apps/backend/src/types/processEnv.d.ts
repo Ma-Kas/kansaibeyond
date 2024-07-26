@@ -14,6 +14,7 @@ const envVariables = z.object({
   FRONTEND_URL_DEV: z.string(),
   FRONTEND_URL_PROD: z.string(),
   COOKIE_SAME_SITE_POLICY: sameSiteSchema,
+  COOKIE_DOMAIN: z.string(),
 });
 
 envVariables.parse(process.env);
