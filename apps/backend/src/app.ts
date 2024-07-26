@@ -23,6 +23,7 @@ import frontendPostRouter from './routes/frontend-routes/posts';
 import frontendCategoryRouter from './routes/frontend-routes/categories';
 import frontendTagRouter from './routes/frontend-routes/tags';
 import frontendAffiliateRouter from './routes/frontend-routes/affiliates';
+import frontendPreviewRouter from './routes/frontend-routes/preview';
 
 import errorHandler from './middleware/errorHandler';
 import {
@@ -65,6 +66,7 @@ frontendRouter.use('/v1/posts', frontendPostRouter);
 frontendRouter.use('/v1/categories', frontendCategoryRouter);
 frontendRouter.use('/v1/tags', frontendTagRouter);
 frontendRouter.use('/v1/affiliates', frontendAffiliateRouter);
+frontendRouter.use('/v1/preview', auth, frontendPreviewRouter);
 
 // Error Handling
 app.use(errorHandler);
