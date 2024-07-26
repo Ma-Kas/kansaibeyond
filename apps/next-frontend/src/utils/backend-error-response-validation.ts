@@ -7,6 +7,7 @@ export const ERRORS_DICTIONARY = {
   BAD_REQUEST: 'Bad Request Error',
   SERVER_ERROR: 'Server Error',
   NOT_FOUND: 'Not Found',
+  UNAUTHORIZED: 'Unauthorized',
 };
 
 export const handleRequestErrors = (err: unknown) => {

@@ -32,7 +32,7 @@ type Props = {
 
 const openPreviewInTab = (postSlug: string): void => {
   const previewWindow = window.open(
-    `${FRONTEND_BASE_URL}/blog/posts/${postSlug}`,
+    `${FRONTEND_BASE_URL}/preview/${postSlug}`,
     '_blank',
     'noopener,noreferrer'
   );

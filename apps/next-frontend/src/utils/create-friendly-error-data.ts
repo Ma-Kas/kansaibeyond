@@ -26,6 +26,14 @@ export const createFriendlyErrorData = (message: string) => {
           'Seems like there was an error connecting to the server. Maybe it is down, or there is an issue with the connection. It might be temporary, so you can either try to reload the page, or go back.',
       };
     }
+    case ERRORS_DICTIONARY.UNAUTHORIZED: {
+      return {
+        status: 403,
+        name: message,
+        description:
+          "Seems like you are trying to access something you're not authorized to. If you believe this to be a mistake, please contact an admin.",
+      };
+    }
     default: {
       return {
         status: 500,
