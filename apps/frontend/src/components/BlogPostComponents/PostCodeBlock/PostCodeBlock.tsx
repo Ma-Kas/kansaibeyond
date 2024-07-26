@@ -1,7 +1,7 @@
 import type * as CSS from 'csstype';
 import { Property } from 'csstype';
-import { INDENTATION_FACTOR } from '../../../pages/BlogPostView/utils/post-content-constants';
-import { CodeBlockNode } from '../../../types/post-content-types';
+import { INDENTATION_FACTOR } from '@/utils/post-content-constants';
+import { CodeBlockNode } from '@/types/post-content-types';
 
 import classes from './PostCodeBlock.module.css';
 

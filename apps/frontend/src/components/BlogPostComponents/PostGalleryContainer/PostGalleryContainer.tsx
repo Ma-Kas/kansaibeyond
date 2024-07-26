@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
+
 import type * as CSS from 'csstype';
-import { ImageGalleryContainerNode } from '../../../types/post-content-types';
+import { ImageGalleryContainerNode } from '@/types/post-content-types';
 import {
   CLOUDINARY_BASE_URL,
   POST_GALLERY_IMAGE_TRANSFORM,
-} from '../../../config/constants';
+} from '@/config/constants';
 
 import classes from './PostGalleryContainer.module.css';
 
@@ -110,17 +112,17 @@ const PostGalleryContainer = ({ containerNode }: Props) => {
   };
 
   return (
-    <div
+    <figure
       className={classes['post_gallery_container']}
       {...(containerStyle && { style: containerStyle })}
     >
       {switchRenderOnGalleryType()}
       {containerNode.captionText && (
-        <div className={classes['post_gallery_caption']}>
+        <figcaption className={classes['post_gallery_caption']}>
           {containerNode.captionText}
-        </div>
+        </figcaption>
       )}
-    </div>
+    </figure>
   );
 };
 

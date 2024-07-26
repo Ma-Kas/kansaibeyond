@@ -1,15 +1,19 @@
+'use client';
+
+/* eslint-disable @next/next/no-img-element */
+
 import type * as CSS from 'csstype';
 import useEmblaCarousel from 'embla-carousel-react';
 import {
   PrevButton,
   NextButton,
-} from '../../EmblaCarousel/EmblaCarouselArrowButtons';
-import usePrevNextButtons from '../../EmblaCarousel/usePrevNextButtons';
-import { ImageCarouselContainerNode } from '../../../types/post-content-types';
+} from '@/components/EmblaCarousel/EmblaCarouselArrowButtons';
+import usePrevNextButtons from '@/components/EmblaCarousel/usePrevNextButtons';
+import { ImageCarouselContainerNode } from '@/types/post-content-types';
 import {
   CLOUDINARY_BASE_URL,
   POST_CAROUSEL_IMAGE_TRANSFORM,
-} from '../../../config/constants';
+} from '@/config/constants';
 
 import classes from './PostCarouselContainer.module.css';
 
@@ -68,7 +72,7 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
   const inlineStyles = setInlineStyleOverride();
 
   return (
-    <div
+    <figure
       className={classes['post_carousel_container']}
       {...(containerStyle && { style: containerStyle })}
     >
@@ -98,11 +102,11 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
         <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
       </div>
       {containerNode.captionText && (
-        <div className={classes['post_carousel_caption']}>
+        <figcaption className={classes['post_carousel_caption']}>
           {containerNode.captionText}
-        </div>
+        </figcaption>
       )}
-    </div>
+    </figure>
   );
 };
 

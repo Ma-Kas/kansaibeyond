@@ -1,5 +1,5 @@
 import type * as CSS from 'csstype';
-import { ImageAlignmentType } from '../../../types/post-content-types';
+import { ImageAlignmentType } from '@/types/post-content-types';
 
 import classes from './PostCarouselBlock.module.css';
 
