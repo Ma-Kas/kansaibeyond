@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
 import CustomError from '@/utils/custom-error';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
+import { setSessionCookieHeader } from '@/utils/set-session-cookie-header';
 
 // Zod Schemas
 // prettier-ignore
@@ -170,6 +171,38 @@ export const getOnePost = async (postSlug: string) => {
 
     if (!response.ok) {
       if (response.status === 404) {
+        notFound();
+      } else {
+        throw new CustomError({
+          digest: response.statusText,
+          message: response.statusText,
+        });
+      }
+    }
+
+    const data: unknown = await response.json();
+    const parsedPost = postSchema.parse(data);
+    return parsedPost;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
+  }
+};
+
+// Send along sessionId (if logged into CMS) in cookie to gain access
+export const getOnePreviewPost = async (postSlug: string) => {
+  const sessionCookie = setSessionCookieHeader();
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/preview/${postSlug}`, {
+      cache: 'no-store',
+      headers: {
+        Cookie: sessionCookie,
+      },
+    });
+
+    if (!response.ok) {
+      // Cheeky hack to show not found page if visitor is not logged in, so as
+      // to hide existence of preview route altogether
+      if (response.status === 403 || response.status === 404) {
         notFound();
       } else {
         throw new CustomError({
