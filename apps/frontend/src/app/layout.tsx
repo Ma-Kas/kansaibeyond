@@ -5,6 +5,13 @@ import Footer from '@/components/Footer/Footer';
 import {
   futuraLtLight,
   futuraLtBook,
+  geistRegular,
+  geistLight,
+  latoRegular,
+  latoLight,
+  madefor,
+  robotoRegular,
+  robotoLight,
   ivyMode,
   handwriting,
 } from '@/styles/fonts';
@@ -28,7 +35,17 @@ const RootLayout = ({
   return (
     <html lang='en'>
       <body
-        className={`${futuraLtLight.variable} ${futuraLtBook.variable} ${ivyMode.variable} ${handwriting.variable}`}
+        className={`${futuraLtLight.variable} 
+        ${futuraLtBook.variable} 
+        ${geistRegular.variable} 
+        ${geistLight.variable} 
+        ${latoRegular.variable} 
+        ${latoLight.variable} 
+        ${madefor.variable} 
+        ${robotoRegular.variable} 
+        ${robotoLight.variable} 
+        ${ivyMode.variable} 
+        ${handwriting.variable}`}
       >
         <Header />
         <main className={classes['page_main']}>{children}</main>
