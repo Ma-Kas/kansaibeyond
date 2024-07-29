@@ -9,7 +9,10 @@ import {
   NextButton,
 } from '@/components/EmblaCarousel/EmblaCarouselArrowButtons';
 import usePrevNextButtons from '@/components/EmblaCarousel/usePrevNextButtons';
-import { ImageCarouselContainerNode } from '@/types/post-content-types';
+import {
+  CarouselImage,
+  ImageCarouselContainerNode,
+} from '@/types/post-content-types';
 import {
   CLOUDINARY_BASE_URL,
   POST_CAROUSEL_IMAGE_TRANSFORM,
@@ -69,6 +72,18 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
     return { innerContainer: innerContainerStyle, slide: slideStyle };
   };
 
+  const setImageInlineStyleOverride = (
+    image: CarouselImage
+  ): CSS.Properties => {
+    const imageStyle: CSS.Properties = {};
+
+    if (image.aspectRatio) {
+      imageStyle.aspectRatio = `${image.aspectRatio}`;
+    }
+
+    return imageStyle;
+  };
+
   const inlineStyles = setInlineStyleOverride();
 
   return (
@@ -91,6 +106,7 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
                 <img
                   key={index}
                   className={classes['post_carousel_image']}
+                  style={setImageInlineStyleOverride(image)}
                   src={`${CLOUDINARY_BASE_URL}${POST_CAROUSEL_IMAGE_TRANSFORM}${image.src}`}
                   alt={image.altText}
                 />

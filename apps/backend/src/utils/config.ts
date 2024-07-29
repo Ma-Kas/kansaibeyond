@@ -30,7 +30,10 @@ const FRONTEND_URL =
 const SESSION_DURATION_HOURS = 168; // 7days
 
 const COOKIE_SAME_SITE_POLICY = process.env.COOKIE_SAME_SITE_POLICY;
-const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;
+const COOKIE_DOMAIN =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+    ? 'localhost'
+    : process.env.COOKIE_DOMAIN;
 
 export {
   DB_CONNECTION_STRING,

@@ -85,9 +85,8 @@ const ComposerSidebar = ({ postData }: { postData: Post }) => {
     );
   }, [editor]);
 
-  const createCloudinaryMediaLibraryWidget = useCallback(
+  const createCloudinaryWidgetSingle = useCallback(
     (
-      multiple: boolean,
       handler: (data: InsertReturnData, activeEditor: LexicalEditor) => void
     ) => {
       const loadingMediaLibraryPopup = notifications.show(
@@ -100,7 +99,39 @@ const ComposerSidebar = ({ postData }: { postData: Post }) => {
           cloud_name: CLOUDINARY_CLOUD_NAME,
           api_key: CLOUDINARY_API_KEY,
           remove_header: false,
-          multiple: { multiple },
+          multiple: false,
+          max_files: 1,
+          insert_caption: 'Insert',
+          default_transformations: [[]],
+        },
+        {
+          insertHandler: (data: InsertReturnData) => {
+            handler(data, activeEditor);
+          },
+          showHandler: () => {
+            notifications.hide(loadingMediaLibraryPopup);
+          },
+        }
+      );
+    },
+    [activeEditor]
+  );
+
+  const createCloudinaryWidgetMultiple = useCallback(
+    (
+      handler: (data: InsertReturnData, activeEditor: LexicalEditor) => void
+    ) => {
+      const loadingMediaLibraryPopup = notifications.show(
+        LoadingNotification({ bodyText: 'Opening Media Library Widget' })
+      );
+      destroyWidgets();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      window.cloudinary.openMediaLibrary(
+        {
+          cloud_name: CLOUDINARY_CLOUD_NAME,
+          api_key: CLOUDINARY_API_KEY,
+          remove_header: false,
+          multiple: true,
           insert_caption: 'Insert',
           default_transformations: [[]],
         },
@@ -122,20 +153,19 @@ const ComposerSidebar = ({ postData }: { postData: Post }) => {
     Media: [
       {
         text: 'Image',
-        onClick: () =>
-          createCloudinaryMediaLibraryWidget(false, handleInsertSingleImage),
+        onClick: () => createCloudinaryWidgetSingle(handleInsertSingleImage),
         icon: IconPhoto,
       },
       {
         text: 'Gallery',
         onClick: () =>
-          createCloudinaryMediaLibraryWidget(true, handleInsertGalleryImages),
+          createCloudinaryWidgetMultiple(handleInsertGalleryImages),
         icon: IconLayoutGrid,
       },
       {
         text: 'Carousel',
         onClick: () =>
-          createCloudinaryMediaLibraryWidget(true, handleInsertCarouselImages),
+          createCloudinaryWidgetMultiple(handleInsertCarouselImages),
         icon: IconCarouselHorizontal,
       },
     ],
