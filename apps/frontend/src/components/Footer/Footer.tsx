@@ -31,8 +31,8 @@ const Footer = () => {
             Privacy Policy
           </Link>
           &nbsp;|&nbsp;
-          <Link className={classes['footer_link']} href={'/sitemap'}>
-            Sitemap
+          <Link className={classes['footer_link']} href={'/search'}>
+            Search
           </Link>
         </p>
         <p className={classes['footer_text_mobile']}>
@@ -43,8 +43,8 @@ const Footer = () => {
             Privacy Policy
           </Link>
           &nbsp;|&nbsp;
-          <Link className={classes['footer_link']} href={'/sitemap'}>
-            Sitemap
+          <Link className={classes['footer_link']} href={'/search'}>
+            Search
           </Link>
         </p>
         <div className={classes['footer_social_group']}>
