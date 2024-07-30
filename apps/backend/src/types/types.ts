@@ -173,6 +173,27 @@ type NewAffiliate = Omit<Affiliate, 'id'>;
 
 type UpdateAffiliate = Partial<NewAffiliate>;
 
+////////////////////////////////////////////////////////////////////////////////
+// Social Media Reel Model Types                                              //
+////////////////////////////////////////////////////////////////////////////////
+
+type ReelData = {
+  id: number;
+  url: string;
+  image: CoverImage;
+};
+
+type SocialMediaReel = {
+  id: number;
+  reelData: ReelData[];
+};
+
+type NewSocialMediaReel = Omit<SocialMediaReel, 'id'>;
+
+type UpdateSocialMediaReel = {
+  reelData: ReelData[];
+};
+
 export {
   Subset,
   UserRole,
@@ -197,4 +218,8 @@ export {
   Affiliate,
   NewAffiliate,
   UpdateAffiliate,
+  ReelData,
+  SocialMediaReel,
+  NewSocialMediaReel,
+  UpdateSocialMediaReel,
 };
