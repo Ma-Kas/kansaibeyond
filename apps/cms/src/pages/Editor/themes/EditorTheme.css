@@ -108,8 +108,7 @@
   font-size: 94%;
 }
 .EditorTheme__hashtag {
-  background-color: rgba(88, 144, 255, 0.15);
-  border-bottom: 1px solid rgba(88, 144, 255, 0.3);
+  /* background-color: rgba(88, 144, 255, 0.15); */
 }
 .EditorTheme__link {
   color: var(--color-editor-link) !important;

@@ -4,7 +4,7 @@ import {
   constructTextComponentFromFormat,
 } from '@/utils/post-text-style-helpers';
 
-import classes from './PostText.module.css';
+import classes from './PostHashtag.module.css';
 
 type Props = {
   format: number;
@@ -12,13 +12,13 @@ type Props = {
   text: string;
 };
 
-const PostText = ({ format, style, text }: Props) => {
+const PostHashtag = ({ format, style, text }: Props) => {
   const textFormats = getTextFormatStates(format);
   const textStyle = handleTextStyle(style);
   return (
     <>
       {constructTextComponentFromFormat(
-        classes['post_text'],
+        classes['post_hashtag'],
         textStyle,
         text,
         textFormats
@@ -27,4 +27,4 @@ const PostText = ({ format, style, text }: Props) => {
   );
 };
 
-export default PostText;
+export default PostHashtag;

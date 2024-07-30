@@ -8,6 +8,7 @@ import {
   RootNode,
   StickyNode,
   TextNode,
+  HashtagNode,
   ListNode,
   ListItemNode,
   CodeBlockNode,
@@ -48,6 +49,10 @@ export const isLinkNode = (node: unknown): node is LinkNode => {
   return (
     (node as LinkNode).type === 'link' || (node as LinkNode).type === 'autolink'
   );
+};
+
+export const isHashtagNode = (node: unknown): node is HashtagNode => {
+  return (node as HashtagNode).type === 'hashtag';
 };
 
 export const isHorizontalRuleNode = (

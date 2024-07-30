@@ -3,6 +3,7 @@ import PostRoot from '@/components/BlogPostComponents/PostRoot/PostRoot';
 import PostParagraph from '@/components/BlogPostComponents/PostParagraph/PostParagraph';
 import PostHorizontalRule from '@/components/BlogPostComponents/PostHorizontalRule/PostHorizontalRule';
 import PostText from '@/components/BlogPostComponents/PostText/PostText';
+import PostHashtag from '@/components/BlogPostComponents/PostHashtag/PostHashtag';
 import PostLink from '@/components/BlogPostComponents/PostLink/PostLink';
 import PostImageBlock from '@/components/BlogPostComponents/PostImageBlock/PostImageBlock';
 import PostImage from '@/components/BlogPostComponents/PostImage/PostImage';
@@ -69,6 +70,7 @@ export const keysToComponentMap = {
   heading: PostHeading,
   text: PostText,
   link: PostLink,
+  hashtag: PostHashtag,
   autolink: PostLink,
   horizontalrule: PostHorizontalRule,
   'image-block': PostImageBlock,

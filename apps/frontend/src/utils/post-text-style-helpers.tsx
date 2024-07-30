@@ -4,7 +4,40 @@ import {
   TEXT_FORMAT_ENUM,
 } from '@/utils/post-content-constants';
 
-import classes from './PostText.module.css';
+import classes from './post-text-style-helpers.module.css';
+
+// Object to return font-family variable for passed in font-family name
+export const fontFamilies: {
+  [key: string]: string;
+} = {
+  'Futura Lt Light': 'var(--font-family-light)',
+  'Futura Lt Book': 'var(--font-family-book)',
+  Madefor: 'var(--font-family-madefor)',
+  Geist: 'var(--font-family-geist-regular)',
+  'Geist Light': 'var(--font-family-geist-light)',
+  Lato: 'var(--font-family-lato-regular)',
+  'Lato Light': 'var(--font-family-lato-light)',
+  Roboto: 'var(--font-family-roboto-regular)',
+  'Roboto Light': 'var(--font-family-roboto-light)',
+} as const;
+
+// CMS users can manually override font family, this parses text style and
+// replaces font family in inline style with correct local css variable
+export const handleTextStyle = (style: string): string => {
+  const index = style.search('font-family');
+  if (index === -1) {
+    return style;
+  }
+  const fontFamilyStyle = style.substring(index, style.indexOf(';', index));
+  const fontFamily = fontFamilyStyle
+    .slice(fontFamilyStyle.indexOf(':') + 1)
+    .trim();
+
+  return style.replace(
+    fontFamilyStyle,
+    `font-family: ${fontFamilies[fontFamily]}`
+  );
+};
 
 // Transforms byte shifted format number into array of all applicable text formats
 // (bold, italic etc) or null if no additional format styles are applied to text

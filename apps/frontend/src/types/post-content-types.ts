@@ -106,6 +106,16 @@ export type TextNode = {
   version: number;
 };
 
+export type HashtagNode = {
+  detail: number; // 0 = regular
+  format: number; // 0 = regular, else number representation of bold, italic etc
+  mode: 'normal' | 'token' | 'segmented';
+  style: string; // inline css style
+  text: string; // actual content to insert into tag
+  type: 'hashtag';
+  version: number;
+};
+
 // Can't exist outside other paragraph, h1 etc node
 export type LinkNode = {
   children: object[];

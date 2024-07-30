@@ -9,6 +9,7 @@ import {
   isHeadingNode,
   isTextNode,
   isListNode,
+  isHashtagNode,
   isListItemNode,
   isCodeBlockNode,
   isCodeHighlightNode,
@@ -84,6 +85,15 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       'children' in parsedNode &&
         parsedNode.children.map((child) => constructComponentTree(child))
     );
+  } else if (isHashtagNode(input)) {
+    // Render HashtagNode
+    const parsedNode = input;
+    return createElement(keysToComponentMap[parsedNode.type], {
+      key: crypto.randomUUID(),
+      format: parsedNode.format,
+      style: 'style' in parsedNode ? parsedNode.style : '',
+      text: parsedNode.text,
+    });
   } else if (isHorizontalRuleNode(input)) {
     // Render Blog Post Horizontal Rule
     const parsedNode = input;
