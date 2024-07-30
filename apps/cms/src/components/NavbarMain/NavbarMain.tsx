@@ -7,6 +7,7 @@ import {
   IconPhoto,
   IconUsers,
   IconHeartHandshake,
+  IconBrandInstagram,
 } from '@tabler/icons-react';
 import NavbarLinksGroup from '../NavbarLinksGroup/NavbarLinksGroup';
 import useAuth from '../../hooks/useAuth';
@@ -31,6 +32,11 @@ const navbarDataAdmin = [
     label: 'Affiliates',
     icon: IconHeartHandshake,
     link: '/dashboard/affiliates',
+  },
+  {
+    label: 'Social Media Reel',
+    icon: IconBrandInstagram,
+    link: '/dashboard/social-media-reel/edit',
   },
   { label: 'Image Library', icon: IconPhoto, link: '/dashboard/images' },
   {
