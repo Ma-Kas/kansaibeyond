@@ -9,31 +9,13 @@ import {
 import NotFoundError from '../../errors/NotFoundError';
 import BadRequestError from '../../errors/BadRequestError';
 
-export const get_all_reels = async (
+export const get_one_reel = async (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const reels = await SocialMediaReel.findAll({
-      order: [['categoryName', 'ASC']],
-    });
-
-    res.status(200).json(reels);
-  } catch (err: unknown) {
-    next(err);
-  }
-};
-
-export const get_one_reel = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const reel = await SocialMediaReel.findOne({
-      where: { id: req.params.id },
-    });
+    const reel = await SocialMediaReel.findOne();
 
     if (!reel) {
       throw new NotFoundError({ message: 'Social Media Reel not found.' });
