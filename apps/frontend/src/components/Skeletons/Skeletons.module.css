@@ -236,11 +236,19 @@
   width: min(500px, 80%);
 }
 
+.social_reel_image {
+  position: relative;
+  background-color: var(--color-panda-grey-0);
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
 /*  */
 /* Shimmer Animation */
 /*  */
 .shimmer::before {
-  z-index: var(--z-index-loading-shimmer);
+  z-index: var(--z-index-backgrounds);
   position: absolute;
   inset: 0;
   content: '';
