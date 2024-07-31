@@ -5,6 +5,7 @@ import Category from './category';
 import Tag from './tag';
 import Comment from './comment';
 import Affiliate from './affiliate';
+import SocialMediaReel from './socialMediaReel';
 import Session from './session';
 
 // Import join tables
@@ -44,4 +45,14 @@ void (function createAssociations() {
   }
 })();
 
-export { User, Contact, Post, Category, Comment, Tag, Affiliate, Session };
+export {
+  User,
+  Contact,
+  Post,
+  Category,
+  Comment,
+  Tag,
+  Affiliate,
+  SocialMediaReel,
+  Session,
+};

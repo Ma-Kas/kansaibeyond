@@ -31,6 +31,7 @@ import UpdateUser from '../pages/UpdateUser/UpdateUser';
 import AffiliateBlogs from '../pages/AffiliateBlogs/AffiliateBlogs';
 import NewAffiliateBlog from '../pages/NewUpdateAffiliateBlog/NewAffiliateBlog';
 import UpdateAffiliateBlog from '../pages/NewUpdateAffiliateBlog/UpdateAffiliateBlog';
+import UpdateSocialMediaReel from '../pages/UpdateSocialMediaReel/UpdateSocialMediaReel';
 
 const Router = () => {
   const queryClient = useQueryClient();
@@ -130,6 +131,14 @@ const Router = () => {
               element: (
                 <AdminRoute>
                   <UpdateAffiliateBlog />
+                </AdminRoute>
+              ),
+            },
+            {
+              path: 'social-media-reel/edit',
+              element: (
+                <AdminRoute>
+                  <UpdateSocialMediaReel />
                 </AdminRoute>
               ),
             },

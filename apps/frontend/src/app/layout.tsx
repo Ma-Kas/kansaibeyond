@@ -1,5 +1,8 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Header from '@/components/Header/Header';
+import SocialMediaReel from '@/components/SocialMediaReel/SocialMediaReel';
+import SocialMediaReelSkeleton from '@/components/SocialMediaReel/SocialMediaReelSkeleton';
 import Footer from '@/components/Footer/Footer';
 
 import {
@@ -49,6 +52,9 @@ const RootLayout = ({
       >
         <Header />
         <main className={classes['page_main']}>{children}</main>
+        <Suspense fallback={<SocialMediaReelSkeleton />}>
+          <SocialMediaReel />
+        </Suspense>
         <Footer />
       </body>
     </html>
