@@ -31,6 +31,7 @@ export const CATEGORY_CARD_IMAGE_TRANSFORM = '/c_fill,w_600,q_auto,f_auto';
 export const CATEGORY_BANNER_IMAGE_TRANSFORM = '/c_fill,w_1920,q_auto,f_auto';
 export const POST_FEATURED_IMAGE_TRANSFORM = '/c_fill,w_1100,q_auto,f_auto';
 export const POST_CARD_IMAGE_TRANSFORM = '/c_fill,w_600,q_auto,f_auto';
+export const SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM = '/c_fill,w_560,q_auto,f_auto';
 
 export const POST_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
 export const POST_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_500,q_auto,f_auto';

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Header from '@/components/Header/Header';
+import SocialMediaReel from '@/components/SocialMediaReel/SocialMediaReel';
 import Footer from '@/components/Footer/Footer';
 
 import {
@@ -49,6 +50,7 @@ const RootLayout = ({
       >
         <Header />
         <main className={classes['page_main']}>{children}</main>
+        <SocialMediaReel />
         <Footer />
       </body>
     </html>

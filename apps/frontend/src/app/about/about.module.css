@@ -124,7 +124,7 @@
 .more_about_section {
   max-width: var(--page-content-max-width);
   margin: 0 auto;
-  margin-bottom: var(--page-section-gap);
+  margin-bottom: var(--page-section-gap-handwriting);
   padding: 0 var(--page-padding-horizontal);
 }
 

@@ -1,6 +1,6 @@
 .page_main {
   padding-top: var(--page-header-desktop-height);
-  padding-bottom: var(--page-footer-height);
+  /* padding-bottom: var(--page-section-gap-handwriting); */
 }
 
 .welcome_section {
@@ -49,7 +49,7 @@
 .quickstart_section {
   max-width: var(--page-content-max-width);
   margin: 0 auto;
-  margin-bottom: var(--page-section-gap);
+  margin-bottom: var(--page-section-gap-handwriting);
 }
 
 .quickstart_card_container {
@@ -98,6 +98,5 @@
 @media (max-width: 900px) {
   .page_main {
     padding-top: var(--page-header-mobile-height);
-    padding-bottom: var(--page-footer-height);
   }
 }
