@@ -1,5 +1,6 @@
 .no_posts_section {
   max-width: var(--page-content-max-width);
+  min-height: 50vh;
   margin: 0 auto;
   margin-bottom: var(--page-section-gap-handwriting);
   padding: 0 var(--page-padding-horizontal);

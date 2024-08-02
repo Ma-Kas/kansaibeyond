@@ -6,7 +6,7 @@
 
 .search_section {
   max-width: var(--page-content-max-width);
-  margin: var(--page-section-gap) auto var(--page-section-gap-handwriting);
+  margin: var(--page-section-gap-handwriting) auto;
   padding: 0 var(--page-padding-horizontal);
 }
 
@@ -16,6 +16,7 @@
 
 .search_section_empty {
   max-width: var(--page-content-max-width);
+  min-height: 90vh;
   margin: 0 auto;
   margin-bottom: var(--page-section-gap-handwriting);
   padding: 0 var(--page-padding-horizontal);
