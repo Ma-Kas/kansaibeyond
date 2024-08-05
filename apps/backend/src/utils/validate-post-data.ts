@@ -44,6 +44,7 @@ const updatePostSchema = z.object(
     content: z.string().optional(),
     coverImage: postCoverImageSchema.optional(),
     status: postStatusSchema.optional(),
+    readTime:z.number().optional(),
     tags: z.number().array().min(1).max(MAX_TAGS_PER_POST).optional(),
     categories: z.number().array().min(1).max(MAX_CATEGORIES_PER_POST).optional(),
     relatedPosts: z.number().array().max(MAX_RELATED_POSTS).optional(),
@@ -103,6 +104,7 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     !('content' in input) &&
     !('coverImage' in input) &&
     !('status' in input) &&
+    !('readTime' in input) &&
     !('tags' in input) &&
     !('categories' in input) &&
     !('relatedPosts' in input)
@@ -118,7 +120,8 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
     !parseResult.title &&
     !parseResult.content &&
     !parseResult.coverImage &&
-    !parseResult.status
+    !parseResult.status &&
+    !parseResult.readTime
   ) {
     return {
       postData: undefined,
@@ -136,6 +139,7 @@ const validatePostUpdateData = (input: unknown): UpdatePost | null => {
       content: parseResult.content,
       coverImage: parseResult.coverImage,
       status: parseResult.status,
+      readTime: parseResult.readTime,
     },
     categories: parseResult.categories,
     tags: parseResult.tags,
