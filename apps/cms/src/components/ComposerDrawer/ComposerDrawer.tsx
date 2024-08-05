@@ -7,6 +7,7 @@ import {
   ScrollArea,
 } from '@mantine/core';
 import cx from 'clsx';
+
 import classes from './ComposerDrawer.module.css';
 
 interface ComposerDrawerProps {

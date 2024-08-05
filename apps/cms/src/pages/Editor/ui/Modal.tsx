@@ -1,7 +1,8 @@
-import './Modal.css';
-
 import { ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { CloseButton, Group, ScrollArea, Stack, Text } from '@mantine/core';
+
+import './Modal.css';
 
 function PortalImpl({
   onClose,
@@ -60,16 +61,21 @@ function PortalImpl({
   return (
     <div className='Modal__overlay' role='dialog'>
       <div className='Modal__modal' tabIndex={-1} ref={modalRef}>
-        <h2 className='Modal__title'>{title}</h2>
-        <button
-          className='Modal__closeButton'
-          aria-label='Close modal'
-          type='button'
-          onClick={onClose}
+        <Group className='Modal__modalHeader' justify='space-between'>
+          <Text>{title}</Text>
+          <CloseButton className='Modal__closeButton' onClick={onClose} />
+        </Group>
+        <ScrollArea
+          classNames={{
+            root: 'Modal__scrollareaRoot',
+            thumb: 'Modal__scrollbarThumb',
+            viewport: 'Modal__scrollareaViewport',
+          }}
+          scrollbars='y'
+          scrollbarSize={'0.5rem'}
         >
-          X
-        </button>
-        <div className='Modal__content'>{children}</div>
+          <Stack className='Modal__content'>{children}</Stack>
+        </ScrollArea>
       </div>
     </div>
   );

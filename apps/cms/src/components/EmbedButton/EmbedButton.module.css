@@ -1,0 +1,38 @@
+.embed_button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(5px);
+  cursor: not-allowed;
+  background-color: transparent;
+  color: var(--color-menu-text-light);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: var(--editor-menu-border);
+  border-radius: rem(10px);
+}
+
+.embed_button:not(:disabled):hover {
+  cursor: pointer;
+  border: rem(1px) solid var(--mantine-primary-color-filled);
+}
+
+.embed_button > svg {
+  height: rem(28px);
+  width: auto;
+  stroke-width: 1;
+  stroke: var(--color-menu-text-light);
+}
+
+.embed_button:disabled {
+  color: var(--color-menu-border-light);
+  svg {
+    stroke: var(--color-menu-border-light);
+  }
+}
+
+.embed_button > span {
+  font-size: var(--font-size-composer-sidebar-small);
+}

@@ -1,4 +1,12 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import {
+  IconBrandYoutube,
+  IconBrandYoutubeFilled,
+  IconBrandTwitter,
+  IconBrandInstagram,
+  IconMap,
+  IconCode,
+} from '@tabler/icons-react';
 import { mergeRegister } from '@lexical/utils';
 import {
   $createParagraphNode,
@@ -10,10 +18,11 @@ import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 import { INSERT_EMBED_COMMAND } from '../../utils/exportedCommands';
+import EmbedButton from '../../../../components/EmbedButton/EmbedButton';
 
-import Button from '../../ui/Button';
-import { DialogActions, DialogButtonsList } from '../../ui/Dialog';
-import TextInput from '../../ui/TextInput';
+import { Button, Textarea } from '@mantine/core';
+import { DialogButtonsGrid, DialogFooter } from '../../ui/Dialog';
+import { TextInput } from '@mantine/core';
 import {
   $createEmbedNode,
   EmbedNode,
@@ -118,14 +127,19 @@ export function InsertYoutubeDialog({
 
   return (
     <>
-      <TextInput
-        label='Embed HTML'
-        placeholder='Paste raw HTML'
-        onChange={(value) => transformYoutube(value)}
+      <Textarea
+        label='YouTube Video Embed Code'
+        autosize
+        minRows={6}
+        maxRows={12}
+        placeholder='e.g. <iframe width="560" height="315" ...'
+        description='The raw embed code copied from YouTube'
+        onChange={(e) => transformYoutube(e.currentTarget.value)}
         value={input}
         data-test-id='embed-modal-html-input'
+        required
       />
-      <DialogActions>
+      <DialogFooter>
         <Button
           data-test-id='embed-modal-confirm-btn'
           disabled={isDisabled}
@@ -133,7 +147,7 @@ export function InsertYoutubeDialog({
         >
           Confirm
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }
@@ -181,13 +195,15 @@ export function InsertYoutubeShortDialog({
   return (
     <>
       <TextInput
-        label='Short Link'
-        placeholder='Paste the link to the short'
-        onChange={(value) => transformYoutubeShort(value)}
+        label='YouTube Short Link'
+        placeholder='e.g. https://youtube.com/shorts/....'
+        description='Paste the link to a YouTube short'
+        onChange={(e) => transformYoutubeShort(e.currentTarget.value)}
         value={input}
+        required
         data-test-id='embed-modal-html-input'
       />
-      <DialogActions>
+      <DialogFooter>
         <Button
           data-test-id='embed-modal-confirm-btn'
           disabled={isDisabled}
@@ -195,7 +211,7 @@ export function InsertYoutubeShortDialog({
         >
           Confirm
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }
@@ -238,13 +254,15 @@ export function InsertTwitterDialog({
   return (
     <>
       <TextInput
-        label='Tweet URL'
+        label='Link to Tweet'
         placeholder='e.g. https://twitter.com/user/status/1234567890'
-        onChange={(value) => transformTwitter(value)}
+        description='Paste the link to a Tweet'
+        onChange={(e) => transformTwitter(e.currentTarget.value)}
         value={input}
+        required
         data-test-id='embed-modal-html-input'
       />
-      <DialogActions>
+      <DialogFooter>
         <Button
           data-test-id='embed-modal-confirm-btn'
           disabled={isDisabled}
@@ -252,7 +270,7 @@ export function InsertTwitterDialog({
         >
           Confirm
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }
@@ -305,14 +323,19 @@ export function InsertInstagramDialog({
 
   return (
     <>
-      <TextInput
-        label='Embed HTML'
-        placeholder='Paste raw HTML embed code'
-        onChange={(value) => transformInstagram(value)}
+      <Textarea
+        label='Instagram Embed Code'
+        autosize
+        minRows={6}
+        maxRows={12}
+        placeholder='e.g. <blockquote class="instagram-media" data-instgrm ...'
+        description='The raw embed code copied from Instagram'
+        onChange={(e) => transformInstagram(e.currentTarget.value)}
         value={input}
         data-test-id='embed-modal-html-input'
+        required
       />
-      <DialogActions>
+      <DialogFooter>
         <Button
           data-test-id='embed-modal-confirm-btn'
           disabled={isDisabled}
@@ -320,7 +343,7 @@ export function InsertInstagramDialog({
         >
           Confirm
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }
@@ -376,14 +399,20 @@ export function InsertGoogleMapsDialog({
 
   return (
     <>
-      <TextInput
-        label='Embed HTML'
-        placeholder='Paste embed code here'
-        onChange={(value) => transformGoogleMaps(value)}
+      <Textarea
+        label='Google Maps Embed Code'
+        autosize
+        minRows={6}
+        maxRows={12}
+        placeholder='e.g. <iframe src="https://www.google.com/maps...'
+        description='The raw embed code copied from Google Maps'
+        onChange={(e) => transformGoogleMaps(e.currentTarget.value)}
         value={input}
         data-test-id='embed-modal-html-input'
+        required
       />
-      <DialogActions>
+
+      <DialogFooter>
         <Button
           data-test-id='embed-modal-confirm-btn'
           disabled={isDisabled}
@@ -391,7 +420,7 @@ export function InsertGoogleMapsDialog({
         >
           Confirm
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }
@@ -471,14 +500,19 @@ export function InsertGeneralDialog({
 
   return (
     <>
-      <TextInput
-        label='Embed HTML'
-        placeholder='Paste raw HTML embed code'
-        onChange={transformGeneralEmbed}
+      <Textarea
+        label='Embed Code'
+        autosize
+        minRows={6}
+        maxRows={12}
+        placeholder='e.g. <iframe src="...'
+        description='The raw embed code you wish to insert'
+        onChange={(e) => transformGeneralEmbed(e.currentTarget.value)}
         value={input}
         data-test-id='embed-modal-html-input'
+        required
       />
-      <DialogActions>
+      <DialogFooter>
         <Button
           data-test-id='embed-modal-confirm-btn'
           disabled={isDisabled}
@@ -486,7 +520,7 @@ export function InsertGeneralDialog({
         >
           Confirm
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </>
   );
 }
@@ -508,6 +542,40 @@ export function InsertEmbedDialog({
     | 'general'
   >(null);
 
+  // Data for Embed Type Buttons
+  const embedTypeButtonItems = [
+    {
+      text: 'YouTube',
+      onClick: () => setMode('youtube'),
+      icon: IconBrandYoutube,
+    },
+    {
+      text: 'YouTube Short',
+      onClick: () => setMode('youtube-shorts'),
+      icon: IconBrandYoutubeFilled,
+    },
+    {
+      text: 'Twitter',
+      onClick: () => setMode('twitter'),
+      icon: IconBrandTwitter,
+    },
+    {
+      text: 'Instagram',
+      onClick: () => setMode('instagram'),
+      icon: IconBrandInstagram,
+    },
+    {
+      text: 'Google Maps',
+      onClick: () => setMode('google-maps'),
+      icon: IconMap,
+    },
+    {
+      text: 'Other (experimental)',
+      onClick: () => setMode('general'),
+      icon: IconCode,
+    },
+  ];
+
   const onClick = (payload: InsertEmbedPayload): void => {
     activeEditor.dispatchCommand(INSERT_EMBED_COMMAND, payload);
     onClose();
@@ -516,44 +584,11 @@ export function InsertEmbedDialog({
   return (
     <>
       {!embedType && (
-        <DialogButtonsList>
-          <Button
-            data-test-id='embed-modal-option-url'
-            onClick={() => setMode('youtube')}
-          >
-            Embed YouTube
-          </Button>
-          <Button
-            data-test-id='embed-modal-option-url'
-            onClick={() => setMode('youtube-shorts')}
-          >
-            Embed YouTube Short
-          </Button>
-          <Button
-            data-test-id='embed-modal-option-url'
-            onClick={() => setMode('twitter')}
-          >
-            Embed Tweet
-          </Button>
-          <Button
-            data-test-id='embed-modal-option-url'
-            onClick={() => setMode('instagram')}
-          >
-            Embed Instagram Post
-          </Button>
-          <Button
-            data-test-id='embed-modal-option-url'
-            onClick={() => setMode('google-maps')}
-          >
-            Embed Google Maps
-          </Button>
-          <Button
-            data-test-id='embed-modal-option-url'
-            onClick={() => setMode('general')}
-          >
-            Embed Other (might not work)
-          </Button>
-        </DialogButtonsList>
+        <DialogButtonsGrid>
+          {embedTypeButtonItems.map((item, index) => {
+            return <EmbedButton key={index} item={item} />;
+          })}
+        </DialogButtonsGrid>
       )}
 
       {embedType === 'youtube' && (
