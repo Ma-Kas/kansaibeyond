@@ -5,11 +5,21 @@
   margin-top: 20px;
 }
 
+.DialogFooter {
+  margin-left: auto;
+}
+
 .DialogButtonsList {
   display: flex;
   flex-direction: column;
   justify-content: right;
   margin-top: 20px;
+}
+
+.DialogButtonGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: rem(15px);
 }
 
 .DialogButtonsList button {
