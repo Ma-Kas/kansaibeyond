@@ -115,7 +115,7 @@ export const get_all_posts = async (
             ],
           },
         ],
-        order: [['createdAt', 'DESC']],
+        order: [['updatedAt', 'DESC']],
       });
 
       if (!allPosts) {
