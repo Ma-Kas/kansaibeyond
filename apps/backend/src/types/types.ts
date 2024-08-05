@@ -99,7 +99,7 @@ type NewPostValidationResult = {
 type NewPost = Omit<Post, 'id' | 'views' | 'readTime'>;
 
 type UpdatePost = {
-  postData?: Partial<Omit<Post, 'id' | 'views' | 'readTime' | 'userId'>>;
+  postData?: Partial<Omit<Post, 'id' | 'views' | 'userId'>>;
   categories?: number[];
   tags?: number[];
   relatedPosts?: number[];

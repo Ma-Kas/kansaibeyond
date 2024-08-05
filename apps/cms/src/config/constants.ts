@@ -20,6 +20,7 @@ export const SELECTABLE_USER_ROLES = {
 } as const;
 
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
+export const READ_TIME_WORDS_PER_MINUTE = 270;
 
 export const OWNER_USERNAME = import.meta.env.VITE_OWNER_USERNAME;
 

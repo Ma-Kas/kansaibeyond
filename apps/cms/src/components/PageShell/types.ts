@@ -79,6 +79,7 @@ export const updatePostSchema = z
         { errorMap: () => ({ message: 'Invalid status option.' }) }
       )
       .optional(),
+    readTime: z.number(),
     categories: z
       .array(z.number())
       .min(MIN_CATEGORIES_PER_POST, {
