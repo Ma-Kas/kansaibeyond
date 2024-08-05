@@ -9,6 +9,7 @@ type PostFormValues = {
     altText: string;
   };
   status: 'published' | 'draft' | 'pending' | 'trash';
+  readTime: number;
   categories: number[];
   tags: number[];
   relatedPosts: null | number[];

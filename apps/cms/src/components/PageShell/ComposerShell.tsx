@@ -74,6 +74,7 @@ const ComposerShell = () => {
         altText: '',
       },
       status: 'draft',
+      readTime: 0,
       categories: [],
       tags: [],
       relatedPosts: [],
@@ -91,6 +92,7 @@ const ComposerShell = () => {
           ? postQuery.data.coverImage
           : { urlSlug: '', altText: '' },
         status: postQuery.data.status ? postQuery.data.status : 'draft',
+        readTime: postQuery.data.readTime ? postQuery.data.readTime : 0,
         categories: postQuery.data.categories.map((cat) => cat.id),
         tags: postQuery.data.tags.map((tag) => tag.id),
         relatedPosts: postQuery.data.relatedPosts

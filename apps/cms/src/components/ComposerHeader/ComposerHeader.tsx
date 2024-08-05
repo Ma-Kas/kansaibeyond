@@ -9,9 +9,11 @@ import {
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import {
+  $getRoot,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
+  EditorState,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
@@ -21,7 +23,10 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { usePostFormContext } from '../PageShell/post-form-context';
 import { GeneralConfirmModal } from '../FeedbackModals/FeedbackModals';
 import { SuccessNotification } from '../FeedbackPopups/FeedbackPopups';
-import { FRONTEND_BASE_URL } from '../../config/constants';
+import {
+  FRONTEND_BASE_URL,
+  READ_TIME_WORDS_PER_MINUTE,
+} from '../../config/constants';
 
 import classes from './ComposerHeader.module.css';
 
@@ -93,10 +98,23 @@ const ComposerHeader = ({ invalidateQueries, formRef }: Props) => {
     await invalidateQueries();
   };
 
+  const setReadTime = (editorState: EditorState) => {
+    // Get the text content of root node, and count words
+    // Return approximate readtime by assuming xxx/min read speed
+    editorState.read(() => {
+      const wordArray = $getRoot().getTextContent().trim().split(/\s+/);
+      postForm.setFieldValue(
+        'readTime',
+        Math.ceil(wordArray.length / READ_TIME_WORDS_PER_MINUTE)
+      );
+    });
+  };
+
   const handleSave = useCallback(() => {
     const editorState = editor.getEditorState();
     const jsonString = JSON.stringify(editorState);
     postForm.setFieldValue('content', jsonString);
+    setReadTime(editorState);
     if (formRef.current) {
       formRef.current.dispatchEvent(
         new Event('submit', { cancelable: true, bubbles: true })
