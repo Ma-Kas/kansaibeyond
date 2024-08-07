@@ -21,6 +21,7 @@ import cmsAffiliateRouter from './routes/cms-routes/affiliates';
 import cmsSocialMediaReelRouter from './routes/cms-routes/social-media-reels';
 
 import frontendPostRouter from './routes/frontend-routes/posts';
+import frontendPostSlugRouter from './routes/frontend-routes/post-slugs';
 import frontendCategoryRouter from './routes/frontend-routes/categories';
 import frontendTagRouter from './routes/frontend-routes/tags';
 import frontendAffiliateRouter from './routes/frontend-routes/affiliates';
@@ -71,6 +72,7 @@ cmsRouter.use(
 
 // Frontend Routes
 frontendRouter.use('/v1/posts', frontendPostRouter);
+frontendRouter.use('/v1/post-slugs', frontendPostSlugRouter);
 frontendRouter.use('/v1/categories', frontendCategoryRouter);
 frontendRouter.use('/v1/tags', frontendTagRouter);
 frontendRouter.use('/v1/affiliates', frontendAffiliateRouter);
