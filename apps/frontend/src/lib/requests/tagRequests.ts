@@ -29,7 +29,9 @@ const allTagsSchema = z.array(tagSchema);
 
 export const getAllTags = async () => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/tags`);
+    const response = await fetch(`${BACKEND_BASE_URL}/tags`, {
+      next: { tags: ['tags', 'tagUpdated'] },
+    });
 
     if (!response.ok) {
       throw new CustomError({
@@ -49,7 +51,9 @@ export const getAllTags = async () => {
 
 export const getOneTag = async (tagSlug: string) => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
+    const response = await fetch(`${BACKEND_BASE_URL}/tags/${tagSlug}`, {
+      next: { tags: [tagSlug, 'tagUpdated'] },
+    });
 
     if (!response.ok) {
       if (response.status === 404) {

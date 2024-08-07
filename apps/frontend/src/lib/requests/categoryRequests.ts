@@ -40,7 +40,9 @@ const singleCategorySchema = categorySchema.omit({ posts: true });
 
 export const getAllCategoriesList = async () => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/categories`);
+    const response = await fetch(`${BACKEND_BASE_URL}/categories`, {
+      next: { tags: ['categories', 'categoryUpdated'] },
+    });
 
     if (!response.ok) {
       throw new CustomError({
@@ -61,7 +63,8 @@ export const getAllCategoriesList = async () => {
 export const getOneCategory = async (categorySlug: string) => {
   try {
     const response = await fetch(
-      `${BACKEND_BASE_URL}/categories/${categorySlug}`
+      `${BACKEND_BASE_URL}/categories/${categorySlug}`,
+      { next: { tags: [categorySlug, 'categoryUpdated'] } }
     );
 
     if (!response.ok) {

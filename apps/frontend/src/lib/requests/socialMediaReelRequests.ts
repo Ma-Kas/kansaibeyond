@@ -32,7 +32,9 @@ export type SocialMediaReelType = z.infer<typeof socialMediaReelSchema>;
 
 export const getSocialMediaReel = async () => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/social-media-reels`);
+    const response = await fetch(`${BACKEND_BASE_URL}/social-media-reels`, {
+      next: { tags: ['socialMediaReel'] },
+    });
 
     if (!response.ok) {
       throw new CustomError({

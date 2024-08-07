@@ -39,7 +39,9 @@ const allAffiliatesSchema = z.array(affiliateSchema);
 
 export const getAllAffiliates = async () => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/affiliates`);
+    const response = await fetch(`${BACKEND_BASE_URL}/affiliates`, {
+      next: { tags: ['affiliates'] },
+    });
 
     if (!response.ok) {
       throw new CustomError({
