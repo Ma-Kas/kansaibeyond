@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BACKEND_BASE_URL } from '@/config/constants';
+import { BACKEND_BASE_URL, REVALIDATION_TAGS } from '@/config/constants';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 import CustomError from '@/utils/custom-error';
 
@@ -33,7 +33,7 @@ export type SocialMediaReelType = z.infer<typeof socialMediaReelSchema>;
 export const getSocialMediaReel = async () => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/social-media-reels`, {
-      next: { tags: ['socialMediaReel'] },
+      next: { tags: [REVALIDATION_TAGS.socialMediaReel] },
     });
 
     if (!response.ok) {

@@ -32,6 +32,8 @@ export const FRONTEND_BASE_URL = import.meta.env.DEV
   ? import.meta.env.VITE_FRONTEND_BASE_URL_DEV
   : import.meta.env.VITE_FRONTEND_BASE_URL_PROD;
 
+export const REVALIDATION_SECRET = import.meta.env.VITE_REVALIDATION_SECRET;
+
 // Cloudinary Image Transformation Constants
 export const CLOUDINARY_MEDIA_LIBRARY_WIDGET_SCRIPT_URL =
   'https://media-library.cloudinary.com/global/all.js';

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { notFound } from 'next/navigation';
-import { BACKEND_BASE_URL } from '@/config/constants';
+import { BACKEND_BASE_URL, REVALIDATION_TAGS } from '@/config/constants';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 import CustomError from '@/utils/custom-error';
 
@@ -41,7 +41,9 @@ const singleCategorySchema = categorySchema.omit({ posts: true });
 export const getAllCategoriesList = async () => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/categories`, {
-      next: { tags: ['categories', 'categoryUpdated'] },
+      next: {
+        tags: [REVALIDATION_TAGS.categories, REVALIDATION_TAGS.categoryUpdated],
+      },
     });
 
     if (!response.ok) {
@@ -64,7 +66,7 @@ export const getOneCategory = async (categorySlug: string) => {
   try {
     const response = await fetch(
       `${BACKEND_BASE_URL}/categories/${categorySlug}`,
-      { next: { tags: [categorySlug, 'categoryUpdated'] } }
+      { next: { tags: [categorySlug, REVALIDATION_TAGS.categoryUpdated] } }
     );
 
     if (!response.ok) {

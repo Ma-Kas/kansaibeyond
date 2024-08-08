@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { notFound } from 'next/navigation';
-import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
+import {
+  BACKEND_BASE_URL,
+  USER_ROLES,
+  REVALIDATION_TAGS,
+} from '@/config/constants';
 import CustomError from '@/utils/custom-error';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 import { setSessionCookieHeader } from '@/utils/set-session-cookie-header';
@@ -128,16 +132,16 @@ export const getAllPosts = async (queryParams?: string) => {
   try {
     const response = queryParams
       ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`, {
-          next: { tags: ['posts'] },
+          next: { tags: [REVALIDATION_TAGS.posts] },
         })
       : await fetch(`${BACKEND_BASE_URL}/posts`, {
           next: {
             tags: [
-              'posts',
-              'postUpdated',
-              'categoryUpdated',
-              'tagUpdated',
-              'userUpdated',
+              REVALIDATION_TAGS.posts,
+              REVALIDATION_TAGS.postUpdated,
+              REVALIDATION_TAGS.categoryUpdated,
+              REVALIDATION_TAGS.tagUpdated,
+              REVALIDATION_TAGS.userUpdated,
             ],
           },
         });
@@ -160,7 +164,7 @@ export const getAllPosts = async (queryParams?: string) => {
 export const getPostSlugList = async () => {
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/post-slugs`, {
-      next: { tags: ['posts'] },
+      next: { tags: [REVALIDATION_TAGS.postUpdated] },
     });
 
     if (!response.ok) {
@@ -185,11 +189,11 @@ export const getSearchPosts = async (queryParams: string) => {
       {
         next: {
           tags: [
-            'posts',
-            'postUpdated',
-            'categoryUpdated',
-            'tagUpdated',
-            'userUpdated',
+            REVALIDATION_TAGS.posts,
+            REVALIDATION_TAGS.postUpdated,
+            REVALIDATION_TAGS.categoryUpdated,
+            REVALIDATION_TAGS.tagUpdated,
+            REVALIDATION_TAGS.userUpdated,
           ],
         },
       }
@@ -216,10 +220,10 @@ export const getOnePost = async (postSlug: string) => {
       next: {
         tags: [
           postSlug,
-          'postUpdated',
-          'categoryUpdated',
-          'tagUpdated',
-          'userUpdated',
+          REVALIDATION_TAGS.postUpdated,
+          REVALIDATION_TAGS.categoryUpdated,
+          REVALIDATION_TAGS.tagUpdated,
+          REVALIDATION_TAGS.userUpdated,
         ],
       },
     });
