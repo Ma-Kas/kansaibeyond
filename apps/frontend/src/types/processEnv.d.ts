@@ -6,6 +6,7 @@ const envVariables = z.object({
   NEXT_PUBLIC_CLOUDINARY_BASE_URL: z.string(),
   CLOUDINARY_CLOUD_NAME: z.string(),
   CLOUDINARY_API_KEY: z.string(),
+  REVALIDATION_SECRET: z.string(),
 });
 
 envVariables.parse(process.env);

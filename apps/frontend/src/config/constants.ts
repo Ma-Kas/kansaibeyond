@@ -3,6 +3,8 @@ export const BACKEND_BASE_URL =
     ? process.env.BACKEND_BASE_URL_DEV
     : process.env.BACKEND_BASE_URL_PROD;
 
+export const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET;
+
 export const USER_ROLES = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',
