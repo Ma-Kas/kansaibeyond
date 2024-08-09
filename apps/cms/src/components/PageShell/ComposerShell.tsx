@@ -28,6 +28,8 @@ import { EditorThemeClasses, KlassConstructor, LexicalNode } from 'lexical';
 import EditorTheme from '../../pages/Editor/themes/EditorTheme';
 
 import classes from './Shell.module.css';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 type InitialConfigType = {
   editorState: string | undefined;
@@ -106,13 +108,16 @@ const ComposerShell = () => {
   const postUpdateMutation = useMutation({
     mutationFn: ({ urlSlug, values }: { urlSlug: string; values: unknown }) =>
       updatePost(urlSlug, values),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data) {
         notifications.show(
           SuccessNotification({
             bodyText: `Post updated: ${data.title}`,
           })
         );
+        if (data.status === 'published') {
+          await postRevalidation(REVALIDATION_TAGS.postUpdated);
+        }
       }
       if (postFormRef.current) {
         postFormRef.current.dispatchEvent(

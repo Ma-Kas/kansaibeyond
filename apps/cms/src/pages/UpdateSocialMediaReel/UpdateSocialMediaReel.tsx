@@ -24,6 +24,8 @@ import {
 import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { socialMediaReelSchema, SocialMediaReel } from './types';
+import { REVALIDATION_TAGS } from '../../config/constants';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './UpdateSocialMediaReel.module.css';
@@ -122,7 +124,11 @@ const UpdateSocialMediaReel = () => {
       values: SocialMediaReel;
     }) => updateSocialMediaReel(reelId, values),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['social-media-reel'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['social-media-reel'] }),
+        postRevalidation(REVALIDATION_TAGS.socialMediaReel),
+      ]);
+
       if (data) {
         notifications.show(
           SuccessNotification({

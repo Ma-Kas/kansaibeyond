@@ -30,6 +30,8 @@ import { Affiliate, affiliateSchema } from './types';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdateAffiliateBlog.module.css';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 // Removes userId from submitted data if not set
 // form requires value of 0 as default value to satisfy TS, but backend needs
@@ -111,6 +113,7 @@ const UpdateAffiliateBlog = () => {
           queryKey: [`affiliate_${affiliateId}`],
           exact: true,
         }),
+        postRevalidation(REVALIDATION_TAGS.affiliates),
       ]);
 
       navigate('../..', { relative: 'path' });

@@ -15,6 +15,8 @@ import {
   ErrorNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import { tagSchema } from './types';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdataBlogTag.module.css';
@@ -43,7 +45,11 @@ const NewBlogTag = () => {
   const tagPostMutation = useMutation({
     mutationFn: postTag,
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['tags'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['tags'] }),
+        postRevalidation(REVALIDATION_TAGS.tags),
+      ]);
+
       navigate('..', { relative: 'path' });
       notifications.show(
         SuccessNotification({ bodyText: `Created new tag: ${data?.tagName}` })

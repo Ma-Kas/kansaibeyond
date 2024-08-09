@@ -16,6 +16,8 @@ import {
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { tagSchema, Tag } from './types';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdataBlogTag.module.css';
@@ -67,11 +69,13 @@ const UpdateBlogTag = () => {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ['tags'] }),
           queryClient.invalidateQueries({ queryKey: [urlSlug] }),
+          postRevalidation(REVALIDATION_TAGS.tagUpdated),
         ]);
       } else {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ['tags'] }),
           queryClient.removeQueries({ queryKey: [urlSlug], exact: true }),
+          postRevalidation(REVALIDATION_TAGS.tagUpdated),
         ]);
       }
 

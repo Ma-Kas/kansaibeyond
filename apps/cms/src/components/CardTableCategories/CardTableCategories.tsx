@@ -16,9 +16,11 @@ import { deleteCategory } from '../../requests/categoryRequests';
 import {
   CLOUDINARY_BASE_URL,
   CATEGORY_LIST_THUMB_TRANSFORM,
+  REVALIDATION_TAGS,
 } from '../../config/constants';
 import useAuth from '../../hooks/useAuth';
 import { hasAdminPermission } from '../../utils/permission-group-handler';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from './CardTableCategories.module.css';
 
@@ -50,7 +52,11 @@ const CardTableCategories = ({
   const categoryDeleteMutation = useMutation({
     mutationFn: (urlSlug: string) => deleteCategory(urlSlug),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['categories'] }),
+        postRevalidation(REVALIDATION_TAGS.categoryUpdated),
+      ]);
+
       notifications.show(SuccessNotification({ bodyText: data?.message }));
     },
     onError: (err) => {

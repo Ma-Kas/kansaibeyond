@@ -18,6 +18,8 @@ import {
   hasAdminPermission,
   hasWriterPermission,
 } from '../../utils/permission-group-handler';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 import classes from './CardTableTags.module.css';
 
@@ -44,7 +46,11 @@ const CardTableTags = ({ headerTopStyle, tagTableData }: TableProps) => {
   const tagDeleteMutation = useMutation({
     mutationFn: (urlSlug: string) => deleteTag(urlSlug),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['tags'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['tags'] }),
+        postRevalidation(REVALIDATION_TAGS.tagUpdated),
+      ]);
+
       notifications.show(SuccessNotification({ bodyText: data?.message }));
     },
     onError: (err) => {

@@ -26,12 +26,14 @@ import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME,
+  REVALIDATION_TAGS,
 } from '../../config/constants';
 import {
   ReturnDataAsset,
   InsertReturnData,
 } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-types';
 import { categorySchema } from './types';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdateBlogCategory.module.css';
@@ -65,7 +67,11 @@ const NewBlogCategory = () => {
   const categoryPostMutation = useMutation({
     mutationFn: postCategory,
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['categories'] }),
+        postRevalidation(REVALIDATION_TAGS.categories),
+      ]);
+
       navigate('..', { relative: 'path' });
       notifications.show(
         SuccessNotification({

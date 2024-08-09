@@ -33,6 +33,7 @@ import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 import {
   CLOUDINARY_BASE_URL,
   POST_LIST_THUMB_TRANSFORM,
+  REVALIDATION_TAGS,
 } from '../../config/constants';
 import useAuth from '../../hooks/useAuth';
 import {
@@ -40,6 +41,7 @@ import {
   hasOwnerPermission,
   hasWriterPermission,
 } from '../../utils/permission-group-handler';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from './CardTablePosts.module.css';
 
@@ -60,7 +62,11 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
   const postDeleteMutation = useMutation({
     mutationFn: (urlSlug: string) => deletePost(urlSlug),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['posts'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['posts'] }),
+        postRevalidation(REVALIDATION_TAGS.postUpdated),
+      ]);
+
       notifications.show(SuccessNotification({ bodyText: data?.message }));
     },
     onError: (err) => {
@@ -75,6 +81,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
     onSuccess: async (data) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['posts'] }),
+        postRevalidation(REVALIDATION_TAGS.postUpdated),
       ]);
 
       if (data) {
@@ -95,6 +102,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
     onSuccess: async (data) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['posts'] }),
+        postRevalidation(REVALIDATION_TAGS.postUpdated),
       ]);
 
       notifications.show(SuccessNotification({ bodyText: data?.message }));

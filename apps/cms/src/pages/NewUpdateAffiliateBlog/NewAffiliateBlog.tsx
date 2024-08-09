@@ -23,10 +23,12 @@ import {
   ErrorNotification,
 } from '../../components/FeedbackPopups/FeedbackPopups';
 import { Affiliate, affiliateSchema } from './types';
+import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdateAffiliateBlog.module.css';
-import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 
 // Removes userId from submitted data if not set
 // form requires value of 0 as default value to satisfy TS, but backend needs
@@ -74,7 +76,11 @@ const NewAffiliateBlog = () => {
   const affiliatePostMutation = useMutation({
     mutationFn: postAffiliate,
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['affiliates'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['affiliates'] }),
+        postRevalidation(REVALIDATION_TAGS.affiliates),
+      ]);
+
       navigate('..', { relative: 'path' });
       notifications.show(
         SuccessNotification({
