@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
@@ -8,6 +9,12 @@ import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './blog.module.css';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description:
+    "An overview of all the most recent content on this blog. Find what's new and exciting.",
+};
 
 const BlogHubPage = () => {
   const postsSectionHeading = (

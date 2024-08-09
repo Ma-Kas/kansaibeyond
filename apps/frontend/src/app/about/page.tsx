@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
 import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
@@ -7,6 +8,12 @@ import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 
 import classes from './about.module.css';
+
+export const metadata: Metadata = {
+  title: 'About',
+  description:
+    'All about the writer and owner of this amazing website, as well as her personal Japan story.',
+};
 
 const AboutPage = () => {
   return (

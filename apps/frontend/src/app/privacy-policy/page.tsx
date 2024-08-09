@@ -1,4 +1,12 @@
+import type { Metadata } from 'next';
+
 import classes from './PrivacyPolicy.module.css';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description:
+    'Learn about our privacy policy, so you know exactly what data we use, and why.',
+};
 
 const PrivacyPolicyPage = () => {
   return (

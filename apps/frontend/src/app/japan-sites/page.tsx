@@ -1,10 +1,17 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 import AffiliateCardsSection from '@/components/AffiliateCardsSection/AffiliateCardsSection';
 import AffiliateCardsSectionSkeleton from '@/components/AffiliateCardsSection/AffiliateCardsSectionSkeleton';
 import { KANSAIBEYOND_EMAIL } from '@/config/constants';
 
 import classes from './JapanSites.module.css';
+
+export const metadata: Metadata = {
+  title: 'Japan Sites',
+  description:
+    'There are a lot of blogs about Japan (Japan travel, Japan culture, working in Japan, hobbies in Japan, etc). I want to introduce some of these awesome people to you.',
+};
 
 const JapanSitesPage = () => {
   return (

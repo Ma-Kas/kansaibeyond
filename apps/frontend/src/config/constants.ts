@@ -8,6 +8,11 @@ export const CMS_BASE_URL =
     ? process.env.CMS_BASE_URL_DEV
     : process.env.CMS_BASE_URL_PROD;
 
+export const FRONTEND_BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? process.env.FRONTEND_BASE_URL_DEV
+    : process.env.FRONTEND_BASE_URL_PROD;
+
 export const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET;
 export const REVALIDATION_TAGS = {
   posts: 'posts',
