@@ -3,6 +3,11 @@ export const BACKEND_BASE_URL =
     ? process.env.BACKEND_BASE_URL_DEV
     : process.env.BACKEND_BASE_URL_PROD;
 
+export const CMS_BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? process.env.CMS_BASE_URL_DEV
+    : process.env.CMS_BASE_URL_PROD;
+
 export const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET;
 export const REVALIDATION_TAGS = {
   posts: 'posts',
@@ -14,7 +19,7 @@ export const REVALIDATION_TAGS = {
   tagUpdated: 'tagUpdated',
   affiliates: 'affiliates',
   socialMediaReel: 'socialMediaReel',
-} as const;
+};
 
 export const USER_ROLES = {
   OWNER: 'OWNER',
