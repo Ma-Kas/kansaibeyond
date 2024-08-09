@@ -132,7 +132,15 @@ export const getAllPosts = async (queryParams?: string) => {
   try {
     const response = queryParams
       ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`, {
-          next: { tags: [REVALIDATION_TAGS.posts] },
+          next: {
+            tags: [
+              REVALIDATION_TAGS.posts,
+              REVALIDATION_TAGS.postUpdated,
+              REVALIDATION_TAGS.categoryUpdated,
+              REVALIDATION_TAGS.tagUpdated,
+              REVALIDATION_TAGS.userUpdated,
+            ],
+          },
         })
       : await fetch(`${BACKEND_BASE_URL}/posts`, {
           next: {
