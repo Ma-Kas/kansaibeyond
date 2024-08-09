@@ -13,6 +13,8 @@ import {
 } from '../FeedbackPopups/FeedbackPopups';
 import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 import { Affiliate, deleteAffiliate } from '../../requests/affiliateRequests';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
+import { REVALIDATION_TAGS } from '../../config/constants';
 
 import classes from './CardTableAffiliates.module.css';
 
@@ -33,7 +35,11 @@ const CardTableAffiliates = ({
   const affiliateDeleteMutation = useMutation({
     mutationFn: (id: number) => deleteAffiliate(id),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['affiliates'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['affiliates'] }),
+        postRevalidation(REVALIDATION_TAGS.affiliates),
+      ]);
+
       notifications.show(SuccessNotification({ bodyText: data?.message }));
     },
     onError: (err) => {

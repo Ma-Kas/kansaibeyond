@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { notFound } from 'next/navigation';
-import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
+import {
+  BACKEND_BASE_URL,
+  USER_ROLES,
+  REVALIDATION_TAGS,
+} from '@/config/constants';
 import CustomError from '@/utils/custom-error';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 import { setSessionCookieHeader } from '@/utils/set-session-cookie-header';
@@ -114,6 +118,7 @@ const postSchema = z.object(
 ).strict();
 
 const listPostSchema = postSchema.omit({ content: true });
+const postSlugListSchema = z.array(z.object({ postSlug: z.string() }).strict());
 
 export type Post = z.infer<typeof postSchema>;
 export type PostForList = z.infer<typeof listPostSchema>;
@@ -126,8 +131,20 @@ const allPostsSchema = z
 export const getAllPosts = async (queryParams?: string) => {
   try {
     const response = queryParams
-      ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`)
-      : await fetch(`${BACKEND_BASE_URL}/posts`);
+      ? await fetch(`${BACKEND_BASE_URL}/posts${queryParams}`, {
+          next: { tags: [REVALIDATION_TAGS.posts] },
+        })
+      : await fetch(`${BACKEND_BASE_URL}/posts`, {
+          next: {
+            tags: [
+              REVALIDATION_TAGS.posts,
+              REVALIDATION_TAGS.postUpdated,
+              REVALIDATION_TAGS.categoryUpdated,
+              REVALIDATION_TAGS.tagUpdated,
+              REVALIDATION_TAGS.userUpdated,
+            ],
+          },
+        });
 
     if (!response.ok) {
       throw new CustomError({
@@ -144,10 +161,42 @@ export const getAllPosts = async (queryParams?: string) => {
   }
 };
 
+export const getPostSlugList = async () => {
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/post-slugs`, {
+      next: { tags: [REVALIDATION_TAGS.postUpdated] },
+    });
+
+    if (!response.ok) {
+      throw new CustomError({
+        digest: response.statusText,
+        message: response.statusText,
+      });
+    }
+
+    const data: unknown = await response.json();
+    const parsedPostSlugList = postSlugListSchema.parse(data);
+    return parsedPostSlugList;
+  } catch (err: unknown) {
+    return handleRequestErrors(err);
+  }
+};
+
 export const getSearchPosts = async (queryParams: string) => {
   try {
     const response = await fetch(
-      `${BACKEND_BASE_URL}/posts/search${queryParams}`
+      `${BACKEND_BASE_URL}/posts/search${queryParams}`,
+      {
+        next: {
+          tags: [
+            REVALIDATION_TAGS.posts,
+            REVALIDATION_TAGS.postUpdated,
+            REVALIDATION_TAGS.categoryUpdated,
+            REVALIDATION_TAGS.tagUpdated,
+            REVALIDATION_TAGS.userUpdated,
+          ],
+        },
+      }
     );
 
     if (!response.ok) {
@@ -167,7 +216,17 @@ export const getSearchPosts = async (queryParams: string) => {
 
 export const getOnePost = async (postSlug: string) => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`);
+    const response = await fetch(`${BACKEND_BASE_URL}/posts/${postSlug}`, {
+      next: {
+        tags: [
+          postSlug,
+          REVALIDATION_TAGS.postUpdated,
+          REVALIDATION_TAGS.categoryUpdated,
+          REVALIDATION_TAGS.tagUpdated,
+          REVALIDATION_TAGS.userUpdated,
+        ],
+      },
+    });
 
     if (!response.ok) {
       if (response.status === 404) {

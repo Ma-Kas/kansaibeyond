@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { notFound } from 'next/navigation';
-import { BACKEND_BASE_URL } from '@/config/constants';
+import { BACKEND_BASE_URL, REVALIDATION_TAGS } from '@/config/constants';
 import CustomError from '@/utils/custom-error';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 
@@ -29,7 +29,9 @@ const allTagsSchema = z.array(tagSchema);
 
 export const getAllTags = async () => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/tags`);
+    const response = await fetch(`${BACKEND_BASE_URL}/tags`, {
+      next: { tags: [REVALIDATION_TAGS.tags, REVALIDATION_TAGS.tagUpdated] },
+    });
 
     if (!response.ok) {
       throw new CustomError({
@@ -49,7 +51,9 @@ export const getAllTags = async () => {
 
 export const getOneTag = async (tagSlug: string) => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/tags/${tagSlug}`);
+    const response = await fetch(`${BACKEND_BASE_URL}/tags/${tagSlug}`, {
+      next: { tags: [tagSlug, REVALIDATION_TAGS.tagUpdated] },
+    });
 
     if (!response.ok) {
       if (response.status === 404) {

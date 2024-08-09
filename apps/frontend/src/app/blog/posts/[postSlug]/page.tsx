@@ -7,11 +7,8 @@ const DynamicScrollToTop = dynamic(() => import('@/components/ScrollToTop'), {
 });
 
 // export const generateStaticParams = async () => {
-//   const posts = await getAllPosts();
-//   return posts.rows.map((post) => ({
-//     postSlug: post.postSlug,
-//   }));
-// };
+//   const postSlugs = await getPostSlugList();
+//   return postSlugs;
 
 const PostPage = async ({
   params: { postSlug },

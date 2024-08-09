@@ -28,12 +28,14 @@ import {
   CLOUDINARY_BASE_URL,
   USER_LIST_THUMB_TRANSFORM,
   SELECTABLE_USER_ROLES,
+  REVALIDATION_TAGS,
 } from '../../config/constants';
 import useAuth from '../../hooks/useAuth';
 import {
   hasAdminPermission,
   hasOwnerPermission,
 } from '../../utils/permission-group-handler';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from './CardTableUsers.module.css';
 
@@ -59,6 +61,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
     onSuccess: async (data) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['users'] }),
+        postRevalidation(REVALIDATION_TAGS.userUpdated),
       ]);
 
       if (data) {
@@ -77,7 +80,11 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
   const userDeleteMutation = useMutation({
     mutationFn: (username: string) => deleteUser(username),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['users'] }),
+        postRevalidation(REVALIDATION_TAGS.userUpdated),
+      ]);
+
       notifications.show(SuccessNotification({ bodyText: data?.message }));
     },
     onError: (err) => {

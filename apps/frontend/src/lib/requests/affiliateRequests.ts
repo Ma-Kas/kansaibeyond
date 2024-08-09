@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { BACKEND_BASE_URL, USER_ROLES } from '@/config/constants';
+import {
+  BACKEND_BASE_URL,
+  USER_ROLES,
+  REVALIDATION_TAGS,
+} from '@/config/constants';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 import CustomError from '@/utils/custom-error';
 
@@ -39,7 +43,9 @@ const allAffiliatesSchema = z.array(affiliateSchema);
 
 export const getAllAffiliates = async () => {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/affiliates`);
+    const response = await fetch(`${BACKEND_BASE_URL}/affiliates`, {
+      next: { tags: [REVALIDATION_TAGS.affiliates] },
+    });
 
     if (!response.ok) {
       throw new CustomError({

@@ -27,6 +27,7 @@ import CardEditUserIcon from '../../components/CardEditUserIcon/CardEditUserIcon
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME,
+  REVALIDATION_TAGS,
 } from '../../config/constants';
 import {
   ReturnDataAsset,
@@ -38,6 +39,7 @@ import {
   UpdateUserType,
   UpdateUserContactType,
 } from './types';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './UpdateUser.module.css';
@@ -161,6 +163,7 @@ const UpdateUser = () => {
           queryKey: [originalUsername],
           exact: true,
         }),
+        postRevalidation(REVALIDATION_TAGS.userUpdated),
       ]);
 
       navigate('../..', { relative: 'path' });

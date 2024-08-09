@@ -30,6 +30,7 @@ import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME,
+  REVALIDATION_TAGS,
 } from '../../config/constants';
 import {
   ReturnDataAsset,
@@ -37,6 +38,7 @@ import {
 } from '../../components/CloudinaryMediaLibraryWidget/cloudinary-types';
 import DynamicErrorPage from '../ErrorPages/DynamicErrorPage';
 import { categorySchema, Category } from './types';
+import { postRevalidation } from '../../requests/revalidateTagRequests';
 
 import classes from '../../components/PageMainContent/PageMainContent.module.css';
 import localClasses from './NewUpdateBlogCategory.module.css';
@@ -99,11 +101,13 @@ const UpdateBlogCategory = () => {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ['categories'] }),
           queryClient.invalidateQueries({ queryKey: [urlSlug] }),
+          postRevalidation(REVALIDATION_TAGS.categoryUpdated),
         ]);
       } else {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ['categories'] }),
           queryClient.removeQueries({ queryKey: [urlSlug], exact: true }),
+          postRevalidation(REVALIDATION_TAGS.categoryUpdated),
         ]);
       }
 
