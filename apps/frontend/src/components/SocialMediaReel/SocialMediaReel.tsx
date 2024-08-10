@@ -86,7 +86,7 @@ const SocialMediaReel = async () => {
                     className={classes.image}
                     src={`${CLOUDINARY_BASE_URL}${SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM}${item.image.urlSlug}`}
                     alt={item.image.altText}
-                    sizes='(max-width: 640px) 90vw, 250px'
+                    sizes='(max-width: 640px) 90vw, 210px'
                     fill
                   />
                 </a>
