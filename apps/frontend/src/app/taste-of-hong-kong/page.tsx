@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
@@ -10,6 +11,12 @@ import {
 import dimSumImage from '@public/images/hk_dim_sum_opt_a.webp';
 
 import classes from './TasteHK.module.css';
+
+export const metadata: Metadata = {
+  title: 'A Taste of Hong Kong',
+  description:
+    'A collection of Hong Kong style restaurants in Japan, along with my reviews. If you want to try Hong Kong style cuisine in Japan, this is the place for you.',
+};
 
 const TasteOfHKPage = () => {
   const reviewSectionHeading = (

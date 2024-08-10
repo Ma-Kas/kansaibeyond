@@ -1,10 +1,17 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import Searchbar from '@/components/Searchbar/Searchbar';
 import SearchPostGridSection from '@/components/PostGridSection/SearchPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import SectionHeading from '@/components/SectionHeading/SectionHeading';
 
 import classes from './search.module.css';
+
+export const metadata: Metadata = {
+  title: 'Search',
+  description:
+    'Search our database of many exciting blog posts, for exactly the content you are most interested in.',
+};
 
 const SearchPage = ({
   searchParams,

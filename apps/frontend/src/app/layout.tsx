@@ -4,6 +4,7 @@ import Header from '@/components/Header/Header';
 import SocialMediaReel from '@/components/SocialMediaReel/SocialMediaReel';
 import SocialMediaReelSkeleton from '@/components/SocialMediaReel/SocialMediaReelSkeleton';
 import Footer from '@/components/Footer/Footer';
+import { FRONTEND_BASE_URL } from '@/config/constants';
 
 import {
   futuraLtLight,
@@ -26,8 +27,13 @@ import '@/styles/post-transform-variables.css';
 import classes from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Kansai & Beyond',
-  description: 'A Japan blog and travel guide website.',
+  title: {
+    template: '%s | Kansai & Beyond',
+    default: 'Kansai & Beyond',
+  },
+  description:
+    "Kansai & Beyond is a blog site documenting life in Japan, photography, tips for traveling and how it's like working as an English Teacher.",
+  metadataBase: new URL(FRONTEND_BASE_URL),
 };
 
 const RootLayout = ({
