@@ -2,6 +2,8 @@ import { IconRefresh, IconPlus } from '@tabler/icons-react';
 import {
   FEATURED_IMAGE_EDIT_TRANSFORM,
   CLOUDINARY_BASE_URL,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
 } from '../../config/constants';
 
 import classes from './PostSettingsCoverImage.module.css';
@@ -26,7 +28,7 @@ const PostSettingsCoverImage = ({
         <div className={classes['featured_image_inner_edit']}>
           <img
             id={id}
-            src={`${CLOUDINARY_BASE_URL}${FEATURED_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}`}
+            src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${FEATURED_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}${WSRV_TRANSFORM}`}
             alt={coverImage.altText}
           />
         </div>

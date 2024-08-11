@@ -27,6 +27,8 @@ import { deleteUser, updateUser, User } from '../../requests/userRequests';
 import {
   CLOUDINARY_BASE_URL,
   USER_LIST_THUMB_TRANSFORM,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
   SELECTABLE_USER_ROLES,
   REVALIDATION_TAGS,
 } from '../../config/constants';
@@ -199,7 +201,7 @@ const CardTableUsers = ({ headerTopStyle, userTableData }: TableProps) => {
           {item.userIcon && (
             <div className={classes['card_body_table_row_image_container']}>
               <img
-                src={`${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${item.userIcon}`}
+                src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${item.userIcon}${WSRV_TRANSFORM}`}
                 alt={`Image icon for user ${item.username}`}
               />
             </div>

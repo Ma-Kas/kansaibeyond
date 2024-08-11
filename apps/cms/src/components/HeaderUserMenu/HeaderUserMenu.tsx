@@ -22,6 +22,8 @@ import useAuth from '../../hooks/useAuth';
 import {
   CLOUDINARY_BASE_URL,
   USER_LIST_THUMB_TRANSFORM,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
 } from '../../config/constants';
 
 import classes from './HeaderUserMenu.module.css';
@@ -73,7 +75,7 @@ const HeaderUserMenu = () => {
               <Avatar
                 src={
                   user.userIcon
-                    ? `${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${user.userIcon}`
+                    ? `${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${user.userIcon}${WSRV_TRANSFORM}`
                     : null
                 }
                 alt={user.displayName}
@@ -92,7 +94,7 @@ const HeaderUserMenu = () => {
               <Avatar
                 src={
                   user.userIcon
-                    ? `${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${user.userIcon}`
+                    ? `${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${USER_LIST_THUMB_TRANSFORM}${user.userIcon}${WSRV_TRANSFORM}`
                     : null
                 }
                 alt={user.displayName}
