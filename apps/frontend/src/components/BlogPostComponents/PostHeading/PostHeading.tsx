@@ -32,7 +32,7 @@ const PostHeading = ({ format, indent, headingNode, children }: Props) => {
     headingNode.tag,
     {
       key: crypto.randomUUID(),
-      style: { ...(style ? { style: style } : { color: 'red' }) },
+      style: style,
       className: classes[`post_heading_${headingNode.tag.slice(-1)}`],
     },
     children
