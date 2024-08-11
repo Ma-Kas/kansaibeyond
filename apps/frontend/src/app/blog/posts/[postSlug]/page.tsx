@@ -1,16 +1,16 @@
 import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
-import { getOnePost } from '@/lib/requests/postRequests';
+import { getOnePost, getPostSlugList } from '@/lib/requests/postRequests';
 import BlogPostView from '@/components/BlogPostView/BlogPostView';
 
 const DynamicScrollToTop = dynamic(() => import('@/components/ScrollToTop'), {
   ssr: false,
 });
 
-// export const generateStaticParams = async () => {
-//   const postSlugs = await getPostSlugList();
-//   return postSlugs;
-// };
+export const generateStaticParams = async () => {
+  const postSlugs = await getPostSlugList();
+  return postSlugs;
+};
 
 export const generateMetadata = async ({
   params,
