@@ -1,11 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
-
 import type * as CSS from 'csstype';
 import { ImageGalleryContainerNode } from '@/types/post-content-types';
-import {
-  CLOUDINARY_BASE_URL,
-  POST_GALLERY_IMAGE_TRANSFORM,
-} from '@/config/constants';
+import BlurryLoadingGalleryImage from '../BlurryLoadingImage/BlurryLoadingGalleryImage';
+import { POST_GALLERY_IMAGE_TRANSFORM } from '@/config/constants';
 
 import classes from './PostGalleryContainer.module.css';
 
@@ -31,8 +27,14 @@ const PostGalleryContainer = ({ containerNode }: Props) => {
     }
     switch (containerNode.gridType) {
       case 'static-type': {
+        let staticGalleryImageWidth = 740;
+
         if (containerNode.columns && containerNode.columns !== undefined) {
           galleryFiguresStyle.gridTemplateColumns = `repeat(${containerNode.columns}, 1fr)`;
+          // Since imageWidth is unknown, programmatically determine the maximum based on column number
+          staticGalleryImageWidth = Math.ceil(
+            staticGalleryImageWidth / containerNode.columns
+          );
         }
         return (
           <div
@@ -41,11 +43,11 @@ const PostGalleryContainer = ({ containerNode }: Props) => {
           >
             {imageList.map((image, index) => {
               return (
-                <img
+                <BlurryLoadingGalleryImage
                   key={index}
                   className={classes['post_gallery_image_static']}
-                  src={`${CLOUDINARY_BASE_URL}${POST_GALLERY_IMAGE_TRANSFORM}${image.src}`}
-                  alt={image.altText}
+                  image={image}
+                  transform={`/c_fill,w_${staticGalleryImageWidth},q_auto,f_auto`}
                 />
               );
             })}
@@ -60,11 +62,11 @@ const PostGalleryContainer = ({ containerNode }: Props) => {
           >
             {imageList.map((image, index) => {
               return (
-                <img
+                <BlurryLoadingGalleryImage
                   key={index}
                   className={classes['post_gallery_image_flex']}
-                  src={`${CLOUDINARY_BASE_URL}${POST_GALLERY_IMAGE_TRANSFORM}${image.src}`}
-                  alt={image.altText}
+                  image={image}
+                  transform={POST_GALLERY_IMAGE_TRANSFORM}
                 />
               );
             })}
@@ -96,12 +98,12 @@ const PostGalleryContainer = ({ containerNode }: Props) => {
                 galleryImageStyle.aspectRatio = image.aspectRatio;
               }
               return (
-                <img
+                <BlurryLoadingGalleryImage
                   key={index}
                   className={classes['post_gallery_image_dynamic']}
-                  {...(galleryImageStyle && { style: galleryImageStyle })}
-                  src={`${CLOUDINARY_BASE_URL}${POST_GALLERY_IMAGE_TRANSFORM}${image.src}`}
-                  alt={image.altText}
+                  image={image}
+                  transform={POST_GALLERY_IMAGE_TRANSFORM}
+                  style={galleryImageStyle}
                 />
               );
             })}

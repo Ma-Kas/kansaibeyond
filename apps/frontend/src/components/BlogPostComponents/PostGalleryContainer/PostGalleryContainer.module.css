@@ -7,6 +7,12 @@
   max-width: 100%;
 }
 
+.post_gallery_figures_dynamic,
+.post_gallery_figures_flex,
+.post_gallery_figures_static {
+  overflow: hidden;
+}
+
 .post_gallery_figures_dynamic {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -19,6 +25,7 @@
   aspect-ratio: 1 / 1;
   object-fit: cover;
   object-position: center;
+  overflow: hidden;
 }
 
 .post_gallery_figures_static {
