@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable @next/next/no-img-element */
-
 import type * as CSS from 'csstype';
 import useEmblaCarousel from 'embla-carousel-react';
 import {
@@ -13,10 +11,8 @@ import {
   CarouselImage,
   ImageCarouselContainerNode,
 } from '@/types/post-content-types';
-import {
-  CLOUDINARY_BASE_URL,
-  POST_CAROUSEL_IMAGE_TRANSFORM,
-} from '@/config/constants';
+import { POST_CAROUSEL_IMAGE_TRANSFORM } from '@/config/constants';
+import BlurryLoadingGalleryImage from '../BlurryLoadingImage/BlurryLoadingGalleryImage';
 
 import classes from './PostCarouselContainer.module.css';
 
@@ -103,12 +99,12 @@ const PostCarouselContainer = ({ containerNode }: Props) => {
                 style={inlineStyles.slide}
                 key={image.id}
               >
-                <img
+                <BlurryLoadingGalleryImage
                   key={index}
                   className={classes['post_carousel_image']}
+                  image={image}
+                  transform={POST_CAROUSEL_IMAGE_TRANSFORM}
                   style={setImageInlineStyleOverride(image)}
-                  src={`${CLOUDINARY_BASE_URL}${POST_CAROUSEL_IMAGE_TRANSFORM}${image.src}`}
-                  alt={image.altText}
                 />
               </div>
             );

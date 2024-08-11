@@ -16,6 +16,8 @@ import { deleteCategory } from '../../requests/categoryRequests';
 import {
   CLOUDINARY_BASE_URL,
   CATEGORY_LIST_THUMB_TRANSFORM,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
   REVALIDATION_TAGS,
 } from '../../config/constants';
 import useAuth from '../../hooks/useAuth';
@@ -116,7 +118,7 @@ const CardTableCategories = ({
         <td>
           <div className={classes['card_body_table_row_image_container']}>
             <img
-              src={`${CLOUDINARY_BASE_URL}${CATEGORY_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}`}
+              src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${CATEGORY_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}${WSRV_TRANSFORM}`}
               alt={item.coverImage?.altText}
             />
           </div>

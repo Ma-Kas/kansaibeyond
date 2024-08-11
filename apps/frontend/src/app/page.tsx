@@ -18,7 +18,6 @@ const Home = () => {
           alt=''
           priority={true}
           sizes='100vw'
-          quality={100}
           fill
           placeholder='blur'
         />
@@ -45,7 +44,7 @@ const Home = () => {
               className={classes['quickstart_card_bg_image']}
               src={KimonoImage}
               alt=''
-              sizes='550px'
+              sizes='(max-width: 714px) 100vw, (max-width: 1100px) 50vw, 550px'
               fill
               placeholder='blur'
             />
@@ -62,9 +61,8 @@ const Home = () => {
               className={classes['quickstart_card_bg_image']}
               src={FujiImage}
               alt=''
-              sizes='550px'
+              sizes='(max-width: 714px) 100vw, (max-width: 1100px) 50vw, 550px'
               fill
-              quality={100}
               placeholder='blur'
             />
             <a

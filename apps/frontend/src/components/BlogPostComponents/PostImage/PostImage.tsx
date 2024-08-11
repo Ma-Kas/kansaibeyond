@@ -1,28 +1,16 @@
-/* eslint-disable @next/next/no-img-element */
-
-import parseInlineStyle from '@/utils/parse-inline-style-string';
-import {
-  CLOUDINARY_BASE_URL,
-  POST_SINGLE_IMAGE_TRANSFORM,
-} from '@/config/constants';
+import BlurryLoadingImage from '../BlurryLoadingImage/BlurryLoadingImage';
+import { ImageNode } from '@/types/post-content-types';
 
 import classes from './PostImage.module.css';
 
 type Props = {
-  style?: string;
   src: string;
   alt: string;
+  node: ImageNode;
 };
 
-const PostImage = ({ style, src, alt }: Props) => {
-  return (
-    <img
-      className={classes['post_image']}
-      src={`${CLOUDINARY_BASE_URL}${POST_SINGLE_IMAGE_TRANSFORM}${src}`}
-      alt={alt}
-      {...(style && { style: parseInlineStyle(style) })}
-    />
-  );
+const PostImage = ({ node }: Props) => {
+  return <BlurryLoadingImage node={node} className={classes['post_image']} />;
 };
 
 export default PostImage;

@@ -48,14 +48,17 @@ export const KANSAIBEYOND_YOUTUBE =
 
 // Cloudinary Image Transformation Constants
 export const CLOUDINARY_BASE_URL = process.env.NEXT_PUBLIC_CLOUDINARY_BASE_URL;
+export const WSRV_BASE_URL = 'https://wsrv.nl/?url=';
+// For animated stuff to work, wsrv needs a transform param of n=-1 to return all frames
+export const WSRV_TRANSFORM = '&output=webp&n=-1';
 export const USER_ICON_IMAGE_TRANSFORM = '/c_fill,w_64,q_70,f_auto';
-export const LOADING_PLACEHOLDER_IMAGE_TRANSFORM = '/c_fill,w_8,q_70,f_auto';
+export const LOADING_PLACEHOLDER_IMAGE_TRANSFORM = '/c_fill,w_8,q_1,f_auto';
 export const CATEGORY_CARD_IMAGE_TRANSFORM = '/c_fill,w_600,q_auto,f_auto';
 export const CATEGORY_BANNER_IMAGE_TRANSFORM = '/c_fill,w_1920,q_auto,f_auto';
 export const POST_FEATURED_IMAGE_TRANSFORM = '/c_fill,w_1100,q_auto,f_auto';
 export const POST_CARD_IMAGE_TRANSFORM = '/c_fill,w_600,q_auto,f_auto';
 export const SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM = '/c_fill,w_560,q_auto,f_auto';
 
-export const POST_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
-export const POST_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_500,q_auto,f_auto';
-export const POST_CAROUSEL_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
+export const POST_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_740,q_auto,f_auto';
+export const POST_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_640,q_auto,f_auto';
+export const POST_CAROUSEL_IMAGE_TRANSFORM = '/c_fill,w_740,q_auto,f_auto';

@@ -33,6 +33,8 @@ import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 import {
   CLOUDINARY_BASE_URL,
   POST_LIST_THUMB_TRANSFORM,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
   REVALIDATION_TAGS,
 } from '../../config/constants';
 import useAuth from '../../hooks/useAuth';
@@ -349,7 +351,7 @@ const CardTablePosts = ({ headerTopStyle, tab, blogTableData }: TableProps) => {
           {item.coverImage && (
             <div className={classes['card_body_table_row_image_container']}>
               <img
-                src={`${CLOUDINARY_BASE_URL}${POST_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}`}
+                src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${POST_LIST_THUMB_TRANSFORM}${item.coverImage?.urlSlug}${WSRV_TRANSFORM}`}
                 alt={item.coverImage?.altText}
               />
             </div>

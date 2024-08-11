@@ -23,7 +23,7 @@ const CategoryCard = async ({ category }: { category: Category }) => {
             className={classes['category_card_image']}
             src={`${CLOUDINARY_BASE_URL}${CATEGORY_CARD_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}`}
             alt=''
-            sizes='(max-width: 768px) 80vw, (max-width: 1024px) 40vw, 350px'
+            sizes='(max-width: 684px) 90vw, (max-width: 1024px) 40vw, 350px'
             fill
             placeholder='blur'
             blurDataURL={blurDataUrl}

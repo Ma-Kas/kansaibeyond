@@ -120,6 +120,7 @@ export const constructComponentTree = (input: unknown): JSX.Element => {
       key: crypto.randomUUID(),
       src: parsedNode.src,
       alt: parsedNode.altText,
+      node: parsedNode,
     });
   } else if (isImageGalleryBlockNode(input)) {
     // Render Blog Post Image Gallery Block

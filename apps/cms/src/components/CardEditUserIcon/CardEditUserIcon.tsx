@@ -2,6 +2,8 @@ import { IconRefresh, IconPlus } from '@tabler/icons-react';
 import {
   USER_ICON_EDIT_TRANSFORM,
   CLOUDINARY_BASE_URL,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
 } from '../../config/constants';
 
 import classes from './CardEditUserIcon.module.css';
@@ -19,7 +21,7 @@ const CardEditUserIcon = ({ id, openMediaLibrary, userIcon }: Props) => {
         <div className={classes['user_icon_inner_edit']}>
           <img
             id={id}
-            src={`${CLOUDINARY_BASE_URL}${USER_ICON_EDIT_TRANSFORM}${userIcon}`}
+            src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${USER_ICON_EDIT_TRANSFORM}${userIcon}${WSRV_TRANSFORM}`}
           />
         </div>
         <div className={classes['user_icon_button_container']}>

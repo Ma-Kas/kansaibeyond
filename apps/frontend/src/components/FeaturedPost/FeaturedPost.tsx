@@ -25,7 +25,7 @@ const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
           className={classes['featured_post_image']}
           src={`${CLOUDINARY_BASE_URL}${POST_FEATURED_IMAGE_TRANSFORM}${post[0].coverImage?.urlSlug}`}
           alt=''
-          sizes='(max-width: 1024px) 90vw, 1100px'
+          sizes='(max-width: 1140px) calc(100vw - 40px), 1100px'
           priority={true}
           fill
           placeholder='blur'

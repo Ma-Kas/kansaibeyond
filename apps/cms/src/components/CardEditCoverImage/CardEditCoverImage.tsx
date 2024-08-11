@@ -2,6 +2,8 @@ import { IconRefresh, IconPlus } from '@tabler/icons-react';
 import {
   COVER_IMAGE_EDIT_TRANSFORM,
   CLOUDINARY_BASE_URL,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
 } from '../../config/constants';
 
 import classes from './CardEditCoverImage.module.css';
@@ -22,7 +24,7 @@ const CardEditCoverImage = ({ id, openMediaLibrary, coverImage }: Props) => {
         <div className={classes['cover_image_inner_edit']}>
           <img
             id={id}
-            src={`${CLOUDINARY_BASE_URL}${COVER_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}`}
+            src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${COVER_IMAGE_EDIT_TRANSFORM}${coverImage.urlSlug}${WSRV_TRANSFORM}`}
             alt={coverImage.altText}
           />
         </div>
