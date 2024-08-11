@@ -1,10 +1,14 @@
-import { CLOUDINARY_BASE_URL } from '../../../config/constants';
+import {
+  CLOUDINARY_BASE_URL,
+  WSRV_BASE_URL,
+  WSRV_TRANSFORM,
+} from '../../../config/constants';
 
 export const stripImageUrl = (url: string, transform: string): string => {
-  const toStrip = `${CLOUDINARY_BASE_URL}${transform}`;
-  return url.replace(toStrip, '');
+  const toStrip = `${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${transform}`;
+  return url.replace(toStrip, '').replace(WSRV_TRANSFORM, '');
 };
 
 export const createImageUrl = (base: string, transform: string): string => {
-  return `${CLOUDINARY_BASE_URL}${transform}${base}`;
+  return `${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${transform}${base}${WSRV_TRANSFORM}`;
 };

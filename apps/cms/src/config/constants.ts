@@ -54,7 +54,7 @@ export const CLOUDINARY_API_KEY = import.meta.env.VITE_CLOUDINARY_API_KEY;
 // Cloudinary Image Transformation Constants
 export const CLOUDINARY_BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL;
 export const WSRV_BASE_URL = 'https://wsrv.nl/?url=';
-export const WSRV_TRANSFORM = '&output=webp';
+export const WSRV_TRANSFORM = '&output=webp&n=-1';
 export const CATEGORY_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
 export const POST_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_60,f_auto';
 export const COVER_IMAGE_EDIT_TRANSFORM = '/c_fill,w_450,q_50,f_auto';
@@ -62,6 +62,6 @@ export const FEATURED_IMAGE_EDIT_TRANSFORM = '/c_fill,w_350,q_50,f_auto';
 export const USER_LIST_THUMB_TRANSFORM = '/c_fill,w_100,q_50,f_auto';
 export const USER_ICON_EDIT_TRANSFORM = '/c_fill,w_200,q_50,f_auto';
 
-export const EDITOR_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
-export const EDITOR_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_500,q_auto,f_auto';
-export const EDITOR_CAROUSEL_IMAGE_TRANSFORM = '/c_fill,w_800,q_auto,f_auto';
+export const EDITOR_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_740,q_auto,f_auto';
+export const EDITOR_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_450,q_auto,f_auto';
+export const EDITOR_CAROUSEL_IMAGE_TRANSFORM = '/c_fill,w_740,q_auto,f_auto';
