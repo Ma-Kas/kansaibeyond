@@ -50,6 +50,8 @@ const BlurryLoadingImage = ({ className, node }: Props) => {
       className={className}
       src={currentImage}
       alt={node.altText}
+      loading='lazy'
+      decoding='async'
     />
   );
 };

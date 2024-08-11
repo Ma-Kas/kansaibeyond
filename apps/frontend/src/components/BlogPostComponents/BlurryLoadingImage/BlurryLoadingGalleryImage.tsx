@@ -54,6 +54,8 @@ const BlurryLoadingGalleryImage = ({
       className={className}
       src={currentImage}
       alt={image.altText}
+      loading='lazy'
+      decoding='async'
     />
   );
 };
