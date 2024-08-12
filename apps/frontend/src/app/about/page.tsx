@@ -24,7 +24,7 @@ const AboutPage = () => {
             className={classes['introduction_section_bg_image']}
             src={introductionImage}
             alt=''
-            sizes='(max-width: 768px) 100vw, (max-width: 1440px) 60vw, 850px'
+            sizes={'(max-width: 768px) 100vw, (max-width: 1440px) 60vw, 850px'}
             priority={true}
             placeholder='blur'
           />

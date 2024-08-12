@@ -17,7 +17,7 @@ const Home = () => {
           src={WelcomeImage}
           alt=''
           priority={true}
-          sizes='100vw'
+          sizes='(max-width: 1920px) 100vw, 1920px'
           fill
           placeholder='blur'
         />

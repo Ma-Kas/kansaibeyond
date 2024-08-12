@@ -32,7 +32,7 @@ const TasteOfHKPage = () => {
           className={classes['hero_banner_image']}
           src={dimSumImage}
           alt=''
-          sizes='100vw'
+          sizes={'(max-width: 768px) 100vw, 100vw'}
           priority={true}
           fill
           placeholder='blur'
