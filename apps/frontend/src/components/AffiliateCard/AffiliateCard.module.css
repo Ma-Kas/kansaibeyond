@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: stretch;
+  transition: var(--card-image-zoom-transition);
 }
 
 .card_container:nth-of-type(odd) {
@@ -12,7 +13,7 @@
 }
 
 .card_container:nth-of-type(even) {
-  background-color: var(--color-panda-grey-1);
+  background-color: var(--color-human-panda-brown-5);
 }
 
 .card_container:has(.card_link_container:hover) {
