@@ -365,6 +365,9 @@ importers:
       eslint-config-next:
         specifier: 14.2.4
         version: 14.2.4(eslint@8.57.0)(typescript@5.5.4)
+      eslint-plugin-jsx-a11y:
+        specifier: ^6.9.0
+        version: 6.9.0(eslint@8.57.0)
       typescript:
         specifier: ^5.2.2
         version: 5.5.4

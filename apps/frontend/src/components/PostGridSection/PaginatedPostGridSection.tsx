@@ -54,7 +54,7 @@ const PaginatedPostGridSection = async ({
                 {currentPage > 1 && (
                   <Link
                     className={classes['previous_page_link']}
-                    href={`/blog/posts?page=${currentPage - 1}`}
+                    href={`?page=${currentPage - 1}`}
                   >
                     PREVIOUS PAGE
                   </Link>
@@ -62,7 +62,7 @@ const PaginatedPostGridSection = async ({
                 {currentPage < totalPages && (
                   <Link
                     className={classes['next_page_link']}
-                    href={`/blog/posts?page=${currentPage + 1}`}
+                    href={`?page=${currentPage + 1}`}
                   >
                     NEXT PAGE
                   </Link>
