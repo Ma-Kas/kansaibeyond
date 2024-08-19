@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
-// Necessary due to Next.js typing svg in Image component as "any"
 
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import { PostUser } from '@/lib/requests/postRequests';
 import {
   CLOUDINARY_BASE_URL,
@@ -33,7 +31,7 @@ const PostInformation = ({
         {!user.userIcon && (
           <Image
             className={classes['author_icon_placeholder']}
-            src={userIcon}
+            src={userIcon as StaticImageData}
             alt=''
           />
         )}
