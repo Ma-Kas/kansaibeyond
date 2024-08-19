@@ -28,6 +28,8 @@ import frontendAffiliateRouter from './routes/frontend-routes/affiliates';
 import frontendPreviewRouter from './routes/frontend-routes/preview';
 import frontendSocialMediaReelRouter from './routes/frontend-routes/social-media-reels';
 
+import healthRouter from './routes/health';
+
 import errorHandler from './middleware/errorHandler';
 import {
   setCMSCorsOptions,
@@ -49,6 +51,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Main Routes
+app.use('/__health', healthRouter);
 app.use('/api/cms', cors(corsCMSOptions), cmsRouter);
 app.use('/api/frontend', cors(corsFrontendOptions), frontendRouter);
 
