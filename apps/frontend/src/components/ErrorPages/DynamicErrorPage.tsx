@@ -1,8 +1,5 @@
-/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
-// Necessary due to Next.js typing svg in Image component as "any"
-
 import Link from 'next/link';
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import errorPanda from '@public/images/red_panda_error.svg';
 import { createFriendlyErrorData } from '@/utils/create-friendly-error-data';
 
@@ -25,7 +22,7 @@ const DynamicErrorPage = ({
 
         <Image
           className={classes['error_image']}
-          src={errorPanda}
+          src={errorPanda as StaticImageData}
           alt=''
           priority={true}
         />

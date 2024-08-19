@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   CATEGORY_CARD_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
 } from '@/config/constants';
 import { Category } from '@/lib/requests/categoryRequests';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
@@ -21,7 +23,7 @@ const CategoryCard = async ({ category }: { category: Category }) => {
         <figure className={classes['category_card_image_container']}>
           <Image
             className={classes['category_card_image']}
-            src={`${CLOUDINARY_BASE_URL}${CATEGORY_CARD_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}`}
+            src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${CATEGORY_CARD_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}${WSRV_TRANSFORM}`}
             alt=''
             sizes='(max-width: 684px) 90vw, (max-width: 1024px) 40vw, 350px'
             fill

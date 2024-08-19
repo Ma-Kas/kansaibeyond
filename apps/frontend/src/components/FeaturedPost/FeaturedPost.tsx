@@ -2,8 +2,10 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   POST_FEATURED_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
 } from '@/config/constants';
 import { getAllPosts } from '@/lib/requests/postRequests';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
@@ -23,7 +25,7 @@ const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
       <figure className={classes['featured_post_image_container']}>
         <Image
           className={classes['featured_post_image']}
-          src={`${CLOUDINARY_BASE_URL}${POST_FEATURED_IMAGE_TRANSFORM}${post[0].coverImage?.urlSlug}`}
+          src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${POST_FEATURED_IMAGE_TRANSFORM}${post[0].coverImage?.urlSlug}${WSRV_TRANSFORM}`}
           alt=''
           sizes='(max-width: 1100px) 100vw, 1100px'
           priority={true}

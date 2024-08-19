@@ -1,7 +1,4 @@
-/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
-// Necessary due to Next.js typing svg in Image component as "any"
-
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import Link from 'next/link';
 import PandaImage from '@public/images/red_panda_opt_a.webp';
 import TwitterIcon from '@public/images/brand-x.svg';
@@ -56,7 +53,7 @@ const Footer = () => {
           >
             <Image
               className={classes['footer_social_icon']}
-              src={TwitterIcon}
+              src={TwitterIcon as StaticImageData}
               alt='Kansai & Beyond X (formerly Twitter) profile'
             />
           </a>
@@ -68,7 +65,7 @@ const Footer = () => {
           >
             <Image
               className={classes['footer_social_icon']}
-              src={InstagramIcon}
+              src={InstagramIcon as StaticImageData}
               alt='Kansai & Beyond Instagram account'
             />
           </a>
@@ -80,7 +77,7 @@ const Footer = () => {
           >
             <Image
               className={classes['footer_social_icon']}
-              src={YouTubeIcon}
+              src={YouTubeIcon as StaticImageData}
               alt='Kansai & Beyond YouTube channel'
             />
           </a>

@@ -1,13 +1,11 @@
-/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
-/* eslint @typescript-eslint/no-unsafe-return: 0 */
-// Necessary due to Next.js typing svg in Image component as "any"
-
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import SectionHeading from '../SectionHeading/SectionHeading';
 import { getSocialMediaReel } from '@/lib/requests/socialMediaReelRequests';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
   KANSAIBEYOND_INSTAGRAM,
 } from '@/config/constants';
 import twitterIcon from '@public/images/brand-x.svg';
@@ -40,19 +38,19 @@ const mapPlaceholderImages = (id: number) => {
   }
 };
 
-const switchIconOnSocial = (url: string) => {
+const switchIconOnSocial = (url: string): StaticImageData => {
   if (url.includes('twitter') || url.includes('x.com')) {
-    return twitterIcon;
+    return twitterIcon as StaticImageData;
   } else if (url.includes('instagram')) {
-    return instagramIcon;
+    return instagramIcon as StaticImageData;
   } else if (url.includes('facebook')) {
-    return facebookIcon;
+    return facebookIcon as StaticImageData;
   } else if (url.includes('youtube')) {
-    return youTubeIcon;
+    return youTubeIcon as StaticImageData;
   } else if (url.includes('thatch')) {
-    return thatchIcon;
+    return thatchIcon as StaticImageData;
   } else {
-    return generalIcon;
+    return generalIcon as StaticImageData;
   }
 };
 
@@ -84,7 +82,7 @@ const SocialMediaReel = async () => {
                   />
                   <Image
                     className={classes.image}
-                    src={`${CLOUDINARY_BASE_URL}${SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM}${item.image.urlSlug}`}
+                    src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM}${item.image.urlSlug}${WSRV_TRANSFORM}`}
                     alt={item.image.altText}
                     sizes='(max-width: 640px) 90vw, 210px'
                     fill
@@ -116,7 +114,7 @@ const SocialMediaReel = async () => {
                 >
                   <Image
                     className={classes['social_icon']}
-                    src={instagramIcon}
+                    src={instagramIcon as StaticImageData}
                     alt=''
                   />
                   <Image

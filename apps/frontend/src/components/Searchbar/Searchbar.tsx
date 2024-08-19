@@ -1,9 +1,6 @@
 'use client';
 
-/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
-// Necessary due to Next.js typing svg in Image component as "any"
-
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import cx from 'clsx';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import searchIcon from '@public/images/search.svg';
@@ -58,7 +55,11 @@ const Searchbar = ({ inHeader }: { inHeader: boolean }) => {
         type='submit'
         aria-label='magnifying glass icon'
       >
-        <Image className={classes.icon} src={searchIcon} alt='' />
+        <Image
+          className={classes.icon}
+          src={searchIcon as StaticImageData}
+          alt=''
+        />
       </button>
     </form>
   );
