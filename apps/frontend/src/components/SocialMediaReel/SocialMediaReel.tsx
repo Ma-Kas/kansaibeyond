@@ -2,8 +2,10 @@ import Image, { type StaticImageData } from 'next/image';
 import SectionHeading from '../SectionHeading/SectionHeading';
 import { getSocialMediaReel } from '@/lib/requests/socialMediaReelRequests';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
   KANSAIBEYOND_INSTAGRAM,
 } from '@/config/constants';
 import twitterIcon from '@public/images/brand-x.svg';
@@ -80,7 +82,7 @@ const SocialMediaReel = async () => {
                   />
                   <Image
                     className={classes.image}
-                    src={`${CLOUDINARY_BASE_URL}${SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM}${item.image.urlSlug}`}
+                    src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM}${item.image.urlSlug}${WSRV_TRANSFORM}`}
                     alt={item.image.altText}
                     sizes='(max-width: 640px) 90vw, 210px'
                     fill

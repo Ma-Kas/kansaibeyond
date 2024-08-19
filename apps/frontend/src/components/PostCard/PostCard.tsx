@@ -2,8 +2,10 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   POST_CARD_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
 } from '@/config/constants';
 import { PostForList } from '@/lib/requests/postRequests';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
@@ -19,7 +21,7 @@ const PostCard = async ({ post }: { post: PostForList }) => {
       <figure className={classes['post_card_image_container']}>
         <Image
           className={classes['post_card_image']}
-          src={`${CLOUDINARY_BASE_URL}${POST_CARD_IMAGE_TRANSFORM}${post.coverImage?.urlSlug}`}
+          src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${POST_CARD_IMAGE_TRANSFORM}${post.coverImage?.urlSlug}${WSRV_TRANSFORM}`}
           alt=''
           sizes='(max-width: 684px) 100vw, (max-width: 1024px) 50vw, 450px'
           fill

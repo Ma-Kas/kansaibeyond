@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   CATEGORY_BANNER_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
 } from '@/config/constants';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
 import { getOneCategory } from '@/lib/requests/categoryRequests';
@@ -17,7 +19,7 @@ const CategoryBanner = async ({ categorySlug }: { categorySlug: string }) => {
     <article className={classes['category_banner']}>
       <Image
         className={classes['category_banner_image']}
-        src={`${CLOUDINARY_BASE_URL}${CATEGORY_BANNER_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}`}
+        src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${CATEGORY_BANNER_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}${WSRV_TRANSFORM}`}
         alt=''
         sizes='100vw'
         priority={true}

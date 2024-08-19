@@ -3,8 +3,10 @@
 import Image, { type StaticImageData } from 'next/image';
 import { PostUser } from '@/lib/requests/postRequests';
 import {
+  WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
   USER_ICON_IMAGE_TRANSFORM,
+  WSRV_TRANSFORM,
 } from '@/config/constants';
 import userIcon from '@public/images/user.svg';
 import { formatShortDate } from '@/utils/format-date';
@@ -24,7 +26,7 @@ const PostInformation = ({
         {user.userIcon && (
           <img
             className={classes['author_icon']}
-            src={`${CLOUDINARY_BASE_URL}${USER_ICON_IMAGE_TRANSFORM}${user.userIcon}`}
+            src={`${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${USER_ICON_IMAGE_TRANSFORM}${user.userIcon}${WSRV_TRANSFORM}`}
             alt=''
           />
         )}
