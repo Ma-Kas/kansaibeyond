@@ -6,7 +6,7 @@ import {
   CATEGORY_CARD_IMAGE_TRANSFORM,
   WSRV_TRANSFORM,
 } from '@/config/constants';
-import { Category } from '@/lib/requests/categoryRequests';
+import { Category } from '@/types/request-schemas';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
 
 import classes from './CategoryCard.module.css';

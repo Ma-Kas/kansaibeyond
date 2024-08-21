@@ -1,34 +1,7 @@
-import { z } from 'zod';
 import { BACKEND_BASE_URL, REVALIDATION_TAGS } from '@/config/constants';
+import { socialMediaReelSchema } from '@/types/request-schemas';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
 import CustomError from '@/utils/custom-error';
-
-// Zod Schemas
-const reelImageSchema = z.object({
-  urlSlug: z.string(),
-  altText: z.string(),
-});
-
-// prettier-ignore
-const reelDataSchema = z.object(
-  {
-    id: z.number(),
-    url: z.string(),
-    image: reelImageSchema,
-  }
-).strict();
-
-// prettier-ignore
-const socialMediaReelSchema = z.object(
-  {
-    id: z.number(),
-    reelData: z.array(reelDataSchema),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }
-).strict();
-
-export type SocialMediaReelType = z.infer<typeof socialMediaReelSchema>;
 
 export const getSocialMediaReel = async () => {
   try {

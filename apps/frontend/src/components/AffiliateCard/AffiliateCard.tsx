@@ -1,4 +1,4 @@
-import { Affiliate } from '@/lib/requests/affiliateRequests';
+import { Affiliate } from '@/types/request-schemas';
 
 import classes from './AffiliateCard.module.css';
 

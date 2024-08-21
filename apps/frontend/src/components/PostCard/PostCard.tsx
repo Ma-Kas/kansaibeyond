@@ -7,7 +7,7 @@ import {
   POST_CARD_IMAGE_TRANSFORM,
   WSRV_TRANSFORM,
 } from '@/config/constants';
-import { PostForList } from '@/lib/requests/postRequests';
+import { PostForList } from '@/types/request-schemas';
 import getBase64ImageUrl from '@/utils/get-bas64-image-url';
 import PostInformation from '../PostInformation/PostInformation';
 

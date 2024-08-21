@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Image, { type StaticImageData } from 'next/image';
-import { PostUser } from '@/lib/requests/postRequests';
+import { PostUser } from '@/types/request-schemas';
 import {
   WSRV_BASE_URL,
   CLOUDINARY_BASE_URL,
