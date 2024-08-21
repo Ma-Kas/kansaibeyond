@@ -1,32 +1,7 @@
 import axios from 'axios';
-import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
+import { socialMediaReelSchema } from '../types/request-schemas';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
-
-// Zod Schemas
-const reelImageSchema = z.object({
-  urlSlug: z.string(),
-  altText: z.string(),
-});
-
-// prettier-ignore
-const reelDataSchema = z.object(
-  {
-    id: z.number(),
-    url: z.string(),
-    image: reelImageSchema,
-  }
-).strict();
-
-// prettier-ignore
-const socialMediaReelSchema = z.object(
-  {
-    id: z.number(),
-    reelData: z.array(reelDataSchema),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }
-).strict();
 
 export const getSocialMediaReel = async () => {
   try {

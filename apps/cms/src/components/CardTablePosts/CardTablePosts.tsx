@@ -3,12 +3,8 @@ import { useState } from 'react';
 import { Checkbox, Button } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Post,
-  deletePost,
-  trashPost,
-  updatePost,
-} from '../../requests/postRequests';
+import { deletePost, trashPost, updatePost } from '../../requests/postRequests';
+import { Post } from '../../types/request-schemas';
 import { formatShortDate } from '../../utils/format-date';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';

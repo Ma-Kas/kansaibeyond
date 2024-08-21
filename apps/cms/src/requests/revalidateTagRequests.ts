@@ -1,15 +1,7 @@
 import axios from 'axios';
-import { z } from 'zod';
 import { FRONTEND_BASE_URL, REVALIDATION_SECRET } from '../config/constants';
+import { revalidationResultSchema } from '../types/request-schemas';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
-
-// prettier-ignore
-const revalidationResultSchema = z.object(
-  {
-    revalidated: z.string(),
-    now: z.string(),
-  }
-).strict();
 
 export const postRevalidation = async (revalidationTag: unknown) => {
   const revalidationData = {

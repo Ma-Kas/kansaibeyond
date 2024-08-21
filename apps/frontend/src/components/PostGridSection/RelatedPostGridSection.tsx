@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import PostCard from '../PostCard/PostCard';
-import { PostForList } from '@/lib/requests/postRequests';
+import { PostForList } from '@/types/request-schemas';
 
 import classes from './PostGridSection.module.css';
 

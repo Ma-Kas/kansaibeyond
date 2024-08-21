@@ -1,19 +1,11 @@
 import { type NextRequest } from 'next/server';
 import { revalidateTag } from 'next/cache';
-import { z } from 'zod';
 import {
   CMS_BASE_URL,
   REVALIDATION_SECRET,
   REVALIDATION_TAGS,
 } from '@/config/constants';
-
-// prettier-ignore
-const revalidateTagSchema = z.object(
-  {
-    tag: z.string(),
-    secret: z.string(),
-  }
-).strict();
+import { revalidateTagSchema } from '@/types/request-schemas';
 
 const validateData = (input: unknown) => {
   const result = revalidateTagSchema.safeParse(input);

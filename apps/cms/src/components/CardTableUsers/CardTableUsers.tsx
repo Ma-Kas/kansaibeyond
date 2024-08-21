@@ -23,7 +23,8 @@ import {
 } from '../FeedbackPopups/FeedbackPopups';
 import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
 
-import { deleteUser, updateUser, User } from '../../requests/userRequests';
+import { deleteUser, updateUser } from '../../requests/userRequests';
+import { User } from '../../types/request-schemas';
 import {
   CLOUDINARY_BASE_URL,
   USER_LIST_THUMB_TRANSFORM,

@@ -36,7 +36,7 @@ import PostEditorTitle from './components/PostEditorTitle/PostEditorTitle';
 import { useDisclosure } from '@mantine/hooks';
 import ContentSettingsModal from './components/ContentSettingsModal/ContentSettingsModal';
 
-import { Post } from '../../requests/postRequests';
+import { Post } from '../../types/request-schemas';
 
 type SettingsModalContext = {
   settingsModalOpen: boolean;

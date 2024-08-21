@@ -1,47 +1,12 @@
 import axios from 'axios';
-import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
+import {
+  categorySchema,
+  allCategoriesSchema,
+  newUpdateCategorySchema,
+  deleteOneSchema as deleteCategorySchema,
+} from '../types/request-schemas';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
-
-// Zod Schemas
-// prettier-ignore
-const categoryPostSchema = z.object(
-  {
-    id: z.number(),
-    postSlug: z.string(),
-  }
-).strict();
-
-// prettier-ignore
-const coverImageSchema = z.object(
-  {
-    altText: z.string(),
-    urlSlug: z.string(),
-  }
-).strict();
-
-// prettier-ignore
-const categorySchema = z.object(
-  {
-    id: z.number(),
-    categoryName: z.string(),
-    categorySlug: z.string(),
-    description: z.string().nullable(),
-    coverImage: coverImageSchema.nullable(),
-    posts: z.array(categoryPostSchema),
-  }
-).strict();
-
-const allCategoriesSchema = z.array(categorySchema);
-
-const newUpdateCategorySchema = categorySchema.omit({ posts: true });
-
-// prettier-ignore
-const deleteCategorySchema = z.object(
-  {
-    message: z.string(),
-  }
-).strict();
 
 export const getAllCategories = async () => {
   try {

@@ -4,7 +4,7 @@ import constructComponentTree from '@/utils/postContentConstructor';
 import RelatedPostGridSection from '../PostGridSection/RelatedPostGridSection';
 import SectionHeading from '../SectionHeading/SectionHeading';
 import UserInformation from '../UserInformation/UserInformation';
-import { Post } from '@/lib/requests/postRequests';
+import { Post } from '@/types/request-schemas';
 
 import classes from './BlogPostView.module.css';
 

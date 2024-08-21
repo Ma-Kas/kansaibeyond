@@ -1,31 +1,8 @@
-import { z } from 'zod';
 import { notFound } from 'next/navigation';
 import { BACKEND_BASE_URL, REVALIDATION_TAGS } from '@/config/constants';
+import { tagSchema, allTagsSchema } from '@/types/request-schemas';
 import CustomError from '@/utils/custom-error';
 import { handleRequestErrors } from '@/utils/backend-error-response-validation';
-
-// Zod Schemas
-// prettier-ignore
-const tagPostSchema = z.object(
-  {
-    id: z.number(),
-    postSlug: z.string(),
-  }
-).strict();
-
-// prettier-ignore
-const tagSchema = z.object(
-  {
-    id: z.number(),
-    tagName: z.string(),
-    tagSlug: z.string(),
-    posts: z.array(tagPostSchema),
-  }
-).strict();
-
-export type Tag = z.infer<typeof tagSchema>;
-
-const allTagsSchema = z.array(tagSchema);
 
 export const getAllTags = async () => {
   try {

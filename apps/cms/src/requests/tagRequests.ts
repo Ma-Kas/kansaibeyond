@@ -1,37 +1,12 @@
 import axios from 'axios';
-import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
+import {
+  tagSchema,
+  allTagsSchema,
+  newUpdateTagSchema,
+  deleteOneSchema as deleteTagSchema,
+} from '../types/request-schemas';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
-
-// Zod Schemas
-// prettier-ignore
-const tagPostSchema = z.object(
-  {
-    id: z.number(),
-    postSlug: z.string(),
-  }
-).strict();
-
-// prettier-ignore
-const tagSchema = z.object(
-  {
-    id: z.number(),
-    tagName: z.string(),
-    tagSlug: z.string(),
-    posts: z.array(tagPostSchema),
-  }
-).strict();
-
-const allTagsSchema = z.array(tagSchema);
-
-const newUpdateTagSchema = tagSchema.omit({ posts: true });
-
-// prettier-ignore
-const deleteTagSchema = z.object(
-  {
-    message: z.string(),
-  }
-).strict();
 
 export const getAllTags = async () => {
   try {
