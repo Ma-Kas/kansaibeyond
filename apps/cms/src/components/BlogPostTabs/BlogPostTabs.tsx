@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import CardTablePosts from '../CardTablePosts/CardTablePosts';
-import { Post } from '../../requests/postRequests';
+import { Post } from '../../types/request-schemas';
 import DynamicErrorPage from '../../pages/ErrorPages/DynamicErrorPage';
 import useCardHeaderTopPosition from '../../hooks/useCardHeaderTopPosition';
 

@@ -25,7 +25,7 @@ import ComposerDrawer from '../ComposerDrawer/ComposerDrawer';
 import ComposerDrawerContentCategories from '../ComposerDrawerContent/ComposerDrawerContentCategories';
 import ComposerDrawerContentTags from '../ComposerDrawerContent/ComposerDrawerContentTags';
 import ComposerDrawerContentSettings from '../ComposerDrawerContent/ComposerDrawerContentSettings';
-import { Post } from '../../requests/postRequests';
+import { Post } from '../../types/request-schemas';
 import { destroyWidgets } from '../CloudinaryMediaLibraryWidget/cloudinary-helpers';
 import { LoadingNotification } from '../FeedbackPopups/FeedbackPopups';
 import {

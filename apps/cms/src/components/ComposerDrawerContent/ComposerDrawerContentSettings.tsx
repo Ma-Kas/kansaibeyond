@@ -17,7 +17,7 @@ import {
   InsertReturnData,
   ReturnDataAsset,
 } from '../CloudinaryMediaLibraryWidget/cloudinary-types';
-import { Post } from '../../requests/postRequests';
+import { Post } from '../../types/request-schemas';
 
 import classes from './ComposerDrawerContent.module.css';
 

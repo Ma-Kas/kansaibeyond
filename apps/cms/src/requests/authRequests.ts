@@ -1,19 +1,7 @@
 import axios from 'axios';
-import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
+import { authSchema } from '../types/request-schemas';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
-
-// Zod Schemas
-// prettier-ignore
-const authSchema = z.object(
-  {
-    id: z.number(),
-    username: z.string(),
-    displayName: z.string(),
-    userIcon: z.string().nullable(),
-    role: z.string(),
-  }
-).strict().nullable();
 
 export const getAuth = async () => {
   try {

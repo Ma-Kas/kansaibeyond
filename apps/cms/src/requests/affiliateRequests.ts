@@ -1,44 +1,12 @@
 import axios from 'axios';
-import { z } from 'zod';
 import { BACKEND_BASE_URL } from '../config/constants';
-import { userRoleSchema } from './userRequests';
+import {
+  affiliateSchema,
+  allAffiliatesSchema,
+  newUpdateAffiliateSchema,
+  deleteOneSchema as deleteAffiliateSchema,
+} from '../types/request-schemas';
 import { handleRequestErrors } from '../utils/backend-error-response-validation';
-
-// Zod Schemas
-// prettier-ignore
-const affiliateUserSchema = z.object(
-  {
-    username: z.string(),
-    displayName: z.string(),
-    userIcon:z.string().nullable(),
-    role: userRoleSchema,
-  }
-).strict();
-
-// prettier-ignore
-const affiliateSchema = z.object(
-  {
-    id: z.number(),
-    blogName: z.string(),
-    blogUrl: z.string().url(),
-    blogDescription: z.string(),
-    userId: z.number().nullable().optional(),
-    user: affiliateUserSchema.optional().nullable(),
-  }
-).strict();
-
-export type Affiliate = z.infer<typeof affiliateSchema>;
-
-const allAffiliatesSchema = z.array(affiliateSchema);
-
-const newUpdateAffiliateSchema = affiliateSchema;
-
-// prettier-ignore
-const deleteAffiliateSchema = z.object(
-  {
-    message: z.string(),
-  }
-).strict();
 
 export const getAllAffiliates = async () => {
   try {

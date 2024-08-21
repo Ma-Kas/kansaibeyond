@@ -12,7 +12,8 @@ import {
   ErrorNotification,
 } from '../FeedbackPopups/FeedbackPopups';
 import FurtherEditDropdown from '../FurtherEditDropdown/FurtherEditDropdown';
-import { Affiliate, deleteAffiliate } from '../../requests/affiliateRequests';
+import { deleteAffiliate } from '../../requests/affiliateRequests';
+import { Affiliate } from '../../types/request-schemas';
 import { postRevalidation } from '../../requests/revalidateTagRequests';
 import { REVALIDATION_TAGS } from '../../config/constants';
 
