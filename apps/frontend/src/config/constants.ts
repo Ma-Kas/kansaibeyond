@@ -36,6 +36,8 @@ export const USER_ROLES = {
 
 export const PAGINATION_PAGE_SIZE = 12;
 
+export const GOOGLE_SITE_VERIFICATION =
+  'sGyVotrGTPwUIj_E_F5r-rJ2TkN9aK77oJORdR3t_qY';
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
 export const KANSAIBEYOND_THATCH = 'https://www.thatch.co/@kansai';
