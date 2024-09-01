@@ -19,6 +19,7 @@ export const SELECTABLE_USER_ROLES = {
   GUEST: 'GUEST',
 } as const;
 
+export const HEADER_ABOUT_LINK = import.meta.env.VITE_HEADER_ABOUT_LINK;
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
 export const READ_TIME_WORDS_PER_MINUTE = 270;
 
