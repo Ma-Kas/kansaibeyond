@@ -59,6 +59,7 @@ const Searchbar = ({ inHeader }: { inHeader: boolean }) => {
           className={classes.icon}
           src={searchIcon as StaticImageData}
           alt=''
+          priority={true}
         />
       </button>
     </form>

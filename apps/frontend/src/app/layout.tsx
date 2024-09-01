@@ -1,10 +1,15 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { GoogleTagManager } from '@next/third-parties/google';
 import Header from '@/components/Header/Header';
 import SocialMediaReel from '@/components/SocialMediaReel/SocialMediaReel';
 import SocialMediaReelSkeleton from '@/components/SocialMediaReel/SocialMediaReelSkeleton';
 import Footer from '@/components/Footer/Footer';
-import { FRONTEND_BASE_URL } from '@/config/constants';
+import {
+  FRONTEND_BASE_URL,
+  GOOGLE_SITE_VERIFICATION,
+  GOOGLE_TAG_MANAGER_CONTAINER_ID,
+} from '@/config/constants';
 
 import {
   futuraLtLight,
@@ -34,6 +39,7 @@ export const metadata: Metadata = {
   description:
     "Kansai & Beyond is a blog site documenting life in Japan, photography, tips for traveling and how it's like working as an English Teacher.",
   metadataBase: new URL(FRONTEND_BASE_URL),
+  verification: { google: GOOGLE_SITE_VERIFICATION },
 };
 
 const RootLayout = ({
@@ -43,6 +49,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en'>
+      <GoogleTagManager gtmId={GOOGLE_TAG_MANAGER_CONTAINER_ID} />
       <body
         className={`${futuraLtLight.variable} 
         ${futuraLtBook.variable} 

@@ -36,7 +36,14 @@ export const USER_ROLES = {
 
 export const PAGINATION_PAGE_SIZE = 12;
 
+// External Data
+export const GOOGLE_SITE_VERIFICATION =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+export const GOOGLE_TAG_MANAGER_CONTAINER_ID =
+  process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_CONTAINER_ID;
+
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
+
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
 export const KANSAIBEYOND_THATCH = 'https://www.thatch.co/@kansai';
 export const KANSAIBEYOND_THATCH_HK_FOOD =

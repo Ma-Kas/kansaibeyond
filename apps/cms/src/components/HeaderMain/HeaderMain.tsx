@@ -1,11 +1,15 @@
 import { Group, Container } from '@mantine/core';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
-import { FRONTEND_BASE_URL, KANSAIBEYOND_EMAIL } from '../../config/constants';
+import {
+  FRONTEND_BASE_URL,
+  KANSAIBEYOND_EMAIL,
+  HEADER_ABOUT_LINK,
+} from '../../config/constants';
 
 import classes from './HeaderMain.module.css';
 
 const menuLinks = [
-  { link: 'https://github.com/Ma-Kas/kansaibeyond', label: 'About' },
+  { link: HEADER_ABOUT_LINK, label: 'About' },
   { link: `mailto:${KANSAIBEYOND_EMAIL}`, label: 'Support' },
 ];
 
