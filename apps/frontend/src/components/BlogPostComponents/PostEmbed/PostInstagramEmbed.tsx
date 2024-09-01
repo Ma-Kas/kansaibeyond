@@ -23,9 +23,7 @@ const PostInstagramEmbed = ({ embedNode }: { embedNode: EmbedNode }) => {
     }
 
     // Force reload the widget to style embedded html code
-    // @ts-expect-error Instagram is attached to the window.
     if (window.instgrm) {
-      // @ts-expect-error Instagram is attached to the window.
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       window.instgrm.Embeds.process();
     }
