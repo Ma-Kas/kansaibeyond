@@ -11,6 +11,8 @@ const envVariables = z.object({
   CLOUDINARY_CLOUD_NAME: z.string(),
   CLOUDINARY_API_KEY: z.string(),
   REVALIDATION_SECRET: z.string(),
+  NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: z.string(),
+  NEXT_PUBLIC_GOOGLE_TAG_MANAGER_CONTAINER_ID: z.string(),
 });
 
 envVariables.parse(process.env);
