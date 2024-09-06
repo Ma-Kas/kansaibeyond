@@ -89,51 +89,49 @@ const PrivacyPolicyPage = () => {
           The data collected may be shared with service providers and others who
           help with our business operations and assist in the delivery of our
           products and services including, but not limited to:
-          <ul>
-            <li>Application development</li>
-            <li>Site hosting</li>
-            <li>Maintenance</li>
-            <li>Data Analysis</li>
-            <li>IT services</li>
-            <li>Email delivery services</li>
-            <li>Marketing</li>
-            <li>Analytics</li>
-            <li>
-              Enforcement of our Terms of Service Agreement and other agreements
-            </li>
-            <li>Other users of the site if you choose to leave comments</li>
-            <li>
-              Third parties in order to prevent damage to our property (tangible
-              and intangible), for safety reasons
-            </li>
-          </ul>
         </p>
-        <p>
-          We do this to:
-          <ul>
-            <li>Comply with legal processes</li>
-            <li>
-              Respond to requests from public and government authorities,
-              including public and government authorities outside your country
-              of residence
-            </li>
-            <li>Enforce our Terms of Service Agreement and other agreements</li>
-            <li>Protect our operations</li>
-            <li>
-              Protect our rights, privacy, safety or property, and/or that of
-              our affiliates, you, or others
-            </li>
-            <li>
-              Allow us to pursue available remedies or limit the damages that we
-              may sustain
-            </li>
-            <li>
-              Third parties as we believe necessary or appropriate, in any
-              manner permitted under applicable law, including laws outside your
-              country of residence
-            </li>
-          </ul>
-        </p>
+        <ul>
+          <li>Application development</li>
+          <li>Site hosting</li>
+          <li>Maintenance</li>
+          <li>Data Analysis</li>
+          <li>IT services</li>
+          <li>Email delivery services</li>
+          <li>Marketing</li>
+          <li>Analytics</li>
+          <li>
+            Enforcement of our Terms of Service Agreement and other agreements
+          </li>
+          <li>Other users of the site if you choose to leave comments</li>
+          <li>
+            Third parties in order to prevent damage to our property (tangible
+            and intangible), for safety reasons
+          </li>
+        </ul>
+        <p>We do this to:</p>
+        <ul>
+          <li>Comply with legal processes</li>
+          <li>
+            Respond to requests from public and government authorities,
+            including public and government authorities outside your country of
+            residence
+          </li>
+          <li>Enforce our Terms of Service Agreement and other agreements</li>
+          <li>Protect our operations</li>
+          <li>
+            Protect our rights, privacy, safety or property, and/or that of our
+            affiliates, you, or others
+          </li>
+          <li>
+            Allow us to pursue available remedies or limit the damages that we
+            may sustain
+          </li>
+          <li>
+            Third parties as we believe necessary or appropriate, in any manner
+            permitted under applicable law, including laws outside your country
+            of residence
+          </li>
+        </ul>
         <p>
           <strong>
             We will never sell, rent, or lease your Personal Data to a third
