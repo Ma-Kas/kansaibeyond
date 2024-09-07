@@ -16,7 +16,7 @@ const ConsentBannerClient = ({ consentCookie }: Props) => {
   // cookie banner instead of waiting for server action response
   const [consent, setConsent] = useState(consentCookie !== undefined);
 
-  const handleConsentCookie = (value: string) => {
+  const handleConsentCookie = (value: boolean) => {
     setConsent(true);
     setConsentCookie(value);
   };
@@ -38,13 +38,15 @@ const ConsentBannerClient = ({ consentCookie }: Props) => {
 
           <div className={classes.buttons}>
             <button
-              onClick={() => handleConsentCookie('all')}
+              id='consent_all_cookies'
+              onClick={() => handleConsentCookie(true)}
               aria-label='Accept all cookies'
             >
               Accept All
             </button>
             <button
-              onClick={() => handleConsentCookie('essential')}
+              id='consent_essential_cookies'
+              onClick={() => handleConsentCookie(false)}
               aria-label='Accept only essential cookies'
             >
               Essential Only
