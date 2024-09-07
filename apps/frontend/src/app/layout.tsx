@@ -5,6 +5,7 @@ import Header from '@/components/Header/Header';
 import SocialMediaReel from '@/components/SocialMediaReel/SocialMediaReel';
 import SocialMediaReelSkeleton from '@/components/SocialMediaReel/SocialMediaReelSkeleton';
 import Footer from '@/components/Footer/Footer';
+import ConsentBanner from '@/components/ConsentBanner/ConsentBanner';
 import {
   FRONTEND_BASE_URL,
   GOOGLE_SITE_VERIFICATION,
@@ -69,6 +70,7 @@ const RootLayout = ({
           <SocialMediaReel />
         </Suspense>
         <Footer />
+        <ConsentBanner />
       </body>
     </html>
   );
