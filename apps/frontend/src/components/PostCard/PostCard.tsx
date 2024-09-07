@@ -30,7 +30,9 @@ const PostCard = async ({ post }: { post: PostForList }) => {
         />
         <div className={classes['post_title_category_container']}>
           <h3>
-            <Link href={`/blog/posts/${post.postSlug}`}>{post.title}</Link>
+            <Link href={`/blog/posts/${post.postSlug}`} aria-label={post.title}>
+              {post.title}
+            </Link>
           </h3>
           <div className={classes['post_category_link_container']}>
             {post.categories.map((category, index, arr) => {
