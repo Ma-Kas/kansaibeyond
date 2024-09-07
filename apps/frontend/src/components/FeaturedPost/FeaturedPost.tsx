@@ -34,7 +34,14 @@ const FeaturedPost = async ({ queryParam }: { queryParam: string }) => {
           blurDataURL={blurDataUrl}
         />
         <div className={classes['featured_post_title_category_container']}>
-          <h2>{post[0].title}</h2>
+          <h2>
+            <Link
+              href={`blog/posts/${post[0].postSlug}`}
+              aria-label={post[0].title}
+            >
+              {post[0].title}
+            </Link>
+          </h2>
           <div className={classes['featured_post_category_link_container']}>
             {post[0].categories.map((category, index, arr) => {
               return (
