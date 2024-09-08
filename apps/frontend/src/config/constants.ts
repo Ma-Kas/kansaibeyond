@@ -26,6 +26,11 @@ export const REVALIDATION_TAGS = {
   socialMediaReel: 'socialMediaReel',
 };
 
+export const COOKIE_DOMAIN =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+    ? 'localhost'
+    : 'kansaibeyond.com';
+
 export const USER_ROLES = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',
