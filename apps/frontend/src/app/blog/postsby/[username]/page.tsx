@@ -17,8 +17,8 @@ export const generateMetadata = async ({
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   return {
-    title: user.displayName,
-    description: 'Browse through all the blog posts published by this user.',
+    title: `Posts by ${user.displayName}`,
+    description: `Browse through all the blog posts published by ${user.displayName}`,
   };
 };
 
