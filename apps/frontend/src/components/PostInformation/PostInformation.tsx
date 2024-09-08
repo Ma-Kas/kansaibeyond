@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
+import Link from 'next/link';
 import Image, { type StaticImageData } from 'next/image';
 import { PostUser } from '@/types/request-schemas';
 import {
@@ -39,7 +40,13 @@ const PostInformation = ({
         )}
       </figure>
       <div className={classes['info_container']}>
-        <p>{user.displayName}</p>
+        <Link
+          href={`/blog/postsby/${user.username}?page=1`}
+          aria-label={`Posts by user: ${user.displayName}`}
+          title='View posts by user'
+        >
+          {user.displayName}
+        </Link>
         <p>{formatShortDate(postDate)}</p>
       </div>
     </div>

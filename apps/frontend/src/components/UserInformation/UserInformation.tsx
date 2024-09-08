@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Image, { type StaticImageData } from 'next/image';
+import Link from 'next/link';
 import { PostUser } from '@/types/request-schemas';
 import {
   WSRV_BASE_URL,
@@ -39,7 +40,16 @@ const UserInformation = ({
         )}
       </figure>
       <div className={classes['info_container']}>
-        <p>By {user.displayName}</p>
+        <p>
+          By&nbsp;
+          <Link
+            href={`/blog/postsby/${user.username}?page=1`}
+            aria-label={`Posts by user: ${user.displayName}`}
+            title='View posts by user'
+          >
+            {user.displayName}
+          </Link>
+        </p>
         <p>Updated {formatLongDate(postDate)}</p>
       </div>
     </section>

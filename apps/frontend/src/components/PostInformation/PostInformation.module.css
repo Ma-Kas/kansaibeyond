@@ -51,6 +51,15 @@
   margin: 0;
 }
 
+.info_container a {
+  text-decoration: none;
+  color: var(--color-page-off-black);
+}
+
+.info_container a:hover {
+  color: var(--color-panda-orange-5);
+}
+
 .info_container p:nth-child(2) {
   font-size: 12px;
 }

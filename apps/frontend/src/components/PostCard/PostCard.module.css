@@ -78,7 +78,7 @@
   padding: 1rem;
 }
 
-.post_card_bottom a {
+.post_link {
   box-sizing: border-box;
   font-family: var(--font-family-book);
   font-weight: var(--font-weight-regular);
