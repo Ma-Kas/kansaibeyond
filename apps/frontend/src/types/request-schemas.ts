@@ -175,6 +175,43 @@ const affiliateSchema = z
 export const allAffiliatesSchema = z.array(affiliateSchema);
 
 ////////////////////////////////////////////////////////////////////////////////
+///////////////                USER PAGE SCHEMAS                 ///////////////
+////////////////////////////////////////////////////////////////////////////////
+
+const userAffiliateSchema = z
+  .object({
+    blogName: z.string(),
+    blogUrl: z.string(),
+    blogDescription: z.string(),
+  })
+  .strict();
+
+const userContactSchema = z
+  .object({
+    email: z.string().nullable(),
+    homepage: z.string().nullable(),
+    twitter: z.string().nullable(),
+    instagram: z.string().nullable(),
+    youtube: z.string().nullable(),
+    linkedin: z.string().nullable(),
+  })
+  .strict();
+
+export const publicUserSchema = z
+  .object({
+    username: z.string(),
+    displayName: z.string(),
+    userIcon: z.string().nullable(),
+    introduction: z.string(),
+    role: userRoleSchema,
+    contact: userContactSchema,
+    affiliate: userAffiliateSchema.nullable(),
+  })
+  .strict();
+
+export const allPublicUsersSchema = z.array(publicUserSchema);
+
+////////////////////////////////////////////////////////////////////////////////
 ///////////             SOCIAL MEDIA REEL SCHEMAS                    ///////////
 ////////////////////////////////////////////////////////////////////////////////
 const reelDataSchema = z
