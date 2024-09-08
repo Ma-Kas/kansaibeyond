@@ -80,7 +80,7 @@
   padding: 1rem 2rem;
 }
 
-.featured_post_bottom a {
+.featured_post_link {
   box-sizing: border-box;
   font-family: var(--font-family-book);
   font-weight: var(--font-weight-regular);

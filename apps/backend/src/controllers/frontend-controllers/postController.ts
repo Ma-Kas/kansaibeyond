@@ -55,6 +55,7 @@ export const get_multiple_posts = async (
       replacements: {
         categoryReplacement: req.query.category,
         tagReplacement: req.query.tag,
+        userReplacement: req.query.username,
       },
       limit: postLimit,
       order: [['updatedAt', 'DESC']],

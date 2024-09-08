@@ -79,7 +79,19 @@ export const createDynamicWhere = (req: Request) => {
             },
           ]
         : []),
-      ...(userQuery ? [{ '$user.username$': req.query.username }] : []),
+      ...(userQuery
+        ? [
+            {
+              id: [
+                Sequelize.literal(
+                  `(SELECT pst.id FROM posts AS pst 
+                    JOIN users AS usr ON pst.user_id = usr.id 
+                    WHERE usr.username = :userReplacement)`
+                ),
+              ],
+            },
+          ]
+        : []),
       ...(post_slugQuery ? [{ postSlug: req.query.post_slug as string }] : []),
     ],
   };

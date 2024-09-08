@@ -9,17 +9,14 @@
 }
 
 .section_heading_double {
-  margin-top: 2rem !important;
+  margin-bottom: 2rem;
 }
 
 .section_heading span,
 .section_heading_double span {
   position: relative;
+  bottom: -15px;
   font-family: var(--font-family-handwriting);
   font-size: 6rem;
   color: var(--color-panda-orange-5);
-}
-
-.section_heading span {
-  bottom: -15px;
 }
