@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 
 import { getOneTag } from '@/lib/requests/tagRequests';
 
@@ -32,9 +32,9 @@ const TagPage = async ({
     <Suspense
       fallback={
         <PostGridSectionSkeleton cardNumber={6} withViewAllLink={false}>
-          <SectionHeading>
+          <MainSectionHeading>
             <span>Tag</span>
-          </SectionHeading>
+          </MainSectionHeading>
         </PostGridSectionSkeleton>
       }
     >
@@ -43,9 +43,9 @@ const TagPage = async ({
         searchParams={searchParams}
         noResultMessage='There are no posts with this tag.'
       >
-        <SectionHeading>
+        <MainSectionHeading>
           <span>Tag</span>&nbsp;{tag.tagName}
-        </SectionHeading>
+        </MainSectionHeading>
       </PaginatedPostGridSection>
     </Suspense>
   );

@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import constructComponentTree from '@/utils/postContentConstructor';
 import RelatedPostGridSection from '../PostGridSection/RelatedPostGridSection';
-import SectionHeading from '../SectionHeading/SectionHeading';
+import { SectionHeading } from '../SectionHeading/SectionHeading';
 import UserInformation from '../UserInformation/UserInformation';
 import { Post } from '@/types/request-schemas';
 

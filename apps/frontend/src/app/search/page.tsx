@@ -3,7 +3,10 @@ import type { Metadata } from 'next';
 import Searchbar from '@/components/Searchbar/Searchbar';
 import SearchPostGridSection from '@/components/PostGridSection/SearchPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import {
+  SectionHeading,
+  MainSectionHeading,
+} from '@/components/SectionHeading/SectionHeading';
 
 import classes from './search.module.css';
 
@@ -29,11 +32,11 @@ const SearchPage = ({
     return (
       <>
         <section className={classes['search_section']}>
-          <SectionHeading>
+          <MainSectionHeading>
             Search Results For:
             <br />
             {`"${query}"`}
-          </SectionHeading>
+          </MainSectionHeading>
           <Suspense>
             <Searchbar inHeader={false} />
           </Suspense>
@@ -60,9 +63,9 @@ const SearchPage = ({
     return (
       <>
         <section className={classes['search_section_empty']}>
-          <SectionHeading>
+          <MainSectionHeading>
             <span>Search</span>&nbsp;for posts
-          </SectionHeading>
+          </MainSectionHeading>
 
           <Searchbar inHeader={false} />
         </section>

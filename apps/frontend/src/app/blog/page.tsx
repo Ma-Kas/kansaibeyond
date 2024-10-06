@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import {
+  SectionHeading,
+  MainSectionHeading,
+} from '@/components/SectionHeading/SectionHeading';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
 import CategoryGridSectionSkeleton from '@/components/CategoryGridSection/CategoryGridSkeleton';
@@ -31,9 +34,9 @@ const BlogHubPage = () => {
   return (
     <>
       <section className={classes['featured_post_section']}>
-        <SectionHeading>
+        <MainSectionHeading>
           <span>Featured</span>&nbsp;post
-        </SectionHeading>
+        </MainSectionHeading>
         <Suspense fallback={<FeaturedPostSkeleton />}>
           <FeaturedPost queryParam='?limit=1' />
         </Suspense>

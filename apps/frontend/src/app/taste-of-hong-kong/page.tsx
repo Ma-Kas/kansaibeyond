@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import {
   KANSAIBEYOND_EMAIL,
   KANSAIBEYOND_THATCH_HK_FOOD,

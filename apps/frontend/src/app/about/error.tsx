@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
 import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import FeaturedPostError from '@/components/ErrorPages/FeaturedPostError';
 
 import classes from './about.module.css';

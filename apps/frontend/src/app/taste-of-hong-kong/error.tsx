@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import {
   KANSAIBEYOND_EMAIL,
   KANSAIBEYOND_THATCH_HK_FOOD,

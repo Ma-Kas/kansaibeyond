@@ -2,8 +2,9 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
-import SectionHeading, {
-  SectionHeadingDouble,
+import {
+  MainSectionHeading,
+  MainSectionHeadingDouble,
 } from '@/components/SectionHeading/SectionHeading';
 
 import { getOneUser } from '@/lib/requests/userRequests';
@@ -35,9 +36,9 @@ const UserPage = async ({
     <Suspense
       fallback={
         <PostGridSectionSkeleton cardNumber={6} withViewAllLink={false}>
-          <SectionHeading>
+          <MainSectionHeading>
             <span>Posts by</span>
-          </SectionHeading>
+          </MainSectionHeading>
         </PostGridSectionSkeleton>
       }
     >
@@ -46,11 +47,11 @@ const UserPage = async ({
         searchParams={searchParams}
         noResultMessage='This user has not published any posts.'
       >
-        <SectionHeadingDouble>
+        <MainSectionHeadingDouble>
           <span>Posts by</span>
           <br></br>
           {user.displayName}
-        </SectionHeadingDouble>
+        </MainSectionHeadingDouble>
       </PaginatedPostGridSection>
     </Suspense>
   );

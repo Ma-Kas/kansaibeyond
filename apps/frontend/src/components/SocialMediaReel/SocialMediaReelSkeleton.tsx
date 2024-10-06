@@ -1,4 +1,4 @@
-import SectionHeading from '../SectionHeading/SectionHeading';
+import { SectionHeading } from '../SectionHeading/SectionHeading';
 import SocialReelImageSkeleton from '../Skeletons/SocialReelImageSkeleton';
 
 import classes from './SocialMediaReel.module.css';

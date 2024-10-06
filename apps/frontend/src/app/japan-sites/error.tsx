@@ -1,6 +1,6 @@
 'use client';
 
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 import PostGridError from '@/components/ErrorPages/PostGridError';
 import { KANSAIBEYOND_EMAIL } from '@/config/constants';
 
@@ -17,9 +17,9 @@ const Error = ({
     <>
       <section className={classes['banner_section']}>
         <article className={classes['banner_content']}>
-          <SectionHeading>
+          <MainSectionHeading>
             <span>Japan</span>&nbsp;Blog Affiliates
-          </SectionHeading>
+          </MainSectionHeading>
           <p>
             For those surfing the Japan interweb looking for more reading
             material, you&apos;ve come to the right place. Scroll away!

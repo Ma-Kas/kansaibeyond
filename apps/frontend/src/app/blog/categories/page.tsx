@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
 import CategoryGridSectionSkeleton from '@/components/CategoryGridSection/CategoryGridSkeleton';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 
 export const metadata: Metadata = {
   title: 'Categories',
@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 
 const CategoriesPage = () => {
   const categorySectionHeading = (
-    <SectionHeading>
+    <MainSectionHeading>
       <span>explore</span>&nbsp;categories
-    </SectionHeading>
+    </MainSectionHeading>
   );
 
   return (

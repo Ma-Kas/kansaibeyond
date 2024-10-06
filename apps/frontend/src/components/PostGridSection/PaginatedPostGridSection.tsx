@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import PostCard from '../PostCard/PostCard';
 import NoPosts from '../NoPosts/NoPosts';
-import SectionHeading from '../SectionHeading/SectionHeading';
+import { SectionHeading } from '../SectionHeading/SectionHeading';
 import { getAllPosts } from '@/lib/requests/postRequests';
 import { PAGINATION_PAGE_SIZE } from '@/config/constants';
 import {

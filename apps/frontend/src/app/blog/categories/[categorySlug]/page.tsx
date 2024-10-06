@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import CategoryBanner from '@/components/CategoryBanner/CategoryBanner';
 import CategoryBannerSkeleton from '@/components/Skeletons/CategoryBannerSkeleton';
 import { getOneCategory } from '@/lib/requests/categoryRequests';
