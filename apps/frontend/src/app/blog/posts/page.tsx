@@ -3,11 +3,24 @@ import type { Metadata } from 'next';
 import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
+import { dictionary } from '@/config/dictionary';
 
 export const metadata: Metadata = {
-  title: 'Blog Posts',
-  description:
-    'Browse through all the blog posts available on this website to find content you are interested in.',
+  title: dictionary.posts.title,
+  description: dictionary.posts.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.posts.title,
+    description: dictionary.posts.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.posts.title,
+    description: dictionary.posts.description,
+  },
 };
 
 const PostsPage = ({

@@ -1,11 +1,24 @@
 import type { Metadata } from 'next';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './PrivacyPolicy.module.css';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy',
-  description:
-    'Learn about our privacy policy, so you know exactly what data we use, and why.',
+  title: dictionary.privacyPolicy.title,
+  description: dictionary.privacyPolicy.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.privacyPolicy.title,
+    description: dictionary.privacyPolicy.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.privacyPolicy.title,
+    description: dictionary.privacyPolicy.description,
+  },
 };
 
 const PrivacyPolicyPage = () => {

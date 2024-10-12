@@ -6,13 +6,26 @@ import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
 import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './about.module.css';
 
 export const metadata: Metadata = {
-  title: 'About',
-  description:
-    'All about the writer and owner of this amazing website, as well as her personal Japan story.',
+  title: dictionary.about.title,
+  description: dictionary.about.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.about.title,
+    description: dictionary.about.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.about.title,
+    description: dictionary.about.description,
+  },
 };
 
 const AboutPage = () => {

@@ -20,6 +20,19 @@ export const generateMetadata = async ({
   return {
     title: `Posts by ${user.displayName}`,
     description: `Browse through all the blog posts published by ${user.displayName}`,
+    twitter: {
+      site: './',
+      card: 'summary_large_image',
+      title: `Posts by ${user.displayName}`,
+      description: `Browse through all the blog posts published by ${user.displayName}`,
+      creator: '@kansaibeyond',
+    },
+    openGraph: {
+      url: './',
+      type: 'website',
+      title: `Posts by ${user.displayName}`,
+      description: `Browse through all the blog posts published by ${user.displayName}`,
+    },
   };
 };
 

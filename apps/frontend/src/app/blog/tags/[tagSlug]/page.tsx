@@ -16,6 +16,21 @@ export const generateMetadata = async ({
   return {
     title: tag.tagName,
     description: 'Browse through all the blog posts associated with this tag.',
+    twitter: {
+      site: './',
+      card: 'summary_large_image',
+      title: tag.tagName,
+      description:
+        'Browse through all the blog posts associated with this tag.',
+      creator: '@kansaibeyond',
+    },
+    openGraph: {
+      url: './',
+      type: 'website',
+      title: tag.tagName,
+      description:
+        'Browse through all the blog posts associated with this tag.',
+    },
   };
 };
 

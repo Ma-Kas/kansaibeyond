@@ -7,13 +7,26 @@ import {
   SectionHeading,
   MainSectionHeading,
 } from '@/components/SectionHeading/SectionHeading';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './search.module.css';
 
 export const metadata: Metadata = {
-  title: 'Search',
-  description:
-    'Search our database of many exciting blog posts, for exactly the content you are most interested in.',
+  title: dictionary.search.title,
+  description: dictionary.search.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.search.title,
+    description: dictionary.search.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.search.title,
+    description: dictionary.search.description,
+  },
 };
 
 const SearchPage = ({
