@@ -1,12 +1,17 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import CategoryBanner from '@/components/CategoryBanner/CategoryBanner';
 import CategoryBannerSkeleton from '@/components/Skeletons/CategoryBannerSkeleton';
 import { getOneCategory } from '@/lib/requests/categoryRequests';
 
 import classes from './category.module.css';
+import {
+  CLOUDINARY_BASE_URL,
+  METADATA_IMAGE_TRANSFORM,
+  WSRV_BASE_URL,
+} from '@/config/constants';
 
 export const generateMetadata = async ({
   params,
@@ -19,6 +24,37 @@ export const generateMetadata = async ({
     title: category.categoryName,
     description:
       'Browse through all the blog posts associated with this category.',
+    twitter: {
+      site: './',
+      card: 'summary_large_image',
+      title: category.categoryName,
+      description:
+        'Browse through all the blog posts associated with this category.',
+      creator: '@kansaibeyond',
+      images: [
+        {
+          url: new URL(
+            `${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${METADATA_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}&output=jpg`
+          ),
+          alt: category.coverImage?.altText || '',
+        },
+      ],
+    },
+    openGraph: {
+      url: './',
+      type: 'website',
+      title: category.categoryName,
+      description:
+        'Browse through all the blog posts associated with this category.',
+      images: [
+        {
+          url: new URL(
+            `${WSRV_BASE_URL}${CLOUDINARY_BASE_URL}${METADATA_IMAGE_TRANSFORM}${category.coverImage?.urlSlug}&output=jpg`
+          ),
+          alt: category.coverImage?.altText || '',
+        },
+      ],
+    },
   };
 };
 

@@ -1,5 +1,5 @@
 import Image, { type StaticImageData } from 'next/image';
-import SectionHeading from '../SectionHeading/SectionHeading';
+import { SectionHeading } from '../SectionHeading/SectionHeading';
 import { getSocialMediaReel } from '@/lib/requests/socialMediaReelRequests';
 import {
   WSRV_BASE_URL,

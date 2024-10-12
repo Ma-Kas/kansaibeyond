@@ -1,19 +1,32 @@
 import type { Metadata } from 'next';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './PrivacyPolicy.module.css';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy',
-  description:
-    'Learn about our privacy policy, so you know exactly what data we use, and why.',
+  title: dictionary.privacyPolicy.title,
+  description: dictionary.privacyPolicy.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.privacyPolicy.title,
+    description: dictionary.privacyPolicy.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.privacyPolicy.title,
+    description: dictionary.privacyPolicy.description,
+  },
 };
 
 const PrivacyPolicyPage = () => {
   return (
     <section className={classes.section}>
       <article className={classes['privacy_policy_content']}>
-        <h2>Privacy Policy</h2>
-        <h3>What Type Of Information Do We Collect?</h3>
+        <h1>Privacy Policy</h1>
+        <h2>What Type Of Information Do We Collect?</h2>
         <p>
           We collect personal information that you provide to us. Some
           information — such as your Internet Protocol (IP) address and/or
@@ -25,7 +38,7 @@ const PrivacyPolicyPage = () => {
           the comments form, and also the visitor&apos;s IP address and browser
           to help prevent spam.
         </p>
-        <h3>Why Do We Collect This Information?</h3>
+        <h2>Why Do We Collect This Information?</h2>
         <p>
           We use Google Analytics to record information about the pages a user
           has seen, for example the URL of the page, time of day, device used,
@@ -72,7 +85,7 @@ const PrivacyPolicyPage = () => {
             here.
           </a>
         </p>
-        <h3>Embedded Content</h3>
+        <h2>Embedded Content</h2>
         <p>
           Articles on this site may include embedded content (e.g. YouTube,
           Twitter/X, Instagram, Ads etc.). Embedded content from other websites
@@ -84,7 +97,7 @@ const PrivacyPolicyPage = () => {
           website. To learn how to control that information and request
           deletion, visit the Privacy Policy of the original website.
         </p>
-        <h3>Who We Share Data With</h3>
+        <h2>Who We Share Data With</h2>
         <p>
           The data collected may be shared with service providers and others who
           help with our business operations and assist in the delivery of our
@@ -138,7 +151,7 @@ const PrivacyPolicyPage = () => {
             party
           </strong>
         </p>
-        <h3>How Long We Retain Your Data</h3>
+        <h2>How Long We Retain Your Data</h2>
         <p>
           If you leave a comment, the comment and its metadata are retained
           indefinitely, and will become part of the content of the site. This is
@@ -157,7 +170,7 @@ const PrivacyPolicyPage = () => {
           period necessary to fulfill the purposes outlined in this Privacy
           Policy unless a longer retention period is required or allowed by law.
         </p>
-        <h3>How Can You Contact Us Or Withdraw Consent?</h3>
+        <h2>How Can You Contact Us Or Withdraw Consent?</h2>
         <p>
           Please contact us by email, or on one of the linked social media
           platforms.

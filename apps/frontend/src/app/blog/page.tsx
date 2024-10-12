@@ -1,19 +1,35 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import {
+  SectionHeading,
+  MainSectionHeading,
+} from '@/components/SectionHeading/SectionHeading';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSection';
 import CategoryGridSectionSkeleton from '@/components/CategoryGridSection/CategoryGridSkeleton';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
+import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './blog.module.css';
-import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 
 export const metadata: Metadata = {
-  title: 'Blog',
-  description:
-    "An overview of all the most recent content on this blog. Find what's new and exciting.",
+  title: dictionary.blogOverview.title,
+  description: dictionary.blogOverview.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.blogOverview.title,
+    description: dictionary.blogOverview.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.blogOverview.title,
+    description: dictionary.blogOverview.description,
+  },
 };
 
 const BlogHubPage = () => {
@@ -31,9 +47,9 @@ const BlogHubPage = () => {
   return (
     <>
       <section className={classes['featured_post_section']}>
-        <SectionHeading>
+        <MainSectionHeading>
           <span>Featured</span>&nbsp;post
-        </SectionHeading>
+        </MainSectionHeading>
         <Suspense fallback={<FeaturedPostSkeleton />}>
           <FeaturedPost queryParam='?limit=1' />
         </Suspense>

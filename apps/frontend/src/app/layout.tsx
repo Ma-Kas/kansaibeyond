@@ -29,18 +29,37 @@ import {
 import '@/styles/index.css';
 import '@/styles/variables.css';
 import '@/styles/post-transform-variables.css';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './page.module.css';
 
 export const metadata: Metadata = {
   title: {
     template: '%s | Kansai & Beyond',
-    default: 'Kansai & Beyond',
+    default: dictionary.home.title,
   },
-  description:
-    "Kansai & Beyond is a blog site documenting life in Japan, photography, tips for traveling and how it's like working as an English Teacher.",
+  description: dictionary.home.description,
   metadataBase: new URL(FRONTEND_BASE_URL),
   verification: { google: GOOGLE_SITE_VERIFICATION },
+  twitter: {
+    site: FRONTEND_BASE_URL,
+    card: 'summary_large_image',
+    title: {
+      template: '%s | Kansai & Beyond',
+      default: dictionary.home.title,
+    },
+    description: dictionary.home.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: FRONTEND_BASE_URL,
+    type: 'website',
+    title: {
+      template: '%s | Kansai & Beyond',
+      default: dictionary.home.title,
+    },
+    description: dictionary.home.description,
+  },
 };
 
 const RootLayout = ({

@@ -3,14 +3,30 @@ import type { Metadata } from 'next';
 import Searchbar from '@/components/Searchbar/Searchbar';
 import SearchPostGridSection from '@/components/PostGridSection/SearchPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import {
+  SectionHeading,
+  MainSectionHeading,
+} from '@/components/SectionHeading/SectionHeading';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './search.module.css';
 
 export const metadata: Metadata = {
-  title: 'Search',
-  description:
-    'Search our database of many exciting blog posts, for exactly the content you are most interested in.',
+  title: dictionary.search.title,
+  description: dictionary.search.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.search.title,
+    description: dictionary.search.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.search.title,
+    description: dictionary.search.description,
+  },
 };
 
 const SearchPage = ({
@@ -29,11 +45,11 @@ const SearchPage = ({
     return (
       <>
         <section className={classes['search_section']}>
-          <SectionHeading>
+          <MainSectionHeading>
             Search Results For:
             <br />
             {`"${query}"`}
-          </SectionHeading>
+          </MainSectionHeading>
           <Suspense>
             <Searchbar inHeader={false} />
           </Suspense>
@@ -60,9 +76,9 @@ const SearchPage = ({
     return (
       <>
         <section className={classes['search_section_empty']}>
-          <SectionHeading>
+          <MainSectionHeading>
             <span>Search</span>&nbsp;for posts
-          </SectionHeading>
+          </MainSectionHeading>
 
           <Searchbar inHeader={false} />
         </section>

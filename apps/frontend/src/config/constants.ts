@@ -13,6 +13,8 @@ export const FRONTEND_BASE_URL =
     ? process.env.FRONTEND_BASE_URL_DEV
     : process.env.FRONTEND_BASE_URL_PROD;
 
+export const FRONTEND_URL = 'https://www.kansaibeyond.com';
+
 export const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET;
 export const REVALIDATION_TAGS = {
   posts: 'posts',
@@ -74,3 +76,5 @@ export const SOCIAL_MEDIA_REEL_IMAGE_TRANSFORM = '/c_fill,w_560,q_auto,f_auto';
 export const POST_SINGLE_IMAGE_TRANSFORM = '/c_fill,w_740,q_auto,f_auto';
 export const POST_GALLERY_IMAGE_TRANSFORM = '/c_fill,w_640,q_auto,f_auto';
 export const POST_CAROUSEL_IMAGE_TRANSFORM = '/c_fill,w_740,q_auto,f_auto';
+
+export const METADATA_IMAGE_TRANSFORM = '/c_fill,w_1200,q_auto,f_auto';

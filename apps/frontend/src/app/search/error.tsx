@@ -1,7 +1,10 @@
 'use client';
 
 import Searchbar from '@/components/Searchbar/Searchbar';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import {
+  SectionHeading,
+  MainSectionHeading,
+} from '@/components/SectionHeading/SectionHeading';
 
 import classes from './search.module.css';
 import PostGridError from '@/components/ErrorPages/PostGridError';
@@ -21,9 +24,9 @@ const Error = ({ error, reset }: Props) => {
   return (
     <>
       <section className={classes['search_section_empty']}>
-        <SectionHeading>
+        <MainSectionHeading>
           <span>Search</span>&nbsp;for posts
-        </SectionHeading>
+        </MainSectionHeading>
 
         <Searchbar inHeader={false} />
       </section>

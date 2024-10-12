@@ -3,19 +3,32 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import PostGridSection from '@/components/PostGridSection/PostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
-import SectionHeading from '@/components/SectionHeading/SectionHeading';
+import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import {
   KANSAIBEYOND_EMAIL,
   KANSAIBEYOND_THATCH_HK_FOOD,
 } from '@/config/constants';
 import dimSumImage from '@public/images/hk_dim_sum_opt_a.webp';
+import { dictionary } from '@/config/dictionary';
 
 import classes from './TasteHK.module.css';
 
 export const metadata: Metadata = {
-  title: 'A Taste of Hong Kong',
-  description:
-    'A collection of Hong Kong style restaurants in Japan, along with my reviews. If you want to try Hong Kong style cuisine in Japan, this is the place for you.',
+  title: dictionary.hongKong.title,
+  description: dictionary.hongKong.description,
+  twitter: {
+    site: './',
+    card: 'summary_large_image',
+    title: dictionary.hongKong.title,
+    description: dictionary.hongKong.description,
+    creator: '@kansaibeyond',
+  },
+  openGraph: {
+    url: './',
+    type: 'website',
+    title: dictionary.hongKong.title,
+    description: dictionary.hongKong.description,
+  },
 };
 
 const TasteOfHKPage = () => {
