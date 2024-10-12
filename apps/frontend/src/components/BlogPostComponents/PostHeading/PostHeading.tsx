@@ -4,6 +4,7 @@ import { INDENTATION_FACTOR } from '@/utils/post-content-constants';
 import { HeadingNode } from '@/types/post-content-types';
 
 import classes from './PostHeading.module.css';
+import { handleHeadingTag } from '@/utils/postContentConstructor';
 
 type Props = {
   format: string;
@@ -29,7 +30,7 @@ const PostHeading = ({ format, indent, headingNode, children }: Props) => {
   // createElement syntax over JSX to utilize variable for appropriate tag creation
   // instead of code repeat in switch statement
   return createElement(
-    headingNode.tag,
+    handleHeadingTag(headingNode.tag),
     {
       key: crypto.randomUUID(),
       style: style,

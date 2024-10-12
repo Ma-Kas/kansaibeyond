@@ -23,6 +23,26 @@ import {
   isEmbedNode,
 } from '@/types/post-content-type-guards';
 import { keysToComponentMap } from './post-content-constants';
+import { HeadingTagType } from '@/types/post-content-types';
+
+let PREVIOUS_H = 1;
+
+export const initializeHeadingHandling = () => {
+  PREVIOUS_H = 1;
+};
+
+export const handleHeadingTag = (usedTag: HeadingTagType): HeadingTagType => {
+  // Helper function to fix heading structure for seo if writer messes up
+  // Ensures no heading levels are skipped, but preserve visual styling
+  const usedTagLevel = parseInt(usedTag.slice(-1));
+
+  if (usedTagLevel > PREVIOUS_H) {
+    PREVIOUS_H++;
+  } else {
+    PREVIOUS_H = usedTagLevel;
+  }
+  return `h${PREVIOUS_H}` as HeadingTagType;
+};
 
 export const constructComponentTree = (input: unknown): JSX.Element => {
   if (isRootNode(input)) {

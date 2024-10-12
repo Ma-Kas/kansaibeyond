@@ -1,6 +1,8 @@
 import { Fragment } from 'react';
 import Link from 'next/link';
-import constructComponentTree from '@/utils/postContentConstructor';
+import constructComponentTree, {
+  initializeHeadingHandling,
+} from '@/utils/postContentConstructor';
 import RelatedPostGridSection from '../PostGridSection/RelatedPostGridSection';
 import { SectionHeading } from '../SectionHeading/SectionHeading';
 import UserInformation from '../UserInformation/UserInformation';
@@ -9,6 +11,8 @@ import { Post } from '@/types/request-schemas';
 import classes from './BlogPostView.module.css';
 
 const BlogPostView = ({ postData }: { postData: Post }) => {
+  initializeHeadingHandling();
+
   return (
     <>
       <article className={classes['blog_post_main']}>
