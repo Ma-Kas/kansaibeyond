@@ -6,8 +6,8 @@ import {
   MainSectionHeading,
   MainSectionHeadingDouble,
 } from '@/components/SectionHeading/SectionHeading';
-
 import { getOneUser } from '@/lib/requests/userRequests';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 export const generateMetadata = async ({
   params,
@@ -21,14 +21,15 @@ export const generateMetadata = async ({
     title: `Posts by ${user.displayName}`,
     description: `Browse through all the blog posts published by ${user.displayName}`,
     twitter: {
-      site: './',
+      site: KANSAIBEYOND_TWITTER_HANDLE,
       card: 'summary_large_image',
       title: `Posts by ${user.displayName}`,
       description: `Browse through all the blog posts published by ${user.displayName}`,
-      creator: '@kansaibeyond',
+      creator: KANSAIBEYOND_TWITTER_HANDLE,
     },
     openGraph: {
       url: './',
+      siteName: SITENAME,
       type: 'website',
       title: `Posts by ${user.displayName}`,
       description: `Browse through all the blog posts published by ${user.displayName}`,

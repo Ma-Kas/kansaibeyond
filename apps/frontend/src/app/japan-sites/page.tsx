@@ -3,7 +3,11 @@ import type { Metadata } from 'next';
 import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 import AffiliateCardsSection from '@/components/AffiliateCardsSection/AffiliateCardsSection';
 import AffiliateCardsSectionSkeleton from '@/components/AffiliateCardsSection/AffiliateCardsSectionSkeleton';
-import { KANSAIBEYOND_EMAIL } from '@/config/constants';
+import {
+  KANSAIBEYOND_EMAIL,
+  KANSAIBEYOND_TWITTER_HANDLE,
+  SITENAME,
+} from '@/config/constants';
 import { dictionary } from '@/config/dictionary';
 
 import classes from './JapanSites.module.css';
@@ -12,14 +16,15 @@ export const metadata: Metadata = {
   title: dictionary.japanSites.title,
   description: dictionary.japanSites.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.japanSites.title,
     description: dictionary.japanSites.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.japanSites.title,
     description: dictionary.japanSites.description,

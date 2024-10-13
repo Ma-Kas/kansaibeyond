@@ -4,19 +4,21 @@ import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import { dictionary } from '@/config/dictionary';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 export const metadata: Metadata = {
   title: dictionary.posts.title,
   description: dictionary.posts.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.posts.title,
     description: dictionary.posts.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.posts.title,
     description: dictionary.posts.description,

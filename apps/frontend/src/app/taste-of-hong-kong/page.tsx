@@ -7,6 +7,8 @@ import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import {
   KANSAIBEYOND_EMAIL,
   KANSAIBEYOND_THATCH_HK_FOOD,
+  KANSAIBEYOND_TWITTER_HANDLE,
+  SITENAME,
 } from '@/config/constants';
 import dimSumImage from '@public/images/hk_dim_sum_opt_a.webp';
 import { dictionary } from '@/config/dictionary';
@@ -17,14 +19,15 @@ export const metadata: Metadata = {
   title: dictionary.hongKong.title,
   description: dictionary.hongKong.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.hongKong.title,
     description: dictionary.hongKong.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.hongKong.title,
     description: dictionary.hongKong.description,

@@ -11,6 +11,7 @@ import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import { dictionary } from '@/config/dictionary';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 import classes from './blog.module.css';
 
@@ -18,14 +19,15 @@ export const metadata: Metadata = {
   title: dictionary.blogOverview.title,
   description: dictionary.blogOverview.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.blogOverview.title,
     description: dictionary.blogOverview.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.blogOverview.title,
     description: dictionary.blogOverview.description,

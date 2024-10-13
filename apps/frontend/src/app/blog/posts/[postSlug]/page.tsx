@@ -3,7 +3,9 @@ import { getOnePost, getPostSlugList } from '@/lib/requests/postRequests';
 import BlogPostView from '@/components/BlogPostView/BlogPostView';
 import {
   CLOUDINARY_BASE_URL,
+  KANSAIBEYOND_TWITTER_HANDLE,
   METADATA_IMAGE_TRANSFORM,
+  SITENAME,
   WSRV_BASE_URL,
 } from '@/config/constants';
 
@@ -24,12 +26,12 @@ export const generateMetadata = async ({
     description:
       'Read through the newest blog post, brought to you by Kansai & Beyond.',
     twitter: {
-      site: './',
+      site: KANSAIBEYOND_TWITTER_HANDLE,
       card: 'summary_large_image',
       title: post.title,
       description:
         'Read through the newest blog post, brought to you by Kansai & Beyond.',
-      creator: '@kansaibeyond',
+      creator: KANSAIBEYOND_TWITTER_HANDLE,
       images: [
         {
           url: new URL(
@@ -41,6 +43,7 @@ export const generateMetadata = async ({
     },
     openGraph: {
       url: './',
+      siteName: SITENAME,
       type: 'website',
       title: post.title,
       description:

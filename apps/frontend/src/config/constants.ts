@@ -13,8 +13,6 @@ export const FRONTEND_BASE_URL =
     ? process.env.FRONTEND_BASE_URL_DEV
     : process.env.FRONTEND_BASE_URL_PROD;
 
-export const FRONTEND_URL = 'https://www.kansaibeyond.com';
-
 export const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET;
 export const REVALIDATION_TAGS = {
   posts: 'posts',
@@ -50,12 +48,14 @@ export const GOOGLE_TAG_MANAGER_CONTAINER_ID =
   process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_CONTAINER_ID;
 
 export const INSTAGRAM_SCRIPT_URL = 'https://www.instagram.com/embed.js';
+export const SITENAME = 'Kansai & Beyond';
 
 export const KANSAIBEYOND_EMAIL = 'kansaibeyond@gmail.com';
 export const KANSAIBEYOND_THATCH = 'https://www.thatch.co/@kansai';
 export const KANSAIBEYOND_THATCH_HK_FOOD =
   'https://www.thatch.co/guide/2v5gfojl4v2on/view';
 export const KANSAIBEYOND_TWITTER = 'https://x.com/kansaibeyond';
+export const KANSAIBEYOND_TWITTER_HANDLE = '@kansaibeyond';
 export const KANSAIBEYOND_INSTAGRAM = 'https://www.instagram.com/kansaibeyond';
 export const KANSAIBEYOND_YOUTUBE =
   'https://www.youtube.com/channel/UCOX-Lsp71XRKLP0S38LegCA';

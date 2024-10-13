@@ -2,7 +2,12 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import introductionImage from '@public/images/kb_about_opt_a.webp';
-import { KANSAIBEYOND_EMAIL, KANSAIBEYOND_THATCH } from '@/config/constants';
+import {
+  KANSAIBEYOND_EMAIL,
+  KANSAIBEYOND_THATCH,
+  KANSAIBEYOND_TWITTER_HANDLE,
+  SITENAME,
+} from '@/config/constants';
 import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import FeaturedPost from '@/components/FeaturedPost/FeaturedPost';
 import FeaturedPostSkeleton from '@/components/Skeletons/FeaturedPostSkeleton';
@@ -14,14 +19,15 @@ export const metadata: Metadata = {
   title: dictionary.about.title,
   description: dictionary.about.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.about.title,
     description: dictionary.about.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.about.title,
     description: dictionary.about.description,

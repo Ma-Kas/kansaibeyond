@@ -10,6 +10,8 @@ import {
   FRONTEND_BASE_URL,
   GOOGLE_SITE_VERIFICATION,
   GOOGLE_TAG_MANAGER_CONTAINER_ID,
+  KANSAIBEYOND_TWITTER_HANDLE,
+  SITENAME,
 } from '@/config/constants';
 
 import {
@@ -42,17 +44,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(FRONTEND_BASE_URL),
   verification: { google: GOOGLE_SITE_VERIFICATION },
   twitter: {
-    site: FRONTEND_BASE_URL,
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: {
       template: '%s | Kansai & Beyond',
       default: dictionary.home.title,
     },
     description: dictionary.home.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: FRONTEND_BASE_URL,
+    siteName: SITENAME,
     type: 'website',
     title: {
       template: '%s | Kansai & Beyond',

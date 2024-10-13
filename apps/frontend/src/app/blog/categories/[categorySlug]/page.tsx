@@ -5,13 +5,15 @@ import { SectionHeading } from '@/components/SectionHeading/SectionHeading';
 import CategoryBanner from '@/components/CategoryBanner/CategoryBanner';
 import CategoryBannerSkeleton from '@/components/Skeletons/CategoryBannerSkeleton';
 import { getOneCategory } from '@/lib/requests/categoryRequests';
-
-import classes from './category.module.css';
 import {
   CLOUDINARY_BASE_URL,
+  KANSAIBEYOND_TWITTER_HANDLE,
   METADATA_IMAGE_TRANSFORM,
+  SITENAME,
   WSRV_BASE_URL,
 } from '@/config/constants';
+
+import classes from './category.module.css';
 
 export const generateMetadata = async ({
   params,
@@ -25,12 +27,12 @@ export const generateMetadata = async ({
     description:
       'Browse through all the blog posts associated with this category.',
     twitter: {
-      site: './',
+      site: KANSAIBEYOND_TWITTER_HANDLE,
       card: 'summary_large_image',
       title: category.categoryName,
       description:
         'Browse through all the blog posts associated with this category.',
-      creator: '@kansaibeyond',
+      creator: KANSAIBEYOND_TWITTER_HANDLE,
       images: [
         {
           url: new URL(
@@ -42,6 +44,7 @@ export const generateMetadata = async ({
     },
     openGraph: {
       url: './',
+      siteName: SITENAME,
       type: 'website',
       title: category.categoryName,
       description:

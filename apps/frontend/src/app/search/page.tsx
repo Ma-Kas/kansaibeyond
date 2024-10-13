@@ -8,6 +8,7 @@ import {
   MainSectionHeading,
 } from '@/components/SectionHeading/SectionHeading';
 import { dictionary } from '@/config/dictionary';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 import classes from './search.module.css';
 
@@ -15,14 +16,15 @@ export const metadata: Metadata = {
   title: dictionary.search.title,
   description: dictionary.search.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.search.title,
     description: dictionary.search.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.search.title,
     description: dictionary.search.description,

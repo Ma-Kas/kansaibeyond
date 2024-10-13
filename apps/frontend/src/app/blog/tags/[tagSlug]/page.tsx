@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import PaginatedPostGridSection from '@/components/PostGridSection/PaginatedPostGridSection';
 import PostGridSectionSkeleton from '@/components/PostGridSection/PostGridSectionSkeleton';
 import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
-
 import { getOneTag } from '@/lib/requests/tagRequests';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 export const generateMetadata = async ({
   params,
@@ -15,21 +15,20 @@ export const generateMetadata = async ({
 
   return {
     title: tag.tagName,
-    description: 'Browse through all the blog posts associated with this tag.',
+    description: `Browse through all the blog posts associated with the tag ${tag.tagName}.`,
     twitter: {
-      site: './',
+      site: KANSAIBEYOND_TWITTER_HANDLE,
       card: 'summary_large_image',
       title: tag.tagName,
-      description:
-        'Browse through all the blog posts associated with this tag.',
-      creator: '@kansaibeyond',
+      description: `Browse through all the blog posts associated with the tag ${tag.tagName}.`,
+      creator: KANSAIBEYOND_TWITTER_HANDLE,
     },
     openGraph: {
       url: './',
+      siteName: SITENAME,
       type: 'website',
       title: tag.tagName,
-      description:
-        'Browse through all the blog posts associated with this tag.',
+      description: `Browse through all the blog posts associated with the tag ${tag.tagName}.`,
     },
   };
 };

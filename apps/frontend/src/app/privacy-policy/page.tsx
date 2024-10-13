@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { dictionary } from '@/config/dictionary';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 import classes from './PrivacyPolicy.module.css';
 
@@ -7,14 +8,15 @@ export const metadata: Metadata = {
   title: dictionary.privacyPolicy.title,
   description: dictionary.privacyPolicy.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.privacyPolicy.title,
     description: dictionary.privacyPolicy.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.privacyPolicy.title,
     description: dictionary.privacyPolicy.description,

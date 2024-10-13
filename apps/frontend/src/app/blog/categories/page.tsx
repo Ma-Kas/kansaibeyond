@@ -4,19 +4,21 @@ import CategoryGridSection from '@/components/CategoryGridSection/CategoryGridSe
 import CategoryGridSectionSkeleton from '@/components/CategoryGridSection/CategoryGridSkeleton';
 import { MainSectionHeading } from '@/components/SectionHeading/SectionHeading';
 import { dictionary } from '@/config/dictionary';
+import { KANSAIBEYOND_TWITTER_HANDLE, SITENAME } from '@/config/constants';
 
 export const metadata: Metadata = {
   title: dictionary.categories.title,
   description: dictionary.categories.description,
   twitter: {
-    site: './',
+    site: KANSAIBEYOND_TWITTER_HANDLE,
     card: 'summary_large_image',
     title: dictionary.categories.title,
     description: dictionary.categories.description,
-    creator: '@kansaibeyond',
+    creator: KANSAIBEYOND_TWITTER_HANDLE,
   },
   openGraph: {
     url: './',
+    siteName: SITENAME,
     type: 'website',
     title: dictionary.categories.title,
     description: dictionary.categories.description,
